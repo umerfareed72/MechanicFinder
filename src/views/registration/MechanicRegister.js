@@ -233,7 +233,7 @@ export default class MechanicRegister extends Component {
                     Create Account
                   </Text>
                   <Text style={[text.text20, {color: colors.white}]}>
-                    (For Mechanics Registeration)
+                    (For Mechanics)
                   </Text>
                 </View>
               </LinearGradient>
