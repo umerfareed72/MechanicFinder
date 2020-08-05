@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "302956113171",
+    "firebase_url": "https://gold-braid-272515.firebaseio.com",
+    "project_id": "gold-braid-272515",
+    "storage_bucket": "gold-braid-272515.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302956113171:android:8d883aefc4035b02173ee6",
+        "android_client_info": {
+          "package_name": "com.mechanicfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302956113171-hjn4ounmnnl76tq02tgqhr2huboeioh8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mechanicfinder",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "302956113171-1igfhdisoeu68stugkk2b1qa3lled9tt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjIwsEG8aUEWzHyQnl86aisV2fGW2B8gM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302956113171-1igfhdisoeu68stugkk2b1qa3lled9tt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
