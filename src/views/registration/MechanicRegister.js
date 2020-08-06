@@ -15,13 +15,14 @@ import {
   Platform,
   AsyncStorage,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 // import RNPickerSelect from 'react-native-picker-select';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
 import DatePicker from 'react-native-datepicker';
 import {Picker} from '@react-native-community/picker';
-
+const axios = require('axios');
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -48,7 +49,6 @@ export default class MechanicRegister extends Component {
       ColorStep2: colors.inputBordercolor,
       ColorStep3: colors.inputBordercolor,
       ColorStep4: colors.inputBordercolor,
-
       BookNowView: 'flex',
       City: 'Select City',
       Country: 'Select Country',
@@ -61,19 +61,15 @@ export default class MechanicRegister extends Component {
       photo: '',
       Phone: '',
       carcompany: '',
-
       skilltype: '',
-
       VehicleType: '',
       date: 'Select Date Of Birth',
       filePath: {},
     };
   }
   submitData = () => {
-    fetch('http://192.168.0.101/mechanicregister', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
+    axios
+      .post('http://192.168.0.101:3000/mechanicregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
@@ -87,16 +83,44 @@ export default class MechanicRegister extends Component {
         skilltype: this.state.skilltype,
         vehicleType: this.state.VehicleType,
         date: this.state.date,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        Alert.alert(`${data.firstname} Information saved successfully!!`);
-        this.props.navigation.navigate('Dashboard');
       })
-      .catch((err) => {
+      .then(function (response) {
+        console.log(response);
+        Alert.alert(`Information saved successfully!!`);
+        //  this.props.navigation.navigate('Dashboard');
+      })
+      .catch(function (error) {
         Alert.alert('something went Wrong!!');
+        console.log(error);
       });
+    console.log('IN');
+    // fetch('http://192.168.8.103/mechanicregister', {
+    //   method: 'post',
+    //   headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
+    //   body: JSON.stringify({
+    //     firstname: this.state.FirstName,
+    //     lastname: this.state.LastName,
+    //     email: this.state.Email,
+    //     password: this.state.Password,
+    //     phone: this.state.Phone,
+    //     address: this.state.address,
+    //     photo: this.state.photo,
+    //     carcompany: this.state.carcompany,
+    //     city: this.state.City,
+    //     country: this.state.Country,
+    //     skilltype: this.state.skilltype,
+    //     vehicleType: this.state.VehicleType,
+    //     date: this.state.date,
+    //   }),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     Alert.alert(`${data.firstname} Information saved successfully!!`);
+    //     this.props.navigation.navigate('Dashboard');
+    //   })
+    //   .catch((err) => {
+    //     Alert.alert('something went Wrong!!');
+    //   });
   };
   handleChoosePhoto = () => {
     const options = {
@@ -443,8 +467,8 @@ export default class MechanicRegister extends Component {
 
                           // ... You can check the source to find the other keys.
                         }}
-                        onDateChange={(date) => {
-                          this.setState({date: date});
+                        onDateChange={(date1) => {
+                          this.setState({date: date1});
                         }}
                       />
                     </View>
@@ -569,16 +593,16 @@ export default class MechanicRegister extends Component {
                       style={image.InputImage}></Image>
 
                     <Picker
-                      selectedValue={this.state.MechanicType}
+                      selectedValue={this.state.skilltype}
                       style={[text.pickerstyle]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({skilltype: itemValue})
                       }>
-                      <Picker.Item label="Select Mechanic Type" value="java" />
-                      <Picker.Item label="Engine" value="engine" />
-                      <Picker.Item label="Body" value="body" />
-                      <Picker.Item label="Painter" value="painter" />
-                      <Picker.Item label="Electric" value="electric" />
+                      <Picker.Item label="Select Mechanic Type" value="" />
+                      <Picker.Item label="Engine" value="Engine" />
+                      <Picker.Item label="Body" value="Body" />
+                      <Picker.Item label="Painter" value="Painter" />
+                      <Picker.Item label="Electric" value="Electric" />
                     </Picker>
                   </View>
 
@@ -593,10 +617,10 @@ export default class MechanicRegister extends Component {
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({VehicleType: itemValue})
                       }>
-                      <Picker.Item label="Select Vehicle Type" value="java" />
-                      <Picker.Item label="Heavy Truck" value="heavy" />
-                      <Picker.Item label="Cars" value="cars" />
-                      <Picker.Item label="Jeep" value="jeep" />
+                      <Picker.Item label="Select Vehicle Type" value="" />
+                      <Picker.Item label="Heavy Truck" value="Heavy Truck" />
+                      <Picker.Item label="Cars" value="Cars" />
+                      <Picker.Item label="Jeep" value="Jeep" />
                     </Picker>
                   </View>
                   <View style={[input.textinputcontainer, style.mv10]}>
@@ -608,15 +632,15 @@ export default class MechanicRegister extends Component {
                       selectedValue={this.state.VehicleName}
                       style={[text.pickerstyle]}
                       onValueChange={(itemValue, itemIndex) =>
-                        this.setState({carcompany: itemValue})
+                        this.setState({VehicleName: itemValue})
                       }>
-                      <Picker.Item label="Select Vehicle Name" value="java" />
-                      <Picker.Item label="Honda" value="honda" />
+                      <Picker.Item label="Select Vehicle Name" value="" />
+                      <Picker.Item label="Honda" value="Honda" />
                       <Picker.Item label="Toyota" value="Toyota" />
                       <Picker.Item label="Suzuki" value="Suzuki" />
                       <Picker.Item label="Audi" value="Audi" />
                       <Picker.Item label="KIA" value="KIA" />
-                      <Picker.Item label="Mercedes" value="merecedes" />
+                      <Picker.Item label="Mercedes" value="Merecedes" />
                     </Picker>
                   </View>
                 </View>
@@ -695,7 +719,7 @@ export default class MechanicRegister extends Component {
                     </View>
                   </View>
                 </View>
-                <TouchableOpacity onPress={this.submitonClick}>
+                <TouchableOpacity onPress={() => this.submitData()}>
                   <View
                     style={[
                       button.buttoncontainer,
@@ -708,8 +732,7 @@ export default class MechanicRegister extends Component {
                         {color: colors.white},
                         button.touchablebutton,
                         text.semibold,
-                      ]}
-                      onPress={() => this.submitData()}>
+                      ]}>
                       Create Account
                     </Text>
                   </View>

@@ -24,12 +24,17 @@ router.post('/mechanicregister', (req, res) => {
     address: req.body.address,
     photo: req.body.photo,
     carcompany: req.body.carcompany,
-    vehicaltype: req.body.vehicaltype,
     city: req.body.city,
     country: req.body.country,
     skilltype: req.body.skilltype,
-    date: req.body.req,
+    data: req.body.data,
+    vehicaltype: req.body.vehicaltype,
   });
+
+  console.log('before');
+  console.log(req.body);
+  console.log('after');
+
   mechanic
     .save()
     .then((data) => {
@@ -62,9 +67,11 @@ router.post('/updatemechanic', (req, res) => {
     address: req.body.address,
     photo: req.body.photo,
     carcompany: req.body.carcompany,
+    vehicaltype: req.body.vehicaltype,
     city: req.body.city,
+    country: req.body.country,
     skilltype: req.body.skilltype,
-    experience: req.body.experience,
+    date: req.body.data,
   })
     .then((data) => {
       console.log(data);

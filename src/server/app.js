@@ -1,12 +1,14 @@
 const express = require('express');
 const app = express();
+
 const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
 
 require('./models/mechanicmodel');
-const mechanicroutes = require('./routes/mechanicroutes');
+const mechanicroutes1 = require('./routes/mechanicroutes');
+
 app.use(bodyparser.json());
-app.use(mechanicroutes);
+app.use(mechanicroutes1);
 
 const mongouri =
   'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';

@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const Mechanicschema = new mongoose.Schema({
+const mechanicschema = new mongoose.Schema({
   firstname: String,
   lastname: String,
-  email: {type: String, unique: true, required: true},
-  password: {type: String, required: true},
+  email: String,
+  password: String,
   phone: String,
   address: String,
   photo: String,
@@ -16,4 +16,4 @@ const Mechanicschema = new mongoose.Schema({
   vehicaltype: String,
 });
 
-mongoose.model('mechanicmodel', Mechanicschema);
+mongoose.model('mechanicmodel', mechanicschema);
