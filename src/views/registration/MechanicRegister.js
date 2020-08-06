@@ -69,7 +69,7 @@ export default class MechanicRegister extends Component {
   }
   submitData = () => {
     axios
-      .post('http://192.168.0.101:3000/mechanicregister', {
+      .post('http://192.168.0.105:3000/mechanicregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
@@ -80,9 +80,10 @@ export default class MechanicRegister extends Component {
         carcompany: this.state.carcompany,
         city: this.state.City,
         country: this.state.Country,
-        skilltype: this.state.skilltype,
-        vehicleType: this.state.VehicleType,
+        VehicleType: this.state.VehicleType,
         date: this.state.date,
+        skilltype: this.state.skilltype,
+     
       })
       .then(function (response) {
         console.log(response);
@@ -629,10 +630,10 @@ export default class MechanicRegister extends Component {
                       style={image.InputImage}></Image>
 
                     <Picker
-                      selectedValue={this.state.VehicleName}
+                      selectedValue={this.state.carcompany}
                       style={[text.pickerstyle]}
                       onValueChange={(itemValue, itemIndex) =>
-                        this.setState({VehicleName: itemValue})
+                        this.setState({carcompany: itemValue})
                       }>
                       <Picker.Item label="Select Vehicle Name" value="" />
                       <Picker.Item label="Honda" value="Honda" />

@@ -26,9 +26,10 @@ router.post('/mechanicregister', (req, res) => {
     carcompany: req.body.carcompany,
     city: req.body.city,
     country: req.body.country,
+    date: req.body.date,
+    VehicalType: req.body.VehicalType,
     skilltype: req.body.skilltype,
-    data: req.body.data,
-    vehicaltype: req.body.vehicaltype,
+    
   });
 
   console.log('before');
