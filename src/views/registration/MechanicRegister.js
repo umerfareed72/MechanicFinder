@@ -80,10 +80,10 @@ export default class MechanicRegister extends Component {
         carcompany: this.state.carcompany,
         city: this.state.City,
         country: this.state.Country,
-        VehicleType: this.state.VehicleType,
+        skilltype: this.state.skilltype,
+        vehicletype: this.state.VehicleType,
         date: this.state.date,
         skilltype: this.state.skilltype,
-     
       })
       .then(function (response) {
         console.log(response);
@@ -135,7 +135,7 @@ export default class MechanicRegister extends Component {
     };
     ImagePicker.showImagePicker(options, (response) => {
       if (response.uri) {
-        this.setState({photo: response});
+        this.setState({photo: response.uri});
       } else if (response.didCancel) {
         console.log('User Cancelled Image Picker');
       } else if (response.error) {
@@ -470,8 +470,8 @@ export default class MechanicRegister extends Component {
 
                           // ... You can check the source to find the other keys.
                         }}
-                        onDateChange={(date1) => {
-                          this.setState({date: date1});
+                        onDateChange={(date) => {
+                          this.setState({date: date});
                         }}
                       />
                     </View>

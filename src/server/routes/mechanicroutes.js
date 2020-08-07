@@ -29,12 +29,9 @@ router.post('/mechanicregister', (req, res) => {
     date: req.body.date,
     VehicalType: req.body.VehicalType,
     skilltype: req.body.skilltype,
-    
+    date: req.body.date,
+    vehicletype: req.body.vehicletype,
   });
-
-  console.log('before');
-  console.log(req.body);
-  console.log('after');
 
   mechanic
     .save()
