@@ -67,6 +67,9 @@ export default class MechanicRegister extends Component {
       filePath: {},
     };
   }
+  navigate=()=>{
+    
+  }
   submitData = () => {
     axios
       .post('http://192.168.0.110:3000/mechanicregister', {
@@ -85,16 +88,18 @@ export default class MechanicRegister extends Component {
         date: this.state.date,
         skilltype: this.state.skilltype,
       })
-      .then(function (response) {
-        // this.props.navigation.navigate("Dashboard")
-      
+      .then( (response)=> {
+      if(response){
+        this.props.navigation.navigate("Dashboard")
+       
+      }
         console.log(response);
         Alert.alert(`Information saved successfully!!`);
       
        
       })
-      .catch(function (error) {
-      
+      .catch( (error)=> {
+       
         Alert.alert('something went Wrong!!');
         
         console.log(error);
