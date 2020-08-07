@@ -69,7 +69,7 @@ export default class MechanicRegister extends Component {
   }
   submitData = () => {
     axios
-      .post('http://192.168.0.105:3000/mechanicregister', {
+      .post('http://192.168.0.110:3000/mechanicregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
@@ -88,7 +88,9 @@ export default class MechanicRegister extends Component {
       .then(function (response) {
         console.log(response);
         Alert.alert(`Information saved successfully!!`);
-        //  this.props.navigation.navigate('Dashboard');
+        this.props.navigation.navigate("Dashboard")
+      
+       
       })
       .catch(function (error) {
         Alert.alert('something went Wrong!!');

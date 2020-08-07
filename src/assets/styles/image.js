@@ -245,6 +245,11 @@ export default StyleSheet.create({
     width: 16,
     resizeMode: 'contain'
   },
+  icon40: {
+    height: 40,
+    width: 40,
+    resizeMode: 'contain'
+  },
   drawerIconmedium: {
     height: 19,
     width: 19,

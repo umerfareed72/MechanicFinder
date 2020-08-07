@@ -87,7 +87,8 @@ export const images = {
   HomeImg2: require('../assets/images/other/HomeImg2.png'),
   category1: require('../assets/images/other/category1.png'),
   category2: require('../assets/images/other/category2.png'),
-
+facebook:require("../assets/images/facebook.png"),
+facebookdark:require("../assets/images/facebookdark.png"),
   arrowright: require('../assets/images/arrow-right.png'),
   mic: require('../assets/images/mic.png'),
   percent: require('../assets/images/percent.png'),
