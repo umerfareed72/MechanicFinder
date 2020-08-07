@@ -81,8 +81,9 @@ export default class MechanicRegister extends Component {
         city: this.state.City,
         country: this.state.Country,
         skilltype: this.state.skilltype,
-        vehicleType: this.state.VehicleType,
+        vehicletype: this.state.VehicleType,
         date: this.state.date,
+        skilltype: this.state.skilltype,
       })
       .then(function (response) {
         console.log(response);
@@ -132,7 +133,7 @@ export default class MechanicRegister extends Component {
     };
     ImagePicker.showImagePicker(options, (response) => {
       if (response.uri) {
-        this.setState({photo: response});
+        this.setState({photo: response.uri});
       } else if (response.didCancel) {
         console.log('User Cancelled Image Picker');
       } else if (response.error) {
@@ -467,8 +468,8 @@ export default class MechanicRegister extends Component {
 
                           // ... You can check the source to find the other keys.
                         }}
-                        onDateChange={(date1) => {
-                          this.setState({date: date1});
+                        onDateChange={(date) => {
+                          this.setState({date: date});
                         }}
                       />
                     </View>
@@ -629,10 +630,10 @@ export default class MechanicRegister extends Component {
                       style={image.InputImage}></Image>
 
                     <Picker
-                      selectedValue={this.state.VehicleName}
+                      selectedValue={this.state.carcompany}
                       style={[text.pickerstyle]}
                       onValueChange={(itemValue, itemIndex) =>
-                        this.setState({VehicleName: itemValue})
+                        this.setState({carcompany: itemValue})
                       }>
                       <Picker.Item label="Select Vehicle Name" value="" />
                       <Picker.Item label="Honda" value="Honda" />

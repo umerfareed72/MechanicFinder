@@ -13,7 +13,7 @@ const mechanicschema = new mongoose.Schema({
   country: String,
   skilltype: String,
   date: String,
-  vehicaltype: String,
+  vehicleType: String,
 });
 
 mongoose.model('mechanicmodel', mechanicschema);
