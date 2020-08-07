@@ -86,14 +86,17 @@ export default class MechanicRegister extends Component {
         skilltype: this.state.skilltype,
       })
       .then(function (response) {
+        // this.props.navigation.navigate("Dashboard")
+      
         console.log(response);
         Alert.alert(`Information saved successfully!!`);
-        this.props.navigation.navigate("Dashboard")
       
        
       })
       .catch(function (error) {
+      
         Alert.alert('something went Wrong!!');
+        
         console.log(error);
       });
     console.log('IN');
@@ -722,7 +725,7 @@ export default class MechanicRegister extends Component {
                     </View>
                   </View>
                 </View>
-                <TouchableOpacity onPress={() => this.submitData()}>
+                <TouchableOpacity onPress={ this.submitData}>
                   <View
                     style={[
                       button.buttoncontainer,
