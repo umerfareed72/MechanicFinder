@@ -17,6 +17,7 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
+
 // import RNPickerSelect from 'react-native-picker-select';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
@@ -62,7 +63,25 @@ export default class MechanicRegister extends Component {
       filePath: {},
     };
   }
+//   cloudinaryUpload = (photo) => {
+//     const data = new FormData()
+//     data.append('file', photo)
+//     data.append('upload_preset', "dng1vvycv")
+//     data.append("cloud_name", "dng1vvycv")
+//     axios
+//       .post('https://api.cloudinary.com/v1_1/dng1vvycv/image/upload', {
+   
+//  data
+//     }).then(res => res.json()).
+//       then(data => {
+//         console.log(data)
+//        this.setState({photo:data.secure_url})
 
+//       }).catch(err => {
+//         Alert.alert("An Error Occured While Uploading")
+//     console.log(err)
+//       })
+//   }
   check = () => {
     if (this.state.Password == this.state.CPassword) {
       this.submitData();
@@ -107,10 +126,21 @@ export default class MechanicRegister extends Component {
         path: 'images',
       },
     };
+    
     ImagePicker.showImagePicker(options, (response) => {
-      if (response.uri) {
+      if (response) {
         console.log(response);
         this.setState({photo: response.uri});
+        // const uri = response.uri;
+        // const type = response.type;
+        // const name = response.fileName;
+        // const source = {
+        //   uri,
+        //   type,
+        //   name,
+        // }
+        // this.cloudinaryUpload(source)
+     
       } else if (response.didCancel) {
         console.log('User Cancelled Image Picker');
       } else if (response.error) {
