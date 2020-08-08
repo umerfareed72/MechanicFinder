@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 const Mechanicmodel = mongoose.model('mechanicmodel');
-
+const Usermodel = mongoose.model('Usermodel');
 router.get('/', (req, res) => {
   Mechanicmodel.find({})
     .then((data) => {
@@ -26,11 +26,10 @@ router.post('/mechanicregister', (req, res) => {
     carcompany: req.body.carcompany,
     city: req.body.city,
     country: req.body.country,
-    date: req.body.date,
-    VehicalType: req.body.VehicalType,
     skilltype: req.body.skilltype,
+vehicletype:req.body.vehicletype,
     date: req.body.date,
-    vehicletype: req.body.vehicletype,
+   
   });
 
   mechanic
@@ -40,9 +39,10 @@ router.post('/mechanicregister', (req, res) => {
       res.send(data);
     })
     .catch((err) => {
-      res.status(422).send(err.message);
+      res.status(404).send(err.message);
     });
 });
+
 
 router.post('/deletemechanic', (req, res) => {
   Mechanicmodel.findByIdAndRemove(req.body.id)
@@ -55,6 +55,45 @@ router.post('/deletemechanic', (req, res) => {
     });
 });
 
+router.post('/deleteUser', (req, res) => {
+  Usermodel.findByIdAndRemove(req.body.id)
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+
+router.post('/userregister', (req, res) => {
+  const User = new Usermodel({
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    email: req.body.email,
+    password: req.body.password,
+    phone: req.body.phone,
+    address: req.body.address,
+    photo: req.body.photo,
+    city: req.body.city,
+    country: req.body.country,
+    date: req.body.date,
+   
+  });
+
+  User
+    .save()
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+
 router.post('/updatemechanic', (req, res) => {
   Mechanicmodel.findByIdAndUpdate(req.body.id, {
     firstname: req.body.firstname,
@@ -65,10 +104,31 @@ router.post('/updatemechanic', (req, res) => {
     address: req.body.address,
     photo: req.body.photo,
     carcompany: req.body.carcompany,
-    vehicaltype: req.body.vehicaltype,
     city: req.body.city,
     country: req.body.country,
     skilltype: req.body.skilltype,
+    vehicaltype: req.body.vehicaltype,
+    date: req.body.data,
+  })
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+router.post('/updateUser', (req, res) => {
+  Usermodel.findByIdAndUpdate(req.body.id, {
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    email: req.body.email,
+    password: req.body.password,
+    phone: req.body.phone,
+    address: req.body.address,
+    photo: req.body.photo,
+    city: req.body.city,
+    country: req.body.country,
     date: req.body.data,
   })
     .then((data) => {

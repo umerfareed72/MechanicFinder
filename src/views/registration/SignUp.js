@@ -15,13 +15,14 @@ import {
   Platform,
   AsyncStorage,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 // import RNPickerSelect from 'react-native-picker-select';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
 import DatePicker from 'react-native-datepicker';
 import {Picker} from '@react-native-community/picker';
-
+const axios = require('axios');
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -34,7 +35,7 @@ import StarRating from 'react-native-star-rating';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 
-export default class HomeDetail extends Component {
+export default class MechanicRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,15 +47,58 @@ export default class HomeDetail extends Component {
       ColorStep1: colors.darkBlue,
       ColorStep2: colors.inputBordercolor,
       ColorStep3: colors.inputBordercolor,
-      BookNowView: 'flex',
+
       City: 'Select City',
       Country: 'Select Country',
+      FirstName: '',
+      LastName: '',
+      Email: '',
+      Password: '',
+      CPassword: '',
+      address: '',
+      photo: '',
+      Phone: '',
       date: 'Select Date Of Birth',
-      photo: null,
       filePath: {},
     };
   }
 
+  check = () => {
+    if (this.state.Password == this.state.CPassword) {
+      this.submitData();
+    } else {
+      alert('Confirm Password Not Matched');
+    }
+  };
+  submitData = () => {
+    axios
+      .post('http://192.168.0.110:3000/userregister', {
+        firstname: this.state.FirstName,
+        lastname: this.state.LastName,
+        email: this.state.Email,
+        password: this.state.Password,
+
+        phone: this.state.Phone,
+        address: this.state.address,
+        photo: this.state.photo,
+        city: this.state.City,
+        country: this.state.Country,
+        date: this.state.date,
+      })
+      .then((response) => {
+        if (response) {
+          this.props.navigation.navigate('Dashboard');
+          console.log(response);
+          Alert.alert(`Information saved successfully!!`);
+        }
+      })
+      .catch((error) => {
+        Alert.alert('something went Wrong!!');
+
+        console.log(error);
+      });
+    console.log('IN');
+  };
   handleChoosePhoto = () => {
     const options = {
       title: 'Take Image From',
@@ -65,7 +109,8 @@ export default class HomeDetail extends Component {
     };
     ImagePicker.showImagePicker(options, (response) => {
       if (response.uri) {
-        this.setState({photo: response});
+        console.log(response);
+        this.setState({photo: response.uri});
       } else if (response.didCancel) {
         console.log('User Cancelled Image Picker');
       } else if (response.error) {
@@ -84,7 +129,6 @@ export default class HomeDetail extends Component {
     if (this.state.TabDataStep1 == 'flex') {
       this.setState({TabDataStep2: 'none'}),
         this.setState({TabDataStep3: 'none'}),
-        this.setState({BookNowView: 'flex'}),
         this.setState({ColorStep1: colors.darkBlue}),
         this.setState({ColorStep3: colors.inputBordercolor}),
         this.setState({ColorStep2: colors.inputBordercolor});
@@ -92,7 +136,6 @@ export default class HomeDetail extends Component {
       this.setState({TabDataStep1: 'flex'}),
         this.setState({TabDataStep2: 'none'}),
         this.setState({TabDataStep3: 'none'});
-    this.setState({BookNowView: 'flex'});
     this.setState({ColorStep1: colors.darkBlue});
     this.setState({ColorStep3: colors.inputBordercolor});
     this.setState({ColorStep2: colors.inputBordercolor});
@@ -102,7 +145,6 @@ export default class HomeDetail extends Component {
     if (this.state.TabDataStep2 == 'flex') {
       this.setState({TabDataStep1: 'none'}),
         this.setState({TabDataStep3: 'none'}),
-        this.setState({BookNowView: 'none'}),
         this.setState({color: 'none'});
       this.setState({ColorStep1: colors.inputBordercolor}),
         this.setState({ColorStep3: colors.inputBordercolor}),
@@ -110,7 +152,6 @@ export default class HomeDetail extends Component {
     } else
       this.setState({TabDataStep2: 'flex'}),
         this.setState({TabDataStep1: 'none'}),
-        this.setState({BookNowView: 'none'}),
         this.setState({TabDataStep3: 'none'});
     this.setState({ColorStep1: colors.inputBordercolor});
     this.setState({ColorStep3: colors.inputBordercolor});
@@ -121,7 +162,6 @@ export default class HomeDetail extends Component {
     if (this.state.TabDataStep3 == 'flex') {
       this.setState({TabDataStep2: 'none'}),
         this.setState({TabDataStep1: 'none'}),
-        this.setState({BookNowView: 'none'}),
         this.setState({color: 'none'});
       this.setState({ColorStep1: colors.inputBordercolor}),
         this.setState({ColorStep3: colors.darkBlue}),
@@ -129,7 +169,6 @@ export default class HomeDetail extends Component {
     } else
       this.setState({TabDataStep3: 'flex'}),
         this.setState({TabDataStep2: 'none'}),
-        this.setState({BookNowView: 'none'}),
         this.setState({TabDataStep1: 'none'});
     this.setState({ColorStep1: colors.inputBordercolor});
     this.setState({ColorStep3: colors.darkBlue});
@@ -156,7 +195,7 @@ export default class HomeDetail extends Component {
                     Create Account
                   </Text>
                   <Text style={[text.text20, {color: colors.white}]}>
-              (For User)
+                    (For Mechanics Registeration)
                   </Text>
                 </View>
               </LinearGradient>
@@ -211,7 +250,7 @@ export default class HomeDetail extends Component {
                 style={[
                   {
                     backgroundColor: colors.white,
-                    display: this.state.BookNowView,
+                    display: this.state.TabDataStep1,
                   },
                 ]}>
                 <View style={[appStyle.headingLayout]}>
@@ -364,15 +403,13 @@ export default class HomeDetail extends Component {
                   </View>
 
                   <View style={[input.textinputcontainer, style.mv5]}>
-                    <Image
-                      source={images.username}
-                      style={image.username}></Image>
+                    <Image source={images.phone} style={image.username}></Image>
                     <TextInput
                       style={input.textinputstyle}
                       placeholder="Phone Number"
                       onChangeText={(text) => {
                         this.setState({
-                          LastName: text,
+                          Phone: text,
                         });
                       }}
                       underlineColorAndroid="transparent"></TextInput>
@@ -380,14 +417,14 @@ export default class HomeDetail extends Component {
 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
-                      source={images.email}
+                      source={images.location}
                       style={image.InputImage}></Image>
                     <TextInput
                       style={input.textinputstyle}
                       placeholder="Home Address"
                       onChangeText={(text) => {
                         this.setState({
-                          Email: text,
+                          address: text,
                         });
                       }}
                       underlineColorAndroid="transparent"></TextInput>
@@ -395,7 +432,7 @@ export default class HomeDetail extends Component {
 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
-                      source={images.email}
+                      source={images.location}
                       style={image.InputImage}></Image>
 
                     <Picker
@@ -414,7 +451,9 @@ export default class HomeDetail extends Component {
                     </Picker>
                   </View>
                   <View style={[input.textinputcontainer, style.mv5]}>
-                    <Image source={images.key} style={image.InputImage}></Image>
+                    <Image
+                      source={images.location}
+                      style={image.InputImage}></Image>
 
                     <Picker
                       selectedValue={this.state.Country}
@@ -448,6 +487,9 @@ export default class HomeDetail extends Component {
                   </View>
                 </TouchableOpacity>
               </View>
+
+              {/* Mechanic SKILLS Page */}
+
               {/* Gallery Tab View End */}
 
               {/* Reviews Tab Start  */}
@@ -466,12 +508,12 @@ export default class HomeDetail extends Component {
                 <View style={[style.flex1, style.jcCenter]}>
                   <View style={[style.aiCenter, style.mv20]}>
                     <View style={[image.largeovalcontainer]}>
-                      {photo && (
+                      {
                         <Image
-                          source={{uri: photo.uri}}
+                          source={{uri: photo}}
                           style={[image.largeovalcontainerupload]}
                         />
-                      )}
+                      }
                       <TouchableOpacity
                         style={{
                           position: 'absolute',
@@ -503,7 +545,7 @@ export default class HomeDetail extends Component {
                     </View>
                   </View>
                 </View>
-                <TouchableOpacity onPress={this.submitonClick}>
+                <TouchableOpacity onPress={this.check}>
                   <View
                     style={[
                       button.buttoncontainer,
