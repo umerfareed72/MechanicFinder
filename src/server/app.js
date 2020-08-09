@@ -6,13 +6,15 @@ const app = express();
 require('./models/mechanicmodel');
 
 const requiretoken = require('./middlewares/requiretoken');
+require('./models/Usermodel');
+
 const mechanicroutes1 = require('./routes/mechanicroutes');
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(mechanicroutes1);
 
 const mongouri =
-  'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';
-//"mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/mechanicregister?retryWrites=true&w=majority"
+  // 'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';
+  'mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/SmartAutoMechanicFinder?retryWrites=true&w=majority';
 // "mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/test"
 mongoose.connect(mongouri, {
   useNewUrlParser: true,

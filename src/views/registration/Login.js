@@ -18,6 +18,14 @@ import {
   Button,
 } from 'react-native';
 import {
+  AccessToken,
+  LoginManager,
+  LoginButton,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk';
+
+import {
   colors,
   screenHeight,
   screenWidth,
@@ -40,16 +48,94 @@ import {
 
 } from '@react-native-community/google-signin';
 import EditProfile from '../main/EditProfile';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
     this.state = {
+      Uregister:colors.white,
+      Mregister:colors.white,
+      textUser:colors.black,
+      textMechanic:colors.black,
       userInfo: null,
+
       gettingLoginStatus: true,
+ user_name:'',
+        // Bussinessid: '',
+        token: '',
+        // FacebookPageId: '',
+    profile_pic:''
      };
   }
+  onLogout = () => {
+    //Clear the state after logout
+    this.setState({user_name: null, token: null, profile_pic: null});
+  };
+  
+  get_Response_Info = (error, result) => {
+    if (error) {
+      //Alert for the Error
+      Alert.alert('Error fetching data: ' + error.toString());
+    } else {
+      //response alert
+      console.log(JSON.stringify(result));
+      this.props.navigation.navigate("Dashboard")
+      
+
+      // this.setState({ Bussinessid:  result.id });
+
+      // this.setState({ FacebookPageId:  result.instagram_business_account.id });
+      // this.setState({ token: 'User Id: ' + ' ' + result.id });
+      // this.setState({ profile_pic: result.picture.data.url });
+    }
+  };
+
+UserRegister=()=>{
+this.setState(({textUser:colors.white,Uregister:colors.orange}))
+this.props.navigation.navigate("SignUp")
+
+}
+MechanicRegister=()=>{
+  this.setState(({textMechanic:colors.white,Mregister:colors.orange}))
+  this.props.navigation.navigate("MechanicRegister")
+  
+  }
+  handleFacebookLogin = () => {
+    const _this = this;
+    LoginManager.logInWithPermissions(['public_profile']).then(
+      function (result) {
+        if (result.isCancelled) {
+          console.log('Login cancelled');
+        } else {
+          console.log(
+            'Login success with permissions: ' +
+              result.grantedPermissions.toString(),
+          );
+
+          AccessToken.getCurrentAccessToken().then((data) => {
+            console.log(data.accessToken.toString());
+            _this.setState({token: data.accessToken.toString()});
+            const token = data.accessToken.toString();
+            const processRequest = new GraphRequest(
+              '/me?fields=name,picture.type(large)',
+              null,
+              _this.get_Response_Info,
+            );
+            // Start the graph request.
+            new GraphRequestManager().addRequest(processRequest).start();
+          });
+        }
+      },
+      function (error) {
+        console.log('Login fail with error: ' + error);
+      },
+    );
+  };
+
+
+
   componentDidMount() {
     //initial configuration
     GoogleSignin.configure({
@@ -220,17 +306,70 @@ export default class Login extends Component {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <View style={[style.mv30,style.mh50]}>
+     
+     
+                <View style={[style.mv10,style.row,style.asCenter]}>
+      
                 <GoogleSigninButton
-      style={[{  height: 55, },style.asCenter]}
-      size={GoogleSigninButton.Size.Wide}
+      style={[style.asCenter]}
+      size={GoogleSigninButton.Size.Icon}
       color={GoogleSigninButton.Color.Light}
       
       onPress={this._signIn}
       disabled={this.state.isSigninInProgress} />
-       
+      
+      
+        <TouchableOpacity  onPress={this.handleFacebookLogin}>
+        <View style={[style.jcCenter,style.flex1,style.mh20]}>
+          <Image style={[image.icon40]} source={images.facebookdark}></Image>
+          </View>
+        </TouchableOpacity>
+     
+      
         </View>
               </View>
+     
+              <View style={[style.asCenter,style.mt40]}>
+<Text style={[text.heading6]}>DO YOU HAVE AN ACCOUNT?</Text>
+
+     </View>
+              <View
+              style={[
+                appStyle.rowBtw,
+                style.mh15,
+                style.mt10,
+                appStyle.bodyShadowTop,
+              ]}>
+                
+              <TouchableOpacity onPress={this.UserRegister} style={[{backgroundColor:this.state.Uregister},
+                appStyle.colLeft]}>
+                <Text
+                  style={[
+                    style.asCenter,
+                    text.tab,
+                    text.semibold,
+                    {color:this.state.textUser},
+                  ]}>
+                User
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={this.MechanicRegister} style={[
+                appStyle.colRight,
+                {backgroundColor:this.state.Mregister}]}>
+                <Text
+                  style={[
+                    style.asCenter,
+                    text.tab,
+                    text.semibold,
+                    {color: this.state.textMechanic},
+                  ]}>
+                Mechanic
+                </Text>
+              </TouchableOpacity>
+
+            
+            </View>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

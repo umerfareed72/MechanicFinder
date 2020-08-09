@@ -128,6 +128,7 @@ ObjectAlign:{
 
   bodyShadowTop: {
     shadowColor: colors.shadowColor,
+
     shadowOffset: {
       width: 0,
       height: 1,
@@ -136,6 +137,19 @@ ObjectAlign:{
     shadowRadius: 3.0,
     elevation: 3,
   },
+  colRight:{
+    paddingVertical:10,paddingHorizontal:20,flex:1,borderTopRightRadius:100,borderBottomRightRadius:100, 
+    borderColor:colors.grayd7,
+    borderWidth:1
+    
+  },
+  colCenter:{
+    paddingVertical:10,paddingHorizontal:20,flex:1
+  },
+  colLeft:{
+    paddingVertical:10,paddingHorizontal:20,flex:1,borderTopLeftRadius:100,borderBottomLeftRadius:100,
+    borderWidth:1,borderColor:colors.grayd7
+    },
   bookingShadow: {
     shadowColor: "#000",
     shadowOffset: {

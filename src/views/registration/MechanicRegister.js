@@ -57,20 +57,29 @@ export default class MechanicRegister extends Component {
       LastName: '',
       Email: '',
       Password: '',
-      Confirmpassword: '',
+      CPassword: '',
       address: '',
       photo: '',
       Phone: '',
       carcompany: '',
       skilltype: '',
-      VehicleType: '',
+      vehicletype: '',
       date: 'Select Date Of Birth',
       filePath: {},
     };
   }
-  submitData = async() => {
+  check=()=>{
+    if(this.state.Password==this.state.CPassword){
+      this.submitData()
+   
+    }else{
+      alert("Confirm Password Not Matched")
+    }
+   
+  }
+  submitData = () => {
     axios
-      .post('http://192.168.0.103:3000/mechanicregister', {
+      .post('http://192.168.0.110:3000/mechanicregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
@@ -82,12 +91,13 @@ export default class MechanicRegister extends Component {
         city: this.state.City,
         country: this.state.Country,
         skilltype: this.state.skilltype,
-        vehicletype: this.state.VehicleType,
+    vehicletype:this.state.vehicletype,
         date: this.state.date,
-        skilltype: this.state.skilltype,
+    
       })
       .then(function (res) {
         console.log(res.data);
+        this.props.navigation.navigate("Dashboard")
         try {
           await AsyncStorage.setItem('token', res.data.token)
         } catch (e) {
@@ -95,8 +105,10 @@ export default class MechanicRegister extends Component {
         }
         Alert.alert('Information saved successfully!!');
       })
-      .catch(function (error) {
+      .catch( (error)=> {
+       
         Alert.alert('something went Wrong!!');
+        
         console.log(error);
       });
 
@@ -115,7 +127,7 @@ export default class MechanicRegister extends Component {
     //     city: this.state.City,
     //     country: this.state.Country,
     //     skilltype: this.state.skilltype,
-    //     vehicleType: this.state.VehicleType,
+    //     vehicletype: this.state.vehicletype,
     //     date: this.state.date,
     //   }),
     // })
@@ -405,9 +417,10 @@ export default class MechanicRegister extends Component {
                       secureTextEntry={true}
                       onChangeText={(text) => {
                         this.setState({
-                          Confirmpassword: text,
+                          CPassword: text,
                         });
                       }}
+                   
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
                 </View>
@@ -482,7 +495,7 @@ export default class MechanicRegister extends Component {
 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
-                      source={images.username}
+                      source={images.phone}
                       style={image.username}></Image>
                     <TextInput
                       style={input.textinputstyle}
@@ -497,7 +510,7 @@ export default class MechanicRegister extends Component {
 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
-                      source={images.HomeImg}
+                      source={images.location}
                       style={image.InputImage}></Image>
                     <TextInput
                       style={input.textinputstyle}
@@ -512,7 +525,7 @@ export default class MechanicRegister extends Component {
 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
-                      source={images.email}
+                      source={images.location}
                       style={image.InputImage}></Image>
 
                     <Picker
@@ -531,7 +544,7 @@ export default class MechanicRegister extends Component {
                     </Picker>
                   </View>
                   <View style={[input.textinputcontainer, style.mv5]}>
-                    <Image source={images.key} style={image.InputImage}></Image>
+                    <Image source={images.location} style={image.InputImage}></Image>
 
                     <Picker
                       selectedValue={this.state.Country}
@@ -595,7 +608,7 @@ export default class MechanicRegister extends Component {
 
                   <View style={[input.textinputcontainer, style.mv10]}>
                     <Image
-                      source={images.email}
+                      source={images.carservice}
                       style={image.InputImage}></Image>
 
                     <Picker
@@ -614,14 +627,14 @@ export default class MechanicRegister extends Component {
 
                   <View style={[input.textinputcontainer, style.mv10]}>
                     <Image
-                      source={images.email}
+                      source={images.cartype}
                       style={image.InputImage}></Image>
 
                     <Picker
-                      selectedValue={this.state.VehicleType}
+                      selectedValue={this.state.vehicletype}
                       style={[text.pickerstyle]}
                       onValueChange={(itemValue, itemIndex) =>
-                        this.setState({VehicleType: itemValue})
+                        this.setState({vehicletype: itemValue})
                       }>
                       <Picker.Item label="Select Vehicle Type" value="" />
                       <Picker.Item label="Heavy Truck" value="Heavy Truck" />
@@ -631,7 +644,7 @@ export default class MechanicRegister extends Component {
                   </View>
                   <View style={[input.textinputcontainer, style.mv10]}>
                     <Image
-                      source={images.email}
+                      source={images.Company}
                       style={image.InputImage}></Image>
 
                     <Picker
@@ -653,7 +666,7 @@ export default class MechanicRegister extends Component {
                 <TouchableOpacity onPress={this.tabStep4}>
                   <View
                     style={[
-                      button.buttoncontainer,
+                      button.buttoncontainer, 
                       style.mt20,
                       style.mh50,
                       {backgroundColor: colors.purple},
@@ -669,7 +682,7 @@ export default class MechanicRegister extends Component {
                   </View>
                 </TouchableOpacity>
               </View>
-
+ 
               {/* Gallery Tab View End */}
 
               {/* Reviews Tab Start  */}
@@ -690,7 +703,7 @@ export default class MechanicRegister extends Component {
                     <View style={[image.largeovalcontainer]}>
                       {
                         <Image
-                          source={{uri: photo.uri}}
+                          source={{uri: photo}}
                           style={[image.largeovalcontainerupload]}
                         />
                       }
@@ -725,7 +738,7 @@ export default class MechanicRegister extends Component {
                     </View>
                   </View>
                 </View>
-                <TouchableOpacity onPress={() => this.submitData()}>
+                <TouchableOpacity onPress={ this.check}>
                   <View
                     style={[
                       button.buttoncontainer,
