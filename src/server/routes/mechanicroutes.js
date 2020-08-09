@@ -1,20 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const {jwtkey} = require('../keys');
 const router = express.Router();
-
+const jwt = require('jsonwebtoken');
 const Mechanicmodel = mongoose.model('mechanicmodel');
 
-router.get('/', (req, res) => {
-  Mechanicmodel.find({})
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+// router.get('/', (req, res) => {
+//   Mechanicmodel.find({})
+//     .then((data) => {
+//       res.send(data);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
 
-router.post('/mechanicregister', (req, res) => {
+router.post('/mechanicregister', async (req, res) => {
   const mechanic = new Mechanicmodel({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
@@ -33,15 +34,36 @@ router.post('/mechanicregister', (req, res) => {
     vehicletype: req.body.vehicletype,
   });
 
-  mechanic
+  await mechanic
     .save()
-    .then((data) => {
-      console.log(data);
-      res.send(data);
+    .then(() => {
+      const token = jwt.sign({mechanicid: mechanic._id}, jwtkey);
+      res.send({token});
     })
+    // .then((data) => {
+    //
+    //   // res.send(data);
+    // })
     .catch((err) => {
       res.status(422).send(err.message);
     });
+});
+router.post('/mechnanicsignin', async (req, res) => {
+  const {email, password} = req.body;
+  if (!email || !password) {
+    return res.status(422).send({error: 'Provide Email and Password Both!!'});
+  }
+  const mechanic = await Mechanicmodel.findOne({email});
+  if (!mechanic) {
+    return res.status(422).send({error: 'Email not exist!!'});
+  }
+  try {
+    await mechanic.comparePassword(password);
+    const token = jwt.sign({mechanicid: mechanic._id}, jwtkey);
+    res.send({token});
+  } catch (err) {
+    return res.status(422).send({error: 'Password not exist!!'});
+  }
 });
 
 router.post('/deletemechanic', (req, res) => {

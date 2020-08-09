@@ -9,7 +9,7 @@ import SignUp from '../views/registration/SignUp';
 import DrawerNavigator from '../navigations/SideMenuNavigation';
 import ChatBox from '../views/main/ChatBox';
 import ForgotPassword from '../views/registration/ForgotPassword';
-import { createBottomTabNavigator} from 'react-navigation-tabs';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
 
 //import Header from '../components/header'; //not being used currently but header function can be placed in-place of header title more customization
 
@@ -23,28 +23,27 @@ const Top = createBottomTabNavigator(
     },
     SignUp: {
       screen: SignUp,
-      navigationOptions:{
-        tabBarLabel:"User Register"
-      }
+      navigationOptions: {
+        tabBarLabel: 'User Register',
+      },
     },
     MechanicRegister: {
       screen: MechanicRegister,
-      navigationOptions:{
-        tabBarLabel:"Mechanic Register"
-      }
+      navigationOptions: {
+        tabBarLabel: 'Mechanic Register',
+      },
     },
   },
   {
-    order: ['Login', 'SignUp','MechanicRegister'],
+    order: ['Login', 'SignUp', 'MechanicRegister'],
     tabBarPosition: 'bottom',
     tabBarOptions: {
       activeTintColor: colors.white,
-activeBackgroundColor:colors.darkBlue,
+      activeBackgroundColor: colors.darkBlue,
       inactiveTintColor: colors.lightblue,
-      labelStyle: {fontSize: 12, fontWeight: 'bold',paddingBottom:15},
-        indicatorStyle: {backgroundColor: colors.darkBlue},
+      labelStyle: {fontSize: 12, fontWeight: 'bold', paddingBottom: 15},
+      indicatorStyle: {backgroundColor: colors.darkBlue},
       style: {backgroundColor: colors.white},
-      
     },
     initialRouteName: 'Login',
   },
@@ -64,7 +63,6 @@ const SplashStack = createStackNavigator(
 );
 const AuthStack = createStackNavigator(
   {
-
     Top: {
       screen: Top,
     },

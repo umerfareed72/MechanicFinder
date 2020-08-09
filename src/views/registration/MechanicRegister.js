@@ -13,10 +13,11 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  AsyncStorage,
+  
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 // import RNPickerSelect from 'react-native-picker-select';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
@@ -67,9 +68,9 @@ export default class MechanicRegister extends Component {
       filePath: {},
     };
   }
-  submitData = () => {
+  submitData = async() => {
     axios
-      .post('http://192.168.0.105:3000/mechanicregister', {
+      .post('http://192.168.0.103:3000/mechanicregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
@@ -85,16 +86,20 @@ export default class MechanicRegister extends Component {
         date: this.state.date,
         skilltype: this.state.skilltype,
       })
-      .then(function (response) {
-        console.log(response);
-        Alert.alert(`Information saved successfully!!`);
-        //  this.props.navigation.navigate('Dashboard');
+      .then(function (res) {
+        console.log(res.data);
+        try {
+          await AsyncStorage.setItem('token', res.data.token)
+        } catch (e) {
+         console.log('error hai',e);
+        }
+        Alert.alert('Information saved successfully!!');
       })
       .catch(function (error) {
         Alert.alert('something went Wrong!!');
         console.log(error);
       });
-    console.log('IN');
+
     // fetch('http://192.168.8.103/mechanicregister', {
     //   method: 'post',
     //   headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
