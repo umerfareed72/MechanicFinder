@@ -48,12 +48,17 @@ import {
 
 } from '@react-native-community/google-signin';
 import EditProfile from '../main/EditProfile';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
     this.state = {
+      Uregister:colors.white,
+      Mregister:colors.white,
+      textUser:colors.black,
+      textMechanic:colors.black,
       userInfo: null,
 
       gettingLoginStatus: true,
@@ -87,7 +92,16 @@ export default class Login extends Component {
     }
   };
 
+UserRegister=()=>{
+this.setState(({textUser:colors.white,Uregister:colors.orange}))
+this.props.navigation.navigate("SignUp")
 
+}
+MechanicRegister=()=>{
+  this.setState(({textMechanic:colors.white,Mregister:colors.orange}))
+  this.props.navigation.navigate("MechanicRegister")
+  
+  }
   handleFacebookLogin = () => {
     const _this = this;
     LoginManager.logInWithPermissions(['public_profile']).then(
@@ -294,10 +308,6 @@ export default class Login extends Component {
                 </TouchableOpacity>
      
      
-     <View style={[style.asCenter,style.mv20]}>
-<Text style={[text.text18]}>Sign In As</Text>
-
-     </View>
                 <View style={[style.mv10,style.row,style.asCenter]}>
       
                 <GoogleSigninButton
@@ -318,6 +328,48 @@ export default class Login extends Component {
       
         </View>
               </View>
+     
+              <View style={[style.asCenter,style.mt40]}>
+<Text style={[text.heading6]}>DO YOU HAVE AN ACCOUNT?</Text>
+
+     </View>
+              <View
+              style={[
+                appStyle.rowBtw,
+                style.mh15,
+                style.mt10,
+                appStyle.bodyShadowTop,
+              ]}>
+                
+              <TouchableOpacity onPress={this.UserRegister} style={[{backgroundColor:this.state.Uregister},
+                appStyle.colLeft]}>
+                <Text
+                  style={[
+                    style.asCenter,
+                    text.tab,
+                    text.semibold,
+                    {color:this.state.textUser},
+                  ]}>
+                User
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={this.MechanicRegister} style={[
+                appStyle.colRight,
+                {backgroundColor:this.state.Mregister}]}>
+                <Text
+                  style={[
+                    style.asCenter,
+                    text.tab,
+                    text.semibold,
+                    {color: this.state.textMechanic},
+                  ]}>
+                Mechanic
+                </Text>
+              </TouchableOpacity>
+
+            
+            </View>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
