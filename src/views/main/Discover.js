@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-  AsyncStorage,
+
   Button,
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';

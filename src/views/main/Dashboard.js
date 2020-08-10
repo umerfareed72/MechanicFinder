@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  AsyncStorage,
+
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 
@@ -41,6 +41,7 @@ export default class Dashboard extends Component {
       loading: false,
       items: [],
       refreshing: false,
+      dataSource:[]
     };
   }
 
@@ -72,6 +73,21 @@ export default class Dashboard extends Component {
   //       },
   //     };
   //   };
+  
+  componentDidMount(){
+    fetch("http://192.168.0.107:3000/mechanics")
+    .then(response => response.json())
+    .then((responseJson)=> {
+      this.setState({
+       dataSource: responseJson
+      })
+  console.log("Ok List")
+    })
+    .catch(error=>console.log(error,"error")
+
+    ) //to catch the errors if any
+    }  
+ 
 
   render() {
     return (
@@ -89,25 +105,10 @@ export default class Dashboard extends Component {
             </View>
             <StatusBar backgroundColor={'transparent'} />
             <View style={[appStyle.headInner]}>
-              <View style={[]}>
-                <Text style={[text.heading1, text.bold]}>Discover</Text>
+              <View style={[style.asCenter]}>
+                <Text style={[text.heading1, text.bold,text.text30]}>Dashboard</Text>
               </View>
-              <View style={[appStyle.searchBg, style.mv10]}>
-                <View style={[style.row, style.aiCenter]}>
-                  <View>
-                    <Image
-                      style={[image.searchIcon]}
-                      source={images.serach}></Image>
-                  </View>
-                  <View style={[style.flex1]}>
-                    <TextInput
-                      style={[appStyle.inputTheme1]}
-                      placeholder="Search"
-                      underlineColorAndroid="transparent"
-                      placeholderTextColor="#fff"></TextInput>
-                  </View>
-                </View>
-              </View>
+           
             </View>
           </LinearGradient>
         </View>
@@ -116,8 +117,12 @@ export default class Dashboard extends Component {
             <View style={[style.pv20]}>
               <View style={[appStyle.rowjustify, style.ph20]}>
                 <Text style={[text.heading2, text.semibold]}>Popular</Text>
-                <TouchableOpacity onPress={
-                 ()=>{this.props.navigation.navigate("Mechanics")} 
+                
+                  
+                <TouchableOpacity 
+                
+                onPress={
+                 ()=>{this.props.navigation.navigate("Mechaniclist")} 
                 }>
                   <Text style={[text.link]}>See all</Text>
                 </TouchableOpacity>
@@ -128,8 +133,12 @@ export default class Dashboard extends Component {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}>
                   <View style={[style.row]}>
+                  {this.state.dataSource.map((data,index)=>{
+               
+               return( 
                     <TouchableOpacity
                       style={[style.mr15]}
+                key={index}
                       onPress={() => {
                         this.props.navigation.navigate('HomeDetail');
                       }}>
@@ -139,10 +148,10 @@ export default class Dashboard extends Component {
                         source={images.HomeImg}>
                         <View style={[appStyle.popularInnerContent]}>
                           <Text style={[text.heading3, text.bold]}>
-                        Abdul
+                        {data.firstname}{" "}{data.lastname}
                           </Text>
                           <Text style={[text.heading3, text.bold]}>
-                          Honda Motor Mechanic
+                         {data.address}{data.city}
                           </Text>
 
                           <StarRating
@@ -161,105 +170,8 @@ export default class Dashboard extends Component {
                         </View>
                       </ImageBackground>
                     </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={[style.mr15]}
-                      onPress={() => {
-                        this.props.navigation.navigate('HomeDetail');
-                      }}>
-                      <ImageBackground
-                        imageStyle={{borderRadius: 4}}
-                        style={image.homeImgLarge}
-                        source={images.HomeImg2}>
-                        <View style={[appStyle.popularInnerContent]}>
-                          <Text style={[text.heading3, text.bold]}>
-                          Kareem
-                          </Text>
-                          <Text style={[text.heading3, text.bold]}>
-                           Suzuki Motor Mechanic
-                          </Text>
-
-                          <StarRating
-                            disabled={true}
-                           
-                            maxStars={5}
-                            rating={this.state.starCount}
-                            selectedStar={(rating) =>
-                              this.onStarRatingPress(rating)
-                            }
-                            fullStarColor={'#fff'}
-                            emptyStarColor={'#fff'}
-                            starSize={10}
-                            containerStyle={{width: 53, marginTop: 3}}
-                          />
-                        </View>
-                      </ImageBackground>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={[style.mr15]}
-                      onPress={() => {
-                        this.props.navigation.navigate('HomeDetail');
-                      }}>
-                      <ImageBackground
-                        imageStyle={{borderRadius: 4}}
-                        style={image.homeImgLarge}
-                        source={images.HomeImg2}>
-                        <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading3, text.bold]}>
-                        Abdul
-                          </Text>
-                          <Text style={[text.heading3, text.bold]}>
-                          Honda Motor Mechanic
-                          </Text>
-
-                          <StarRating
-                            disabled={true}
-                           
-                            maxStars={5}
-                            rating={this.state.starCount}
-                            selectedStar={(rating) =>
-                              this.onStarRatingPress(rating)
-                            }
-                            fullStarColor={'#fff'}
-                            emptyStarColor={'#fff'}
-                            starSize={10}
-                            containerStyle={{width: 53, marginTop: 3}}
-                          />
-                        </View>
-                      </ImageBackground>
-                    </TouchableOpacity>
-
-                    <View style={[style.mr15, style.mb20]}>
-                      <ImageBackground
-                        imageStyle={{borderRadius: 4}}
-                        style={image.homeImgLarge}
-                        source={images.HomeImg}>
-                        <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading3, text.bold]}>
-                        Abdul
-                          </Text>
-                          <Text style={[text.heading3, text.bold]}>
-                          Honda Motor Mechanic
-                          </Text>
-
-                          <StarRating
-                            disabled={true}
-                           
-                            maxStars={5}
-                            rating={this.state.starCount}
-                            selectedStar={(rating) =>
-                              this.onStarRatingPress(rating)
-                            }
-                            fullStarColor={'#fff'}
-                            emptyStarColor={'#fff'}
-                            starSize={10}
-                            containerStyle={{width: 53, marginTop: 3}}
-                          />
-                        </View>
-                      </ImageBackground>
+                )})}
                     </View>
-                  </View>
                 </ScrollView>
 
                 <View style={[style.mb20]}>
@@ -330,7 +242,7 @@ export default class Dashboard extends Component {
                   </ScrollView>
                 </View>
 
-                <View style={[style.mb20]}>
+                {/* <View style={[style.mb20]}>
                   <View style={[appStyle.rowjustify, style.pv15, style.pr20]}>
                     <Text style={[text.heading2]}>Recommend</Text>
                     <TouchableOpacity onPress={()=>{this.props.navigation.navigate("Mechanics")}}>
@@ -344,6 +256,7 @@ export default class Dashboard extends Component {
                       <View style={[style.mr15]}>
                         <ImageBackground
                           imageStyle={{borderRadius: 4}}
+                          
                           style={image.homerecommendImg}
                           source={images.HomeImg}>
                           <View style={[appStyle.popularInnerContent]}>
@@ -419,7 +332,7 @@ export default class Dashboard extends Component {
                       </View>
                     </View>
                   </ScrollView>
-                </View>
+                </View> */}
               </View>
             </View>
           </ScrollView>

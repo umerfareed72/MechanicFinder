@@ -11,7 +11,7 @@ import {createAppContainer} from 'react-navigation';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createDrawerNavigator} from 'react-navigation-drawer';
-import Mechanics from "../views/main/Mechanics" 
+import Mechaniclist from "../views/main/Mechaniclist" 
 import Dashboard from '../views/main/Dashboard';
 import HomeDetail from '../views/main/HomeDetail';
 import Discover from '../views/main/Discover';
@@ -96,8 +96,8 @@ Help:{
     SelectReferExperience: {
       screen: SelectReferExperience,
     },
-    Mechanics:{
-      screen:Mechanics
+    Mechaniclist:{
+      screen:Mechaniclist
     }
   },
   {

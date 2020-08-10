@@ -5,7 +5,9 @@ import text from './text';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default StyleSheet.create({
-
+  safeContainer: {
+    backgroundColor: colors.white, flex: 1
+  },
   chatcontainerleft:{
 marginVertical:10,
 flex:1,
@@ -108,6 +110,24 @@ ObjectAlign:{
   popularInnerContent: {
     flex: 1, justifyContent: 'flex-end', margin: 10
   },
+  slotCard: {
+    backgroundColor: colors.white,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    marginVertical: 10,
+    // width: screenWidth.width100/3-20,
+    shadowColor: colors.shadowColor,
+    marginHorizontal: 1,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.0,
+    elevation: 6,
+  },
+
   categoryLayer: {
     backgroundColor: 'red',
     height: screenHeight.height13 / 2,

@@ -3,13 +3,24 @@ const { height, width } = Dimensions.get('screen');
 import { colors, screenHeight, screenWidth, images } from '../../config/Constant';
 export default StyleSheet.create({
   // all images  style here
-
+  backArrow2: {
+    width: 20,
+    height: 25,
+    top: 5,
+    resizeMode: 'contain'
+  },
+  forward: {
+    height: 25, width: 25, resizeMode: 'contain'
+  },
 
   tiny: {
     height: 10,
     width: 10,
     resizeMode: "contain",
     alignSelf: "center"
+  },
+  userImg:{
+    width:65,height:65,resizeMode:'cover',borderRadius:130/2
   },
 
   insidebox: {

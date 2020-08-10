@@ -120,4 +120,8 @@ facebookdark:require("../assets/images/facebookdark.png"),
   searchBottom: require('../assets/images/searchBottom.png'),
   backArrow: require('../assets/images/backArrow.png'),
   date: require('../assets/images/calendarOrange.png'),
+  dummy1: require('../assets/images/userImg.png'),
+  arrowLong: require('../assets/images/arrowLong.png'),
+  backarrowh:require("../assets/images/backarrowh.png"),
 };
+

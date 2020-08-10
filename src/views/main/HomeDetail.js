@@ -13,9 +13,10 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  AsyncStorage,
+  
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -42,15 +43,22 @@ export default class HomeDetail extends Component {
       ColorGallery: colors.inputBordercolor,
       ColorReview: colors.inputBordercolor,
       BookNowView: 'flex',
+      data:[]
     };
   }
-
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
     });
   }
+componentDidMount(){
+AsyncStorage.getItem("data").then((res)=>{
+res=JSON.parse(res)
+console.log(res)
+this.setState({data:res})
+})
 
+}
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
       this.setState({TabDataGallery: 'none'}),
@@ -108,6 +116,7 @@ export default class HomeDetail extends Component {
   };
 
   render() {
+    const {data}=this.state;
     return (
       <SafeAreaView style={[appStyle.safeAreaHeight]}>
         <StatusBar />
@@ -141,7 +150,7 @@ export default class HomeDetail extends Component {
 
               <View style={[style.mv5]}>
                 <Text style={[text.heading1, text.bold]}>
-                  Some Heading Text Here
+    {data.firstname}{" "}{data.lastname}
                 </Text>
               </View>
               <View style={[style.mv5]}>
@@ -204,18 +213,13 @@ export default class HomeDetail extends Component {
                 appStyle.bodyLayout,
                 {display: this.state.TabDataOverview},
               ]}>
-              <View style={[appStyle.rowAlignCenter, style.mb5]}>
-                <Image
-                  style={[image.locationIcon, style.mr5]}
-                  source={images.clock}></Image>
-                <Text>Timming</Text>
-              </View>
+             
 
               <View style={[appStyle.rowAlignCenter, style.mb5]}>
                 <Image
                   style={[image.locationIcon, style.mr5]}
                   source={images.location}></Image>
-                <Text>Address Text here</Text>
+                <Text>{data.address}{data.city}{" "}{data.country}</Text>
               </View>
               <View style={[style.pv10]}>
                 <Text style={[text.paraGray]}>
@@ -242,10 +246,10 @@ export default class HomeDetail extends Component {
                     style={
                       ({color: colors.Black323}, [text.text22, text.bold])
                     }>
-                    $33
+                    $5
                   </Text>
                   <Text style={([text.text14], {color: colors.gray})}>
-                    Per Person
+                    Per Day
                   </Text>
                 </View>
                 <View style={style.flex1}>

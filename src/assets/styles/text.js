@@ -15,7 +15,15 @@ export default StyleSheet.create({
    
     justifyContent: 'center',
   },
-
+  heading8:{
+    fontSize:22,
+    color:colors.purple,
+  },
+  heading8White:{
+    fontSize:22,
+    color:colors.white,
+    
+  },
  
   textbody: {
     fontSize: 14,
@@ -269,4 +277,7 @@ export default StyleSheet.create({
   OpenSans: {
     fontFamily: 'OpenSans',
   },
+  greyVLight:{
+    color: '#c7c7c7'
+  }
 });

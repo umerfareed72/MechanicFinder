@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  AsyncStorage,
+
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';

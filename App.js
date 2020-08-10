@@ -5,7 +5,7 @@ import {
   View,
   Text,
   AppRegistry,
-  AsyncStorage,
+ 
   StatusBar,
 } from 'react-native';
 

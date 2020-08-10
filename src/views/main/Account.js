@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  AsyncStorage,
+  
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 

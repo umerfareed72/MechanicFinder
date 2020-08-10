@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-  AsyncStorage,
+
   Button,
   TouchableNativeFeedbackBase,
 } from 'react-native';
