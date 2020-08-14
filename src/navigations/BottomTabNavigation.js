@@ -39,6 +39,7 @@ import Feedback from "../views/main/Feedback";
 import Help from "../views/main/Help";
 import InviteFriends from '../views/main/InviteFriends';
 import Mechaniclist from "../views/main/Mechaniclist"
+import ChatBox from '../views/main/ChatBox';
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
@@ -164,23 +165,46 @@ const Navigator = createMaterialBottomTabNavigator(
     barStyle: {backgroundColor: '#fff'},
   },
 );
-const Navigators = createStackNavigator(
+
+const Navigators = createMaterialBottomTabNavigator(
   {
     BookNow: {
       screen: BookNow,
+      navigationOptions: {
+        tabBarLabel: 'Profile',
+        tabBarIcon: ({tintColor}) => (
+          <Image
+            style={{resizeMode: 'contain', height: 25, width: 25}}
+            source={images.userIcon}
+          />
+        ),
+      },
     },
-    QrCode: {
-      screen: QrCode,
+
+    ChatBox: {
+      screen: ChatBox,
+      navigationOptions: {
+        tabBarLabel: 'ChatBox',
+        tabBarIcon: ({tintColor}) => (
+          <Image
+            style={{resizeMode: 'contain', height: 25, width: 25}}
+            source={images.chatBox}
+          />
+        ),
+      },
     },
+
+  
   },
   {
-    headerMode: 'none',
-    navigationOptions: {
-      headerVisible: false,
-    },
+    initialRouteName: 'BookNow',
+    activeColor: '#F59E52',
+    activeBackgroundColor: '#fff',
+    inactiveBackgroundColor: '#fff',
+    inactiveColor: '#4E5967',
+    barStyle: {backgroundColor: '#fff'},
   },
 );
-
 const TabNavigator = createDrawerNavigator(
   {
     Navigator: {

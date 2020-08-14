@@ -186,7 +186,7 @@ export default class ChatBox extends Component {
               <View style={style.row}>
                 <View style={style.flex2}>
                   <TextInput
-                    style={[text.textlabel12]}
+                    style={[text.textlabel15]}
                     placeholder="Type a Message"></TextInput>
                 </View>
                 <View style={(style.flex1, style.row)}>

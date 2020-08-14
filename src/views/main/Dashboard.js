@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 
+
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -101,7 +102,7 @@ export default class Dashboard extends Component {
             end={{x: 1, y: 0}}
             style={{height: screenHeight.height30}}>
             <View style={{postion: 'absolute', top: 30, left: 10,width:30}}>
-              <Hamburger />
+              <Hamburger  />
             </View>
             <StatusBar backgroundColor={'transparent'} />
             <View style={[appStyle.headInner]}>
@@ -190,6 +191,37 @@ export default class Dashboard extends Component {
  
   
   })}
+  
+  <TouchableOpacity
+                      style={[style.mr15]}
+                      onPress={() => {
+                        this.props.navigation.navigate('HomeDetail');
+                      }}>
+                      <ImageBackground
+                        imageStyle={{borderRadius: 4}}
+                        style={image.homeImgLarge}
+                        source={images.HomeImg2}>
+                        <View style={[appStyle.popularInnerContent]}>
+                          <Text style={[text.heading5white, text.bold]}>
+                            Resturant
+                          </Text>
+                          <StarRating
+                            disabled={true}
+                           
+                            maxStars={5}
+                            rating={this.state.starCount}
+                            selectedStar={(rating) =>
+                              this.onStarRatingPress(rating)
+                            }
+                            fullStarColor={colors.white}
+                            emptyStarColor={colors.white}
+                            starSize={10}
+                            containerStyle={{width: 53, marginTop: 3}}
+                          />
+                        </View>
+                      </ImageBackground>
+                    </TouchableOpacity>
+
                   </View>
                 </ScrollView>
 

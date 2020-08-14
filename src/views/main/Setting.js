@@ -33,6 +33,7 @@ import StarRating from 'react-native-star-rating';
 // import vectorIcon from 'react-native-vector-icons';
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
+import Login from '../registration/Login';
 
 
 
@@ -40,8 +41,11 @@ export default class Settings extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
-            isModalVisible: false,
+dataSource:[],
+photo:null,
+firstname:'Username',
+lastname:'',    
+isModalVisible: false,
         };
         // this.state = {
         //     loading: false,
@@ -49,17 +53,44 @@ export default class Settings extends Component {
         //     refreshing: false,
         // };
     }
+onSignout=()=>{
 
-    state = {
-        isModalVisible: false,
-    };
+const login =new Login();
+login._signOut();
+AsyncStorage.removeItem("googleData")
+this.toggleModal()
+
+}
+googleUserdata=()=>{
+    try {
+        AsyncStorage.getItem("googleData").then((res)=>{
+            res=JSON.parse(res)
+            console.log(this.state.dataSource,"Agya Oy Data")
+            this.setState({dataSource:res})
+            this.setState({
+                firstname
+                :this.state.dataSource.user.name    
+                })
+                this.setState({
+                    photo
+                    :this.state.dataSource.user.photo   
+                    })
+            
+            })
+         
+    } catch (error) {
+   console.log("error")     
+    }
+}
 
     toggleModal = () => {
         this.setState({ isModalVisible: !this.state.isModalVisible });
     };
 
 
-
+componentDidMount(){
+   this.googleUserdata()
+}
     render() {
         return (
             <SafeAreaView style={appStyle.safeContainer}>
@@ -84,7 +115,7 @@ export default class Settings extends Component {
 
                                     <TouchableOpacity
                                         style={[style.mh10]}
-                                        onPress={this.toggleModal}>
+                                        onPress={()=>{this.props.navigation.navigate('Login')}}>
                                         <View style={[button.modalButton]}>
                                             <Text style={[text.heading5white]}>Yes</Text>
                                         </View>
@@ -119,11 +150,11 @@ export default class Settings extends Component {
 
                         {/* header */}
                         <View style={style.asCenter}>
-                            <Image style={[image.ovalcontainerupload, style.shadow]} source={images.userImg} />
+                            <Image style={[image.ovalcontainerupload, style.shadow]} source={{uri:this.state.photo}} />
                             {/* <Text style={[text.text18,text.orange,text.semibold]}>Sam Adams</Text> */}
                         </View>
                         <View style={[style.asCenter,style.pt5]}>
-                            <Text style={[text.text18,text.orange,text.semibold]}>Sam Adams</Text>
+                            <Text style={[text.text18,text.orange,text.semibold]}>{this.state.firstname}</Text>
                         </View>
                         {/* header end */}
 
@@ -222,7 +253,7 @@ export default class Settings extends Component {
                             </TouchableOpacity>
 
                             <TouchableOpacity 
-                            onPress= {() => this.props.navigation.navigate('Login')}
+                            onPress= {this.onSignout}
                             style={[style.mb20]}>
                                 <View style={[style.rowBtw]}>
                                     <View style={[style.row, style.aiCenter]}>

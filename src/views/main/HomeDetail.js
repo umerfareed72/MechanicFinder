@@ -124,8 +124,9 @@ this.setState({data:res})
         {/*Body */}
         <View style={{}}>
           <ImageBackground
-            source={images.HomeImg2}
-            style={{height: screenHeight.height50}}>
+            source={images.userImg}
+            style={{height: screenHeight.height35}}>
+                <View style={style.bgOverlay}/>
             <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}
               style={[image.headerBackArrow]}>
@@ -163,7 +164,7 @@ this.setState({data:res})
           </ImageBackground>
         </View>
 
-        <View style={[appStyle.bodyBg, appStyle.bodyHeight50]}>
+        <View style={[appStyle.bodyBg]}>
           <View
             style={[
               appStyle.rowBtw,
@@ -174,29 +175,29 @@ this.setState({data:res})
             <TouchableOpacity onPress={() => this.tabOverview()}>
               <Text
                 style={[
-                  text.tab,
+                  text.tab1,
                   text.semibold,
                   {color: this.state.ColorOverview},
                 ]}>
                 Overview
               </Text>
             </TouchableOpacity>
-
+{/* 
             <TouchableOpacity onPress={() => this.tabGallery()}>
               <Text
                 style={[
-                  text.tab,
+                  text.tab1,
                   text.semibold,
                   {color: this.state.ColorGallery},
                 ]}>
                 Gallery
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity onPress={() => this.tabReview()}>
               <Text
                 style={[
-                  text.tab,
+                  text.tab1,
                   text.semibold,
                   {color: this.state.ColorReview},
                 ]}>
@@ -206,7 +207,7 @@ this.setState({data:res})
           </View>
           {/* <View style={[appStyle.bottomBorder]}></View> */}
 
-          <ScrollView style={style.mb50}>
+          <ScrollView >
             {/* OverView Tab */}
             <View
               style={[
@@ -215,12 +216,38 @@ this.setState({data:res})
               ]}>
              
 
-              <View style={[appStyle.rowAlignCenter, style.mb5]}>
+              <View style={[appStyle.rowAlignCenter, style.mb10]}>
                 <Image
                   style={[image.locationIcon, style.mr5]}
                   source={images.location}></Image>
-                <Text>{data.address}{data.city}{" "}{data.country}</Text>
+                <Text style={[text.heading3]}>{data.address}{data.city}{" "}{data.country}</Text>
               </View>
+              <View style={[appStyle.rowAlignCenter, style.mb10]}>
+                <Image
+                  style={[image.locationIcon, style.mr5]}
+                  source={images.carservice}></Image>
+                <Text style={[text.heading3]}>Mechanic Skills: Car{" "}{data.skilltype}</Text>
+              </View>
+             <View style={[style.rowBtw]}>
+
+             <View style={[appStyle.rowAlignCenter, style.mb10]}>
+                <Image
+                  style={[image.locationIcon, style.mr5]}
+                  source={images.cartype}></Image>
+                <Text style={[text.heading3]}>Vehicle Type: {" "}{data.vehicletype}</Text>
+              </View>
+              <View style={[appStyle.rowAlignCenter, style.mb10]}>
+                <Image
+                  style={[image.locationIcon, style.mr5]}
+                  source={images.Company}></Image>
+                <Text style={[text.heading3]}>Car Brand: {" "}{data.carcompany}</Text>
+              </View>
+
+             </View>
+            
+<View style={[style.mt20]}>
+  <Text style={[text.text16]}>Some Description</Text>
+</View>
               <View style={[style.pv10]}>
                 <Text style={[text.paraGray]}>
                   Sed ut perspiciatis unde omnis iste natus error sit voluptatem
@@ -276,7 +303,7 @@ this.setState({data:res})
               </View>
             </View>
 
-            {/* Gallery Tab View */}
+            {/* Gallery Tab View
 
             <View style={[style.mv10, {display: this.state.TabDataGallery}]}>
               <View style={[style.row, appStyle.rowBtw, appStyle.flexWrap]}>
@@ -312,7 +339,7 @@ this.setState({data:res})
                   style={[image.galleryImg, style.mv5]}
                   source={images.HomeImg}></Image>
               </View>
-            </View>
+            </View> */}
             {/* Gallery Tab View End */}
 
             {/* Reviews Tab Start  */}

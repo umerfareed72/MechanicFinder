@@ -176,7 +176,7 @@ export default class Dashboard extends Component {
                   <TouchableOpacity
                     onPress={this.toggleModal}
                     style={[image.crossImg]}>
-                    <Image style={[image.locationIcon]} source={images.cross} />
+                    <Image style={[image.locationIconSmall]} source={images.cross} />
                   </TouchableOpacity>
                   <View style={{marginRight: 5, width: screenWidth.width25}}>
                     <ImageBackground
@@ -251,7 +251,7 @@ export default class Dashboard extends Component {
                   <TouchableOpacity
                     onPress={this.toggleModal}
                     style={[image.crossImg]}>
-                    <Image style={[image.locationIcon]} source={images.cross} />
+                    <Image style={[image.locationIconSmall]} source={images.cross} />
                   </TouchableOpacity>
                   <View style={{marginRight: 5, width: screenWidth.width25}}>
                     <ImageBackground
@@ -326,7 +326,7 @@ export default class Dashboard extends Component {
                   <TouchableOpacity
                     onPress={this.toggleModal}
                     style={[image.crossImg]}>
-                    <Image style={[image.locationIcon]} source={images.cross} />
+                    <Image style={[image.locationIconSmall]} source={images.cross} />
                   </TouchableOpacity>
                   <View style={{marginRight: 5, width: screenWidth.width25}}>
                     <ImageBackground
@@ -401,7 +401,7 @@ export default class Dashboard extends Component {
                   <TouchableOpacity
                     onPress={this.toggleModal}
                     style={[image.crossImg]}>
-                    <Image style={[image.locationIcon]} source={images.cross} />
+                    <Image style={[image.locationIconSmall]} source={images.cross} />
                   </TouchableOpacity>
                   <View style={{marginRight: 5, width: screenWidth.width25}}>
                     <ImageBackground
@@ -476,7 +476,7 @@ export default class Dashboard extends Component {
                   <TouchableOpacity
                     onPress={this.toggleModal}
                     style={[image.crossImg]}>
-                    <Image style={[image.locationIcon]} source={images.cross} />
+                    <Image style={[image.locationIconSmall]} source={images.cross} />
                   </TouchableOpacity>
                   <View style={{marginRight: 5, width: screenWidth.width25}}>
                     <ImageBackground

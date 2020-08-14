@@ -5,8 +5,8 @@ export default StyleSheet.create({
   fontFamily: {
     // fontFamily:'serif',
   },
-  textlabel12: {
-    fontSize: 12,
+  textlabel15: {
+    fontSize: 15,
     color: colors.gray,
     marginHorizontal: 10,
   },
@@ -104,6 +104,12 @@ export default StyleSheet.create({
     color: colors.black,
     marginHorizontal: 10,
   },
+  pickerstyle:{
+    height: 50, 
+    width: 280, 
+    left: -8,
+     color: colors.gray
+  },
   textheader5: {
     fontSize: 16,
     color: colors.gray,
@@ -200,6 +206,10 @@ export default StyleSheet.create({
   ac: {
     textAlign: 'center',
   },
+tab1:{
+marginHorizontal:40,
+fontSize:18
+},
 
   heading4Bold: {
     fontSize: 14,

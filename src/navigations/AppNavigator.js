@@ -35,7 +35,7 @@ MechanicRegister:MechanicRegister,
     Forgot: ForgotPassword,
 
     BottomTabNavigation: TabNavigation,
-    ChatBox: ChatBox,
+    // ChatBox: ChatBox,
     // DrawerNavigator:DrawerNavigator
   },
   {

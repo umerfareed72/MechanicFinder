@@ -73,7 +73,9 @@ export default class Mechaniclist extends Component {
     .catch(error=>console.log(error,"error")
 
     ) //to catch the errors if any
-    }  
+    
+  
+  }  
  
   onStarRatingPress(rating) {
     this.setState({
@@ -95,7 +97,7 @@ export default class Mechaniclist extends Component {
               </TouchableOpacity>
 
           <View>
-            <Text style={[text.heading8, text.bold]}>Mechanics</Text>
+            <Text style={[text.heading1purple, text.bold]}>Mechanics</Text>
             <Text style={[text.text14, {color: '#4A4A4A'}]}>
              Have a Nice Day
             </Text>

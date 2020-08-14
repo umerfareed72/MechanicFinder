@@ -133,6 +133,8 @@ facebookdark:require("../assets/images/facebookdark.png"),
   terms: require('../assets/images/terms.png'),
   help: require('../assets/images/help.png'),
   refer: require('../assets/images/refer.png'),
+  workshop: require('../assets/images/workshop.png'),
+  chatBox:require('../assets/images/chatbox.png'),
 
 
   //others

@@ -323,6 +323,13 @@ bodyShadowBottom: {
     width:screenWidth.width65/3,
     alignItems:'center'
   },
-  
+  curvedContainer:{
+    flex:1,backgroundColor:'#fff',marginTop:-15,borderRadius:15
+  },
+  overviewStarsContainer:{
+    backgroundColor: colors.white,
+    width:120,alignItems:'center',paddingVertical:10,
+    flexDirection:'row',marginBottom:5
+  },
   
 });

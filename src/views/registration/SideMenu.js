@@ -46,6 +46,14 @@ export default class SideMenu extends React.Component {
   static navigationOptions = {
     headerShown: false,
   };
+  onSignout=()=>{
+
+    const login =new Login();
+    login._signOut();
+    this.props.navigation.navigate("Login")
+    
+    }
+    
   render() {
     return (
       <SafeAreaView style={{backgroundColor: '#ccc', flex: 1}}>

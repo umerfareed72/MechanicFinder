@@ -200,13 +200,14 @@ export default StyleSheet.create({
   },
 
   locationIcon: {
-    height: 14,
-    width: 10,
+    height: 20,
+    width: 20,
     resizeMode: 'contain',
+    tintColor:colors.orange
   },
   locationIconSmall: {
-    height: 10,
-    width: 9,
+    height: 15,
+    width: 15,
     resizeMode: 'contain',
     marginRight: 5
   },
@@ -280,6 +281,18 @@ export default StyleSheet.create({
     top: 30,
     left: 10,
     padding: 10,
+  },
+
+
+  storeImg: {
+    
+    // height:"80%",
+    width:"100%",
+    height:screenWidth.width45-30,
+    
+    borderRadius: 4,
+    resizeMode: 'cover',
+    justifyContent: 'space-evenly',
   },
 
 });

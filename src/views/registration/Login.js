@@ -48,6 +48,8 @@ import {
 } from '@react-native-community/google-signin';
 import EditProfile from '../main/EditProfile';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import Dashboard from '../main/Dashboard';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Login extends Component {
   constructor(props) {
@@ -146,9 +148,11 @@ export default class Login extends Component {
   _isSignedIn = async () => {
     const isSignedIn = await GoogleSignin.isSignedIn();
     if (isSignedIn) {
-      alert('User is already signed in');
+    console.log('User is already signed in');
       //Get the User details as user is already signed in
       this._getCurrentUserInfo();
+  
+
     } else {
       //alert("Please Login");
       console.log('Please Login');
@@ -182,7 +186,9 @@ export default class Login extends Component {
       });
       const userInfo = await GoogleSignin.signIn();
       console.log('User Info --> ', userInfo);
+      const sendData=JSON.stringify(userInfo);
       this.setState({userInfo: userInfo});
+      AsyncStorage.setItem("googleData",sendData)
       this.props.navigation.navigate('Dashboard');
     } catch (error) {
       console.log('Message', error.message);
@@ -208,25 +214,14 @@ export default class Login extends Component {
       console.error(error);
     }
   };
+  
 
   render() {
     if (this.state.userInfo != null) {
       return (
-        <View style={{alignSelf: 'center'}}>
-          <View style={{alignSelf: 'center', marginTop: 150}}>
-            <View>
-              <Image
-                style={{height: 50, width: 50}}
-                source={{uri: this.state.userInfo.user.photo}}></Image>
-              <Text>Email: {this.state.userInfo.user.name}</Text>
-              <Text>Email: {this.state.userInfo.user.email}</Text>
-              <TouchableOpacity onPress={this._signOut}>
-                <Text>Logout</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      );
+     this.props.navigation.navigate("Dashboard")
+
+        );
     } else {
       return (
         <SafeAreaView style={style.flex1}>
@@ -335,7 +330,7 @@ export default class Login extends Component {
                     <Text
                       style={[
                         style.asCenter,
-                        text.tab,
+                        text.heading3,
                         text.semibold,
                         {color: this.state.textUser},
                       ]}>
@@ -352,7 +347,7 @@ export default class Login extends Component {
                     <Text
                       style={[
                         style.asCenter,
-                        text.tab,
+                        text.heading3,
                         text.semibold,
                         {color: this.state.textMechanic},
                       ]}>

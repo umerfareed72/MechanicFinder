@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-  AsyncStorage,
+
   Button,
   TouchableNativeFeedbackBase,
 } from 'react-native';
@@ -33,7 +33,7 @@ import appStyle from '../../assets/styles/appStyle';
 import {Calendar} from 'react-native-calendars';
 import QRCode from 'react-native-qrcode-svg';
 
-export default class Feedback extends Component {
+export default class Help extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
@@ -41,14 +41,14 @@ export default class Feedback extends Component {
 
   render() {
     return (
-      <SafeAreaView style={appStyle.safeContainer}>
-        <KeyboardAwareScrollView>
-          <StatusBar
-            barStyle={'light-content'}
-            backgroundColor={'transparent'}></StatusBar>
+      <SafeAreaView style={[appStyle.safeContainer]}>
+        <StatusBar translucent={true} backgroundColor={'transparent'} />
 
-          <View>
-            <View style={{}}>
+<KeyboardAvoidingView >
+  <ScrollView>
+
+        <View>
+        <View style={{}}>
               <LinearGradient
                 colors={colors.orablu}
                 start={{x: -0.9, y: 1}}
@@ -68,50 +68,51 @@ export default class Feedback extends Component {
                 </View>
               </LinearGradient>
             </View>
-
-            <View style={appStyle.bodyBg}>
-              <View style={style.mh10}>
-                <View style={style.mv10}>
-                  <Text style={text.heading2}>Help</Text>
-                </View>
-
-                <View style={[input.textinputcontainer, style.mv10]}>
-                  <Image
-                    source={images.Question}
-                    style={[image.roundCrossImg, style.mr10]}></Image>
-                  <TextInput
-                    onFocus={this.changeheight}
-                    style={input.textinputstyle}
-                    placeholder="Subject"
-                    underlineColorAndroid="transparent"></TextInput>
-                </View>
-
-                <View style={[style.mh30]}>
-                  <View style={[appStyle.rowAlignCenter, style.mv10]}>
-                    <Image style={[image.emailIcon]} source={images.email} />
-                    <Text style={[{color: colors.gray}]}>Message</Text>
-                  </View>
-                  <View style={[appStyle.textareaBorder]}>
-                    <Textarea
-                      placeholderTextColor={'#c7c7c7'}
-                      underlineColorAndroid={'transparent'}
-                    />
-                  </View>
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('');
-                  }}
-                  style={[button.btnThemeOutline, style.mt30]}>
-                  <Text style={[text.btntext, text.text18, text.purple]}>
-                    Submit
-                  </Text>
-                </TouchableOpacity>
+          <View style={appStyle.bodyBg}>
+            <View style={style.mh10}>
+              <View style={style.mv10}>
+                <Text style={text.heading2}>Help</Text>
               </View>
+
+              <View style={[input.textinputcontainer,style.mv10]}>
+                <Image source={images.Question} style={[image.drawerIcon,{tintColor:colors.gray}]}></Image>
+                <TextInput
+                  onFocus={this.changeheight}
+                  style={input.textinputstyle}
+                  placeholder="Question"
+                  underlineColorAndroid="transparent"></TextInput>
+              </View>
+
+              <View style={[style.mh30]}>
+                <View style={[appStyle.rowAlignCenter, style.mv10]}>
+                  <Image
+                    style={[image.emailIcon]}
+                    source={images.email}
+                  />
+                  <Text style={[ {color: colors.gray}]}>
+                    Message
+                  </Text>
+                </View>
+                <View style={[appStyle.textareaBorder]}>
+                  <Textarea
+                    placeholderTextColor={'#c7c7c7'}
+                    underlineColorAndroid={'transparent'}
+                  />
+                </View>
+              </View>
+              <TouchableOpacity onPress={()=>{this.props.navigation.navigate("Mechanics")}}>
+                <View style={[button.buttoncontainer, style.mv30]}>
+                  <Text
+                    style={[button.touchablebutton, {color: colors.darkBlue}]}>
+                   Submit
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
-        </KeyboardAwareScrollView>
+        </View>
+ </ScrollView>
+ </KeyboardAvoidingView>
       </SafeAreaView>
     );
   }
