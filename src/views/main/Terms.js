@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-
+  AsyncStorage,
   Button,
   TouchableNativeFeedbackBase,
 } from 'react-native';
@@ -31,6 +31,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import {Calendar} from 'react-native-calendars';
 import QRCode from 'react-native-qrcode-svg';
+import appColors from '../../assets/styles/appColors';
 
 export default class Terms extends Component {
   constructor(props) {
@@ -41,14 +42,17 @@ export default class Terms extends Component {
   render() {
     return (
       <SafeAreaView style={appStyle.safeAreaHeight}>
-       <StatusBar ></StatusBar>
+        <StatusBar
+          barStyle={'light-content'}
+          backgroundColor={'transparent'}></StatusBar>
+
         <View>
-          <View>
+          <View style={{}}>
             <LinearGradient
               colors={colors.orablu}
               start={{x: -0.9, y: 1}}
               end={{x: 1, y: 0}}
-              style={[style.headerHeight1]}>
+              style={{height: screenHeight.height25}}>
               <TouchableOpacity
                 onPress={() => this.props.navigation.goBack()}
                 style={[image.headerBackArrow]}>
@@ -56,11 +60,10 @@ export default class Terms extends Component {
                   style={[image.backArrow]}
                   source={images.backArrow}></Image>
               </TouchableOpacity>
-              <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                <Image source={images.logoDark} style={[image.splashImg]} />
-              </View>
-              <View style={[text.tcbottomheading]}>
-                <Text style={text.textheader1}>Terms of Service</Text>
+              <View style={[appStyle.headInner]}>
+                <View style={[]}>
+                  <Text style={[text.heading1, text.bold]}>Terms</Text>
+                </View>
               </View>
             </LinearGradient>
           </View>
@@ -68,32 +71,38 @@ export default class Terms extends Component {
           <View style={style.bodycontainer5}>
             <View style={[appStyle.bodyBg]}>
               <ScrollView style={style.mb50}>
-               <View style={style.mh15}>
-                <View >
-                  <Text style={text.mediumlabel}>Terms of Service</Text>
-                </View>
-                <View>
-                  <Text style={[text.mediumlabel, style.asCenter]}>
-                    Some heading Here
-                  </Text>
-                </View>
-                <View >
-                  <Text style={text.textbody}>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                    aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                    justo duo dolores et ea rebum. Stet clita kasd gubergren, no
-                    sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem
-                    ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-                    nonumy eirmod tempor invidunt ut labore erat, sed diam
-                    voluptua. At vero eos et accusam et justo duo dolores et ea
-                    rebum. Stet clita kasd gubergren, no sea takimata sanctus
-                    est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                    consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-                    invidunt ut labore et dolore magna aliquyam erat, sed diam
-                    voluptua. At vero eos et accusam et justo duo dolores et ea
-                    rebum. Stet
-                  </Text>
+                <View style={style.mh15}>
+                  <View style={style.mv10}>
+                    <Text style={text.heading2}>Terms of Service</Text>
+                  </View>
+                  <View>
+                    <Text
+                      style={[
+                        text.heading2,
+                        style.asCenter,
+                        appColors.greyRegular,
+                      ]}>
+                      Some heading Here
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={text.textbody}>
+                      Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                      sed diam nonumy eirmod tempor invidunt ut labore et dolore
+                      magna aliquyam erat, sed diam voluptua. At vero eos et
+                      accusam et justo duo dolores et ea rebum. Stet clita kasd
+                      gubergren, no sea takimata sanctus est Lorem ipsum dolor
+                      sit amet. Lorem ipsum dolor sit amet, consetetur
+                      sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                      ut labore erat, sed diam voluptua. At vero eos et accusam
+                      et justo duo dolores et ea rebum. Stet clita kasd
+                      gubergren, no sea takimata sanctus est Lorem ipsum dolor
+                      sit amet. Lorem ipsum dolor sit amet, consetetur
+                      sadipscing elitr, sed diam nonumy eirmod tempor invidunt
+                      ut labore et dolore magna aliquyam erat, sed diam
+                      voluptua. At vero eos et accusam et justo duo dolores et
+                      ea rebum. Stet
+                    </Text>
                   </View>
                 </View>
               </ScrollView>

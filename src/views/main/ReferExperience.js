@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-
+  AsyncStorage,
   KeyboardAvoidingView,
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
@@ -57,8 +57,9 @@ export default class ReferExperience extends Component {
 
   render() {
     return (
-      <SafeAreaView style={[appStyle.safeAreaHeight]}>
-        <StatusBar />
+      <SafeAreaView style={[appStyle.safeContainer]}>
+ <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
+               
         {/*Body */}
         <View style={{}}>
           <LinearGradient
@@ -100,7 +101,7 @@ export default class ReferExperience extends Component {
         </View>
 
         <View style={[appStyle.bodyBg, appStyle.bodyHeight30]}>
-          <View style={[appStyle.rowjustify, appStyle.bodyLayout]}>
+          <View style={[appStyle.rowJustify, appStyle.bodyLayout]}>
             <Text style={[text.heading2, text.semibold]}>Restaurants</Text>
             <TouchableOpacity>
               <TouchableOpacity
@@ -160,7 +161,7 @@ export default class ReferExperience extends Component {
                     style={[image.emailIcon, style.mr15]}
                     source={images.email}
                   />
-                  <Text style={[text.heading6, {color: colors.gray}]}>
+                  <Text style={[text.heading2Gray, {color: colors.gray}]}>
                     Your Experience
                   </Text>
                 </View>
@@ -192,7 +193,7 @@ export default class ReferExperience extends Component {
                       {width: screenWidth.width40 + 10},
                     ]}>
                     <View style={[style.row]}>
-                      <Text style={[text.heading6, text.semibold]}>
+                      <Text style={[text.heading2Gray, text.semibold]}>
                         Rex_Solution
                       </Text>
                     </View>
@@ -213,7 +214,7 @@ export default class ReferExperience extends Component {
                         start={{x: -0.9, y: 1}}
                         end={{x: 1, y: 0}}
                         style={[button.inviteBtn]}>
-                        <Text style={[text.heading3]}>Invite</Text>
+                        <Text style={[text.heading5white]}>Invite</Text>
                       </LinearGradient>
                     </TouchableOpacity>
                   </View>
@@ -238,7 +239,7 @@ export default class ReferExperience extends Component {
                       {width: screenWidth.width40 + 10},
                     ]}>
                     <View style={[style.row]}>
-                      <Text style={[text.heading6, text.semibold]}>
+                      <Text style={[text.heading2Gray, text.semibold]}>
                         Rex_Solution
                       </Text>
                     </View>
@@ -259,7 +260,7 @@ export default class ReferExperience extends Component {
                         start={{x: -0.9, y: 1}}
                         end={{x: 1, y: 0}}
                         style={[button.inviteBtn]}>
-                        <Text style={[text.heading3]}>Invite</Text>
+                        <Text style={[text.heading5white]}>Invite</Text>
                       </LinearGradient>
                     </TouchableOpacity>
                   </View>

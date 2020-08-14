@@ -250,7 +250,7 @@ bodyShadowBottom: {
   
   },
 
-  rowjustify: {
+  rowJustify: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

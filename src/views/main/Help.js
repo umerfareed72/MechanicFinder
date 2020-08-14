@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-
+  AsyncStorage,
   Button,
   TouchableNativeFeedbackBase,
 } from 'react-native';
@@ -33,7 +33,7 @@ import appStyle from '../../assets/styles/appStyle';
 import {Calendar} from 'react-native-calendars';
 import QRCode from 'react-native-qrcode-svg';
 
-export default class Help extends Component {
+export default class Feedback extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
@@ -41,79 +41,77 @@ export default class Help extends Component {
 
   render() {
     return (
-      <SafeAreaView >
-        <StatusBar translucent={true} backgroundColor={'transparent'} />
+      <SafeAreaView style={appStyle.safeContainer}>
+        <KeyboardAwareScrollView>
+          <StatusBar
+            barStyle={'light-content'}
+            backgroundColor={'transparent'}></StatusBar>
 
-<KeyboardAvoidingView style={{backgroundColor: colors.white,flexGrow:1}}>
-  <ScrollView>
-
-        <View>
           <View>
-            <LinearGradient
-              colors={colors.orablu}
-              start={{x: -0.9, y: 1}}
-              end={{x: 1, y: 0}}
-              style={[style.headerHeight1]}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.goBack()}
-                style={[image.headerBackArrow]}>
-                <Image
-                  style={[image.backArrow]}
-                  source={images.backArrow}></Image>
-              </TouchableOpacity>
-              <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                <Image source={images.logoDark} style={[image.splashImg]} />
-              </View>
-              <View style={[text.tcbottomheading]}>
-                <Text style={text.textheader1}>Help</Text>
-              </View>
-            </LinearGradient>
-          </View>
-          <View style={appStyle.bodyBg}>
-            <View style={style.mh10}>
-              <View style={style.mv10}>
-                <Text style={text.mediumlabel}>Help</Text>
-              </View>
-
-              <View style={[input.textinputcontainer,style.mv10]}>
-                <Image source={images.Question} style={image.drawerIcon}></Image>
-                <TextInput
-                  onFocus={this.changeheight}
-                  style={input.textinputstyle}
-                  placeholder="Question"
-                  underlineColorAndroid="transparent"></TextInput>
-              </View>
-
-              <View style={[style.mh30]}>
-                <View style={[appStyle.rowAlignCenter, style.mv10]}>
+            <View style={{}}>
+              <LinearGradient
+                colors={colors.orablu}
+                start={{x: -0.9, y: 1}}
+                end={{x: 1, y: 0}}
+                style={{height: screenHeight.height25}}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.goBack()}
+                  style={[image.headerBackArrow]}>
                   <Image
-                    style={[image.emailIcon]}
-                    source={images.email}
-                  />
-                  <Text style={[ {color: colors.gray}]}>
-                    Message
+                    style={[image.backArrow]}
+                    source={images.backArrow}></Image>
+                </TouchableOpacity>
+                <View style={[appStyle.headInner]}>
+                  <View style={[]}>
+                    <Text style={[text.heading1, text.bold]}>Help</Text>
+                  </View>
+                </View>
+              </LinearGradient>
+            </View>
+
+            <View style={appStyle.bodyBg}>
+              <View style={style.mh10}>
+                <View style={style.mv10}>
+                  <Text style={text.heading2}>Help</Text>
+                </View>
+
+                <View style={[input.textinputcontainer, style.mv10]}>
+                  <Image
+                    source={images.Question}
+                    style={[image.roundCrossImg, style.mr10]}></Image>
+                  <TextInput
+                    onFocus={this.changeheight}
+                    style={input.textinputstyle}
+                    placeholder="Subject"
+                    underlineColorAndroid="transparent"></TextInput>
+                </View>
+
+                <View style={[style.mh30]}>
+                  <View style={[appStyle.rowAlignCenter, style.mv10]}>
+                    <Image style={[image.emailIcon]} source={images.email} />
+                    <Text style={[{color: colors.gray}]}>Message</Text>
+                  </View>
+                  <View style={[appStyle.textareaBorder]}>
+                    <Textarea
+                      placeholderTextColor={'#c7c7c7'}
+                      underlineColorAndroid={'transparent'}
+                    />
+                  </View>
+                </View>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('');
+                  }}
+                  style={[button.btnThemeOutline, style.mt30]}>
+                  <Text style={[text.btntext, text.text18, text.purple]}>
+                    Submit
                   </Text>
-                </View>
-                <View style={[appStyle.textareaBorder]}>
-                  <Textarea
-                    placeholderTextColor={'#c7c7c7'}
-                    underlineColorAndroid={'transparent'}
-                  />
-                </View>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity onPress={()=>{this.props.navigation.navigate("Mechanics")}}>
-                <View style={[button.buttoncontainer, style.mv30]}>
-                  <Text
-                    style={[button.touchablebutton, {color: colors.darkBlue}]}>
-                   Submit
-                  </Text>
-                </View>
-              </TouchableOpacity>
             </View>
           </View>
-        </View>
- </ScrollView>
- </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     );
   }

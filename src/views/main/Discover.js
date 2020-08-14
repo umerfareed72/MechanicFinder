@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-
+  AsyncStorage,
   Button,
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
@@ -83,7 +83,7 @@ export default class EditProfile extends Component {
                   showsVerticalScrollIndicator={false}
                   style={style.mb20}>
                   <View style={[style.padding10]}>
-                    <Text style={[text.mediumlabel]}>Edit</Text>
+                    <Text style={[text.heading2]}>Edit</Text>
                   </View>
                   <View style={[appStyle.editbordercontainer]}>
                     <View style={style.row}>

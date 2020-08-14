@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  
+  AsyncStorage,
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 
@@ -46,8 +46,9 @@ export default class HomeDetail extends Component {
 
   render() {
     return (
-      <SafeAreaView style={[appStyle.safeAreaHeight]}>
-        <StatusBar />
+      <SafeAreaView style={[appStyle.safeContainer]}>
+     <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
+               
         {/*Body */}
         <View style={{}}>
           <ImageBackground
@@ -71,7 +72,7 @@ export default class HomeDetail extends Component {
           </ImageBackground>
         </View>
         <View style={[appStyle.bodyBg, appStyle.bodyHeight35]}>
-          <View style={[appStyle.rowjustify, appStyle.bodyLayout]}>
+          <View style={[appStyle.rowJustify, appStyle.bodyLayout]}>
             <Text style={[text.heading2, text.semibold]}>Accounts</Text>
             <TouchableOpacity
               onPress={() => {
@@ -95,7 +96,7 @@ export default class HomeDetail extends Component {
                   </View>
                   <View style={[style.jcCenter, {}]}>
                     <View style={[style.row]}>
-                      <Text style={[style.mr5, text.heading6]}>
+                      <Text style={[style.mr5, text.heading2Gray]}>
                         Rex_Solution
                       </Text>
                     </View>
@@ -120,7 +121,7 @@ export default class HomeDetail extends Component {
                   </View>
                   <View style={[style.jcCenter, {}]}>
                     <View style={[style.row]}>
-                      <Text style={[style.mr5, text.heading6]}>
+                      <Text style={[style.mr5, text.heading2Gray]}>
                         Rex_Solution
                       </Text>
                     </View>
@@ -145,7 +146,7 @@ export default class HomeDetail extends Component {
                   </View>
                   <View style={[style.jcCenter, {}]}>
                     <View style={[style.row]}>
-                      <Text style={[style.mr5, text.heading6]}>
+                      <Text style={[style.mr5, text.heading2Gray]}>
                         Rex_Solution
                       </Text>
                     </View>
@@ -170,7 +171,7 @@ export default class HomeDetail extends Component {
                   </View>
                   <View style={[style.jcCenter, {}]}>
                     <View style={[style.row]}>
-                      <Text style={[style.mr5, text.heading6]}>
+                      <Text style={[style.mr5, text.heading2Gray]}>
                         Rex_Solution
                       </Text>
                     </View>
@@ -195,7 +196,7 @@ export default class HomeDetail extends Component {
                   </View>
                   <View style={[style.jcCenter, {}]}>
                     <View style={[style.row]}>
-                      <Text style={[style.mr5, text.heading6]}>
+                      <Text style={[style.mr5, text.heading2Gray]}>
                         Rex_Solution
                       </Text>
                     </View>
@@ -220,7 +221,7 @@ export default class HomeDetail extends Component {
                   </View>
                   <View style={[style.jcCenter, {}]}>
                     <View style={[style.row]}>
-                      <Text style={[style.mr5, text.heading6]}>
+                      <Text style={[style.mr5, text.heading2Gray]}>
                         Rex_Solution
                       </Text>
                     </View>

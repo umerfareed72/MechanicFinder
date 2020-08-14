@@ -61,7 +61,7 @@ export default class Mechaniclist extends Component {
  
   componentDidMount(){
    
-    fetch("http://192.168.0.107:3000/mechanics")
+    fetch("http://192.168.0.106:3000/mechanics")
     .then(response => response.json())
     .then((responseJson)=> {
       this.setState({
@@ -112,7 +112,7 @@ export default class Mechaniclist extends Component {
 key={index}
             // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
             onPress={() => this.changebuttoncolor(index)}
-              style={[appStyle.slotCard, appStyle.rowjustify, style.aiCenter]}>
+              style={[appStyle.slotCard, appStyle.rowJustify, style.aiCenter]}>
               <View style={[style.row, style.aiCenter]}>
                 <View style={style.mr10}>
                   <Image style={image.userImg} source={images.dummy1} />

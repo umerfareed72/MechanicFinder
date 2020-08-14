@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-
+  AsyncStorage,
   Button,
   TouchableNativeFeedbackBase,
 } from 'react-native';
@@ -40,10 +40,12 @@ export default class QrCode extends Component {
 
   render() {
     return (
-      <SafeAreaView style={appStyle.safeAreaHeight}>
-          <StatusBar translucent={true} backgroundColor={'transparent'} />
+      <SafeAreaView style={appStyle.safeContainer}>
+    <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
+               
         <View>
-          <ImageBackground source={images.beef} style={appStyle.bodyHeight60}>
+          <ImageBackground source={images.beef} style={appStyle.bodyHeight70}>
+          <View style={style.bgOverlay}/>
             <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}
               style={[image.headerBackArrow]}>
@@ -52,14 +54,14 @@ export default class QrCode extends Component {
                 source={images.backArrow}></Image>
             </TouchableOpacity>
             <View style={text.headertextstyle}>
-              <Text style={text.textheader1}>Restaurant </Text>
+              <Text style={text.heading1}>Restaurant </Text>
             </View>
           </ImageBackground>
-          <View style={style.bodycontainer3}>
-            <View style={[appStyle.bodyBg]}>
+            <View style={[appStyle.bodyBg,appStyle.bodyHeight30]}>
               <ScrollView showsVerticalScrollIndicator={false}>
-                <View>
-                  <Text style={text.smallheader}>Booking Name</Text>
+               <View style={style.mh10}>
+                <View  style={[style.mt10]} >
+                  <Text style={text.heading2}>Booking Name</Text>
                 </View>
                 <View style={[style.row,style.flex1]}>
                   <View style={[image.attachtextimageleft]}>
@@ -90,15 +92,16 @@ export default class QrCode extends Component {
                   </View>
                 </View>
                 <View style={style.padding10}>
-                  <Text style={text.textheader3}>
+                  <Text style={text.heading3}>
                     Sed ut perspiciatis unde omnis iste natus error sit
                     voluptatem accusantium doloremque laudantium, totam rem
                     aperiam, eaque ipsa quae ab illo inventore veritatis et
                     quasi architecto beatae vitae dicta sunt explicabo. Nemo.
                   </Text>
+                  
                 </View>
                 <View style={[style.pb10]}>
-                  <Text style={style.padding5}>Qr Code</Text>
+                  <Text style={text.heading2}>Qr Code</Text>
                 </View>
 
                 <View style={[style.asCenter]}>
@@ -111,10 +114,11 @@ export default class QrCode extends Component {
                     logoBackgroundColor="transparent"
                   />
                 </View>
+                </View>
               </ScrollView>
             </View>
           </View>
-        </View>
+
       </SafeAreaView>
     );
   }

@@ -11,7 +11,7 @@ import {createAppContainer} from 'react-navigation';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createDrawerNavigator} from 'react-navigation-drawer';
-import Mechaniclist from "../views/main/Mechaniclist" 
+
 import Dashboard from '../views/main/Dashboard';
 import HomeDetail from '../views/main/HomeDetail';
 import Discover from '../views/main/Discover';
@@ -25,6 +25,8 @@ import SelectReferExperience from '../views/main/SelectReferExperience';
 import Tab3 from '../views/main/tab3';
 import QrCode from '../views/main/QrCode';
 import EditProfile from '../views/main/EditProfile';
+import Setting from '../views/main/Setting';
+
 import BookNow from '../views/main/BookNow';
 import Icon from 'react-native-vector-icons/Entypo';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -36,22 +38,12 @@ import Terms from '../views/main/Terms';
 import Feedback from "../views/main/Feedback";
 import Help from "../views/main/Help";
 import InviteFriends from '../views/main/InviteFriends';
+import Mechaniclist from "../views/main/Mechaniclist"
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
     Dashboard: {
       screen: Dashboard,
-      // navigationOptions:({ navigation }) => {
-      //   return {
-      //     headerLeft: () => (
-      // <Icon name="menu" size={30}
-      //  onPress={() => navigation.openDrawer()}
-      // >
-
-      // </Icon>
-      //       )
-      //   }
-      // }
     },
     HomeDetail: {
       screen: HomeDetail,
@@ -62,20 +54,9 @@ const DashboardStack = createStackNavigator(
     Account: {
       screen: Account,
     },
-
-    Privacy: {
-      screen: Privacy,
+    Mechaniclist:{
+      screen:Mechaniclist
     },
-    Terms: {
-      screen: Terms,
-    },
-
-    Feedback:{
-      screen:Feedback
-    },
-Help:{
-  screen:Help
-},
     Notification: {
       screen: Notification,
     },
@@ -96,9 +77,6 @@ Help:{
     SelectReferExperience: {
       screen: SelectReferExperience,
     },
-    Mechaniclist:{
-      screen:Mechaniclist
-    }
   },
   {
     headerMode: 'none',
@@ -121,9 +99,13 @@ const DiscoverStack = createStackNavigator(
 );
 const TabStack = createStackNavigator(
   {
+    Setting:Setting,
     EditProfile: EditProfile,
+    Terms:Terms,
+    Privacy:Privacy,
+    Help: Help,
+    Feedback:Feedback
   },
-
   {
     headerMode: 'none',
     navigationOptions: {

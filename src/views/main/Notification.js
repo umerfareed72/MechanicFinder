@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-
+  AsyncStorage,
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 
@@ -109,8 +109,9 @@ export default class Notification extends Component {
 
   render() {
     return (
-      <SafeAreaView style={[appStyle.safeAreaHeight]}>
-        <StatusBar />
+      <SafeAreaView style={[appStyle.safeContainer]}>
+        <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
+               
         {/*Body */}
         <View style={{}}>
           <LinearGradient
@@ -119,7 +120,7 @@ export default class Notification extends Component {
             end={{x: 1, y: 0}}
             style={{height: screenHeight.height30}}>
             <View style={{margin: 20}} />
-            <StatusBar backgroundColor={'transparent'} />
+     
 
             <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}
@@ -157,7 +158,7 @@ export default class Notification extends Component {
             <TouchableOpacity onPress={() => this.tabOverview()}>
               <Text
                 style={[
-                  text.tab,
+                  text.heading2,
                   text.semibold,
                   {color: this.state.ColorOverview},
                 ]}>
@@ -168,8 +169,8 @@ export default class Notification extends Component {
             <TouchableOpacity onPress={() => this.tabGallery()}>
               <Text
                 style={[
-                  text.tab,
-                  text.semibold,
+                  text.heading2,
+          
                   {color: this.state.ColorGallery},
                 ]}>
                 Recent
@@ -179,8 +180,8 @@ export default class Notification extends Component {
             <TouchableOpacity onPress={() => this.tabReview()}>
               <Text
                 style={[
-                  text.tab,
-                  text.semibold,
+                  text.heading2,
+             
                   {color: this.state.ColorReview},
                 ]}>
                 Group
@@ -211,13 +212,13 @@ export default class Notification extends Component {
                     {width: screenWidth.width40 + 10},
                   ]}>
                   <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
                       Rex_Solution
                     </Text>
                   </View>
                   <View>
                     <Text style={[text.paraGray]}>
-                      Please let me know Please{' '}
+                      Please let me know Please hhhhh hhhhh hhhhhhhhhhh hhh hhh
                     </Text>
                   </View>
                 </View>
@@ -250,47 +251,7 @@ export default class Notification extends Component {
                     {width: screenWidth.width40 + 10},
                   ]}>
                   <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
-                      Rex_Solution
-                    </Text>
-                  </View>
-                  <View>
-                    <Text style={[text.paraGray]}>
-                      Please let me know Please{' '}
-                    </Text>
-                  </View>
-                </View>
-                <View
-                  style={[
-                    appStyle.rowAlignCenter,
-                    style.mh5,
-                    {width: screenWidth.width20 - 20},
-                  ]}>
-                  <Text style={[text.dateTime]}>Tomorrow</Text>
-                  <Text style={[text.dateTime]}>12:59pm</Text>
-                </View>
-              </View>
-
-              <View
-                style={[
-                  style.row,
-                  style.mv5,
-                  style.jcCenter,
-                  {width: screenWidth.width100 - 20},
-                ]}>
-                <View style={[{width: screenWidth.width20}]}>
-                  <Image
-                    style={appStyle.listImg}
-                    source={images.logoSmall}></Image>
-                </View>
-                <View
-                  style={[
-                    style.jcCenter,
-                    style.mh5,
-                    {width: screenWidth.width40 + 10},
-                  ]}>
-                  <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
                       Rex_Solution
                     </Text>
                   </View>
@@ -330,7 +291,7 @@ export default class Notification extends Component {
                     {width: screenWidth.width40 + 10},
                   ]}>
                   <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
                       Rex_Solution
                     </Text>
                   </View>
@@ -370,7 +331,7 @@ export default class Notification extends Component {
                     {width: screenWidth.width40 + 10},
                   ]}>
                   <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
                       Rex_Solution
                     </Text>
                   </View>
@@ -410,7 +371,47 @@ export default class Notification extends Component {
                     {width: screenWidth.width40 + 10},
                   ]}>
                   <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
+                      Rex_Solution
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={[text.paraGray]}>
+                      Please let me know Please{' '}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={[
+                    appStyle.rowAlignCenter,
+                    style.mh5,
+                    {width: screenWidth.width20 - 20},
+                  ]}>
+                  <Text style={[text.dateTime]}>Tomorrow</Text>
+                  <Text style={[text.dateTime]}>12:59pm</Text>
+                </View>
+              </View>
+
+              <View
+                style={[
+                  style.row,
+                  style.mv5,
+                  style.jcCenter,
+                  {width: screenWidth.width100 - 20},
+                ]}>
+                <View style={[{width: screenWidth.width20}]}>
+                  <Image
+                    style={appStyle.listImg}
+                    source={images.logoSmall}></Image>
+                </View>
+                <View
+                  style={[
+                    style.jcCenter,
+                    style.mh5,
+                    {width: screenWidth.width40 + 10},
+                  ]}>
+                  <View style={[style.row]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
                       Rex_Solution
                     </Text>
                   </View>
@@ -454,7 +455,7 @@ export default class Notification extends Component {
                     {width: screenWidth.width40 + 10},
                   ]}>
                   <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
                       Rex_Solution
                     </Text>
                   </View>
@@ -494,7 +495,7 @@ export default class Notification extends Component {
                     {width: screenWidth.width40 + 10},
                   ]}>
                   <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
                       Rex_Solution
                     </Text>
                   </View>
@@ -538,7 +539,7 @@ export default class Notification extends Component {
                     {width: screenWidth.width40 + 10},
                   ]}>
                   <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
                       Rex_Solution
                     </Text>
                   </View>
@@ -578,7 +579,7 @@ export default class Notification extends Component {
                     {width: screenWidth.width40 + 10},
                   ]}>
                   <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
                       Rex_Solution
                     </Text>
                   </View>
@@ -618,7 +619,7 @@ export default class Notification extends Component {
                     {width: screenWidth.width40 + 10},
                   ]}>
                   <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
                       Rex_Solution
                     </Text>
                   </View>
@@ -658,7 +659,7 @@ export default class Notification extends Component {
                     {width: screenWidth.width40 + 10},
                   ]}>
                   <View style={[style.row]}>
-                    <Text style={[text.heading6, text.semibold]}>
+                    <Text style={[text.heading2Gray, text.semibold]}>
                       Rex_Solution
                     </Text>
                   </View>

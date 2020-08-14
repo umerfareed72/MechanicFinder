@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-
+  AsyncStorage,
   Button,
   TouchableNativeFeedbackBase,
 } from 'react-native';
@@ -73,14 +73,13 @@ export default class BookNow extends Component {
 
   render() {
     return (
-      <SafeAreaView style={style.flex1}>
-         <StatusBar translucent={true} backgroundColor={'transparent'} />
-
-<KeyboardAvoidingView style={{backgroundColor: colors.white,flexGrow:1}}>
-  <ScrollView>
-
+      <SafeAreaView style={appStyle.safeContainer}>
+        <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
+               
+        <KeyboardAwareScrollView style={{backgroundColor: colors.white}}>
           <View>
             <ImageBackground source={images.beef} style={style.HeaderHeight3}>
+            <View style={style.bgOverlay}/>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('HomeDetail')}
                 style={[image.headerBackArrow]}>
@@ -90,11 +89,12 @@ export default class BookNow extends Component {
               </TouchableOpacity>
 
               <View style={text.headertextstyle}>
-                <Text style={text.textheader1}>Restaurant Name</Text>
+                <Text style={text.heading1}>Restaurant Name</Text>
               </View>
             </ImageBackground>
             <View>
               <View style={[appStyle.bodyBg]}>
+                <View style={[style.mh10]}>
                 <View style={[appStyle.headingLayout]}>
                   <Text style={text.textHeader2}>Select Date & Time</Text>
                 </View>
@@ -124,7 +124,7 @@ export default class BookNow extends Component {
                     }}></Calendar>
                 </View>
                 <View>
-                  <Text style={text.textheader3}>Slots Available</Text>
+                  <Text style={text.heading3}>Slots Available</Text>
                 </View>
                 <View style={[style.choiceLabelRow, appStyle.borderContainer]}>
                   {this.state.slots.map((item, key) => {
@@ -159,7 +159,7 @@ export default class BookNow extends Component {
                   })}
                 </View>
                 <View style={appStyle.borderContainer}>
-                  <Text style={[text.textheader3]}>Address</Text>
+                  <Text style={[text.heading3]}>Address</Text>
 
                   <TextInput
                     style={[text.textheader4]}
@@ -172,11 +172,11 @@ export default class BookNow extends Component {
                       placeholder="Number of Persons"></TextInput>
                   </View>
                 </View>
-                <View style={[style.row, style.flex1, style.mh10]}>
-                  <View style={[style.row, style.flex1]}>
+                <View style={[appStyle.rowJustify,style.mv20]}>
+                  <View >
                     <Text>Price Per Person $33</Text>
                   </View>
-                  <View style={[style.flex1, style.row, style.jcFlexEnd]}>
+                  <View >
                     <Text> Total: $61</Text>
                   </View>
                 </View>
@@ -186,6 +186,7 @@ export default class BookNow extends Component {
                   }}>
                   <View
                     style={[
+                      style.mv10,
                       button.buttoncontainer,
                       button.bookbuttoncontainer,
                     ]}>
@@ -196,9 +197,9 @@ export default class BookNow extends Component {
                 </TouchableOpacity>
               </View>
             </View>
+            </View>
           </View>
-        </ScrollView>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     );
   }

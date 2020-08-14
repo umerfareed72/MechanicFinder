@@ -107,7 +107,6 @@ export default StyleSheet.create({
     flexDirection:"row",
     padding: 15,
     alignItems: 'center',
-    backgroundColor: '#fff',
     // paddingHorizontal: 20
   },
   attachtextimageright: {
@@ -123,8 +122,8 @@ export default StyleSheet.create({
     height: 20,
     width: 20,
     marginRight: 10,
-    resizeMode: "contain"
-
+    resizeMode: "contain",
+    tintColor:colors.white
 
   },
   smallimagestyle: {

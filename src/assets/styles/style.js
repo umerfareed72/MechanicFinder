@@ -413,4 +413,7 @@ marginHorizontal:15
     backgroundColor: colors.darkBlue,
 
   },
+  borderBottomNav:{
+    height:0.5,width:'100%',backgroundColor:colors.purple,marginTop:8
+  }
 });

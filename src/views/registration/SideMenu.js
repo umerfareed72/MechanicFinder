@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, Alert, ImageBackground, Image,StatusBar} from 'react-native';
+import {
+  View,
+  Text,
+  Alert,
+  ImageBackground,
+  Image,
+  StatusBar,
+} from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -16,7 +23,8 @@ import {ListItem, Separator} from 'native-base';
 
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {color} from 'react-native-reanimated';
-import { SafeAreaView } from 'react-navigation';
+import {SafeAreaView} from 'react-navigation';
+import LinearGradient from 'react-native-linear-gradient';
 
 navigateToScreen = (route) => () => {
   const navigateAction = NavigationActions.navigate({
@@ -27,12 +35,12 @@ navigateToScreen = (route) => () => {
 export default class SideMenu extends React.Component {
   constructor(props) {
     super(props);
-  this.state={
-    collapsed:false,
-    collpased2:false,
-    collapsed3:false,
-    collapsed4:false
-  }
+    this.state = {
+      collapsed: false,
+      collpased2: false,
+      collapsed3: false,
+      collapsed4: false,
+    };
   }
 
   static navigationOptions = {
@@ -40,62 +48,76 @@ export default class SideMenu extends React.Component {
   };
   render() {
     return (
-      <SafeAreaView>
-          <StatusBar translucent={true} backgroundColor={'transparent'} />
-      <ScrollView>
-        <View>
-          <View style={({color: colors.white}, appStyle.borderContainer)}>
+      <SafeAreaView style={{backgroundColor: '#ccc', flex: 1}}>
+        <StatusBar
+          translucent={true}
+          barStyle={'light-content'}
+          backgroundColor={'transparent'}
+        />
+        {/* <View style={{ backgroundColor: 'red', flex: 1 }}> */}
+        <LinearGradient
+          colors={colors.orablu}
+          start={{x: -0.9, y: 1}}
+          end={{x: 1, y: 0}}
+          style={[style.flex1, style.shadow]}>
+          <ScrollView style={{}}>
+            <View style={appStyle.borderContainer}>
+              <TouchableOpacity
+              // onPress={() => {
+              //   this.props.navigation.navigate('ReferExperience');
+              // }}
+              >
+                <View style={[style.row, style.mt40, style.mh20]}>
+                  <View style={[style.mr10]}>
+                    <Image
+                      style={appStyle.listImg}
+                      source={images.logoSmall}></Image>
+                  </View>
+                  <View style={[style.jcCenter, {}]}>
+                    <View style={style.mr5}>
+                      <Text style={[text.text16, text.white, text.semibold]}>
+                        Rex_Solution
+                      </Text>
+                      <Text style={[text.text12, text.white, text.semibold]}>
+                        rex@gmail.com
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('ReferExperience');
+                this.props.navigation.navigate('Account');
               }}>
-              <View style={[style.row, style.mt40, style.mh20]}>
-                <View style={[style.mr10]}>
+              <View style={style.mh20}>
+                <View style={[image.attachtextimageleft]}>
                   <Image
-                    style={appStyle.listImg}
-                    source={images.logoSmall}></Image>
-                </View>
-                <View style={[style.jcCenter, {}]}>
-                  <View style={[style.row]}>
-                    <Text style={[style.mr5, text.heading6]}>Rex_Solution</Text>
-                  </View>
-                  <View>
-                    <Text style={[text.text12, {color: colors.gray5d}]}>
-                      rex@gmail.com
-                    </Text>
-                  </View>
+                    source={images.user}
+                    style={[image.drawerIcon]}></Image>
+                  <Text style={[text.textheader4, {color: colors.white}]}>
+                    Accounts
+                  </Text>
                 </View>
               </View>
             </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('Account');
-            }}>
-            <View style={style.mh20}>
-              <View style={[image.attachtextimageleft]}>
-                <Image source={images.user} style={[image.drawerIcon]}></Image>
-                <Text style={[text.textheader4, {color: colors.gray666}]}>
-                  Accounts
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('SelectReferExperience');
-            }}>
-            <View style={style.mh20}>
-              <View style={[image.attachtextimageleft]}>
-                <Image source={images.saved} style={[image.drawerIcon]}></Image>
-                <Text style={[text.textheader4, {color: colors.gray666}]}>
-                  Saved
-                </Text>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('Memories');
+              }}>
+              <View style={style.mh20}>
+                <View style={[image.attachtextimageleft]}>
+                  <Image
+                    source={images.saved}
+                    style={[image.drawerIcon]}></Image>
+                  <Text style={[text.textheader4, {color: colors.white}]}>
+                    Saved
+                  </Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-          {/* <TouchableOpacity onPress={()=>{this.props.navigation.navigate("Memories")}}>
+            </TouchableOpacity>
+            {/* <TouchableOpacity onPress={()=>{this.props.navigation.navigate("Memories")}}>
                   <View style={style.mh20}>
                   <View style={[image.attachtextimageleft]}>
                     <Image
@@ -105,22 +127,23 @@ export default class SideMenu extends React.Component {
                   </View>
                   </View>
                   </TouchableOpacity> */}
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('MyBooking');
-            }}>
-            <View style={style.mh20}>
-              <View style={[image.attachtextimageleft]}>
-                <Image
-                  source={images.calendar}
-                  style={[image.drawerIcon]}></Image>
-                <Text style={[text.textheader4, {color: colors.gray666}]}>
-                  My Booking
-                </Text>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('MyBooking');
+              }}>
+              <View style={style.mh20}>
+                <View style={[image.attachtextimageleft]}>
+                  <Image
+                    source={images.calendar}
+                    style={[image.drawerIcon]}></Image>
+                  <Text style={[text.textheader4, {color: colors.white}]}>
+                    My Booking
+                  </Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-          <Collapse 
+            </TouchableOpacity>
+
+            {/* <Collapse 
           isCollapsed={this.state.collapsed} 
           >
             <CollapseHeader>
@@ -133,7 +156,7 @@ export default class SideMenu extends React.Component {
                     <Image
                       source={images.setting}
                       style={[image.drawerIcon]}></Image>
-                    <Text style={[text.textheader4, {color: colors.gray666}]}>
+                    <Text style={[text.textheader4, {color: colors.white}]}>
               Setting
                     </Text>
                   </View>
@@ -163,10 +186,41 @@ export default class SideMenu extends React.Component {
                 </TouchableOpacity>
               </ListItem>
             </CollapseBody>
-          </Collapse>
+          </Collapse> */}
 
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('Setting');
+              }}>
+              <View style={style.mh20}>
+                <View style={[image.attachtextimageleft]}>
+                  <Image
+                    source={images.setting}
+                    style={[image.drawerIcon]}></Image>
+                  <Text style={[text.textheader4, {color: colors.white}]}>
+                    Settings
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
 
-          <Collapse isCollapsed={this.state.collapsed2} 
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('InviteFriend');
+              }}>
+              <View style={style.mh20}>
+                <View style={[image.attachtextimageleft]}>
+                  <Image
+                    source={images.percent}
+                    style={[image.drawerIcon]}></Image>
+                  <Text style={[text.textheader4, {color: colors.white}]}>
+                    Invite a Friend
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+           
+            {/* <Collapse isCollapsed={this.state.collapsed2} 
           >
             <CollapseHeader>
               <TouchableOpacity
@@ -179,7 +233,7 @@ export default class SideMenu extends React.Component {
                     <Image
                       source={images.percent}
                       style={[image.drawerIcon]}></Image>
-                    <Text style={[text.textheader4, {color: colors.gray666}]}>
+                    <Text style={[text.textheader4, {color: colors.white}]}>
                       Promotions
                     </Text>
                   </View>
@@ -209,9 +263,9 @@ export default class SideMenu extends React.Component {
                 </TouchableOpacity>
               </ListItem>
             </CollapseBody>
-          </Collapse>
+          </Collapse> */}
 
-          <Collapse isCollapsed={this.state.collapsed3}>
+            {/* <Collapse isCollapsed={this.state.collapsed3}>
             <CollapseHeader>
               <TouchableOpacity 
                  onPress={()=>{
@@ -224,7 +278,7 @@ export default class SideMenu extends React.Component {
                     <Image
                       source={images.support}
                       style={[image.drawerIcon]}></Image>
-                    <Text style={[text.textheader4, {color: colors.gray666}]}>
+                    <Text style={[text.textheader4, {color: colors.white}]}>
                       Support
                     </Text>
                   </View>
@@ -254,9 +308,9 @@ export default class SideMenu extends React.Component {
                 </TouchableOpacity>
               </ListItem>
             </CollapseBody>
-          </Collapse>
+          </Collapse> */}
 
-          <Collapse isCollapsed={this.state.collapsed4}>
+            {/* <Collapse isCollapsed={this.state.collapsed4}>
             <CollapseHeader>
               <TouchableOpacity
                onPress={()=>{
@@ -269,7 +323,7 @@ export default class SideMenu extends React.Component {
                     <Image
                       source={images.LegalPaper}
                       style={[image.drawerIcon]}></Image>
-                    <Text style={[text.textheader4, {color: colors.gray666}]}>
+                    <Text style={[text.textheader4, {color: colors.white}]}>
                       Legal
                     </Text>
                   </View>
@@ -300,25 +354,25 @@ export default class SideMenu extends React.Component {
                 </TouchableOpacity>
               </ListItem>
             </CollapseBody>
-          </Collapse>
+          </Collapse> */}
 
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('Login');
-            }}>
-            <View style={style.mh20}>
-              <View style={[image.attachtextimageleft]}>
-                <Image
-                  source={images.logout}
-                  style={[image.drawerIcon]}></Image>
-                <Text style={[text.textheader4, {color: colors.gray666}]}>
-                  Logout
-                </Text>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('Login');
+              }}>
+              <View style={style.mh20}>
+                <View style={[image.attachtextimageleft]}>
+                  <Image
+                    source={images.logout}
+                    style={[image.drawerIcon]}></Image>
+                  <Text style={[text.textheader4, {color: colors.white}]}>
+                    Logout
+                  </Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            </TouchableOpacity>
+          </ScrollView>
+        </LinearGradient>
       </SafeAreaView>
     );
   }

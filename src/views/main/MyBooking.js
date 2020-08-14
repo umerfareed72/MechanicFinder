@@ -14,7 +14,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-
+  AsyncStorage,
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 
@@ -48,6 +48,7 @@ export default class Dashboard extends Component {
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
+    
     });
   }
 
@@ -87,10 +88,10 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <SafeAreaView style={[appStyle.safeAreaHeight]}>
-        <StatusBar />
+      <SafeAreaView style={[appStyle.safeContainer]}>
+    <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
+               
         {/*Body */}
-
         <View style={{}}>
           {/* <Button title="Show modal" onPress={this.toggleModal} /> */}
           <Modal
@@ -105,7 +106,7 @@ export default class Dashboard extends Component {
                     style={[style.mh10]}
                     onPress={this.toggleModal}>
                     <View style={[button.modalButton]}>
-                      <Text style={[text.heading3]}>No</Text>
+                      <Text style={[text.heading5white]}>No</Text>
                     </View>
                   </TouchableOpacity>
 
@@ -113,7 +114,7 @@ export default class Dashboard extends Component {
                     style={[style.mh10]}
                     onPress={this.toggleModal}>
                     <View style={[button.modalButton]}>
-                      <Text style={[text.heading3]}>Yes</Text>
+                      <Text style={[text.heading5white]}>Yes</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -183,16 +184,13 @@ export default class Dashboard extends Component {
                       style={[style.mv5, {height: 80, width: '100%'}]}
                       source={images.HomeImg}>
                       <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading3, text.bold]}>
+                        <Text style={[text.heading5white, text.bold]}>
                           Resturant
                         </Text>
 
                         <StarRating
                           disabled={true}
-                          emptyStar={'ios-star-outline'}
-                          fullStar={'ios-star'}
-                          halfStar={'ios-star-half'}
-                          iconSet={'Ionicons'}
+                        
                           maxStars={5}
                           rating={this.state.starCount}
                           selectedStar={(rating) =>
@@ -261,16 +259,13 @@ export default class Dashboard extends Component {
                       style={[style.mv5, {height: 80, width: '100%'}]}
                       source={images.HomeImg}>
                       <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading3, text.bold]}>
+                        <Text style={[text.heading5white, text.bold]}>
                           Resturant
                         </Text>
 
                         <StarRating
                           disabled={true}
-                          emptyStar={'ios-star-outline'}
-                          fullStar={'ios-star'}
-                          halfStar={'ios-star-half'}
-                          iconSet={'Ionicons'}
+                          
                           maxStars={5}
                           rating={this.state.starCount}
                           selectedStar={(rating) =>
@@ -339,16 +334,13 @@ export default class Dashboard extends Component {
                       style={[style.mv5, {height: 80, width: '100%'}]}
                       source={images.HomeImg}>
                       <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading3, text.bold]}>
+                        <Text style={[text.heading5white, text.bold]}>
                           Resturant
                         </Text>
 
                         <StarRating
                           disabled={true}
-                          emptyStar={'ios-star-outline'}
-                          fullStar={'ios-star'}
-                          halfStar={'ios-star-half'}
-                          iconSet={'Ionicons'}
+                          
                           maxStars={5}
                           rating={this.state.starCount}
                           selectedStar={(rating) =>
@@ -417,16 +409,13 @@ export default class Dashboard extends Component {
                       style={[style.mv5, {height: 80, width: '100%'}]}
                       source={images.HomeImg}>
                       <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading3, text.bold]}>
+                        <Text style={[text.heading5white, text.bold]}>
                           Resturant
                         </Text>
 
                         <StarRating
                           disabled={true}
-                          emptyStar={'ios-star-outline'}
-                          fullStar={'ios-star'}
-                          halfStar={'ios-star-half'}
-                          iconSet={'Ionicons'}
+                          
                           maxStars={5}
                           rating={this.state.starCount}
                           selectedStar={(rating) =>
@@ -495,16 +484,13 @@ export default class Dashboard extends Component {
                       style={[style.mv5, {height: 80, width: '100%'}]}
                       source={images.HomeImg}>
                       <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading3, text.bold]}>
+                        <Text style={[text.heading5white, text.bold]}>
                           Resturant
                         </Text>
 
                         <StarRating
                           disabled={true}
-                          emptyStar={'ios-star-outline'}
-                          fullStar={'ios-star'}
-                          halfStar={'ios-star-half'}
-                          iconSet={'Ionicons'}
+                          
                           maxStars={5}
                           rating={this.state.starCount}
                           selectedStar={(rating) =>
