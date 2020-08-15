@@ -440,7 +440,7 @@ export default class SideMenu extends React.Component {
 
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('Login');
+                this.logout();
               }}>
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>

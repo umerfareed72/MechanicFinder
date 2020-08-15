@@ -14,7 +14,6 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-  
   Button,
   Alert,
 } from 'react-native';
@@ -51,7 +50,6 @@ import {
 import EditProfile from '../main/EditProfile';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Dashboard from '../main/Dashboard';
-
 
 export default class Login extends Component {
   constructor(props) {
@@ -153,11 +151,9 @@ export default class Login extends Component {
   _isSignedIn = async () => {
     const isSignedIn = await GoogleSignin.isSignedIn();
     if (isSignedIn) {
-    console.log('User is already signed in');
+      console.log('User is already signed in');
       //Get the User details as user is already signed in
       this._getCurrentUserInfo();
-  
-
     } else {
       //alert("Please Login");
       console.log('Please Login');
@@ -191,9 +187,9 @@ export default class Login extends Component {
       });
       const userInfo = await GoogleSignin.signIn();
       console.log('User Info --> ', userInfo);
-      const sendData=JSON.stringify(userInfo);
+      const sendData = JSON.stringify(userInfo);
       this.setState({userInfo: userInfo});
-      AsyncStorage.setItem("googleData",sendData)
+      AsyncStorage.setItem('googleData', sendData);
       this.props.navigation.navigate('Dashboard');
     } catch (error) {
       console.log('Message', error.message);
@@ -238,7 +234,6 @@ export default class Login extends Component {
         }
       });
   };
-  
 
   render() {
     if (this.state.userInfo != null) {
@@ -258,9 +253,6 @@ export default class Login extends Component {
           </View>
         </View>
       );
-     this.props.navigation.navigate("Dashboard")
-
-        );
     } else {
       return (
         <SafeAreaView style={style.flex1}>
@@ -329,7 +321,6 @@ export default class Login extends Component {
                   <TouchableOpacity
                     onPress={() => {
                       this.submitData();
-                      this.props.navigation.navigate('Dashboard');
                     }}>
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text
