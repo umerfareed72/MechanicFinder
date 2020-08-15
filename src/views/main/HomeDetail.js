@@ -13,9 +13,10 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  AsyncStorage,
+  
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -42,15 +43,22 @@ export default class HomeDetail extends Component {
       ColorGallery: colors.inputBordercolor,
       ColorReview: colors.inputBordercolor,
       BookNowView: 'flex',
+      data:[]
     };
   }
-
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
     });
   }
+componentDidMount(){
+AsyncStorage.getItem("data").then((res)=>{
+res=JSON.parse(res)
+console.log(res)
+this.setState({data:res})
+})
 
+}
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
       this.setState({TabDataGallery: 'none'}),
@@ -108,6 +116,7 @@ export default class HomeDetail extends Component {
   };
 
   render() {
+    const {data}=this.state;
     return (
       <SafeAreaView style={[appStyle.safeAreaHeight]}>
         <StatusBar />
@@ -115,8 +124,9 @@ export default class HomeDetail extends Component {
         {/*Body */}
         <View style={{}}>
           <ImageBackground
-            source={images.HomeImg2}
-            style={{height: screenHeight.height50}}>
+            source={images.userImg}
+            style={{height: screenHeight.height35}}>
+                <View style={style.bgOverlay}/>
             <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}
               style={[image.headerBackArrow]}>
@@ -141,7 +151,7 @@ export default class HomeDetail extends Component {
 
               <View style={[style.mv5]}>
                 <Text style={[text.heading1, text.bold]}>
-                  Some Heading Text Here
+    {data.firstname}{" "}{data.lastname}
                 </Text>
               </View>
               <View style={[style.mv5]}>
@@ -154,7 +164,7 @@ export default class HomeDetail extends Component {
           </ImageBackground>
         </View>
 
-        <View style={[appStyle.bodyBg, appStyle.bodyHeight50]}>
+        <View style={[appStyle.bodyBg]}>
           <View
             style={[
               appStyle.rowBtw,
@@ -165,29 +175,29 @@ export default class HomeDetail extends Component {
             <TouchableOpacity onPress={() => this.tabOverview()}>
               <Text
                 style={[
-                  text.tab,
+                  text.tab1,
                   text.semibold,
                   {color: this.state.ColorOverview},
                 ]}>
                 Overview
               </Text>
             </TouchableOpacity>
-
+{/* 
             <TouchableOpacity onPress={() => this.tabGallery()}>
               <Text
                 style={[
-                  text.tab,
+                  text.tab1,
                   text.semibold,
                   {color: this.state.ColorGallery},
                 ]}>
                 Gallery
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity onPress={() => this.tabReview()}>
               <Text
                 style={[
-                  text.tab,
+                  text.tab1,
                   text.semibold,
                   {color: this.state.ColorReview},
                 ]}>
@@ -197,26 +207,47 @@ export default class HomeDetail extends Component {
           </View>
           {/* <View style={[appStyle.bottomBorder]}></View> */}
 
-          <ScrollView style={style.mb50}>
+          <ScrollView >
             {/* OverView Tab */}
             <View
               style={[
                 appStyle.bodyLayout,
                 {display: this.state.TabDataOverview},
               ]}>
-              <View style={[appStyle.rowAlignCenter, style.mb5]}>
-                <Image
-                  style={[image.locationIcon, style.mr5]}
-                  source={images.clock}></Image>
-                <Text>Timming</Text>
-              </View>
+             
 
-              <View style={[appStyle.rowAlignCenter, style.mb5]}>
+              <View style={[appStyle.rowAlignCenter, style.mb10]}>
                 <Image
                   style={[image.locationIcon, style.mr5]}
                   source={images.location}></Image>
-                <Text>Address Text here</Text>
+                <Text style={[text.heading3]}>{data.address}{data.city}{" "}{data.country}</Text>
               </View>
+              <View style={[appStyle.rowAlignCenter, style.mb10]}>
+                <Image
+                  style={[image.locationIcon, style.mr5]}
+                  source={images.carservice}></Image>
+                <Text style={[text.heading3]}>Mechanic Skills: Car{" "}{data.skilltype}</Text>
+              </View>
+             <View style={[style.rowBtw]}>
+
+             <View style={[appStyle.rowAlignCenter, style.mb10]}>
+                <Image
+                  style={[image.locationIcon, style.mr5]}
+                  source={images.cartype}></Image>
+                <Text style={[text.heading3]}>Vehicle Type: {" "}{data.vehicletype}</Text>
+              </View>
+              <View style={[appStyle.rowAlignCenter, style.mb10]}>
+                <Image
+                  style={[image.locationIcon, style.mr5]}
+                  source={images.Company}></Image>
+                <Text style={[text.heading3]}>Car Brand: {" "}{data.carcompany}</Text>
+              </View>
+
+             </View>
+            
+<View style={[style.mt20]}>
+  <Text style={[text.text16]}>Some Description</Text>
+</View>
               <View style={[style.pv10]}>
                 <Text style={[text.paraGray]}>
                   Sed ut perspiciatis unde omnis iste natus error sit voluptatem
@@ -242,10 +273,10 @@ export default class HomeDetail extends Component {
                     style={
                       ({color: colors.Black323}, [text.text22, text.bold])
                     }>
-                    $33
+                    $5
                   </Text>
                   <Text style={([text.text14], {color: colors.gray})}>
-                    Per Person
+                    Per Day
                   </Text>
                 </View>
                 <View style={style.flex1}>
@@ -272,7 +303,7 @@ export default class HomeDetail extends Component {
               </View>
             </View>
 
-            {/* Gallery Tab View */}
+            {/* Gallery Tab View
 
             <View style={[style.mv10, {display: this.state.TabDataGallery}]}>
               <View style={[style.row, appStyle.rowBtw, appStyle.flexWrap]}>
@@ -308,7 +339,7 @@ export default class HomeDetail extends Component {
                   style={[image.galleryImg, style.mv5]}
                   source={images.HomeImg}></Image>
               </View>
-            </View>
+            </View> */}
             {/* Gallery Tab View End */}
 
             {/* Reviews Tab Start  */}

@@ -120,4 +120,30 @@ facebookdark:require("../assets/images/facebookdark.png"),
   searchBottom: require('../assets/images/searchBottom.png'),
   backArrow: require('../assets/images/backArrow.png'),
   date: require('../assets/images/calendarOrange.png'),
+  dummy1: require('../assets/images/userImg.png'),
+  arrowLong: require('../assets/images/arrowLong.png'),
+  backarrowh:require("../assets/images/backarrowh.png"),
+  complaints: require('../assets/images/complaints.png'),
+  userPurple: require('../assets/images/userPurple.png'),
+  logoutPurple: require('../assets/images/logoutPurple.png'),
+  cancel: require('../assets/images/cancel.png'),
+  editEmpty: require('../assets/images/pencil.png'),
+  userIcon: require('../assets/images/userIcon.png'),
+  legalIcon: require('../assets/images/legalIcon.png'),
+  terms: require('../assets/images/terms.png'),
+  help: require('../assets/images/help.png'),
+  refer: require('../assets/images/refer.png'),
+  workshop: require('../assets/images/workshop.png'),
+  chatBox:require('../assets/images/chatbox.png'),
+
+
+  //others
+
+  dummy1: require('../assets/images/other/dummy1.jpg'),
+  userImg: require('../assets/images/userImg.png'),
+  category: require('../assets/images/other/categoryImg.png'),
+
+
+
 };
+

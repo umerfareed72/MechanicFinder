@@ -42,11 +42,9 @@ export default class Feedback extends Component {
   render() {
     return (
       <SafeAreaView >
-         <StatusBar translucent={true} backgroundColor={'transparent'} />
-
-<KeyboardAvoidingView style={{backgroundColor: colors.white,flexGrow:1}}>
-  <ScrollView>
-
+          <KeyboardAwareScrollView>
+          <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
+               
         <View>
           <View>
             <LinearGradient
@@ -65,14 +63,14 @@ export default class Feedback extends Component {
                 <Image source={images.logoDark} style={[image.splashImg]} />
               </View>
               <View style={[text.tcbottomheading]}>
-                <Text style={text.textheader1}>Give Feedback</Text>
+                <Text style={text.heading1}>Give Feedback</Text>
               </View>
             </LinearGradient>
           </View>
           <View style={appStyle.bodyBg}>
             <View style={style.mh10}>
               <View style={style.mv10}>
-                <Text style={text.mediumlabel}>Feedback</Text>
+                <Text style={text.heading2}>Feedback</Text>
               </View>
 
               <View style={[input.textinputcontainer,style.mv10]}>
@@ -112,8 +110,7 @@ export default class Feedback extends Component {
             </View>
           </View>
         </View>
-  </ScrollView>
-  </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     );
   }

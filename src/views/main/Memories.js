@@ -77,8 +77,9 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <SafeAreaView style={[appStyle.safeAreaHeight]}>
-        <StatusBar />
+      <SafeAreaView style={[appStyle.safeContainer]}>
+       <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
+               
         {/*Body */}
         <View style={{}}>
           <LinearGradient
@@ -115,7 +116,7 @@ export default class Dashboard extends Component {
           </LinearGradient>
         </View>
 
-        <View style={[appStyle.bodyBg, appStyle.bodyHeight35]}>
+        <View style={[appStyle.bodyBg,style.flex1]}>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate('MyBooking');
@@ -125,24 +126,21 @@ export default class Dashboard extends Component {
             </View>
           </TouchableOpacity>
 
-          <ScrollView style={style.mb20}>
-            <View style={[]}>
+          <ScrollView style={[style.mb20,style.flex1]}>
+            
               <View style={[style.row, appStyle.rowBtw, appStyle.flexWrap]}>
                 <ImageBackground
                   imageStyle={{borderRadius: 4}}
                   style={[image.galleryImg, style.mv5]}
                   source={images.HomeImg}>
                   <View style={[appStyle.popularInnerContent]}>
-                    <Text style={[text.heading3, text.bold]}>Resturant
+                    <Text style={[text.heading5white, text.bold]}>Resturant
                     Resturant
                     </Text>
 
                     <StarRating
                       disabled={true}
-                      emptyStar={'ios-star-outline'}
-                      fullStar={'ios-star'}
-                      halfStar={'ios-star-half'}
-                      iconSet={'Ionicons'}
+                    
                       maxStars={5}
                       rating={this.state.starCount}
                       selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -159,14 +157,11 @@ export default class Dashboard extends Component {
                   style={[image.galleryImg, style.mv5]}
                   source={images.HomeImg}>
                   <View style={[appStyle.popularInnerContent]}>
-                    <Text style={[text.heading3, text.bold]}>Resturant</Text>
+                    <Text style={[text.heading5white, text.bold]}>Resturant</Text>
 
                     <StarRating
                       disabled={true}
-                      emptyStar={'ios-star-outline'}
-                      fullStar={'ios-star'}
-                      halfStar={'ios-star-half'}
-                      iconSet={'Ionicons'}
+                  
                       maxStars={5}
                       rating={this.state.starCount}
                       selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -183,14 +178,11 @@ export default class Dashboard extends Component {
                   style={[image.galleryImg, style.mv5]}
                   source={images.HomeImg}>
                   <View style={[appStyle.popularInnerContent]}>
-                    <Text style={[text.heading3, text.bold]}>Resturant</Text>
+                    <Text style={[text.heading5white, text.bold]}>Resturant</Text>
 
                     <StarRating
                       disabled={true}
-                      emptyStar={'ios-star-outline'}
-                      fullStar={'ios-star'}
-                      halfStar={'ios-star-half'}
-                      iconSet={'Ionicons'}
+                     
                       maxStars={5}
                       rating={this.state.starCount}
                       selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -207,14 +199,11 @@ export default class Dashboard extends Component {
                   style={[image.galleryImg, style.mv5]}
                   source={images.HomeImg}>
                   <View style={[appStyle.popularInnerContent]}>
-                    <Text style={[text.heading3, text.bold]}>Resturant</Text>
+                    <Text style={[text.heading5white, text.bold]}>Resturant</Text>
 
                     <StarRating
                       disabled={true}
-                      emptyStar={'ios-star-outline'}
-                      fullStar={'ios-star'}
-                      halfStar={'ios-star-half'}
-                      iconSet={'Ionicons'}
+                     
                       maxStars={5}
                       rating={this.state.starCount}
                       selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -231,14 +220,11 @@ export default class Dashboard extends Component {
                   style={[image.galleryImg, style.mv5]}
                   source={images.HomeImg}>
                   <View style={[appStyle.popularInnerContent]}>
-                    <Text style={[text.heading3, text.bold]}>Resturant</Text>
+                    <Text style={[text.heading5white, text.bold]}>Resturant</Text>
 
                     <StarRating
                       disabled={true}
-                      emptyStar={'ios-star-outline'}
-                      fullStar={'ios-star'}
-                      halfStar={'ios-star-half'}
-                      iconSet={'Ionicons'}
+                 
                       maxStars={5}
                       rating={this.state.starCount}
                       selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -255,14 +241,11 @@ export default class Dashboard extends Component {
                   style={[image.galleryImg, style.mv5]}
                   source={images.HomeImg}>
                   <View style={[appStyle.popularInnerContent]}>
-                    <Text style={[text.heading3, text.bold]}>Resturant</Text>
+                    <Text style={[text.heading5white, text.bold]}>Resturant</Text>
 
                     <StarRating
                       disabled={true}
-                      emptyStar={'ios-star-outline'}
-                      fullStar={'ios-star'}
-                      halfStar={'ios-star-half'}
-                      iconSet={'Ionicons'}
+                    
                       maxStars={5}
                       rating={this.state.starCount}
                       selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -279,14 +262,11 @@ export default class Dashboard extends Component {
                   style={[image.galleryImg, style.mv5]}
                   source={images.HomeImg}>
                   <View style={[appStyle.popularInnerContent]}>
-                    <Text style={[text.heading3, text.bold]}>Resturant</Text>
+                    <Text style={[text.heading5white, text.bold]}>Resturant</Text>
 
                     <StarRating
                       disabled={true}
-                      emptyStar={'ios-star-outline'}
-                      fullStar={'ios-star'}
-                      halfStar={'ios-star-half'}
-                      iconSet={'Ionicons'}
+                   
                       maxStars={5}
                       rating={this.state.starCount}
                       selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -298,80 +278,12 @@ export default class Dashboard extends Component {
                   </View>
                 </ImageBackground>
 
-                <ImageBackground
-                  imageStyle={{borderRadius: 4}}
-                  style={[image.galleryImg, style.mv5]}
-                  source={images.HomeImg}>
-                  <View style={[appStyle.popularInnerContent]}>
-                    <Text style={[text.heading3, text.bold]}>Resturant</Text>
-
-                    <StarRating
-                      disabled={true}
-                      emptyStar={'ios-star-outline'}
-                      fullStar={'ios-star'}
-                      halfStar={'ios-star-half'}
-                      iconSet={'Ionicons'}
-                      maxStars={5}
-                      rating={this.state.starCount}
-                      selectedStar={(rating) => this.onStarRatingPress(rating)}
-                      fullStarColor={'#fff'}
-                      emptyStarColor={'#fff'}
-                      starSize={10}
-                      containerStyle={{width: 53, marginTop: 3}}
-                    />
-                  </View>
-                </ImageBackground>
+               
               </View>
-            </View>
+           
           </ScrollView>
         </View>
 
-        {/* <View style={[appStyle.bodyHeight30, appStyle.bodyBg]}>
-                    <ScrollView>
-                        <View style={[style.pv20]}>
-                            <TouchableOpacity style={[style.mh20, style.mv5]} onPress={() => {
-                                this.props.navigation.navigate('MyBooking');
-                            }}>
-                                <Text style={[text.heading2, text.semibold]}>Saved</Text>
-
-                            </TouchableOpacity>
-
-                            <View style={[]}>
-
-                                <View style={[style.row, appStyle.rowBtw, appStyle.flexWrap]}>
-
-                                    <ImageBackground imageStyle={{ borderRadius: 4 }} style={[image.galleryImg, style.mv5]} source={images.HomeImg}>
-                                        <View style={[appStyle.popularInnerContent]}>
-                                            <Text style={[text.heading3, text.bold]}>Resturant</Text>
-
-                                            <StarRating
-                                                disabled={true}
-                                                emptyStar={'ios-star-outline'}
-                                                fullStar={'ios-star'}
-                                                halfStar={'ios-star-half'}
-                                                iconSet={'Ionicons'}
-                                                maxStars={5}
-                                                rating={this.state.starCount}
-                                                selectedStar={rating => this.onStarRatingPress(rating)}
-                                                fullStarColor={'#fff'}
-                                                emptyStarColor={'#fff'}
-                                                starSize={10}
-                                                containerStyle={{ width: 53, marginTop: 3 }}
-                                            />
-                                        </View>
-                                    </ImageBackground>
-
-
-
-                                </View>
-                            </View>
-
-
-
-
-                        </View>
-                    </ScrollView>
-                </View> */}
       </SafeAreaView>
     );
   }

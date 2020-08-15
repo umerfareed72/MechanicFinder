@@ -11,14 +11,22 @@ import {
   Image,
   ImageBackground,
   Dimensions,
+  Animated,
   KeyboardAvoidingView,
+  Linking,
   Keyboard,
   Platform,
   AsyncStorage,
   Button,
-  TouchableNativeFeedbackBase,
 } from 'react-native';
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+
+import {
+  colors,
+  screenHeight,
+  screenWidth,
+  images,
+  height,
+} from '../../config/Constant';
 
 import LinearGradient from 'react-native-linear-gradient';
 import style from '../../assets/styles/style';
@@ -29,176 +37,187 @@ import button from '../../assets/styles/button';
 var FloatingLabel = require('react-native-floating-labels');
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
-import {Calendar} from 'react-native-calendars';
+import StarRating from 'react-native-star-rating';
 
-export default class BookNow extends Component {
+export default class Overview extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
-    this.onDayPress = this.onDayPress.bind(this);
+    super(props);
     this.state = {
-      slots: [
-        {time: '11:30', id: 1},
-        {time: '11:00', id: 2},
-        {time: '14:30', id: 3},
-        {time: '15:00', id: 4},
-        {time: '14:30', id: 5},
-        {time: '15:00', id: 6},
-        {time: '18:00', id: 7},
-        {time: '18:30', id: 8},
-      ],
-      slot: '',
-      defaultcolor: '#EAEEF6',
-      darkcolor: colors.darkBlue,
-      white: colors.white,
-      black: colors.black,
+      rating: 2,
+      starCount: 3.5,
+      fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
+    this.fadeOut = this.fadeOut.bind(this);
+  }
+  onStarRatingPress(rating) {
+    this.setState({
+      starCount: rating,
+    });
   }
 
-  onDayPress(day) {
-    this.setState({
-      selected: day.dateString,
+  makeCall = () => {
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = 'tel:${03044228402}';
+    } else {
+      phoneNumber = 'telprompt:${1234567890}';
+    }
+
+    Linking.openURL(phoneNumber);
+  };
+  componentDidMount() {
+    Animated.loop(
+      Animated.timing(
+        // Animate over time
+        this.state.fadeAnim, // The animated value to drive
+        {
+          toValue: 1, // Animate to opacity: 1 (opaque)
+          duration: 2000, // 2000ms
+          useNativeDriver: true,
+        },
+      ),
+      {iterations: 1000},
+    ).start();
+
+    // Starts the animation
+  }
+
+  fadeOut() {
+    this.setState({fadeAnim: new Animated.Value(1)}, () => {
+      Animated.timing(
+        // Animate over time
+        this.state.fadeAnim, // The animated value to drive
+        {
+          toValue: 0, // Animate to opacity: 1 (opaque)
+          duration: 2000, // 2000ms
+          useNativeDriver: true,
+        },
+      ).start();
     });
   }
-  changebuttoncolor = (id) => {
-    this.setState({
-      slot: id,
-    });
-  };
-  changetextcolor = (id) => {
-    this.setState({
-      slot: id,
-    });
-  };
 
   render() {
+    let {fadeAnim} = this.state;
     return (
-      <SafeAreaView style={style.flex1}>
-         <StatusBar translucent={true} backgroundColor={'transparent'} />
+      <SafeAreaView style={appStyle.safeContainer}>
+        <StatusBar barStyle={'light-content'} backgroundColor={'transparent'} />
 
-<KeyboardAvoidingView style={{backgroundColor: colors.white,flexGrow:1}}>
-  <ScrollView>
-
-          <View>
-            <ImageBackground source={images.beef} style={style.HeaderHeight3}>
+        <View style={style.flex1}>
+          <ImageBackground
+            imageStyle={{borderRadius: 8}}
+            style={[image.storeImg, style.w100]}
+            source={images.userImg}>
+            <View style={style.bgOverlay} />
+            <View style={[style.rowBtw, style.ph20, style.pb10]}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('HomeDetail')}
-                style={[image.headerBackArrow]}>
+                onPress={() => this.props.navigation.navigate('HomeDetail')}>
                 <Image
-                  style={[image.backArrow]}
-                  source={images.backArrow}></Image>
+                  source={images.backarrowh}
+                  style={[image.backArrow2, {tintColor: colors.white}]}></Image>
               </TouchableOpacity>
 
-              <View style={text.headertextstyle}>
-                <Text style={text.textheader1}>Restaurant Name</Text>
+              <View>
+                <Text style={[text.heading1, text.bold]}></Text>
               </View>
-            </ImageBackground>
-            <View>
-              <View style={[appStyle.bodyBg]}>
-                <View style={[appStyle.headingLayout]}>
-                  <Text style={text.textHeader2}>Select Date & Time</Text>
-                </View>
 
-                <View style={appStyle.CalenderContainer}>
-                  <Calendar
-                    onDayPress={this.onDayPress}
-                    markedDates={{[this.state.selected]: {selected: true}}}
-                    theme={{
-                      selectedDayBackgroundColor: colors.darkyellow,
-                    }}
-                    markingType={'custom'}
-                    renderArrow={(direction) => {
-                      if (direction == 'left')
-                        return (
-                          <Image
-                            source={images.leftarrow}
-                            style={image.leftimage}
-                          />
-                        );
-                      if (direction == 'right')
-                        return (
-                          <Image
-                            source={images.rightarrow}
-                            style={image.rightimage}></Image>
-                        );
-                    }}></Calendar>
-                </View>
-                <View>
-                  <Text style={text.textheader3}>Slots Available</Text>
-                </View>
-                <View style={[style.choiceLabelRow, appStyle.borderContainer]}>
-                  {this.state.slots.map((item, key) => {
-                    return (
-                      <TouchableOpacity
-                        onPress={() => this.changebuttoncolor(item.id)}
-                        style={[
-                          style.choiceLabelCol,
-                          {
-                            backgroundColor:
-                              item.id == this.state.slot
-                                ? this.state.darkcolor
-                                : this.state.defaultcolor,
-                          },
-                        ]}
-                        activeOpacity={1}>
-                        <Text
-                          style={[
-                            style.choiceLabel,
-                            {
-                              color:
-                                item.id == this.state.slot
-                                  ? this.state.white
-                                  : this.state.black,
-                            },
-                          ]}
-                          onPress={() => this.changetextcolor(item.id)}>
-                          {item.time}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
-                <View style={appStyle.borderContainer}>
-                  <Text style={[text.textheader3]}>Address</Text>
-
-                  <TextInput
-                    style={[text.textheader4]}
-                    placeholder="Some Address text Here"></TextInput>
-                </View>
-                <View style={appStyle.borderContainer}>
-                  <View>
-                    <TextInput
-                      style={[text.textheader5]}
-                      placeholder="Number of Persons"></TextInput>
-                  </View>
-                </View>
-                <View style={[style.row, style.flex1, style.mh10]}>
-                  <View style={[style.row, style.flex1]}>
-                    <Text>Price Per Person $33</Text>
-                  </View>
-                  <View style={[style.flex1, style.row, style.jcFlexEnd]}>
-                    <Text> Total: $61</Text>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('QrCode');
-                  }}>
-                  <View
-                    style={[
-                      button.buttoncontainer,
-                      button.bookbuttoncontainer,
-                    ]}>
-                    <Text style={[button.touchablebutton, button.bookbutton]}>
-                      Book Now
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+              <Text style={[text.text16, text.orange]}></Text>
             </View>
+          </ImageBackground>
+
+          <View style={appStyle.curvedContainer}>
+            <ScrollView style={style.ph20}>
+              <View style={[style.mt30]}>
+                <Text style={[text.h1Purple]}>Mian Umer Fareed</Text>
+              </View>
+              <View style={[appStyle.overviewStarsContainer]}>
+                <StarRating
+                  disabled={true}
+                  maxStars={5}
+                  rating={this.state.starCount}
+                  selectedStar={(rating) => this.onStarRatingPress(rating)}
+                  fullStarColor={'#E9B60D'}
+                  emptyStarColor={'#E9B60D'}
+                  starSize={10}
+                  containerStyle={style.w40}
+                />
+                <Text style={[text.text10, style.pl10, text.lightGrey]}>
+                  Reviews(85)
+                </Text>
+              </View>
+
+              <View style={[]}>
+                <Text style={[text.h1]}>Discription</Text>
+                <Text style={text.para}>
+                  it is a long established fact that a reader will be distracted
+                  by the readable content page when looking at its layout.it is
+                  a long established fact that a reader will be distracted by
+                  the readable content of a page when looking at its layout.
+                </Text>
+              </View>
+
+              <View style={style.mt20}>
+                <View style={[style.row, style.aiCenter]}>
+                  <Image
+                    style={[image.locationIcon, {tintColor: colors.orange}]}
+                    source={images.workshop}></Image>
+                  <Text style={[text.listItems, style.p5]}>Honda Workshop</Text>
+                </View>
+                <View style={[style.row, style.aiCenter]}>
+                  <Image
+                    style={[image.locationIcon, image.tintOrange]}
+                    source={images.timing}></Image>
+                  <Text style={[text.listItems, style.p5]}>
+                    11:00am-03:00pm
+                  </Text>
+                </View>
+                <View style={[style.row, style.aiCenter]}>
+                  <Image
+                    style={image.locationIcon}
+                    source={images.location}></Image>
+                  <Text style={[text.listItems, style.p5]}>
+                    Model town,Block b Lahore
+                  </Text>
+                </View>
+                <View style={[style.row, style.aiCenter]}>
+                  <Image
+                    style={image.locationIcon}
+                    source={images.dollar}></Image>
+                  <Text style={[text.listItems, style.p5]}>
+                    Estimated Rate: 5$
+                  </Text>
+                </View>
+
+                <Animated.View style={{...this.props.style, opacity: fadeAnim}}>
+                  {/* {this.props.children} */}
+                  <TouchableOpacity
+                    onPress={this.makeCall}
+                    style={[button.Profilebutton]}>
+                   
+                    <Text style={[text.btntext, text.text16, text.ac]}>
+                    Call Now
+                    </Text>
+                  </TouchableOpacity>
+                </Animated.View>
+
+                <Animated.View style={{...this.props.style, opacity: fadeAnim}}>
+                  {/* {this.props.children} */}
+                  <TouchableOpacity
+                    onPress={() =>
+                      Linking.openURL('google.navigation:q=137+201')
+                    }
+                    style={[button.Profilebutton]}>
+                    <Text style={[text.btntext, text.text16, text.ac]}>
+                      Locate Now
+                    </Text>
+                  </TouchableOpacity>
+                </Animated.View>
+              </View>
+            </ScrollView>
           </View>
-        </ScrollView>
-        </KeyboardAvoidingView>
+        </View>
       </SafeAreaView>
     );
   }

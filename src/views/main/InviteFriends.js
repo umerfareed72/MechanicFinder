@@ -40,12 +40,10 @@ export default class InviteFriends extends Component {
   render() {
     return (
          <SafeAreaView style={style.flex1}>
-      
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
-
-<KeyboardAvoidingView style={{backgroundColor: colors.white,flexGrow:1}}>
-  <ScrollView>
-
+ <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
+               
+      <KeyboardAwareScrollView style={{backgroundColor:colors.white}} >     
+     
       
         {/*Body */}
         <View style={{}}>
@@ -62,15 +60,15 @@ export default class InviteFriends extends Component {
                 source={images.backArrow}></Image>
             </TouchableOpacity>
             <View style={text.headertextstyle}>
-                <Text style={text.textheader1}>Inivite Friends </Text>
+                <Text style={text.heading1}>Inivite Friends </Text>
               </View>      
            </LinearGradient>
         </View>
 
         <View style={[appStyle.bodyBg]}>
 <View style={style.mh10}>
-          <View>
-                    <Text style={text.smallheader}>Invite Your Friends</Text>
+          <View style={[style.mt10]}>
+                    <Text style={text.heading2}>Invite Your Friends</Text>
                   </View>
                   <View style={style.pt10}>
                     <Text style={text.text22}>Invite Your Friend To Get 20$</Text>
@@ -91,7 +89,7 @@ export default class InviteFriends extends Component {
                     style={[image.emailIcon]}
                     source={images.email}
                   />
-                  <Text style={[text.heading6, {color: colors.gray}]}>
+                  <Text style={[text.heading2Gray, {color: colors.gray}]}>
          Message
                   </Text>
                 </View>
@@ -127,8 +125,7 @@ export default class InviteFriends extends Component {
           </View>
           </View>
         </View>
-      </ScrollView>
-      </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
   
 

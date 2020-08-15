@@ -413,4 +413,13 @@ marginHorizontal:15
     backgroundColor: colors.darkBlue,
 
   },
+  borderBottomNav:{
+    height:0.5,width:'100%',backgroundColor:colors.purple,marginTop:8
+  },
+  bgOverlay:{
+    backgroundColor:'rgba(6,8,10,0.7)',
+    position:'absolute',
+    top:0,
+    bottom:0,right:0,left:0
+  },
 });

@@ -42,6 +42,8 @@ export default class ChatBox extends Component {
   render() {
     return (
       <KeyboardAvoidingView behavior="padding">
+              <StatusBar barStyle={"dark-content"} backgroundColor={'transparent'} />
+          
         <View>
           <View>
             <LinearGradient
@@ -49,7 +51,7 @@ export default class ChatBox extends Component {
               start={{x: -0.9, y: 1}}
               end={{x: 1, y: 0}}
               style={[{paddingTop: 30}]}>
-              <StatusBar translucent={true} backgroundColor={'transparent'} />
+             
               <TouchableOpacity
                 onPress={() => this.props.navigation.goBack()}
                 style={[image.headerBackArrow, style.pt15]}>
@@ -66,7 +68,7 @@ export default class ChatBox extends Component {
                 </View>
 
                 <View style={{alignSelf: 'center', alignContent: 'center'}}>
-                  <Text style={[text.mediumlabel, {color: colors.white}]}>
+                  <Text style={[text.heading2, {color: colors.white}]}>
                     Rex_Solution
                   </Text>
                 </View>

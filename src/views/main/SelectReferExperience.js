@@ -56,8 +56,9 @@ export default class SelectReferExperience extends Component {
 
   render() {
     return (
-      <SafeAreaView style={[appStyle.safeAreaHeight]}>
-        <StatusBar />
+      <SafeAreaView style={[appStyle.safeContainer]}>
+       <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
+               
         {/*Body */}
         <View style={{}}>
           <LinearGradient
@@ -101,7 +102,7 @@ export default class SelectReferExperience extends Component {
           </LinearGradient>
         </View>
         <View style={[appStyle.bodyBg, appStyle.bodyHeight30]}>
-          <View style={[appStyle.rowjustify, appStyle.bodyLayout]}>
+          <View style={[appStyle.rowJustify, appStyle.bodyLayout]}>
             <Text style={[text.heading2, text.semibold]}>Restaurants</Text>
             <TouchableOpacity>
               <TouchableOpacity>

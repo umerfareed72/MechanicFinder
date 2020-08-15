@@ -17,7 +17,7 @@ export default StyleSheet.create({
 
     marginVertical: 8,
   },
-  
+
   touchablebutton: {
     textAlign: 'center',
     fontSize: 14,
@@ -63,5 +63,14 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     backgroundColor: colors.white,
+  },
+  Profilebutton: {
+    marginTop: 50,
+    width: '35%',
+    height: 35,
+    borderColor: 'black',
+    borderRadius: 15,
+    backgroundColor: colors.orange,
+    justifyContent: 'center',
   },
 });

@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 
+
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -41,6 +42,7 @@ export default class Dashboard extends Component {
       loading: false,
       items: [],
       refreshing: false,
+      dataSource:[]
     };
   }
 
@@ -49,6 +51,20 @@ export default class Dashboard extends Component {
       starCount: rating,
     });
   }
+  componentDidMount(){
+    fetch("http://192.168.0.106:3000/mechanics")
+    .then(response => response.json())
+    .then((responseJson)=> {
+      this.setState({
+       dataSource: responseJson
+      })
+  console.log("Ok List")
+    })
+    .catch(error=>console.log(error,"error")
+
+    ) //to catch the errors if any
+    }  
+ 
 
   // static navigationOptions = ({navigation}) => {
   //     return {
@@ -75,22 +91,23 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <SafeAreaView style={[appStyle.safeAreaHeight]}>
-        <StatusBar />
+      <SafeAreaView style={[appStyle.safeContainer]}>
+   <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
+               
         {/*Body */}
         <View style={{}}>
           <LinearGradient
             colors={colors.orablu}
             start={{x: -0.9, y: 1}}
             end={{x: 1, y: 0}}
-            style={{height: screenHeight.height35}}>
+            style={{height: screenHeight.height30}}>
             <View style={{postion: 'absolute', top: 30, left: 10,width:30}}>
-              <Hamburger />
+              <Hamburger  />
             </View>
             <StatusBar backgroundColor={'transparent'} />
             <View style={[appStyle.headInner]}>
               <View style={[]}>
-                <Text style={[text.heading1, text.bold]}>Discover</Text>
+                <Text style={[text.heading1]}>Discover</Text>
               </View>
               <View style={[appStyle.searchBg, style.mv10]}>
                 <View style={[style.row, style.aiCenter]}>
@@ -114,11 +131,9 @@ export default class Dashboard extends Component {
         <View style={[appStyle.bodyHeight35, appStyle.bodyBg]}>
           <ScrollView>
             <View style={[style.pv20]}>
-              <View style={[appStyle.rowjustify, style.ph20]}>
-                <Text style={[text.heading2, text.semibold]}>Popular</Text>
-                <TouchableOpacity onPress={
-                 ()=>{this.props.navigation.navigate("Mechanics")} 
-                }>
+              <View style={[appStyle.rowJustify, style.ph20]}>
+                <Text style={[text.heading4, text.semibold]}>Popular</Text>
+                <TouchableOpacity onPress={()=>{this.props.navigation.navigate("Mechaniclist")}}>
                   <Text style={[text.link]}>See all</Text>
                 </TouchableOpacity>
               </View>
@@ -128,8 +143,17 @@ export default class Dashboard extends Component {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}>
                   <View style={[style.row]}>
+                
+                  {
+                
+                
+                  this.state.dataSource.map((data,index)=>{
+               if(index<3){
+               return( 
+              
                     <TouchableOpacity
                       style={[style.mr15]}
+                      key={index}
                       onPress={() => {
                         this.props.navigation.navigate('HomeDetail');
                       }}>
@@ -138,31 +162,37 @@ export default class Dashboard extends Component {
                         style={image.homeImgLarge}
                         source={images.HomeImg}>
                         <View style={[appStyle.popularInnerContent]}>
-                          <Text style={[text.heading3, text.bold]}>
-                        Abdul
+                          <Text style={[text.heading5white, text.bold]}>
+                          {data.firstname}{" "}{data.lastname}
                           </Text>
-                          <Text style={[text.heading3, text.bold]}>
-                          Honda Motor Mechanic
+                          <Text style={[text.heading5white, text.bold]}>
+                          {data.address}{data.city}
                           </Text>
+
 
                           <StarRating
                             disabled={true}
-                           
+                         
                             maxStars={5}
                             rating={this.state.starCount}
                             selectedStar={(rating) =>
                               this.onStarRatingPress(rating)
                             }
-                            fullStarColor={'#fff'}
-                            emptyStarColor={'#fff'}
+                            fullStarColor={colors.white}
+                            emptyStarColor={colors.white}
                             starSize={10}
                             containerStyle={{width: 53, marginTop: 3}}
                           />
                         </View>
                       </ImageBackground>
                     </TouchableOpacity>
-
-                    <TouchableOpacity
+               )
+  }
+ 
+  
+  })}
+  
+  <TouchableOpacity
                       style={[style.mr15]}
                       onPress={() => {
                         this.props.navigation.navigate('HomeDetail');
@@ -172,13 +202,9 @@ export default class Dashboard extends Component {
                         style={image.homeImgLarge}
                         source={images.HomeImg2}>
                         <View style={[appStyle.popularInnerContent]}>
-                          <Text style={[text.heading3, text.bold]}>
-                          Kareem
+                          <Text style={[text.heading5white, text.bold]}>
+                            Resturant
                           </Text>
-                          <Text style={[text.heading3, text.bold]}>
-                           Suzuki Motor Mechanic
-                          </Text>
-
                           <StarRating
                             disabled={true}
                            
@@ -187,8 +213,8 @@ export default class Dashboard extends Component {
                             selectedStar={(rating) =>
                               this.onStarRatingPress(rating)
                             }
-                            fullStarColor={'#fff'}
-                            emptyStarColor={'#fff'}
+                            fullStarColor={colors.white}
+                            emptyStarColor={colors.white}
                             starSize={10}
                             containerStyle={{width: 53, marginTop: 3}}
                           />
@@ -196,79 +222,15 @@ export default class Dashboard extends Component {
                       </ImageBackground>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={[style.mr15]}
-                      onPress={() => {
-                        this.props.navigation.navigate('HomeDetail');
-                      }}>
-                      <ImageBackground
-                        imageStyle={{borderRadius: 4}}
-                        style={image.homeImgLarge}
-                        source={images.HomeImg2}>
-                        <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading3, text.bold]}>
-                        Abdul
-                          </Text>
-                          <Text style={[text.heading3, text.bold]}>
-                          Honda Motor Mechanic
-                          </Text>
-
-                          <StarRating
-                            disabled={true}
-                           
-                            maxStars={5}
-                            rating={this.state.starCount}
-                            selectedStar={(rating) =>
-                              this.onStarRatingPress(rating)
-                            }
-                            fullStarColor={'#fff'}
-                            emptyStarColor={'#fff'}
-                            starSize={10}
-                            containerStyle={{width: 53, marginTop: 3}}
-                          />
-                        </View>
-                      </ImageBackground>
-                    </TouchableOpacity>
-
-                    <View style={[style.mr15, style.mb20]}>
-                      <ImageBackground
-                        imageStyle={{borderRadius: 4}}
-                        style={image.homeImgLarge}
-                        source={images.HomeImg}>
-                        <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading3, text.bold]}>
-                        Abdul
-                          </Text>
-                          <Text style={[text.heading3, text.bold]}>
-                          Honda Motor Mechanic
-                          </Text>
-
-                          <StarRating
-                            disabled={true}
-                           
-                            maxStars={5}
-                            rating={this.state.starCount}
-                            selectedStar={(rating) =>
-                              this.onStarRatingPress(rating)
-                            }
-                            fullStarColor={'#fff'}
-                            emptyStarColor={'#fff'}
-                            starSize={10}
-                            containerStyle={{width: 53, marginTop: 3}}
-                          />
-                        </View>
-                      </ImageBackground>
-                    </View>
                   </View>
                 </ScrollView>
 
                 <View style={[style.mb20]}>
-                  <View style={[appStyle.rowjustify, style.pv15, style.pr20]}>
-                    <Text style={[text.heading2, text.semibold]}>
+                  <View style={[appStyle.rowJustify, style.pv15, style.pr20]}>
+                    <Text style={[text.heading4, text.semibold]}>
                       Categories
                     </Text>
-                    <TouchableOpacity onPress={
-                 ()=>{this.props.navigation.navigate("Mechanics")}}>
+                    <TouchableOpacity>
                       <Text style={[text.link]}>See all</Text>
                     </TouchableOpacity>
                   </View>
@@ -282,8 +244,8 @@ export default class Dashboard extends Component {
                           style={image.homeCategoryImg}
                           source={images.category1}>
                           <View style={[appStyle.categoryLayer]}>
-                            <Text style={[text.heading2Bold, text.bold]}>
-                             Painter
+                            <Text style={[text.heading4Bold, text.bold]}>
+                              BBQ
                             </Text>
                           </View>
                         </ImageBackground>
@@ -295,8 +257,8 @@ export default class Dashboard extends Component {
                           style={image.homeCategoryImg}
                           source={images.category2}>
                           <View style={[appStyle.categoryLayer]}>
-                            <Text style={[text.heading2Bold, text.bold]}>
-                              Electrician
+                            <Text style={[text.heading4Bold, text.bold]}>
+                              Drinks
                             </Text>
                           </View>
                         </ImageBackground>
@@ -307,33 +269,20 @@ export default class Dashboard extends Component {
                           style={image.homeCategoryImg}
                           source={images.HomeImg}>
                           <View style={[appStyle.categoryLayer]}>
-                            <Text style={[text.heading2Bold, text.bold]}>
-                              Engine
+                            <Text style={[text.heading4Bold, text.bold]}>
+                              Salad
                             </Text>
                           </View>
                         </ImageBackground>
                       </View>
-                      <View style={[style.mr15]}>
-                        <ImageBackground
-                          imageStyle={{borderRadius: 4}}
-                          style={image.homeCategoryImg}
-                          source={images.HomeImg}>
-                          <View style={[appStyle.categoryLayer]}>
-                            <Text style={[text.heading2Bold, text.bold]}>
-                             Body
-                            </Text>
-                          </View>
-                        </ImageBackground>
-                      </View>
-                    
                     </View>
                   </ScrollView>
                 </View>
 
                 <View style={[style.mb20]}>
-                  <View style={[appStyle.rowjustify, style.pv15, style.pr20]}>
-                    <Text style={[text.heading2]}>Recommend</Text>
-                    <TouchableOpacity onPress={()=>{this.props.navigation.navigate("Mechanics")}}>
+                  <View style={[appStyle.rowJustify, style.pv15, style.pr20]}>
+                    <Text style={[text.heading4]}>Recommend</Text>
+                    <TouchableOpacity>
                       <Text style={[text.link]}>See all</Text>
                     </TouchableOpacity>
                   </View>
@@ -347,19 +296,19 @@ export default class Dashboard extends Component {
                           style={image.homerecommendImg}
                           source={images.HomeImg}>
                           <View style={[appStyle.popularInnerContent]}>
-                            <Text style={[text.heading4, text.bold]}>
-                            Engine
+                            <Text style={[text.heading5white, text.bold]}>
+                              Momofuku
                             </Text>
                             <StarRating
                               disabled={true}
-                           
+                              
                               maxStars={5}
                               rating={this.state.starCount}
                               selectedStar={(rating) =>
                                 this.onStarRatingPress(rating)
                               }
-                              fullStarColor={'#fff'}
-                              emptyStarColor={'#fff'}
+                              fullStarColor={colors.white}
+                              emptyStarColor={colors.white}
                               starSize={10}
                               containerStyle={{width: 53, marginTop: 5}}
                             />
@@ -373,19 +322,19 @@ export default class Dashboard extends Component {
                           style={image.homerecommendImg}
                           source={images.HomeImg2}>
                           <View style={[appStyle.popularInnerContent]}>
-                            <Text style={[text.heading4, text.bold]}>
-                            Painter
+                            <Text style={[text.heading5white, text.bold]}>
+                              Momofuku
                             </Text>
                             <StarRating
                               disabled={true}
-                           
+                              
                               maxStars={5}
                               rating={this.state.starCount}
                               selectedStar={(rating) =>
                                 this.onStarRatingPress(rating)
                               }
-                              fullStarColor={'#fff'}
-                              emptyStarColor={'#fff'}
+                              fullStarColor={colors.white}
+                              emptyStarColor={colors.white}
                               starSize={10}
                               containerStyle={{width: 53, marginTop: 5}}
                             />
@@ -398,19 +347,19 @@ export default class Dashboard extends Component {
                           style={image.homerecommendImg}
                           source={images.HomeImg}>
                           <View style={[appStyle.popularInnerContent]}>
-                            <Text style={[text.heading4, text.bold]}>
-                          Electrician
+                            <Text style={[text.heading5white, text.bold]}>
+                              Resturant
                             </Text>
                             <StarRating
                               disabled={true}
-                           
+                              
                               maxStars={5}
                               rating={this.state.starCount}
                               selectedStar={(rating) =>
                                 this.onStarRatingPress(rating)
                               }
-                              fullStarColor={'#fff'}
-                              emptyStarColor={'#fff'}
+                              fullStarColor={colors.white}
+                              emptyStarColor={colors.white}
                               starSize={10}
                               containerStyle={{width: 53, marginTop: 5}}
                             />

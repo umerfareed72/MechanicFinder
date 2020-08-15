@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  AsyncStorage,
+
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
@@ -63,25 +63,25 @@ export default class MechanicRegister extends Component {
       filePath: {},
     };
   }
-//   cloudinaryUpload = (photo) => {
-//     const data = new FormData()
-//     data.append('file', photo)
-//     data.append('upload_preset', "dng1vvycv")
-//     data.append("cloud_name", "dng1vvycv")
-//     axios
-//       .post('https://api.cloudinary.com/v1_1/dng1vvycv/image/upload', {
+  cloudinaryUpload = (photo) => {
+    const data = new FormData()
+    data.append('file', photo)
+    data.append('upload_preset', "dng1vvycv")
+    data.append("cloud_name", "dng1vvycv")
+    axios
+      .post('https://api.cloudinary.com/v1_1/dng1vvycv/image/upload', {
    
-//  data
-//     }).then(res => res.json()).
-//       then(data => {
-//         console.log(data)
-//        this.setState({photo:data.secure_url})
+ data
+    }).then(res => res.json()).
+      then(data => {
+        console.log(data)
+       this.setState({photo:data.secure_url})
 
-//       }).catch(err => {
-//         Alert.alert("An Error Occured While Uploading")
-//     console.log(err)
-//       })
-//   }
+      }).catch(err => {
+        Alert.alert("An Error Occured While Uploading")
+    console.log(err)
+      })
+  }
   check = () => {
     if (this.state.Password == this.state.CPassword) {
       this.submitData();
@@ -91,7 +91,7 @@ export default class MechanicRegister extends Component {
   };
   submitData = () => {
     axios
-      .post('http://192.168.0.110:3000/userregister', {
+      .post('http://192.168.0.106:3000/userregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
@@ -131,15 +131,15 @@ export default class MechanicRegister extends Component {
       if (response) {
         console.log(response);
         this.setState({photo: response.uri});
-        // const uri = response.uri;
-        // const type = response.type;
-        // const name = response.fileName;
-        // const source = {
-        //   uri,
-        //   type,
-        //   name,
-        // }
-        // this.cloudinaryUpload(source)
+        const uri = response.uri;
+        const type = response.type;
+        const name = response.fileName;
+        const source = {
+          uri,
+          type,
+          name,
+        }
+        this.cloudinaryUpload(source)
      
       } else if (response.didCancel) {
         console.log('User Cancelled Image Picker');

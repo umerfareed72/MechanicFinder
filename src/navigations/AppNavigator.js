@@ -33,6 +33,7 @@ const AuthStack = createStackNavigator(
     Forgot: ForgotPassword,
 
     // BottomTabNavigation: TabNavigation,
+    BottomTabNavigation: TabNavigation,
     // ChatBox: ChatBox,
     // DrawerNavigator:DrawerNavigator
   },

@@ -3,13 +3,24 @@ const { height, width } = Dimensions.get('screen');
 import { colors, screenHeight, screenWidth, images } from '../../config/Constant';
 export default StyleSheet.create({
   // all images  style here
-
+  backArrow2: {
+    width: 20,
+    height: 25,
+    top: 5,
+    resizeMode: 'contain'
+  },
+  forward: {
+    height: 25, width: 25, resizeMode: 'contain'
+  },
 
   tiny: {
     height: 10,
     width: 10,
     resizeMode: "contain",
     alignSelf: "center"
+  },
+  userImg:{
+    width:65,height:65,resizeMode:'cover',borderRadius:130/2
   },
 
   insidebox: {
@@ -96,7 +107,6 @@ export default StyleSheet.create({
     flexDirection:"row",
     padding: 15,
     alignItems: 'center',
-    backgroundColor: '#fff',
     // paddingHorizontal: 20
   },
   attachtextimageright: {
@@ -112,8 +122,8 @@ export default StyleSheet.create({
     height: 20,
     width: 20,
     marginRight: 10,
-    resizeMode: "contain"
-
+    resizeMode: "contain",
+    tintColor:colors.white
 
   },
   smallimagestyle: {
@@ -190,13 +200,14 @@ export default StyleSheet.create({
   },
 
   locationIcon: {
-    height: 14,
-    width: 10,
+    height: 20,
+    width: 20,
     resizeMode: 'contain',
+    tintColor:colors.orange
   },
   locationIconSmall: {
-    height: 10,
-    width: 9,
+    height: 15,
+    width: 15,
     resizeMode: 'contain',
     marginRight: 5
   },
@@ -270,6 +281,18 @@ export default StyleSheet.create({
     top: 30,
     left: 10,
     padding: 10,
+  },
+
+
+  storeImg: {
+    
+    // height:"80%",
+    width:"100%",
+    height:screenWidth.width45-30,
+    
+    borderRadius: 4,
+    resizeMode: 'cover',
+    justifyContent: 'space-evenly',
   },
 
 });

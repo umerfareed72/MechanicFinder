@@ -96,6 +96,52 @@ router.post('/deleteUser', (req, res) => {
     });
 });
 
+router.get('/users', (req, res) => {
+  async function get() {
+    const users = await Usermodel.find().sort('id').select({
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      password: 1,
+      phone: 1,
+      address: 1,
+      photo: 1,
+      carcompany: 1,
+      city: 1,
+      country: 1,
+      skilltype: 1,
+      vehicletype: 1,
+      date: 1,
+    });
+    if (!users) return res.status(404).send('Not Found');
+    res.send(users);
+  }
+  get();
+});
+
+router.get('/mechanics', (req, res) => {
+  async function get() {
+    const users = await Mechanicmodel.find().sort('id').select({
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      password: 1,
+      phone: 1,
+      address: 1,
+      photo: 1,
+      carcompany: 1,
+      city: 1,
+      country: 1,
+      skilltype: 1,
+      vehicletype: 1,
+      date: 1,
+    });
+    if (!users) return res.status(404).send('Not Found');
+    res.send(users);
+  }
+  get();
+});
+
 router.post('/userregister', (req, res) => {
   const User = new Usermodel({
     firstname: req.body.firstname,
