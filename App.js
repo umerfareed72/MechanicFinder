@@ -5,32 +5,42 @@ import {
   View,
   Text,
   AppRegistry,
-  AsyncStorage,
   StatusBar,
 } from 'react-native';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import AppNavigator from './src/navigations/AppNavigator';
+import Bottomtabnavigator from './src/navigations/BottomTabNavigation';
 
 export default class App extends React.Component {
   constructor() {
     super();
-    this.state = {hasToken: false, isLoaded: false};
+    this.state = {hasToken: false, isLoaded: false, isloggedin: null};
     console.disableYellowBox = true;
   }
 
-  componentDidMount() {
+  detectlogin = async () => {
     this.setState({isLoaded: true});
+    const token = await AsyncStorage.getItem('token');
+    if (token) {
+      this.setState({isloggedin: true});
+    } else {
+      this.setState({isloggedin: false});
+    }
+  };
+
+  async componentDidMount() {
+    this.detectlogin();
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <AppNavigator />
+        {this.state.isloggedin ? <Bottomtabnavigator /> : <AppNavigator />}
       </View>
     );
   }
 
-  _handleLoadingError = error => {
+  _handleLoadingError = (error) => {
     console.warn(error);
   };
 

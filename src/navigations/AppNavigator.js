@@ -32,8 +32,8 @@ const AuthStack = createStackNavigator(
     MechanicRegister: MechanicRegister,
     Forgot: ForgotPassword,
 
-    BottomTabNavigation: TabNavigation,
-    ChatBox: ChatBox,
+    // BottomTabNavigation: TabNavigation,
+    // ChatBox: ChatBox,
     // DrawerNavigator:DrawerNavigator
   },
   {
@@ -46,6 +46,7 @@ export default createAppContainer(
     {
       Splash: SplashStack,
       Auth: AuthStack,
+      MainApp: TabNavigation,
     },
     {
       initialRouteName: 'Splash',
