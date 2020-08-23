@@ -91,7 +91,7 @@ export default class MechanicRegister extends Component {
   };
   submitData = () => {
     axios
-      .post('http://192.168.0.106:3000/userregister', {
+      .post('http://192.168.0.105:3000/userregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,

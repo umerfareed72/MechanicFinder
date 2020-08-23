@@ -42,17 +42,30 @@ export default class Dashboard extends Component {
       loading: false,
       items: [],
       refreshing: false,
-      dataSource:[]
+      dataSource:[],
+      slot: '',
+  
     };
   }
 
+  changebuttoncolor = (id) => {
+    this.setState({
+      slot: id,
+    });
+    if(this.state.slot==id){
+// console.log(this.state.dataSource[id])
+        this.props.navigation.navigate("HomeDetail") 
+ const senddata=JSON.stringify(this.state.dataSource[id])
+        AsyncStorage.setItem("data",senddata)
+    }
+};
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
     });
   }
   componentDidMount(){
-    fetch("http://192.168.0.106:3000/mechanics")
+    fetch("http://192.168.0.105:3000/mechanics")
     .then(response => response.json())
     .then((responseJson)=> {
       this.setState({
@@ -154,9 +167,9 @@ export default class Dashboard extends Component {
                     <TouchableOpacity
                       style={[style.mr15]}
                       key={index}
-                      onPress={() => {
-                        this.props.navigation.navigate('HomeDetail');
-                      }}>
+                      onPress={() => this.changebuttoncolor(index)}
+                     
+                     >
                       <ImageBackground
                         imageStyle={{borderRadius: 4}}
                         style={image.homeImgLarge}
@@ -194,9 +207,10 @@ export default class Dashboard extends Component {
   
   <TouchableOpacity
                       style={[style.mr15]}
-                      onPress={() => {
-                        this.props.navigation.navigate('HomeDetail');
-                      }}>
+                      // onPress={() => {
+                      //   this.props.navigation.navigate('HomeDetail');
+                      // }}
+                      >
                       <ImageBackground
                         imageStyle={{borderRadius: 4}}
                         style={image.homeImgLarge}
