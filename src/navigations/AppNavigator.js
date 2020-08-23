@@ -13,7 +13,6 @@ import ForgotPassword from '../views/registration/ForgotPassword';
 import React from 'react';
 import {colors} from '../config/Constant';
 
-
 const SplashStack = createStackNavigator(
   {
     Splash: Splash,
@@ -28,12 +27,12 @@ const SplashStack = createStackNavigator(
 );
 const AuthStack = createStackNavigator(
   {
-
-Login:Login,
-SignUp:SignUp,
-MechanicRegister:MechanicRegister,
+    Login: Login,
+    SignUp: SignUp,
+    MechanicRegister: MechanicRegister,
     Forgot: ForgotPassword,
 
+    // BottomTabNavigation: TabNavigation,
     BottomTabNavigation: TabNavigation,
     // ChatBox: ChatBox,
     // DrawerNavigator:DrawerNavigator
@@ -48,6 +47,7 @@ export default createAppContainer(
     {
       Splash: SplashStack,
       Auth: AuthStack,
+      MainApp: TabNavigation,
     },
     {
       initialRouteName: 'Splash',

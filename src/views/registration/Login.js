@@ -14,9 +14,10 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-  
   Button,
+  Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   AccessToken,
   LoginManager,
@@ -32,7 +33,7 @@ import {
   images,
   height,
 } from '../../config/Constant';
-
+const axios = require('axios');
 import LinearGradient from 'react-native-linear-gradient';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -49,7 +50,6 @@ import {
 import EditProfile from '../main/EditProfile';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Dashboard from '../main/Dashboard';
-import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Login extends Component {
   constructor(props) {
@@ -61,6 +61,9 @@ export default class Login extends Component {
       textUser: colors.black,
       textMechanic: colors.black,
       userInfo: null,
+      Email: '',
+      Password: '',
+      error: '',
 
       gettingLoginStatus: true,
       user_name: '',
@@ -148,11 +151,9 @@ export default class Login extends Component {
   _isSignedIn = async () => {
     const isSignedIn = await GoogleSignin.isSignedIn();
     if (isSignedIn) {
-    console.log('User is already signed in');
+      console.log('User is already signed in');
       //Get the User details as user is already signed in
       this._getCurrentUserInfo();
-  
-
     } else {
       //alert("Please Login");
       console.log('Please Login');
@@ -186,9 +187,9 @@ export default class Login extends Component {
       });
       const userInfo = await GoogleSignin.signIn();
       console.log('User Info --> ', userInfo);
-      const sendData=JSON.stringify(userInfo);
+      const sendData = JSON.stringify(userInfo);
       this.setState({userInfo: userInfo});
-      AsyncStorage.setItem("googleData",sendData)
+      AsyncStorage.setItem('googleData', sendData);
       this.props.navigation.navigate('Dashboard');
     } catch (error) {
       console.log('Message', error.message);
@@ -214,14 +215,44 @@ export default class Login extends Component {
       console.error(error);
     }
   };
-  
+
+  submitData = () => {
+    axios
+      .post('http://192.168.0.105:3000/mechnanicsignin', {
+        email: this.state.Email,
+        password: this.state.Password,
+      })
+      .then(async (res) => {
+        console.log(res.data);
+
+        try {
+          await AsyncStorage.setItem('token', res.data.token);
+          this.props.navigation.navigate('MainApp');
+        } catch (e) {
+          console.log('error hai', e);
+          Alert.alert('Invalid email password');
+        }
+      });
+  };
 
   render() {
     if (this.state.userInfo != null) {
       return (
-     this.props.navigation.navigate("Dashboard")
-
-        );
+        <View style={{alignSelf: 'center'}}>
+          <View style={{alignSelf: 'center', marginTop: 150}}>
+            <View>
+              <Image
+                style={{height: 50, width: 50}}
+                source={{uri: this.state.userInfo.user.photo}}></Image>
+              <Text>Email: {this.state.userInfo.user.name}</Text>
+              <Text>Email: {this.state.userInfo.user.email}</Text>
+              <TouchableOpacity onPress={this._signOut}>
+                <Text>Logout</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      );
     } else {
       return (
         <SafeAreaView style={style.flex1}>
@@ -255,6 +286,11 @@ export default class Login extends Component {
                       onFocus={this.changeheight}
                       style={input.textinputstyle}
                       placeholder="Email"
+                      onChangeText={(text) => {
+                        this.setState({
+                          Email: text,
+                        });
+                      }}
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
 
@@ -264,6 +300,11 @@ export default class Login extends Component {
                       onFocus={this.changeheight}
                       style={input.textinputstyle}
                       placeholder="Password"
+                      onChangeText={(text) => {
+                        this.setState({
+                          Password: text,
+                        });
+                      }}
                       secureTextEntry={true}
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
@@ -279,7 +320,7 @@ export default class Login extends Component {
 
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate('Dashboard');
+                      this.submitData();
                     }}>
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text

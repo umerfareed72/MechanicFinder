@@ -8,6 +8,7 @@ import {
   StatusBar,
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+import AsyncStorage from '@react-native-community/async-storage';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -42,18 +43,21 @@ export default class SideMenu extends React.Component {
       collapsed4: false,
     };
   }
+  logout = () => {
+    AsyncStorage.removeItem('token').then(() => {
+      this.props.navigation.navigate('Login');
+    });
+  };
 
   static navigationOptions = {
     headerShown: false,
   };
-  onSignout=()=>{
-
-    const login =new Login();
+  onSignout = () => {
+    const login = new Login();
     login._signOut();
-    this.props.navigation.navigate("Login")
-    
-    }
-    
+    this.props.navigation.navigate('Login');
+  };
+
   render() {
     return (
       <SafeAreaView style={{backgroundColor: '#ccc', flex: 1}}>
@@ -169,27 +173,28 @@ export default class SideMenu extends React.Component {
                     </Text>
                   </View>
                 </View>
-              </TouchableOpacity>
-            </CollapseHeader>
-            <CollapseBody>
-              <ListItem style={{borderColor: colors.white}}>
+              </View>
+            </TouchableOpacity>
+            <Collapse isCollapsed={this.state.collapsed}>
+              <CollapseHeader>
                 <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.navigate('EditProfile');
+                    this.setState({
+                      collapsed: true,
+                      collapsed2: false,
+                      collapsed4: false,
+                      collapsed3: false,
+                    });
                   }}>
-                  <View style={style.pl60}>
-                    <Text style={[text.textlabel12]}>Edit Profile</Text>
-                  </View>
-                </TouchableOpacity>
-              </ListItem>
-
-              <ListItem style={{borderColor: colors.white}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('Notification');
-                  }}>
-                  <View style={style.pl60}>
-                    <Text style={[text.textlabel12]}>Notification</Text>
+                  <View style={style.mh20}>
+                    <View style={[image.attachtextimageleft]}>
+                      <Image
+                        source={images.setting}
+                        style={[image.drawerIcon]}></Image>
+                      <Text style={[text.textheader4, {color: colors.gray666}]}>
+                        Setting
+                      </Text>
+                    </View>
                   </View>
                 </TouchableOpacity>
               </ListItem>
@@ -227,7 +232,7 @@ export default class SideMenu extends React.Component {
                 </View>
               </View>
             </TouchableOpacity>
-           
+
             {/* <Collapse isCollapsed={this.state.collapsed2} 
           >
             <CollapseHeader>
@@ -252,13 +257,36 @@ export default class SideMenu extends React.Component {
               <ListItem style={{borderColor: colors.white}}>
                 <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.navigate('InviteFriend');
+                    this.setState({
+                      collapsed: false,
+                      collapsed2: true,
+                      collapsed3: false,
+                      collapsed4: false,
+                    });
                   }}>
-                  <View style={style.pl60}>
-                    <Text style={[text.textlabel12]}>Invite Friend</Text>
+                  <View style={style.mh20}>
+                    <View style={[image.attachtextimageleft]}>
+                      <Image
+                        source={images.percent}
+                        style={[image.drawerIcon]}></Image>
+                      <Text style={[text.textheader4, {color: colors.gray666}]}>
+                        Promotions
+                      </Text>
+                    </View>
                   </View>
                 </TouchableOpacity>
-              </ListItem>
+              </CollapseHeader>
+              <CollapseBody>
+                <ListItem style={{borderColor: colors.white}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('InviteFriend');
+                    }}>
+                    <View style={style.pl60}>
+                      <Text style={[text.textlabel12]}>Invite Friend</Text>
+                    </View>
+                  </TouchableOpacity>
+                </ListItem>
 
               <ListItem style={{borderColor: colors.white}}>
                 <TouchableOpacity
@@ -297,13 +325,36 @@ export default class SideMenu extends React.Component {
               <ListItem style={{borderColor: colors.white}}>
                 <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.navigate('Help');
+                    this.setState({
+                      collapsed: false,
+                      collapsed2: false,
+                      collapsed4: false,
+                      collapsed3: true,
+                    });
                   }}>
-                  <View style={style.pl60}>
-                    <Text style={[text.textlabel12]}>Heip</Text>
+                  <View style={style.mh20}>
+                    <View style={[image.attachtextimageleft]}>
+                      <Image
+                        source={images.support}
+                        style={[image.drawerIcon]}></Image>
+                      <Text style={[text.textheader4, {color: colors.gray666}]}>
+                        Support
+                      </Text>
+                    </View>
                   </View>
                 </TouchableOpacity>
-              </ListItem>
+              </CollapseHeader>
+              <CollapseBody>
+                <ListItem style={{borderColor: colors.white}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('Help');
+                    }}>
+                    <View style={style.pl60}>
+                      <Text style={[text.textlabel12]}>Heip</Text>
+                    </View>
+                  </TouchableOpacity>
+                </ListItem>
 
               <ListItem style={{borderColor: colors.white}}>
                 <TouchableOpacity
@@ -342,13 +393,36 @@ export default class SideMenu extends React.Component {
               <ListItem style={{borderColor: colors.white}}>
                 <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.navigate('Terms');
+                    this.setState({
+                      collapsed: false,
+                      collapsed2: false,
+                      collapsed3: false,
+                      collapsed4: true,
+                    });
                   }}>
-                  <View style={style.pl60}>
-                    <Text style={[text.textlabel12]}>Term of Service</Text>
+                  <View style={style.mh20}>
+                    <View style={[image.attachtextimageleft]}>
+                      <Image
+                        source={images.LegalPaper}
+                        style={[image.drawerIcon]}></Image>
+                      <Text style={[text.textheader4, {color: colors.gray666}]}>
+                        Legal
+                      </Text>
+                    </View>
                   </View>
                 </TouchableOpacity>
-              </ListItem>
+              </CollapseHeader>
+              <CollapseBody>
+                <ListItem style={{borderColor: colors.white}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('Terms');
+                    }}>
+                    <View style={style.pl60}>
+                      <Text style={[text.textlabel12]}>Term of Service</Text>
+                    </View>
+                  </TouchableOpacity>
+                </ListItem>
 
               <ListItem style={{borderColor: colors.white}}>
                 <TouchableOpacity
@@ -366,7 +440,7 @@ export default class SideMenu extends React.Component {
 
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('Login');
+                this.logout();
               }}>
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>

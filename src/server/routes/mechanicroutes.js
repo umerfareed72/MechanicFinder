@@ -1,9 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const {jwtkey} = require('../keys');
 const router = express.Router();
-
+const jwt = require('jsonwebtoken');
 const Mechanicmodel = mongoose.model('mechanicmodel');
 const Usermodel = mongoose.model('Usermodel');
+// router.get('/', (req, res) => {
+//   Mechanicmodel.find({})
+//     .then((data) => {
+//       res.send(data);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
+
 router.get('/', (req, res) => {
   Mechanicmodel.find({})
     .then((data) => {
@@ -14,7 +25,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post('/mechanicregister', (req, res) => {
+router.post('/mechanicregister', async (req, res) => {
   const mechanic = new Mechanicmodel({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
@@ -27,22 +38,41 @@ router.post('/mechanicregister', (req, res) => {
     city: req.body.city,
     country: req.body.country,
     skilltype: req.body.skilltype,
-vehicletype:req.body.vehicletype,
+    vehicletype: req.body.vehicletype,
     date: req.body.date,
-   
   });
 
-  mechanic
+  await mechanic
     .save()
-    .then((data) => {
-      console.log(data);
-      res.send(data);
+    .then(() => {
+      const token = jwt.sign({mechanicid: mechanic._id}, jwtkey);
+      res.send({token});
     })
+    // .then((data) => {
+    //
+    //   // res.send(data);
+    // })
     .catch((err) => {
       res.status(404).send(err.message);
     });
 });
-
+router.post('/mechnanicsignin', async (req, res) => {
+  const {email, password} = req.body;
+  if (!email || !password) {
+    return res.status(422).send({error: 'Provide Email and Password Both!!'});
+  }
+  const mechanic = await Mechanicmodel.findOne({email});
+  if (!mechanic) {
+    return res.status(422).send({error: 'Email not exist!!'});
+  }
+  try {
+    await mechanic.comparePassword(password);
+    const token = jwt.sign({mechanicid: mechanic._id}, jwtkey);
+    res.send({token});
+  } catch (err) {
+    return res.status(422).send({error: 'Password not exist!!'});
+  }
+});
 
 router.post('/deletemechanic', (req, res) => {
   Mechanicmodel.findByIdAndRemove(req.body.id)
@@ -66,56 +96,51 @@ router.post('/deleteUser', (req, res) => {
     });
 });
 
-router.get("/users", (req, res) => {
+router.get('/users', (req, res) => {
   async function get() {
-    const users = await Usermodel.find()
-      .sort("id")
-      .select({
-        firstname: 1,
-        lastname: 1,
-        email: 1,
-        password: 1,
-        phone: 1,
-        address: 1,
-        photo: 1,
-        carcompany: 1,
-        city: 1,
-        country: 1,
-        skilltype: 1,
-    vehicletype:1,
-        date: 1,
-      });
-    if (!users) return res.status(404).send("Not Found");
+    const users = await Usermodel.find().sort('id').select({
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      password: 1,
+      phone: 1,
+      address: 1,
+      photo: 1,
+      carcompany: 1,
+      city: 1,
+      country: 1,
+      skilltype: 1,
+      vehicletype: 1,
+      date: 1,
+    });
+    if (!users) return res.status(404).send('Not Found');
     res.send(users);
   }
   get();
 });
 
-router.get("/mechanics", (req, res) => {
+router.get('/mechanics', (req, res) => {
   async function get() {
-    const users = await Mechanicmodel.find()
-      .sort("id")
-      .select({
-        firstname: 1,
-        lastname: 1,
-        email: 1,
-        password: 1,
-        phone: 1,
-        address: 1,
-        photo: 1,
-        carcompany: 1,
-        city: 1,
-        country: 1,
-        skilltype: 1,
-    vehicletype:1,
-        date: 1,
-      });
-    if (!users) return res.status(404).send("Not Found");
+    const users = await Mechanicmodel.find().sort('id').select({
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      password: 1,
+      phone: 1,
+      address: 1,
+      photo: 1,
+      carcompany: 1,
+      city: 1,
+      country: 1,
+      skilltype: 1,
+      vehicletype: 1,
+      date: 1,
+    });
+    if (!users) return res.status(404).send('Not Found');
     res.send(users);
   }
   get();
 });
-
 
 router.post('/userregister', (req, res) => {
   const User = new Usermodel({
@@ -129,11 +154,9 @@ router.post('/userregister', (req, res) => {
     city: req.body.city,
     country: req.body.country,
     date: req.body.date,
-   
   });
 
-  User
-    .save()
+  User.save()
     .then((data) => {
       console.log(data);
       res.send(data);
@@ -142,7 +165,6 @@ router.post('/userregister', (req, res) => {
       res.status(404).send(err.message);
     });
 });
-
 
 router.post('/updatemechanic', (req, res) => {
   Mechanicmodel.findByIdAndUpdate(req.body.id, {

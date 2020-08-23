@@ -13,10 +13,10 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 // import RNPickerSelect from 'react-native-picker-select';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
@@ -67,15 +67,13 @@ export default class MechanicRegister extends Component {
       filePath: {},
     };
   }
-  check=()=>{
-    if(this.state.Password==this.state.CPassword){
-      this.submitData()
-   
-    }else{
-      alert("Confirm Password Not Matched")
+  check = () => {
+    if (this.state.Password == this.state.CPassword) {
+      this.submitData();
+    } else {
+      alert('Confirm Password Not Matched');
     }
-   
-  }
+  };
   submitData = () => {
     axios
       .post('http://192.168.0.105:3000/mechanicregister', {
@@ -90,25 +88,26 @@ export default class MechanicRegister extends Component {
         city: this.state.City,
         country: this.state.Country,
         skilltype: this.state.skilltype,
-    vehicletype:this.state.vehicletype,
+        vehicletype: this.state.vehicletype,
         date: this.state.date,
-    
       })
-      .then( (response)=> {
-        if(response){
-          this.props.navigation.navigate("Dashboard")
-          console.log(response);
-          Alert.alert(`Information saved successfully!!`);  
-        
-        } 
+      .then(async (res) => {
+        console.log(res.data);
+        console.log(res.data.token);
+        try {
+          await AsyncStorage.setItem('token', res.data.token);
+          console.log(this.props.navigation);
+          this.props.navigation.navigate('MainApp');
+        } catch (e) {
+          console.log('error hai', e);
+        }
       })
-      .catch( (error)=> {
-       
+      .catch((error) => {
         Alert.alert('something went Wrong!!');
-        
+
         console.log(error);
       });
-    console.log('IN');
+
     // fetch('http://192.168.8.103/mechanicregister', {
     //   method: 'post',
     //   headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
@@ -417,7 +416,6 @@ export default class MechanicRegister extends Component {
                           CPassword: text,
                         });
                       }}
-                   
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
                 </View>
@@ -491,9 +489,7 @@ export default class MechanicRegister extends Component {
                   </View>
 
                   <View style={[input.textinputcontainer, style.mv5]}>
-                    <Image
-                      source={images.phone}
-                      style={image.username}></Image>
+                    <Image source={images.phone} style={image.username}></Image>
                     <TextInput
                       style={input.textinputstyle}
                       placeholder="Phone Number"
@@ -541,7 +537,9 @@ export default class MechanicRegister extends Component {
                     </Picker>
                   </View>
                   <View style={[input.textinputcontainer, style.mv5]}>
-                    <Image source={images.location} style={image.InputImage}></Image>
+                    <Image
+                      source={images.location}
+                      style={image.InputImage}></Image>
 
                     <Picker
                       selectedValue={this.state.Country}
@@ -663,7 +661,7 @@ export default class MechanicRegister extends Component {
                 <TouchableOpacity onPress={this.tabStep4}>
                   <View
                     style={[
-                      button.buttoncontainer, 
+                      button.buttoncontainer,
                       style.mt20,
                       style.mh50,
                       {backgroundColor: colors.purple},
@@ -679,7 +677,7 @@ export default class MechanicRegister extends Component {
                   </View>
                 </TouchableOpacity>
               </View>
- 
+
               {/* Gallery Tab View End */}
 
               {/* Reviews Tab Start  */}
@@ -735,7 +733,7 @@ export default class MechanicRegister extends Component {
                     </View>
                   </View>
                 </View>
-                <TouchableOpacity onPress={ this.check}>
+                <TouchableOpacity onPress={this.check}>
                   <View
                     style={[
                       button.buttoncontainer,
