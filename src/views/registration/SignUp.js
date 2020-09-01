@@ -13,7 +13,8 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-
+PermissionsAndroid,
+Permission,
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
@@ -35,6 +36,7 @@ import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import Geolocation from 'react-native-geolocation-service';
 
 export default class MechanicRegister extends Component {
   constructor(props) {
@@ -60,28 +62,76 @@ export default class MechanicRegister extends Component {
       photo: '',
       Phone: '',
       date: 'Select Date Of Birth',
+      longitude:'',
+      latitude:'',
       filePath: {},
     };
   }
-  cloudinaryUpload = (photo) => {
-    const data = new FormData()
-    data.append('file', photo)
-    data.append('upload_preset', "dng1vvycv")
-    data.append("cloud_name", "dng1vvycv")
-    axios
-      .post('https://api.cloudinary.com/v1_1/dng1vvycv/image/upload', {
-   
- data
-    }).then(res => res.json()).
-      then(data => {
-        console.log(data)
-       this.setState({photo:data.secure_url})
 
-      }).catch(err => {
-        Alert.alert("An Error Occured While Uploading")
-    console.log(err)
-      })
-  }
+  requestUserLocation = async () => {
+    try {
+      const grantedLocation = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location Permission',
+        
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+        {
+          title: 'Cool Location Permission',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (
+        grantedLocation === PermissionsAndroid.RESULTS.GRANTED &&
+        granted === PermissionsAndroid.RESULTS.GRANTED
+      ) {
+        Geolocation.getCurrentPosition(
+          (position) => {
+            console.log(position);
+          this.setState({longitude:position.coords.longitude,latitude:position.coords.latitude})
+       
+        },
+          (error) => {
+            // See error code charts below.
+            console.log(error.code, error.message);
+          },
+          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+        );
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+componentDidMount(){
+this.requestUserLocation();
+}
+//   cloudinaryUpload = (photo) => {
+//     const data = new FormData()
+//     data.append('file', photo)
+//     data.append('upload_preset', "dng1vvycv")
+//     data.append("cloud_name", "dng1vvycv")
+//     axios
+//       .post('https://api.cloudinary.com/v1_1/dng1vvycv/image/upload', {
+   
+//  data
+//     }).then(res => res.json()).
+//       then(data => {
+//         console.log(data)
+//        this.setState({photo:data.secure_url})
+
+//       }).catch(err => {
+//         Alert.alert("An Error Occured While Uploading")
+//     console.log(err)
+//       })
+//   }
   check = () => {
     if (this.state.Password == this.state.CPassword) {
       this.submitData();
@@ -103,6 +153,8 @@ export default class MechanicRegister extends Component {
         city: this.state.City,
         country: this.state.Country,
         date: this.state.date,
+     longitude:this.state.longitude,
+     latitude:this.state.latitude
       })
       .then((response) => {
         if (response) {
@@ -131,15 +183,15 @@ export default class MechanicRegister extends Component {
       if (response) {
         console.log(response);
         this.setState({photo: response.uri});
-        const uri = response.uri;
-        const type = response.type;
-        const name = response.fileName;
-        const source = {
-          uri,
-          type,
-          name,
-        }
-        this.cloudinaryUpload(source)
+        // const uri = response.uri;
+        // const type = response.type;
+        // const name = response.fileName;
+        // const source = {
+        //   uri,
+        //   type,
+        //   name,
+        // }
+        // this.cloudinaryUpload(source)
      
       } else if (response.didCancel) {
         console.log('User Cancelled Image Picker');
@@ -225,7 +277,7 @@ export default class MechanicRegister extends Component {
                     Create Account
                   </Text>
                   <Text style={[text.text20, {color: colors.white}]}>
-                    (For Mechanics Registeration)
+                    (For User Registeration)
                   </Text>
                 </View>
               </LinearGradient>

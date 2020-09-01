@@ -65,7 +65,7 @@ export default class Dashboard extends Component {
     });
   }
   componentDidMount(){
-    fetch("http://192.168.0.105:3000/mechanics")
+    fetch("http://192.168.0.107:3000/mechanics")
     .then(response => response.json())
     .then((responseJson)=> {
       this.setState({

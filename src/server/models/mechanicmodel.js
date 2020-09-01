@@ -14,6 +14,8 @@ const mechanicschema = new mongoose.Schema({
   skilltype: String,
   vehicletype: String,
   date: String,
+  longitude:String,
+ latitude:String
 });
 
 mechanicschema.pre('save', function (next) {

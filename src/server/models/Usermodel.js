@@ -11,7 +11,8 @@ const Userschema = new mongoose.Schema({
   city: String,
   country: String,
   date: String,
- 
+ longitude:String,
+ latitude:String
 });
 
 mongoose.model('Usermodel', Userschema);

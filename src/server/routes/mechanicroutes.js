@@ -40,6 +40,8 @@ router.post('/mechanicregister', async (req, res) => {
     skilltype: req.body.skilltype,
     vehicletype: req.body.vehicletype,
     date: req.body.date,
+    longitude:req.body.longitude,
+ latitude:req.body.latitude
   });
 
   await mechanic
@@ -154,6 +156,8 @@ router.post('/userregister', (req, res) => {
     city: req.body.city,
     country: req.body.country,
     date: req.body.date,
+    longitude:req.body.longitude,
+    latitude:req.body.latitude
   });
 
   User.save()
