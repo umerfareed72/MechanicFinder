@@ -79,29 +79,6 @@ export default class Dashboard extends Component {
     }  
  
 
-  // static navigationOptions = ({navigation}) => {
-  //     return {
-  //       headerTitle: '',
-  //       headerTitleAlign: 'left',
-  //       headerShown: 'false',
-  //       headerVisible: 'false',
-  //       headerTitleStyle: [text.bold, {
-  //         fontSize: 35,
-  //         color: 'transparent',
-  //         letterSpacing: 1,
-  //         marginLeft: 20,
-  //       }],
-  //       headerLeft: () => <Hamburger/>,
-  //       //headerRight: () => <ProfileIcon />,
-  //       headerStyle: {
-  //         elevation: 0,
-  //         backgroundColor: 'transparent',
-  //         // alignItems:'center',
-  //         justifyContent: 'center',
-  //       },
-  //     };
-  //   };
-
   render() {
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
@@ -207,9 +184,7 @@ export default class Dashboard extends Component {
   
   <TouchableOpacity
                       style={[style.mr15]}
-                      // onPress={() => {
-                      //   this.props.navigation.navigate('HomeDetail');
-                      // }}
+                      //    // }}
                       >
                       <ImageBackground
                         imageStyle={{borderRadius: 4}}
