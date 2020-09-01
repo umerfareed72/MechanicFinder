@@ -218,7 +218,7 @@ export default class Login extends Component {
 
   submitData = () => {
     axios
-      .post('http://192.168.0.105:3000/mechnanicsignin', {
+      .post('http://192.168.0.107:3000/mechnanicsignin', {
         email: this.state.Email,
         password: this.state.Password,
       })
@@ -319,9 +319,8 @@ export default class Login extends Component {
                   </View>
 
                   <TouchableOpacity
-                    onPress={() => {
-                      this.submitData();
-                    }}>
+                    onPress={this.submitData
+                    }>
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text
                         style={[

@@ -439,9 +439,9 @@ export default class SideMenu extends React.Component {
           </Collapse> */}
 
             <TouchableOpacity
-              onPress={() => {
-                this.logout();
-              }}>
+              onPress={
+             this.logout
+             }>
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>
                   <Image

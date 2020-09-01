@@ -58,7 +58,11 @@ onSignout=()=>{
 const login =new Login();
 login._signOut();
 AsyncStorage.removeItem("googleData")
-this.toggleModal()
+this.toggleModal();
+    AsyncStorage.removeItem('token').then(() => {
+      this.props.navigation.navigate('Login');
+    });
+
 
 }
 googleUserdata=()=>{
