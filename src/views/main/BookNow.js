@@ -46,6 +46,8 @@ export default class Overview extends Component {
     super(props);
     this.state = {
       rating: 2,
+   longitude:'',
+   latitude:'',
       starCount: 3.5,
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
@@ -68,6 +70,20 @@ export default class Overview extends Component {
 
     Linking.openURL(phoneNumber);
   };
+getMechanicLocation=()=>{
+  fetch("http://192.168.0.110:3000/location")
+  .then(response => response.json())
+  .then((responseJson)=> {
+    // this.setState({
+    // })
+console.log(responseJson)
+  })
+  .catch(error=>console.log(error,"error")
+
+  ) //to catch the errors if any
+ 
+}
+
   componentDidMount() {
     Animated.loop(
       Animated.timing(
@@ -83,6 +99,7 @@ export default class Overview extends Component {
     ).start();
 
     // Starts the animation
+ this.getMechanicLocation()
   }
 
   fadeOut() {
@@ -202,7 +219,6 @@ export default class Overview extends Component {
                   </TouchableOpacity>
                 </Animated.View>
 
-                <Animated.View style={{...this.props.style, opacity: fadeAnim}}>
                   {/* {this.props.children} */}
                   <TouchableOpacity
                     onPress={() =>
@@ -213,8 +229,7 @@ export default class Overview extends Component {
                       Locate Now
                     </Text>
                   </TouchableOpacity>
-                </Animated.View>
-              </View>
+                  </View>
             </ScrollView>
           </View>
         </View>

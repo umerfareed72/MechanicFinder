@@ -5,15 +5,8 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Mechanicmodel = mongoose.model('mechanicmodel');
 const Usermodel = mongoose.model('Usermodel');
-// router.get('/', (req, res) => {
-//   Mechanicmodel.find({})
-//     .then((data) => {
-//       res.send(data);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
+const UserLocationmodel = mongoose.model('UserLocationmodel');
+const Locationmodel = mongoose.model('Locationmodel');
 
 router.get('/', (req, res) => {
   Mechanicmodel.find({})
@@ -24,7 +17,7 @@ router.get('/', (req, res) => {
       console.log(err);
     });
 });
-
+//Mechanic Backend
 router.post('/mechanicregister', async (req, res) => {
   const mechanic = new Mechanicmodel({
     firstname: req.body.firstname,
@@ -38,10 +31,10 @@ router.post('/mechanicregister', async (req, res) => {
     city: req.body.city,
     country: req.body.country,
     skilltype: req.body.skilltype,
+    longitude: req.body.longitude,
+    latitude: req.body.latitude,
     vehicletype: req.body.vehicletype,
     date: req.body.date,
-    longitude:req.body.longitude,
- latitude:req.body.latitude
   });
 
   await mechanic
@@ -57,6 +50,51 @@ router.post('/mechanicregister', async (req, res) => {
     .catch((err) => {
       res.status(404).send(err.message);
     });
+});
+
+//Get User longitude and latitude
+router.post('/location', (req, res) => {
+  const location = new Locationmodel({
+    longitude: req.body.longitude,
+    latitude: req.body.latitude,
+  });
+
+  location
+    .save()
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+router.patch('/mechanicregister', (req, res) => {
+  var user_id = '5f501f762dd38b2e144a3d66';
+  Mechanicmodel.findByIdAndUpdate(
+    user_id,
+    {longitude: req.body.longitude, latitude: req.body.latitude},
+    function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Updated User : ', docs);
+        res.send(docs);
+      }
+    },
+  );
+});
+
+router.get('/location', (req, res) => {
+  async function get() {
+    const location = await Locationmodel.findOne().select({
+      longitude: 1,
+      latitude: 1,
+    });
+    if (!location) return res.status(404).send('Not Found');
+    res.send(location);
+  }
+  get();
 });
 router.post('/mechnanicsignin', async (req, res) => {
   const {email, password} = req.body;
@@ -75,32 +113,9 @@ router.post('/mechnanicsignin', async (req, res) => {
     return res.status(422).send({error: 'Password not exist!!'});
   }
 });
-
-router.post('/deletemechanic', (req, res) => {
-  Mechanicmodel.findByIdAndRemove(req.body.id)
-    .then((data) => {
-      console.log(data);
-      res.send(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
-router.post('/deleteUser', (req, res) => {
-  Usermodel.findByIdAndRemove(req.body.id)
-    .then((data) => {
-      console.log(data);
-      res.send(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
-router.get('/users', (req, res) => {
+router.get('/mechanics', (req, res) => {
   async function get() {
-    const users = await Usermodel.find().sort('id').select({
+    const users = await Mechanicmodel.find().sort('id').select({
       firstname: 1,
       lastname: 1,
       email: 1,
@@ -120,10 +135,11 @@ router.get('/users', (req, res) => {
   }
   get();
 });
-
-router.get('/mechanics', (req, res) => {
+//User Portion
+//User Register
+router.get('/users', (req, res) => {
   async function get() {
-    const users = await Mechanicmodel.find().sort('id').select({
+    const users = await Usermodel.find().sort('id').select({
       firstname: 1,
       lastname: 1,
       email: 1,
@@ -156,8 +172,6 @@ router.post('/userregister', (req, res) => {
     city: req.body.city,
     country: req.body.country,
     date: req.body.date,
-    longitude:req.body.longitude,
-    latitude:req.body.latitude
   });
 
   User.save()
@@ -170,22 +184,26 @@ router.post('/userregister', (req, res) => {
     });
 });
 
-router.post('/updatemechanic', (req, res) => {
-  Mechanicmodel.findByIdAndUpdate(req.body.id, {
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    email: req.body.email,
-    password: req.body.password,
-    phone: req.body.phone,
-    address: req.body.address,
-    photo: req.body.photo,
-    carcompany: req.body.carcompany,
-    city: req.body.city,
-    country: req.body.country,
-    skilltype: req.body.skilltype,
-    vehicaltype: req.body.vehicaltype,
-    date: req.body.data,
-  })
+//Get User longitude and latitude
+router.post('/userlocation', (req, res) => {
+  const Userlocation = new UserLocationmodel({
+    longitude: req.body.longitude,
+    latitude: req.body.latitude,
+  });
+
+  Userlocation.save()
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+//Delete User
+router.delete('/deletemechanic', (req, res) => {
+  Mechanicmodel.findByIdAndRemove(req.body.id)
     .then((data) => {
       console.log(data);
       res.send(data);
@@ -194,19 +212,9 @@ router.post('/updatemechanic', (req, res) => {
       console.log(err);
     });
 });
-router.post('/updateUser', (req, res) => {
-  Usermodel.findByIdAndUpdate(req.body.id, {
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    email: req.body.email,
-    password: req.body.password,
-    phone: req.body.phone,
-    address: req.body.address,
-    photo: req.body.photo,
-    city: req.body.city,
-    country: req.body.country,
-    date: req.body.data,
-  })
+
+router.post('/deleteUser', (req, res) => {
+  Usermodel.findByIdAndRemove(req.body.id)
     .then((data) => {
       console.log(data);
       res.send(data);

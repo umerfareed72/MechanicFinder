@@ -63,6 +63,8 @@ export default class MechanicRegister extends Component {
       carcompany: '',
       skilltype: '',
       vehicletype: '',
+      longitude:'',
+      latitude:'',
       date: 'Select Date Of Birth',
       filePath: {},
     };
@@ -76,7 +78,7 @@ export default class MechanicRegister extends Component {
   };
   submitData = () => {
     axios
-      .post('http://192.168.0.105:3000/mechanicregister', {
+      .post('http://192.168.0.110:3000/mechanicregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
@@ -90,14 +92,16 @@ export default class MechanicRegister extends Component {
         skilltype: this.state.skilltype,
         vehicletype: this.state.vehicletype,
         date: this.state.date,
+        longitude:this.state.longitude,
+        latitude:this.state.latitude
       })
       .then(async (res) => {
-        console.log(res.data);
+        console.log(res);
         console.log(res.data.token);
         try {
           await AsyncStorage.setItem('token', res.data.token);
-          console.log(this.props.navigation);
-          this.props.navigation.navigate('MainApp');
+        
+          this.props.navigation.navigate('mechanicStack');
         } catch (e) {
           console.log('error hai', e);
         }

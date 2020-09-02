@@ -9,15 +9,19 @@ import {
   TouchableOpacity,
   CheckBox,
   Image,
+  PermissionsAndroid,
+  Permission,
   ImageBackground,
   Dimensions,
   Keyboard,
   Platform,
   AsyncStorage,
+
 } from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
+
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
-
-
+const axios = require('axios');
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -37,16 +41,68 @@ export default class Dashboard extends Component {
     this.state = {
       rating: 2,
       starCount: 3,
-    };
-    this.state = {
+      longitude:'',
+      latitude:'',
       loading: false,
       items: [],
       refreshing: false,
       dataSource:[],
       slot: '',
-  
     };
   }
+  requestUserLocation = async () => {
+    try {
+      const grantedLocation = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location Permission',
+        
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+        {
+          title: 'Cool Location Permission',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (
+        grantedLocation === PermissionsAndroid.RESULTS.GRANTED &&
+        granted === PermissionsAndroid.RESULTS.GRANTED
+      ) {
+        Geolocation.getCurrentPosition(
+          (position) => {
+            console.log(position);
+          this.setState({longitude:position.coords.longitude,latitude:position.coords.latitude})
+          axios
+          .post('http://192.168.0.110:3000/userlocation', {
+         longitude:this.state.longitude,
+         latitude:this.state.latitude
+          })
+          .then((response) => {
+          console.log(response)         
+          })
+          .catch((error) => {
+             console.log(error);
+          });
+       
+        },
+          (error) => {
+            // See error code charts below.
+            console.log(error.code, error.message);
+          },
+          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+        );
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
   changebuttoncolor = (id) => {
     this.setState({
@@ -65,7 +121,7 @@ export default class Dashboard extends Component {
     });
   }
   componentDidMount(){
-    fetch("http://192.168.0.107:3000/mechanics")
+    fetch("http://192.168.0.110:3000/mechanics")
     .then(response => response.json())
     .then((responseJson)=> {
       this.setState({
@@ -76,7 +132,8 @@ export default class Dashboard extends Component {
     .catch(error=>console.log(error,"error")
 
     ) //to catch the errors if any
-    }  
+    this.requestUserLocation()
+  }  
  
 
   render() {

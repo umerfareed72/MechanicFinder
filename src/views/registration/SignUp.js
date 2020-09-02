@@ -36,7 +36,6 @@ import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
-import Geolocation from 'react-native-geolocation-service';
 
 export default class MechanicRegister extends Component {
   constructor(props) {
@@ -62,57 +61,12 @@ export default class MechanicRegister extends Component {
       photo: '',
       Phone: '',
       date: 'Select Date Of Birth',
-      longitude:'',
-      latitude:'',
       filePath: {},
+    
+
     };
   }
 
-  requestUserLocation = async () => {
-    try {
-      const grantedLocation = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Location Permission',
-        
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-        {
-          title: 'Cool Location Permission',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (
-        grantedLocation === PermissionsAndroid.RESULTS.GRANTED &&
-        granted === PermissionsAndroid.RESULTS.GRANTED
-      ) {
-        Geolocation.getCurrentPosition(
-          (position) => {
-            console.log(position);
-          this.setState({longitude:position.coords.longitude,latitude:position.coords.latitude})
-       
-        },
-          (error) => {
-            // See error code charts below.
-            console.log(error.code, error.message);
-          },
-          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-        );
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
-componentDidMount(){
-this.requestUserLocation();
-}
 //   cloudinaryUpload = (photo) => {
 //     const data = new FormData()
 //     data.append('file', photo)
@@ -141,7 +95,7 @@ this.requestUserLocation();
   };
   submitData = () => {
     axios
-      .post('http://192.168.0.105:3000/userregister', {
+      .post('http://192.168.0.110:3000/userregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
@@ -153,8 +107,7 @@ this.requestUserLocation();
         city: this.state.City,
         country: this.state.Country,
         date: this.state.date,
-     longitude:this.state.longitude,
-     latitude:this.state.latitude
+
       })
       .then((response) => {
         if (response) {

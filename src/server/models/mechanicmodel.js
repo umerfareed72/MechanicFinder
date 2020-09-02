@@ -12,10 +12,12 @@ const mechanicschema = new mongoose.Schema({
   city: String,
   country: String,
   skilltype: String,
+  longitude:String,
+  latitude:String,
   vehicletype: String,
   date: String,
-  longitude:String,
- latitude:String
+ 
+
 });
 
 mechanicschema.pre('save', function (next) {
@@ -51,4 +53,14 @@ mechanicschema.methods.comparePassword = function (candidatepassword) {
     });
   });
 };
+
+const Locationschema = new mongoose.Schema({
+  longitude:String,
+  latitude:String
+ 
+ });
+ 
+ mongoose.model('Locationmodel', Locationschema);
+ 
+
 mongoose.model('mechanicmodel', mechanicschema);

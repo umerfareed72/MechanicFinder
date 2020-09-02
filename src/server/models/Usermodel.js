@@ -11,8 +11,14 @@ const Userschema = new mongoose.Schema({
   city: String,
   country: String,
   date: String,
+
+});
+const UserLocationschema = new mongoose.Schema({
  longitude:String,
  latitude:String
+
 });
+
+mongoose.model('UserLocationmodel', UserLocationschema);
 
 mongoose.model('Usermodel', Userschema);
