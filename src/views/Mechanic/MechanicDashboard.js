@@ -40,12 +40,29 @@ export default class MechanicDashboard extends Component {
     this.state = {
       longitude: '',
       latitude: '',
+      mechanicid: '',
       loading: false,
       items: [],
       refreshing: false,
       dataSource: [],
     };
   }
+  getId = () => {
+    axios
+      .get('http://192.168.0.110:3000/me', {
+        headers: {
+          'x-access-token':
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZWNoYW5pY2lkIjoiNWY1MGE4M2FiMTRlNjIyYmQ4NjlkZTRkIiwiaWF0IjoxNTk5MTIxNDY4fQ.Dm6ItyGXXrPV4KtAEOgB8F9M6yJDhl56VVOyDjsHBWw',
+        },
+      })
+      .then((response) => {
+        console.log(response.data.mechanicid);
+        this.setState({mechanicid: response.data.mechanicid});
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   requestUserLocation = async () => {
     try {
       const grantedLocation = await PermissionsAndroid.request(
@@ -79,7 +96,8 @@ export default class MechanicDashboard extends Component {
               latitude: position.coords.latitude,
             });
             axios
-              .post('http://192.168.0.110:3000/location', {
+              .patch('http://192.168.0.110:3000/mechanicregister', {
+                mechanicid: this.state.mechanicid,
                 longitude: this.state.longitude,
                 latitude: this.state.latitude,
               })
@@ -108,19 +126,18 @@ export default class MechanicDashboard extends Component {
     });
   }
   componentDidMount() {
-    AsyncStorage.getItem("id").then((res)=>{
-      res=JSON.parse(res)
-      console.log(res)
-      // this.setState({data:res})
-      })
-      
     this.requestUserLocation();
+    this.getId();
   }
 
   render() {
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
-        <StatusBar barStyle={'light-content'} backgroundColor={'transparent'} translucent={true}/>
+        <StatusBar
+          barStyle={'light-content'}
+          backgroundColor={'transparent'}
+          translucent={true}
+        />
 
         {/*Body */}
         <View style={{}}>
@@ -129,8 +146,13 @@ export default class MechanicDashboard extends Component {
             start={{x: -0.9, y: 1}}
             end={{x: 1, y: 0}}
             style={{height: screenHeight.height30}}>
-            <View style={{postion: 'absolute', top: 30, left: 10, width: 30}}>
-            </View>
+            <View
+              style={{
+                postion: 'absolute',
+                top: 30,
+                left: 10,
+                width: 30,
+              }}></View>
             <StatusBar backgroundColor={'transparent'} />
             <View style={[appStyle.headInner]}>
               <View style={[]}>

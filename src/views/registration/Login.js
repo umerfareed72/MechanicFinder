@@ -320,7 +320,7 @@ export default class Login extends Component {
 
                   <TouchableOpacity 
                   // onPress={this.submitData}
-                  onPress={()=>{this.props.navigation.navigate('Dashboard')}}
+                  onPress={()=>{this.props.navigation.navigate('MechanicDashboard')}}
                   >
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text

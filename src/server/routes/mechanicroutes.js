@@ -52,6 +52,17 @@ router.post('/mechanicregister', async (req, res) => {
     });
 });
 
+router.get('/me', function(req, res) {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+  
+  jwt.verify(token, jwtkey, function(err, decoded) {
+    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+    
+    res.status(200).send(decoded);
+  });
+});
+
 //Get User longitude and latitude
 router.post('/location', (req, res) => {
   const location = new Locationmodel({
@@ -70,9 +81,9 @@ router.post('/location', (req, res) => {
     });
 });
 router.patch('/mechanicregister', (req, res) => {
-  var user_id = '5f501f762dd38b2e144a3d66';
+  
   Mechanicmodel.findByIdAndUpdate(
-    user_id,
+    req.body.mechanicid,
     {longitude: req.body.longitude, latitude: req.body.latitude},
     function (err, docs) {
       if (err) {
