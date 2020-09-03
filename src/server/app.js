@@ -7,11 +7,14 @@ require('./models/mechanicmodel');
 
 const requiretoken = require('./middlewares/requiretoken');
 require('./models/Usermodel');
+const usertoken = require('./middlewares/Usertoken');
 
 const mechanicroutes1 = require('./routes/mechanicroutes');
+const userroutes1 = require('./routes/Userroutes');
+
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(mechanicroutes1);
-
+app.use(userroutes1);
 const mongouri =
   'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';
 // 'mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/SmartAutoMechanicFinder?retryWrites=true&w=majority';
@@ -29,6 +32,9 @@ mongoose.connection.on('error', (err) => {
 });
 app.get('/', requiretoken, (req, res) => {
   res.send('your email is ' + req.mechanic.email);
+});
+app.get('/', usertoken, (req, res) => {
+  res.send('your email is ' + req.user.email);
 });
 app.listen(3000, () => {
   console.log('listening on 3000');

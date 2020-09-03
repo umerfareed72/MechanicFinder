@@ -218,7 +218,7 @@ export default class Login extends Component {
 
   submitData = () => {
     axios
-      .post('http://192.168.0.107:3000/mechnanicsignin', {
+      .post('http://192.168.8.103:3000/mechnanicsignin', {
         email: this.state.Email,
         password: this.state.Password,
       })
@@ -226,8 +226,8 @@ export default class Login extends Component {
         console.log(res.data);
 
         try {
-          await AsyncStorage.setItem('token', res.data.token);
-          this.props.navigation.navigate('MainApp');
+          await AsyncStorage.setItem('usertoken', res.data.token);
+          this.props.navigation.navigate('userStack');
         } catch (e) {
           console.log('error hai', e);
           Alert.alert('Invalid email password');
