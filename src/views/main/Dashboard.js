@@ -80,7 +80,7 @@ export default class Dashboard extends Component {
             console.log(position);
           this.setState({longitude:position.coords.longitude,latitude:position.coords.latitude})
           axios
-          .post('http://192.168.0.110:3000/userlocation', {
+          .post('http://192.168.0.108:3000/userlocation', {
          longitude:this.state.longitude,
          latitude:this.state.latitude
           })
@@ -121,7 +121,7 @@ export default class Dashboard extends Component {
     });
   }
   componentDidMount(){
-    fetch("http://192.168.0.110:3000/mechanics")
+    fetch("http://192.168.0.108:3000/mechanics")
     .then(response => response.json())
     .then((responseJson)=> {
       this.setState({

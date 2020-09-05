@@ -18,7 +18,7 @@ Permission,
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-
+import AsyncStorage from "@react-native-community/async-storage"
 // import RNPickerSelect from 'react-native-picker-select';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
@@ -61,6 +61,8 @@ export default class MechanicRegister extends Component {
       photo: '',
       Phone: '',
       date: 'Select Date Of Birth',
+      longitude:'',
+      latitude:'',
       filePath: {},
     
 
@@ -95,25 +97,29 @@ export default class MechanicRegister extends Component {
   };
   submitData = () => {
     axios
-      .post('http://192.168.0.110:3000/userregister', {
+      .post('http://192.168.0.108:3000/userregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
         password: this.state.Password,
-
         phone: this.state.Phone,
         address: this.state.address,
         photo: this.state.photo,
         city: this.state.City,
         country: this.state.Country,
         date: this.state.date,
-
+longitude:this.state.longitude,
+latitude:this.state.latitude
       })
-      .then((response) => {
-        if (response) {
-          this.props.navigation.navigate('Dashboard');
-          console.log(response);
-          Alert.alert(`Information saved successfully!!`);
+      .then(async (res) => {
+        console.log(res);
+        console.log(res.data.token);
+        try {
+          await AsyncStorage.setItem('usertoken', res.data.token);
+        
+          this.props.navigation.navigate('userStack');
+        } catch (e) {
+          console.log('error hai', e);
         }
       })
       .catch((error) => {
@@ -121,8 +127,7 @@ export default class MechanicRegister extends Component {
 
         console.log(error);
       });
-    console.log('IN');
-  };
+    }
   handleChoosePhoto = () => {
     const options = {
       title: 'Take Image From',

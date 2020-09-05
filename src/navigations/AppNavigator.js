@@ -6,6 +6,7 @@ import Login from '../views/registration/Login';
 import MechanicRegister from '../views/registration/MechanicRegister';
 // import TabNavigation from './BottomTabNavigation';
 import SignUp from '../views/registration/SignUp';
+import LoginasMechanic from '../views/registration/LoginasMechanic';
 
 import ChatBox from '../views/main/ChatBox';
 import ForgotPassword from '../views/registration/ForgotPassword';
@@ -29,6 +30,7 @@ const AuthStack = createStackNavigator(
   {
     Login: Login,
     SignUp: SignUp,
+    LoginasMechanic:LoginasMechanic,
     MechanicRegister: MechanicRegister,
     Forgot: ForgotPassword,
 

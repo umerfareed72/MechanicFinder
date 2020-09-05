@@ -60,6 +60,10 @@ export default class Login extends Component {
       Mregister: colors.white,
       textUser: colors.black,
       textMechanic: colors.black,
+      adminLogin: colors.white,
+      mechanicLogin: colors.white,
+      textAdmin: colors.black,
+      textMechanicLogin: colors.black,
       userInfo: null,
       Email: '',
       Password: '',
@@ -103,6 +107,16 @@ export default class Login extends Component {
     this.setState({textMechanic: colors.white, Mregister: colors.orange});
     this.props.navigation.navigate('MechanicRegister');
   };
+
+  adminLogin = () => {
+    this.setState({textAdmin: colors.white, adminLogin: colors.orange});
+    this.props.navigation.navigate('');
+  };
+  mechanicLogin = () => {
+    this.setState({textMechanicLogin: colors.white, mechanicLogin: colors.orange});
+    this.props.navigation.navigate('LoginasMechanic');
+  };
+
   handleFacebookLogin = () => {
     const _this = this;
     LoginManager.logInWithPermissions(['public_profile']).then(
@@ -218,7 +232,7 @@ export default class Login extends Component {
 
   submitData = () => {
     axios
-      .post('http://192.168.8.103:3000/mechnanicsignin', {
+      .post('http://192.168.8.108:3000/userignin', {
         email: this.state.Email,
         password: this.state.Password,
       })
@@ -320,7 +334,7 @@ export default class Login extends Component {
 
                   <TouchableOpacity 
                   // onPress={this.submitData}
-                  onPress={()=>{this.props.navigation.navigate('MechanicDashboard')}}
+                  onPress={()=>{this.props.navigation.navigate('Dashboard')}}
                   >
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text
@@ -391,6 +405,50 @@ export default class Login extends Component {
                         text.heading3,
                         text.semibold,
                         {color: this.state.textMechanic},
+                      ]}>
+                      Mechanic
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={[style.asCenter, style.mv10]}>
+                  <Text style={[text.heading6]}>Login as </Text>
+                </View>
+                <View
+                  style={[
+                    appStyle.rowBtw,
+                    style.mh15,
+                    style.mv10,
+                    appStyle.bodyShadowTop,
+                  ]}>
+                  <TouchableOpacity
+                    onPress={this.adminLogin}
+                    style={[
+                      {backgroundColor: this.state.adminLogin},
+                      appStyle.colLeft,
+                    ]}>
+                    <Text
+                      style={[
+                        style.asCenter,
+                        text.heading3,
+                        text.semibold,
+                        {color: this.state.textAdmin},
+                      ]}>
+                      Admin
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={this.mechanicLogin}
+                    style={[
+                      appStyle.colRight,
+                      {backgroundColor: this.state.mechanicLogin},
+                    ]}>
+                    <Text
+                      style={[
+                        style.asCenter,
+                        text.heading3,
+                        text.semibold,
+                        {color: this.state.textMechanicLogin},
                       ]}>
                       Mechanic
                     </Text>

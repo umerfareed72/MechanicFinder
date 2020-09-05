@@ -6,16 +6,29 @@ const jwt = require('jsonwebtoken');
 const Mechanicmodel = mongoose.model('mechanicmodel');
 const Locationmodel = mongoose.model('Locationmodel');
 
-router.get('/mechanics', (req, res) => {
-  Mechanicmodel.find({})
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+
+
+//Mechanic Login
+router.post('/mechnanicsignin', async (req, res) => {
+  const {email, password} = req.body;
+  if (!email || !password) {
+    return res.status(422).send({error: 'Provide Email and Password Both!!'});
+  }
+  const mechanic = await Mechanicmodel.findOne({email});
+  if (!mechanic) {
+    return res.status(422).send({error: 'Email not exist!!'});
+  }
+  try {
+    await mechanic.comparePassword(password);
+    const token = jwt.sign({mechanicid: mechanic._id}, jwtkey);
+    res.send({token});
+  } catch (err) {
+    return res.status(422).send({error: 'Password not exist!!'});
+  }
 });
-//Mechanic Backend
+
+
+//Mechanic Registeration
 router.post('/mechanicregister', async (req, res) => {
   const mechanic = new Mechanicmodel({
     firstname: req.body.firstname,
@@ -57,12 +70,13 @@ router.get('/me', function(req, res) {
   jwt.verify(token, jwtkey, function(err, decoded) {
     if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
     
-    res.status(200).send(decoded);
+    res.status(200).send(decoded.userid);
+  
   });
 });
 
-//Get User longitude and latitude
-router.post('/location', (req, res) => {
+//Add Mechanic longitude and latitude
+router.post('/addmechaniclocation', (req, res) => {
   const location = new Locationmodel({
     longitude: req.body.longitude,
     latitude: req.body.latitude,
@@ -78,7 +92,9 @@ router.post('/location', (req, res) => {
       res.status(404).send(err.message);
     });
 });
-router.patch('/mechanicregister', (req, res) => {
+
+//Update Mechanic Lat & Long
+router.patch('/updatemechaniclocation', (req, res) => {
   
   Mechanicmodel.findByIdAndUpdate(
     req.body.mechanicid,
@@ -93,10 +109,10 @@ router.patch('/mechanicregister', (req, res) => {
     },
   );
 });
-
-router.get('/location', (req, res) => {
+//Get Mechanics Location
+router.get('/getmechaniclocation', (req, res) => {
   async function get() {
-    const location = await Locationmodel.findOne().select({
+    const location = await Locationmodel.find().select({
       longitude: 1,
       latitude: 1,
     });
@@ -105,23 +121,9 @@ router.get('/location', (req, res) => {
   }
   get();
 });
-router.post('/mechnanicsignin', async (req, res) => {
-  const {email, password} = req.body;
-  if (!email || !password) {
-    return res.status(422).send({error: 'Provide Email and Password Both!!'});
-  }
-  const mechanic = await Mechanicmodel.findOne({email});
-  if (!mechanic) {
-    return res.status(422).send({error: 'Email not exist!!'});
-  }
-  try {
-    await mechanic.comparePassword(password);
-    const token = jwt.sign({mechanicid: mechanic._id}, jwtkey);
-    res.send({token});
-  } catch (err) {
-    return res.status(422).send({error: 'Password not exist!!'});
-  }
-});
+
+
+//Get all Mechanics
 router.get('/mechanics', (req, res) => {
   async function get() {
     const users = await Mechanicmodel.find().sort('id').select({
