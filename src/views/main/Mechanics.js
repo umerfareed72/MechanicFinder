@@ -1,8 +1,15 @@
-import React, { Component } from 'react';
-import {StyleSheet,Text,View, StatusBar,TouchableOpacity,Image} from "react-native"
-import { Card,CardItem} from 'native-base';
+import React, {Component} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import {Card, CardItem} from 'native-base';
 import RecommendedMechanic from './RecommendedMechanic';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import Icon from 'react-native-vector-icons/AntDesign';
 import LinearGradient from 'react-native-linear-gradient';
@@ -15,18 +22,17 @@ var FloatingLabel = require('react-native-floating-labels');
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 class Mechanics extends Component {
-
-
-    render() { 
-        return ( <ScrollView style={styles.container}>
-             <View>
+  render() {
+    return (
+      <ScrollView style={styles.container}>
+        <View>
           <LinearGradient
             colors={colors.orablu}
             start={{x: -0.9, y: 1}}
             end={{x: 1, y: 0}}
             style={[{paddingTop: 30}]}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Dashboard")}
+              onPress={() => this.props.navigation.navigate('Dashboard')}
               style={[image.headerBackArrow, style.pt15]}>
               <Image
                 style={[image.backArrow]}
@@ -46,61 +52,57 @@ class Mechanics extends Component {
             </View>
           </LinearGradient>
         </View>
-            <StatusBar></StatusBar>
-          <Card style={{ marginLeft: 5, marginRight: 5 }}  >
-                        <CardItem header style={{ borderBottomWidth: 1, borderBottomColor: '#dee0e2' }}>
-                            <Text>Your Recommendations</Text>
-                        </CardItem>
+        <StatusBar></StatusBar>
+        <Card style={{marginLeft: 5, marginRight: 5}}>
+          <CardItem
+            header
+            style={{borderBottomWidth: 1, borderBottomColor: '#dee0e2'}}>
+            <Text>Your Recommendations</Text>
+          </CardItem>
 
-                        <RecommendedMechanic
-                        navigation={this.props.navigation}
-                            mechanicname="UMER FAREED"
-                            location="Badami Bagh Lahore"
-                            Price="$10"
-                             imageUri={images.HomeImg}
-                            rating={5}
-
-                        />
-                        <RecommendedMechanic
-                        navigation={this.props.navigation}
-                            mechanicname="UMER FAREED"
-                            location="Badami Bagh Lahore"
-                            Price="$10"
-                             imageUri={images.HomeImg}
-                            rating={1}
-
-                        />
-                        <RecommendedMechanic
-                        navigation={this.props.navigation}
-                            mechanicname="UMER FAREED"
-                            location="Badami Bagh Lahore"
-                            Price="$10"
-                             imageUri={images.HomeImg}
-                            rating={2}
-
-                        />
-                        <RecommendedMechanic
-                        navigation={this.props.navigation}
-                            mechanicname="UMER FAREED"
-                            location="Badami Bagh Lahore"
-                            Price="$10"
-                             imageUri={images.HomeImg}
-                            rating={3}
-
-                        />
-                       
-              
-                    </Card>
-        </ScrollView> );
-    }
+          <RecommendedMechanic
+            navigation={this.props.navigation}
+            mechanicname="UMER FAREED"
+            location="Badami Bagh Lahore"
+            Price="$10"
+            imageUri={images.HomeImg}
+            rating={5}
+          />
+          <RecommendedMechanic
+            navigation={this.props.navigation}
+            mechanicname="UMER FAREED"
+            location="Badami Bagh Lahore"
+            Price="$10"
+            imageUri={images.HomeImg}
+            rating={1}
+          />
+          <RecommendedMechanic
+            navigation={this.props.navigation}
+            mechanicname="UMER FAREED"
+            location="Badami Bagh Lahore"
+            Price="$10"
+            imageUri={images.HomeImg}
+            rating={2}
+          />
+          <RecommendedMechanic
+            navigation={this.props.navigation}
+            mechanicname="UMER FAREED"
+            location="Badami Bagh Lahore"
+            Price="$10"
+            imageUri={images.HomeImg}
+            rating={3}
+          />
+        </Card>
+      </ScrollView>
+    );
+  }
 }
- 
+
 export default Mechanics;
-const styles = StyleSheet.create({ 
-    
-    container: {
-        flex: 1,
-        height: null,
-        width: null
-      },
-    })
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: null,
+    width: null,
+  },
+});

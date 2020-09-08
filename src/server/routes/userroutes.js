@@ -27,8 +27,8 @@ router.post('/userregister', (req, res) => {
 
   User.save()
     .then((data) => {
-    //   console.log(data);
-    //   res.send(data);
+      // console.log(data);
+      // res.send(data);
     const token = jwt.sign({userid: User._id}, jwtkey);
     res.send({token});
       

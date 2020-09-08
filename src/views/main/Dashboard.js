@@ -32,7 +32,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import Hamburger from '../../components/headerComponent/Hamburger';
 import {DrawerNavigator} from 'react-navigation';
-
+import * as geolib from 'geolib';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 
 export default class Dashboard extends Component {
@@ -45,6 +45,7 @@ export default class Dashboard extends Component {
       latitude:'',
       loading: false,
       items: [],
+      locations:[],
       refreshing: false,
       dataSource:[],
       slot: '',
@@ -78,9 +79,33 @@ export default class Dashboard extends Component {
         Geolocation.getCurrentPosition(
           (position) => {
             console.log(position);
+axios.get('http://192.168.0.108:3000/getmechaniclocation')
+.then((response) => {
+  
+  this.setState({locations:response.data})
+  this.state.locations.map((item)=>{
+// const areaMechanics=geolib.isPointWithinRadius(item.latitude,item.longitude,5000)   
+// console.log(areaMechanics) 
+// alert(areaMechanics)
+
+const near=geolib.findNearest({ latitude: position.coords.latitude, longitude: position.coords.longitude },[
+  
+  { latitude: item.latitude, longitude: item.longitude }]);
+console.log(near)
+})
+
+})
+  .catch((error) => {
+     console.log(error);
+  });
+
+
+
+
+
           this.setState({longitude:position.coords.longitude,latitude:position.coords.latitude})
           axios
-          .post('http://192.168.0.108:3000/userlocation', {
+          .post('http://192.168.0.108:3000/adduserlocation', {
          longitude:this.state.longitude,
          latitude:this.state.latitude
           })

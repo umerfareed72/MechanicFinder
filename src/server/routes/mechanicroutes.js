@@ -9,7 +9,7 @@ const Locationmodel = mongoose.model('Locationmodel');
 
 
 //Mechanic Login
-router.post('/mechnanicsignin', async (req, res) => {
+router.post('/mechanicsignin', async (req, res) => {
   const {email, password} = req.body;
   if (!email || !password) {
     return res.status(422).send({error: 'Provide Email and Password Both!!'});

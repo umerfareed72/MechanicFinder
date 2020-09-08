@@ -231,8 +231,9 @@ export default class Login extends Component {
   };
 
   submitData = () => {
+       
     axios
-      .post('http://192.168.8.108:3000/userignin', {
+      .post('http://192.168.0.108:3000/usersignin', {
         email: this.state.Email,
         password: this.state.Password,
       })
@@ -241,7 +242,9 @@ export default class Login extends Component {
 
         try {
           await AsyncStorage.setItem('usertoken', res.data.token);
+         console.log(res.data.token)
           this.props.navigation.navigate('userStack');
+          
         } catch (e) {
           console.log('error hai', e);
           Alert.alert('Invalid email password');
@@ -333,8 +336,7 @@ export default class Login extends Component {
                   </View>
 
                   <TouchableOpacity 
-                  // onPress={this.submitData}
-                  onPress={()=>{this.props.navigation.navigate('Dashboard')}}
+                  onPress={this.submitData}
                   >
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text
