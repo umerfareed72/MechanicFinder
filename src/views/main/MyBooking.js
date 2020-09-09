@@ -48,7 +48,6 @@ export default class Dashboard extends Component {
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
-    
     });
   }
 
@@ -89,8 +88,8 @@ export default class Dashboard extends Component {
   render() {
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
-    <StatusBar barStyle={"light-content"} backgroundColor={'transparent'} />
-               
+        <StatusBar barStyle={'light-content'} backgroundColor={'transparent'} />
+
         {/*Body */}
         <View style={{}}>
           {/* <Button title="Show modal" onPress={this.toggleModal} /> */}
@@ -128,7 +127,7 @@ export default class Dashboard extends Component {
             colors={colors.orablu}
             start={{x: -0.9, y: 1}}
             end={{x: 1, y: 0}}
-            style={{height: screenHeight.height30}}>
+            style={{height: screenHeight.height20}}>
             <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}
               style={[image.headerBackArrow]}>
@@ -138,23 +137,7 @@ export default class Dashboard extends Component {
             </TouchableOpacity>
             <View style={[appStyle.headInner]}>
               <View style={[]}>
-                <Text style={[text.heading1, text.bold]}>Discover</Text>
-              </View>
-              <View style={[appStyle.searchBg, style.mv10]}>
-                <View style={[style.row, style.aiCenter]}>
-                  <View>
-                    <Image
-                      style={[image.searchIcon]}
-                      source={images.serach}></Image>
-                  </View>
-                  <View style={[style.flex1]}>
-                    <TextInput
-                      style={[appStyle.inputTheme1]}
-                      placeholder="Search"
-                      underlineColorAndroid="transparent"
-                      placeholderTextColor="#fff"></TextInput>
-                  </View>
-                </View>
+                <Text style={[text.heading1, text.bold]}>My Booking</Text>
               </View>
             </View>
           </LinearGradient>
@@ -176,7 +159,10 @@ export default class Dashboard extends Component {
                   <TouchableOpacity
                     onPress={this.toggleModal}
                     style={[image.crossImg]}>
-                    <Image style={[image.locationIconSmall]} source={images.cross} />
+                    <Image
+                      style={[image.locationIconSmall]}
+                      source={images.cross}
+                    />
                   </TouchableOpacity>
                   <View style={{marginRight: 5, width: screenWidth.width25}}>
                     <ImageBackground
@@ -190,7 +176,6 @@ export default class Dashboard extends Component {
 
                         <StarRating
                           disabled={true}
-                        
                           maxStars={5}
                           rating={this.state.starCount}
                           selectedStar={(rating) =>
@@ -251,7 +236,10 @@ export default class Dashboard extends Component {
                   <TouchableOpacity
                     onPress={this.toggleModal}
                     style={[image.crossImg]}>
-                    <Image style={[image.locationIconSmall]} source={images.cross} />
+                    <Image
+                      style={[image.locationIconSmall]}
+                      source={images.cross}
+                    />
                   </TouchableOpacity>
                   <View style={{marginRight: 5, width: screenWidth.width25}}>
                     <ImageBackground
@@ -265,7 +253,6 @@ export default class Dashboard extends Component {
 
                         <StarRating
                           disabled={true}
-                          
                           maxStars={5}
                           rating={this.state.starCount}
                           selectedStar={(rating) =>
@@ -326,7 +313,10 @@ export default class Dashboard extends Component {
                   <TouchableOpacity
                     onPress={this.toggleModal}
                     style={[image.crossImg]}>
-                    <Image style={[image.locationIconSmall]} source={images.cross} />
+                    <Image
+                      style={[image.locationIconSmall]}
+                      source={images.cross}
+                    />
                   </TouchableOpacity>
                   <View style={{marginRight: 5, width: screenWidth.width25}}>
                     <ImageBackground
@@ -340,7 +330,6 @@ export default class Dashboard extends Component {
 
                         <StarRating
                           disabled={true}
-                          
                           maxStars={5}
                           rating={this.state.starCount}
                           selectedStar={(rating) =>
@@ -401,7 +390,10 @@ export default class Dashboard extends Component {
                   <TouchableOpacity
                     onPress={this.toggleModal}
                     style={[image.crossImg]}>
-                    <Image style={[image.locationIconSmall]} source={images.cross} />
+                    <Image
+                      style={[image.locationIconSmall]}
+                      source={images.cross}
+                    />
                   </TouchableOpacity>
                   <View style={{marginRight: 5, width: screenWidth.width25}}>
                     <ImageBackground
@@ -415,7 +407,6 @@ export default class Dashboard extends Component {
 
                         <StarRating
                           disabled={true}
-                          
                           maxStars={5}
                           rating={this.state.starCount}
                           selectedStar={(rating) =>
@@ -476,7 +467,10 @@ export default class Dashboard extends Component {
                   <TouchableOpacity
                     onPress={this.toggleModal}
                     style={[image.crossImg]}>
-                    <Image style={[image.locationIconSmall]} source={images.cross} />
+                    <Image
+                      style={[image.locationIconSmall]}
+                      source={images.cross}
+                    />
                   </TouchableOpacity>
                   <View style={{marginRight: 5, width: screenWidth.width25}}>
                     <ImageBackground
@@ -490,7 +484,6 @@ export default class Dashboard extends Component {
 
                         <StarRating
                           disabled={true}
-                          
                           maxStars={5}
                           rating={this.state.starCount}
                           selectedStar={(rating) =>

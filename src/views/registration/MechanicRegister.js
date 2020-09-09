@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 // import RNPickerSelect from 'react-native-picker-select';
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+import {colors, URL,screenHeight, screenWidth, images} from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
 import DatePicker from 'react-native-datepicker';
 import {Picker} from '@react-native-community/picker';
@@ -78,7 +78,7 @@ export default class MechanicRegister extends Component {
   };
   submitData = () => {
     axios
-      .post('http://192.168.0.108:3000/mechanicregister', {
+      .post(URL.Url+'mechanicregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,

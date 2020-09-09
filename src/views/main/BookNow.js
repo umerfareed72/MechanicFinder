@@ -25,6 +25,7 @@ import {
   screenHeight,
   screenWidth,
   images,
+  URL,
   height,
 } from '../../config/Constant';
 
@@ -71,7 +72,7 @@ export default class Overview extends Component {
     Linking.openURL(phoneNumber);
   };
 getMechanicLocation=()=>{
-  fetch("http://192.168.0.110:3000/location")
+  fetch(URL.Url+"location")
   .then(response => response.json())
   .then((responseJson)=> {
     // this.setState({

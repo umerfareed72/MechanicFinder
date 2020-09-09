@@ -86,7 +86,7 @@ export default class Dashboard extends Component {
             colors={colors.orablu}
             start={{x: -0.9, y: 1}}
             end={{x: 1, y: 0}}
-            style={{height: screenHeight.height30}}>
+            style={{height: screenHeight.height20}}>
             <StatusBar backgroundColor={'transparent'} />
             <View style={{postion: 'absolute', top: 30, left: 10,width:30}}>
               <Hamburger />
@@ -95,22 +95,6 @@ export default class Dashboard extends Component {
             <View style={[appStyle.headInner]}>
               <View style={[]}>
                 <Text style={[text.heading1, text.bold]}>Discover</Text>
-              </View>
-              <View style={[appStyle.searchBg, style.mv10]}>
-                <View style={[style.row, style.aiCenter]}>
-                  <View>
-                    <Image
-                      style={[image.searchIcon]}
-                      source={images.serach}></Image>
-                  </View>
-                  <View style={[style.flex1]}>
-                    <TextInput
-                      style={[appStyle.inputTheme1]}
-                      placeholder="Search"
-                      underlineColorAndroid="transparent"
-                      placeholderTextColor="#fff"></TextInput>
-                  </View>
-                </View>
               </View>
             </View>
           </LinearGradient>

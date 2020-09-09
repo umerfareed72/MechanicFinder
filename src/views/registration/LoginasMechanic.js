@@ -24,7 +24,8 @@ import {
   screenHeight,
   screenWidth,
   images,
-  height,
+  URL
+  ,height,
 } from '../../config/Constant';
 const axios = require('axios');
 import LinearGradient from 'react-native-linear-gradient';
@@ -72,7 +73,7 @@ export default class Login extends Component {
 
   submitData = () => {
     axios
-      .post('http://192.168.0.108:3000/mechanicsignin', {
+      .post(URL.Url+'mechanicsignin', {
         email: this.state.Email,
         password: this.state.Password,
       })

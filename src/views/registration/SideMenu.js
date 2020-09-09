@@ -98,25 +98,11 @@ export default class SideMenu extends React.Component {
                 </View>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('Account');
-              }}>
-              <View style={style.mh20}>
-                <View style={[image.attachtextimageleft]}>
-                  <Image
-                    source={images.user}
-                    style={[image.drawerIcon]}></Image>
-                  <Text style={[text.textheader4, {color: colors.white}]}>
-                    Accounts
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+  
 
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('Memories');
+                this.props.navigation.navigate('Feedback');
               }}>
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>
@@ -129,17 +115,7 @@ export default class SideMenu extends React.Component {
                 </View>
               </View>
             </TouchableOpacity>
-            {/* <TouchableOpacity onPress={()=>{this.props.navigation.navigate("Memories")}}>
-                  <View style={style.mh20}>
-                  <View style={[image.attachtextimageleft]}>
-                    <Image
-                      source={images.picture}
-                      style={[image.image18]}></Image>
-                    <Text style={text.textheader4}>Memories</Text>
-                  </View>
-                  </View>
-                  </TouchableOpacity> */}
-            <TouchableOpacity
+                <TouchableOpacity
               onPress={() => {
                 this.props.navigation.navigate('MyBooking');
               }}>
@@ -154,52 +130,6 @@ export default class SideMenu extends React.Component {
                 </View>
               </View>
             </TouchableOpacity>
-
-            {/* <Collapse 
-          isCollapsed={this.state.collapsed} 
-          >
-            <CollapseHeader>
-              <TouchableOpacity   onPress={()=>{
-                  this.setState({collapsed:true,collapsed2:false,collapsed4:false,collapsed3:false})
-                }}
-              >
-                <View style={style.mh20}>
-                  <View style={[image.attachtextimageleft]}>
-                    <Image
-                      source={images.setting}
-                      style={[image.drawerIcon]}></Image>
-                    <Text style={[text.textheader4, {color: colors.white}]}>
-              Setting
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <Collapse isCollapsed={this.state.collapsed}>
-              <CollapseHeader>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({
-                      collapsed: true,
-                      collapsed2: false,
-                      collapsed4: false,
-                      collapsed3: false,
-                    });
-                  }}>
-                  <View style={style.mh20}>
-                    <View style={[image.attachtextimageleft]}>
-                      <Image
-                        source={images.setting}
-                        style={[image.drawerIcon]}></Image>
-                      <Text style={[text.textheader4, {color: colors.gray666}]}>
-                        Setting
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </ListItem>
-            </CollapseBody>
-          </Collapse> */}
 
             <TouchableOpacity
               onPress={() => {

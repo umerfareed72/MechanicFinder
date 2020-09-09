@@ -185,9 +185,9 @@ export default StyleSheet.create({
     resizeMode: 'cover',
   },
   homeCategoryImg: {
-    width: screenWidth.width100 - 170,
-    height: screenHeight.height13,
-    borderRadius: 4,
+  marginHorizontal:20,
+    height: screenHeight.height20,
+    borderRadius: 10,
     resizeMode: 'contain',
     justifyContent: 'center',
   },
@@ -212,7 +212,7 @@ export default StyleSheet.create({
     marginRight: 5
   },
   galleryImg: {
-    width: screenWidth.width100 / 2 - 10,
+    width: screenWidth.width100 / 2 - 12,
     height: screenHeight.height100 / 6, resizeMode: 'contain',
     marginHorizontal: 5,
     borderRadius: 4

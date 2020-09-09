@@ -23,7 +23,6 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import {Calendar} from 'react-native-calendars';
 import QRCode from 'react-native-qrcode-svg';
-import appColors from '../../assets/styles/appColors';
 
 
 export default class Privacy extends Component {
@@ -66,7 +65,7 @@ export default class Privacy extends Component {
                   <Text style={text.heading2}>Privacy Policy</Text>
                 </View>
                 <View>
-                  <Text style={[text.heading2, style.asCenter,appColors.greyRegular]}>
+                  <Text style={[text.heading2, style.asCenter,text.greyRegular]}>
                     Some heading Here
                   </Text>
                 </View>

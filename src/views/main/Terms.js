@@ -31,7 +31,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import {Calendar} from 'react-native-calendars';
 import QRCode from 'react-native-qrcode-svg';
-import appColors from '../../assets/styles/appColors';
+
 
 export default class Terms extends Component {
   constructor(props) {
@@ -80,7 +80,7 @@ export default class Terms extends Component {
                       style={[
                         text.heading2,
                         style.asCenter,
-                        appColors.greyRegular,
+                      text.greyRegular
                       ]}>
                       Some heading Here
                     </Text>

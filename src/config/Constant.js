@@ -37,7 +37,10 @@ export const screenWidth = {
   width20: Math.round((20 / 100) * Dimensions.get('window').width),
   width65: Math.round((65 / 100) * Dimensions.get('window').width),
 };
-
+//Url
+export const URL = {
+Url:'http://192.168.0.103:3000/'
+}
 //colors
 export const colors = {
   orange: '#F59E52',
@@ -142,6 +145,12 @@ facebookdark:require("../assets/images/facebookdark.png"),
   dummy1: require('../assets/images/other/dummy1.jpg'),
   userImg: require('../assets/images/userImg.png'),
   category: require('../assets/images/other/categoryImg.png'),
+  carPaint: require('../assets/images/other/carPaint.jpg'),
+  engine1: require('../assets/images/other/engine1.jpg'),
+  engine: require('../assets/images/other/engine.jpg'),
+  electric: require('../assets/images/other/electric.jpg'),
+  body:require('../assets/images/other/body.jpg')
+  
 
 
 

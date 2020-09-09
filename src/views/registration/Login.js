@@ -32,6 +32,7 @@ import {
   screenWidth,
   images,
   height,
+  URL
 } from '../../config/Constant';
 const axios = require('axios');
 import LinearGradient from 'react-native-linear-gradient';
@@ -233,7 +234,7 @@ export default class Login extends Component {
   submitData = () => {
        
     axios
-      .post('http://192.168.0.108:3000/usersignin', {
+      .post(URL.Url+'usersignin', {
         email: this.state.Email,
         password: this.state.Password,
       })
@@ -336,7 +337,11 @@ export default class Login extends Component {
                   </View>
 
                   <TouchableOpacity 
-                  onPress={this.submitData}
+                  // onPress={this.submitData}
+                  onPress={() => {
+                    this.props.navigation.navigate('Dashboard');
+                  }}
+              
                   >
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text

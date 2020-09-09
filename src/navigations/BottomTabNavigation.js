@@ -15,15 +15,12 @@ import {createDrawerNavigator} from 'react-navigation-drawer';
 import Dashboard from '../views/main/Dashboard';
 import HomeDetail from '../views/main/HomeDetail';
 import Discover from '../views/main/Discover';
-import Account from '../views/main/Account';
+
 import Memories from '../views/main/Memories';
 import MyBooking from '../views/main/MyBooking';
-import Notification from '../views/main/Notification';
 import InviteFriend from '../views/main/InviteFriend';
-import ReferExperience from '../views/main/ReferExperience';
-import SelectReferExperience from '../views/main/SelectReferExperience';
-import Tab3 from '../views/main/tab3';
-import QrCode from '../views/main/QrCode';
+
+
 import EditProfile from '../views/main/EditProfile';
 import Setting from '../views/main/Setting';
 
@@ -35,9 +32,8 @@ import {colors, screenHeight, screenWidth, images} from '../config/Constant';
 import SideMenu from '../views/registration/SideMenu';
 import Privacy from '../views/main/Privacy';
 import Terms from '../views/main/Terms';
-import Feedback from "../views/main/Feedback";
 import Help from "../views/main/Help";
-import InviteFriends from '../views/main/InviteFriends';
+
 import Mechaniclist from "../views/main/Mechaniclist"
 import ChatBox from '../views/main/ChatBox';
 //add new screen to this stack here
@@ -52,32 +48,22 @@ const DashboardStack = createStackNavigator(
     Memories: {
       screen: Memories,
     },
-    Account: {
-      screen: Account,
-    },
+   
     Mechaniclist:{
       screen:Mechaniclist
     },
-    Notification: {
-      screen: Notification,
-    },
+  
     InviteFriend: {
       screen: InviteFriend,
     },
-    InviteFriends: {
-      screen: InviteFriends,
-    },
+    
 
     MyBooking: {
       screen: MyBooking,
     },
-    ReferExperience: {
-      screen: ReferExperience,
-    },
+   
 
-    SelectReferExperience: {
-      screen: SelectReferExperience,
-    },
+  
   },
   {
     headerMode: 'none',
@@ -105,7 +91,7 @@ const TabStack = createStackNavigator(
     Terms:Terms,
     Privacy:Privacy,
     Help: Help,
-    Feedback:Feedback
+  
   },
   {
     headerMode: 'none',

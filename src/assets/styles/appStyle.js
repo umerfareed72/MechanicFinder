@@ -2,7 +2,6 @@ import { StyleSheet, Dimensions } from 'react-native';
 const { height, width } = Dimensions.get('screen');
 import { colors, screenHeight, screenWidth, images } from '../../config/Constant';
 import text from './text';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export default StyleSheet.create({
   safeContainer: {
@@ -128,14 +127,6 @@ ObjectAlign:{
     elevation: 6,
   },
 
-  categoryLayer: {
-    backgroundColor: 'red',
-    height: screenHeight.height13 / 2,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.dullBlack,
-  },
   bodyLayout: {
     paddingHorizontal: 20,
     paddingVertical: 20,
@@ -282,12 +273,12 @@ bodyShadowBottom: {
     margin: 10,
   },
   categoryLayer: {
-    backgroundColor: 'red',
     height: screenHeight.height13 / 2,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.dullBlack,
+    opacity:0.9,
+    backgroundColor: colors.lightblue,
   },
   saveImgHMargin: {
     marginLeft: 10,

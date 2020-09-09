@@ -77,8 +77,7 @@ export default StyleSheet.create({
     width: 'auto',
     marginLeft: 80,
   },
- 
- 
+
   lebel16: {
     fontSize: 16,
     marginHorizontal: 5,
@@ -87,14 +86,14 @@ export default StyleSheet.create({
     paddingBottom: 25,
     alignSelf: 'center',
   },
-  
+
   textHeader2: {
     alignSelf: 'center',
     fontSize: 15,
     color: colors.gray,
     paddingTop: 10,
   },
- 
+
   textbox: {
     color: colors.grayB4,
     fontSize: 14,
@@ -104,11 +103,11 @@ export default StyleSheet.create({
     color: colors.black,
     marginHorizontal: 10,
   },
-  pickerstyle:{
-    height: 50, 
-    width: 280, 
+  pickerstyle: {
+    height: 50,
+    width: 280,
     left: -8,
-     color: colors.gray
+    color: colors.gray,
   },
   textheader5: {
     fontSize: 16,
@@ -206,10 +205,10 @@ export default StyleSheet.create({
   ac: {
     textAlign: 'center',
   },
-tab1:{
-marginHorizontal:40,
-fontSize:18
-},
+  tab1: {
+    marginHorizontal: 40,
+    fontSize: 18,
+  },
 
   heading4Bold: {
     fontSize: 14,
@@ -220,7 +219,7 @@ fontSize:18
   //   fontSize: 16,
   //   color: colors.gray5d,
   // },
- 
+
   heading7: {
     fontSize: 9,
     color: colors.grayAb,
@@ -283,7 +282,6 @@ fontSize:18
     fontSize: 14,
     fontWeight: '500',
     color: colors.h2,
-   
   },
   para: {
     fontSize: 14,
@@ -349,12 +347,11 @@ fontSize:18
   },
   heading2Gray: {
     fontSize: 16,
-    fontWeight: '600', 
+    fontWeight: '600',
     color: colors.gray5d,
   },
   heading3: {
     fontWeight: '600',
-
     fontSize: 15,
     color: colors.inputBordercolor,
   },
@@ -363,7 +360,7 @@ fontSize:18
     fontWeight: '600',
     color: colors.purple,
   },
-   heading5: {
+  heading5: {
     fontSize: 12,
     color: colors.purple,
   },
@@ -371,5 +368,50 @@ fontSize:18
   heading5white: {
     fontSize: 12,
     color: colors.white,
+  },
+  //text Color
+  white: {
+    color: colors.white,
+  },
+
+  orange: {
+    color: colors.orange,
+  },
+  lightGrey: {
+    color: colors.lightGrey,
+  },
+  purple: {
+    color: colors.h1Purple,
+  },
+  greyVLight: {
+    color: '#c7c7c7',
+  },
+  greyRegular: {
+    color: '#8B8B8B',
+  },
+
+  blackish: {
+    color: colors.h3Grey,
+  },
+  darkBlue: {
+    color: colors.darkBlue,
+  },
+  regularPurple: {
+    color: colors.purple,
+  },
+  regualBlack: {
+    color: colors.black,
+  },
+  regualGray: {
+    color: colors.gray,
+  },
+  darkYellow: {
+    color: colors.darkyellow,
+  },
+  lightBlue: {
+    color: colors.lightblue,
+  },
+  lightGrey: {
+    color: colors.lightGrey,
   },
 });
