@@ -55,12 +55,5 @@ Userschema.methods.comparePassword = function (candidatepassword) {
 
 
 
-const UserLocationschema = new mongoose.Schema({
- longitude:String,
- latitude:String
-
-});
-
-mongoose.model('UserLocationmodel', UserLocationschema);
 
 mongoose.model('Usermodel', Userschema);

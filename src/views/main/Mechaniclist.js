@@ -68,16 +68,15 @@ export default class Mechaniclist extends Component {
   };
 
   componentDidMount() {
-    fetch(URL.Url + 'mechanics')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          dataSource: responseJson,
-        });
-        // const senddata = JSON.stringify(this.state.dataSource);
-        // AsyncStorage.setItem('MechanicData', senddata);
+    AsyncStorage.getItem('Mechanicdata')
+      .then((res) => {
+        res = JSON.parse(res);
+        this.setState({dataSource: res});
+        console.log(res);
       })
-      .catch((error) => console.log(error, 'error')); //to catch the errors if any
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   onStarRatingPress(rating) {

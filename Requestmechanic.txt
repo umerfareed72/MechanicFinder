@@ -241,3 +241,13 @@
     }
   
   };
+
+
+this.state.mechanics.map((item)=>{
+ axios.get(URL.Url+'mechanic/'+item.mechanicid).then((response)=>{
+   console.log(response.data)
+ this.setState({dataSource:response.data})
+  }).catch((error)=>{
+   console.log(error)
+ }) 
+})

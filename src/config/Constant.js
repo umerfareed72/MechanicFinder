@@ -37,9 +37,10 @@ export const screenWidth = {
   width20: Math.round((20 / 100) * Dimensions.get('window').width),
   width65: Math.round((65 / 100) * Dimensions.get('window').width),
 };
+
 //Url
 export const URL = {
-Url:'http://192.168.0.107:3000/'
+Url:'http://192.168.0.103:3000/'
 }
 //colors
 export const colors = {

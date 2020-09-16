@@ -4,9 +4,7 @@ const {jwtkey} = require('../keys');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Usermodel = mongoose.model('Usermodel');
-const UserLocationmodel = mongoose.model('UserLocationmodel');
 
-//User Portion
 //User Register
 
 router.post('/userregister', (req, res) => {
@@ -71,53 +69,21 @@ router.get('/user/:id', (req, res) => {
     });
 });
 
-//Add User longitude and latitude
-router.post('/adduserlocation', (req, res) => {
-  const location = new UserLocationmodel({
-    longitude: req.body.longitude,
-    latitude: req.body.latitude,
-  });
-
-  location
-    .save()
-    .then((data) => {
-      console.log(data);
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(404).send(err.message);
-    });
-});
-
 //Update User Lat & Long
 router.put('/userlocation/:id', (req, res) => {
-  Usermodel.findByIdAndUpdate(
-    req.params.id,
-    {longitude: req.body.longitude, latitude: req.body.latitude},
-      ).then((user) => {
-        if (!user) {
-          return res.status(404).send('User Not Found');
-        }
-        return res.status(200).json(user);
-     
-      })
-      .catch((error) => {
-        return res.send(error);
-      });
-  
-});
-
-//Get Users Location
-router.get('/getuserlocation', (req, res) => {
-  async function get() {
-    const location = await UserLocationmodel.find().select({
-      longitude: 1,
-      latitude: 1,
+  Usermodel.findByIdAndUpdate(req.params.id, {
+    longitude: req.body.longitude,
+    latitude: req.body.latitude,
+  })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send('User Not Found');
+      }
+      return res.status(200).json(user);
+    })
+    .catch((error) => {
+      return res.send(error);
     });
-    if (!location) return res.status(404).send('Not Found');
-    res.send(location);
-  }
-  get();
 });
 
 //Get all Users
@@ -142,19 +108,6 @@ router.get('/users', (req, res) => {
     res.send(users);
   }
   get();
-});
-
-//Delete User
-
-router.post('/deleteUser', (req, res) => {
-  Usermodel.findByIdAndRemove(req.body.id)
-    .then((data) => {
-      console.log(data);
-      res.send(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
 });
 
 module.exports = router;

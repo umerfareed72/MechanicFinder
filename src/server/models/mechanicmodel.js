@@ -54,13 +54,7 @@ mechanicschema.methods.comparePassword = function (candidatepassword) {
   });
 };
 
-const Locationschema = new mongoose.Schema({
-  mechanicid:String,
-  distance:String
+ 
 
- });
- 
- mongoose.model('Locationmodel', Locationschema);
- 
 
 mongoose.model('mechanicmodel', mechanicschema);

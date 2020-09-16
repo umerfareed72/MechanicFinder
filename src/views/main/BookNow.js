@@ -16,7 +16,6 @@ import {
   Linking,
   Keyboard,
   Platform,
-  AsyncStorage,
   Button,
 } from 'react-native';
 
@@ -39,7 +38,7 @@ var FloatingLabel = require('react-native-floating-labels');
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import StarRating from 'react-native-star-rating';
-
+import AsyncStorage from '@react-native-community/async-storage';
 export default class Overview extends Component {
   constructor(props) {
     super(props);
@@ -47,8 +46,7 @@ export default class Overview extends Component {
     super(props);
     this.state = {
       rating: 2,
-   longitude:'',
-   latitude:'',
+      data: [],
       starCount: 3.5,
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
@@ -61,29 +59,29 @@ export default class Overview extends Component {
   }
 
   makeCall = () => {
-    let phoneNumber = '';
-
-    if (Platform.OS === 'android') {
-      phoneNumber = 'tel:${03044228402}';
-    } else {
-      phoneNumber = 'telprompt:${1234567890}';
-    }
-
-    Linking.openURL(phoneNumber);
+    AsyncStorage.getItem('data').then((res) => {
+      res = JSON.parse(res);
+      console.log(res);
+      this.setState({data: res});
+      let phoneNumber = '';
+      if (Platform.OS === 'android') {
+        console.log(this.state.data.phone);
+        phoneNumber = 'tel:' + this.state.data.phone;
+      } else {
+        phoneNumber = 'telprompt:${1234567890}';
+      }
+  
+      Linking.openURL(phoneNumber);
+  
+    });
+     };
+  getMechanicLocation = () => {
+    AsyncStorage.getItem('data').then((res) => {
+      res = JSON.parse(res);
+      console.log(res);
+      this.setState({data: res});
+    });
   };
-getMechanicLocation=()=>{
-  fetch(URL.Url+"location")
-  .then(response => response.json())
-  .then((responseJson)=> {
-    // this.setState({
-    // })
-console.log(responseJson)
-  })
-  .catch(error=>console.log(error,"error")
-
-  ) //to catch the errors if any
- 
-}
 
   componentDidMount() {
     Animated.loop(
@@ -100,7 +98,7 @@ console.log(responseJson)
     ).start();
 
     // Starts the animation
- this.getMechanicLocation()
+    this.getMechanicLocation();
   }
 
   fadeOut() {
@@ -213,24 +211,31 @@ console.log(responseJson)
                   <TouchableOpacity
                     onPress={this.makeCall}
                     style={[button.Profilebutton]}>
-                   
                     <Text style={[text.btntext, text.text16, text.ac]}>
-                    Call Now
+                      Call Now
                     </Text>
                   </TouchableOpacity>
                 </Animated.View>
 
-                  {/* {this.props.children} */}
-                  <TouchableOpacity
-                    onPress={() =>
-                      Linking.openURL('google.navigation:q=137+201')
-                    }
-                    style={[button.Profilebutton]}>
-                    <Text style={[text.btntext, text.text16, text.ac]}>
-                      Locate Now
-                    </Text>
-                  </TouchableOpacity>
-                  </View>
+                {/* {this.props.children} */}
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log(
+                      this.state.data.latitude + this.state.data.longitude,
+                    );
+                    Linking.openURL(
+                      'google.navigation:q=' +
+                        this.state.data.latitude +
+                        ',' +
+                        this.state.data.longitude,
+                    );
+                  }}
+                  style={[button.Profilebutton]}>
+                  <Text style={[text.btntext, text.text16, text.ac]}>
+                    Locate Now
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </ScrollView>
           </View>
         </View>

@@ -49,15 +49,15 @@ export default class Dashboard extends Component {
       longitude: '',
       latitude: '',
       loading: false,
-      locations: [],
       refreshing: false,
-      data: [],
       userdata: [],
+      dataSource: [],
       token: '',
       userid: '',
+      distance: [],
     };
   }
-  
+
   requestUserLocation = async () => {
     try {
       const grantedLocation = await PermissionsAndroid.request(
@@ -105,11 +105,10 @@ export default class Dashboard extends Component {
     }
   };
 
-  getClientData = () => {
-    console.log('Latitude', this.state.latitude);
+  getClientData = async () => {
     AsyncStorage.getItem('usersignintoken').then((res) => {
       this.setState({token: res});
-      console.log('User Token', this.state.token);
+
       axios
         .get(URL.Url + 'me', {
           headers: {
@@ -117,7 +116,6 @@ export default class Dashboard extends Component {
           },
         })
         .then((response) => {
-          console.log(response.data);
           this.setState({userid: response.data.userid});
           axios
             .get(URL.Url + 'user/' + this.state.userid)
@@ -129,17 +127,16 @@ export default class Dashboard extends Component {
                 })
                 .then((response) => {
                   this.setState({userdata: response.data});
-                  console.log('Updated lat & long', this.state.userdata);
-
-                  // axios
-                  //   .get(URL.Url + 'nearmechanics/:id')
-                  //   .then((response) => {
-                  //     console.log(response.data);
-                  //   })
-                  //   .catch((error) => {
-                  //     console.log(error);
-                  //   });
+                  axios
+                    .get(URL.Url + 'nearmechanics/' + this.state.userid)
+                    .then((response) => {
+                      const senddata = JSON.stringify(response.data);
+                      AsyncStorage.setItem('Mechanicdata', senddata);
                     })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                })
                 .catch((error) => {
                   console.log('Error', error);
                 });

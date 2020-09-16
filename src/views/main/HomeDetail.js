@@ -139,7 +139,7 @@ export default class HomeDetail extends Component {
         <View style={{}}>
           <ImageBackground
             source={images.userImg}
-            style={{height: screenHeight.height35}}>
+            style={{height: screenHeight.height25}}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}
@@ -227,45 +227,45 @@ export default class HomeDetail extends Component {
                 appStyle.bodyLayout,
                 {display: this.state.TabDataOverview},
               ]}>
-              <View style={[appStyle.rowAlignCenter, style.mv10]}>
+              <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.locationIcon, style.mr5]}
                   source={images.location}></Image>
                 <Text style={[text.heading2, text.bold]}>Address</Text>
               </View>
-              <View style={[style.borderbottom, style.mh20, style.mv10]}>
+              <View style={[style.borderbottom,  style.mt10]}>
                 <Text style={[text.heading2Gray]}>
                   {' '}
                   {data.address}
                   {data.city} {data.country}
                 </Text>
               </View>
-              <View style={[appStyle.rowAlignCenter, style.mv10]}>
+              <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.locationIcon, style.mr5]}
                   source={images.cartype}></Image>
                 <Text style={[text.heading2, text.bold]}>Vehicle Type</Text>
               </View>
-              <View style={[style.borderbottom, style.mh20, style.mv10]}>
+              <View style={[style.borderbottom, style.mt10]}>
                 <Text style={[text.heading2Gray]}> {data.vehicletype}</Text>
               </View>
-              <View style={[appStyle.rowAlignCenter, style.mv10]}>
+              <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.locationIcon, style.mr5]}
                   source={images.Company}></Image>
                 <Text style={[text.heading2, text.bold]}>Car Brand</Text>
               </View>
-              <View style={[style.borderbottom, style.mh20, style.mv10]}>
+              <View style={[style.borderbottom,  style.mt10]}>
                 <Text style={[text.heading2Gray]}> {data.carcompany}</Text>
               </View>
 
-              <View style={[appStyle.rowAlignCenter, style.mv10]}>
+              <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.locationIcon, style.mr5]}
                   source={images.carservice}></Image>
                 <Text style={[text.heading2, text.bold]}>Skills Type</Text>
               </View>
-              <View style={[style.borderbottom, style.mh20, style.mv10]}>
+              <View style={[style.borderbottom, style.mv10]}>
                 <Text style={[text.heading2Gray]}> {data.skilltype}</Text>
               </View>
               <View style={[style.mt20]}>
@@ -292,6 +292,7 @@ export default class HomeDetail extends Component {
             </View>
             <View
               style={[
+                style.mb50,
                 appStyle.bodyLayout,
                 appStyle.bodyShadowBottom,
                 {
@@ -311,7 +312,7 @@ export default class HomeDetail extends Component {
                     Per Day
                   </Text>
                 </View>
-                <View style={style.flex1}>
+                <View style={[style.flex1]}>
                   <TouchableOpacity
                     onPress={this.buyItems}>
                     <View
