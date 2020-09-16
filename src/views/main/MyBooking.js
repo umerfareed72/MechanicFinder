@@ -143,11 +143,11 @@ export default class Dashboard extends Component {
           </LinearGradient>
         </View>
 
-        <View style={[appStyle.bodyBg, appStyle.bodyHeight35]}>
+        <View style={[appStyle.bodyBg,appStyle.safeContainer]}>
           <View style={[appStyle.headingLayout]}>
             <Text style={[text.heading2, text.semibold]}>My Bookings</Text>
           </View>
-          <ScrollView>
+          <ScrollView >
             <View style={[style.mv10]}>
               <View
                 style={[
@@ -533,6 +533,161 @@ export default class Dashboard extends Component {
                   </View>
                 </View>
               </View>
+              
+              <View
+                style={[
+                  appStyle.bookingShadow,
+                  style.mv5,
+                  {backgroundColor: '#fff'},
+                ]}>
+                <View style={[style.row, style.jcCenter]}>
+                  <TouchableOpacity
+                    onPress={this.toggleModal}
+                    style={[image.crossImg]}>
+                    <Image
+                      style={[image.locationIconSmall]}
+                      source={images.cross}
+                    />
+                  </TouchableOpacity>
+                  <View style={{marginRight: 5, width: screenWidth.width25}}>
+                    <ImageBackground
+                      imageStyle={{borderRadius: 4}}
+                      style={[style.mv5, {height: 80, width: '100%'}]}
+                      source={images.HomeImg}>
+                      <View style={[appStyle.popularInnerContent]}>
+                        <Text style={[text.heading5white, text.bold]}>
+                          Resturant
+                        </Text>
+
+                        <StarRating
+                          disabled={true}
+                          maxStars={5}
+                          rating={this.state.starCount}
+                          selectedStar={(rating) =>
+                            this.onStarRatingPress(rating)
+                          }
+                          fullStarColor={'#fff'}
+                          emptyStarColor={'#fff'}
+                          starSize={10}
+                          containerStyle={{width: 53, marginTop: 3}}
+                        />
+                      </View>
+                    </ImageBackground>
+                  </View>
+
+                  <View style={[style.jcCenter, {width: screenWidth.width65}]}>
+                    <View>
+                      <Text style={[text.text14, text.semibold]}>
+                        Restaurant Name
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={[text.text12, text.semibold]}>
+                        Price:$33
+                      </Text>
+                    </View>
+
+                    <View style={[appStyle.rowBtw]}>
+                      <View style={[appStyle.BookingsmallWidth]}>
+                        <Image
+                          style={[image.locationIconSmall]}
+                          source={images.calendarOrange}></Image>
+                        <Text style={[text.text9]}>28-7-2020</Text>
+                      </View>
+                      <View style={[appStyle.BookingsmallWidth]}>
+                        <Image
+                          style={[image.locationIconSmall]}
+                          source={images.clock}></Image>
+                        <Text style={[text.text9]}>28-7-2020</Text>
+                      </View>
+                      <View style={[appStyle.BookingsmallWidth]}>
+                        <Image
+                          style={[image.locationIconSmall]}
+                          source={images.location}></Image>
+                        <Text style={[text.text9]}>Some Text Some here </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+
+              <View
+                style={[
+                  appStyle.bookingShadow,
+                  style.mv5,
+                  {backgroundColor: '#fff'},
+                ]}>
+                <View style={[style.row, style.jcCenter]}>
+                  <TouchableOpacity
+                    onPress={this.toggleModal}
+                    style={[image.crossImg]}>
+                    <Image
+                      style={[image.locationIconSmall]}
+                      source={images.cross}
+                    />
+                  </TouchableOpacity>
+                  <View style={{marginRight: 5, width: screenWidth.width25}}>
+                    <ImageBackground
+                      imageStyle={{borderRadius: 4}}
+                      style={[style.mv5, {height: 80, width: '100%'}]}
+                      source={images.HomeImg}>
+                      <View style={[appStyle.popularInnerContent]}>
+                        <Text style={[text.heading5white, text.bold]}>
+                          Resturant
+                        </Text>
+
+                        <StarRating
+                          disabled={true}
+                          maxStars={5}
+                          rating={this.state.starCount}
+                          selectedStar={(rating) =>
+                            this.onStarRatingPress(rating)
+                          }
+                          fullStarColor={'#fff'}
+                          emptyStarColor={'#fff'}
+                          starSize={10}
+                          containerStyle={{width: 53, marginTop: 3}}
+                        />
+                      </View>
+                    </ImageBackground>
+                  </View>
+
+                  <View style={[style.jcCenter, {width: screenWidth.width65}]}>
+                    <View>
+                      <Text style={[text.text14, text.semibold]}>
+                        Restaurant Name
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={[text.text12, text.semibold]}>
+                        Price:$33
+                      </Text>
+                    </View>
+
+                    <View style={[appStyle.rowBtw]}>
+                      <View style={[appStyle.BookingsmallWidth]}>
+                        <Image
+                          style={[image.locationIconSmall]}
+                          source={images.calendarOrange}></Image>
+                        <Text style={[text.text9]}>28-7-2020</Text>
+                      </View>
+                      <View style={[appStyle.BookingsmallWidth]}>
+                        <Image
+                          style={[image.locationIconSmall]}
+                          source={images.clock}></Image>
+                        <Text style={[text.text9]}>28-7-2020</Text>
+                      </View>
+                      <View style={[appStyle.BookingsmallWidth]}>
+                        <Image
+                          style={[image.locationIconSmall]}
+                          source={images.location}></Image>
+                        <Text style={[text.text9]}>Some Text Some here </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+
             </View>
           </ScrollView>
         </View>

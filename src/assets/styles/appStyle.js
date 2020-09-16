@@ -280,6 +280,18 @@ bodyShadowBottom: {
     opacity:0.9,
     backgroundColor: colors.lightblue,
   },
+  categoryLayer2: {
+    height: screenHeight.height13 / 2,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    opacity:0.8,
+    borderBottomLeftRadius:10,
+    borderBottomRightRadius:10,
+    position:'absolute',
+    bottom:0,
+    backgroundColor: colors.lightblue,
+  },
   saveImgHMargin: {
     marginLeft: 10,
     marginRight: 5,

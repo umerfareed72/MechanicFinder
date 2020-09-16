@@ -369,6 +369,33 @@ export default StyleSheet.create({
     fontSize: 12,
     color: colors.white,
   },
+
+//Font Family
+Eutemia:{
+  fontFamily:'Eutemia'
+},
+goodfishbd:{
+  fontFamily:'goodfishbd'
+},
+VanityBold:{
+  fontFamily:'Vanity-Bold'
+},
+VanityBold:{
+  fontFamily:'Vanity-Bold'
+},
+VanityBold:{
+  fontFamily:'Vanity-Bold'
+},
+VanityLight:{
+  fontFamily:'Vanity-Light'
+},
+VanityLightItalic:{
+fontFamily:'Vanity-LightItalic'
+},
+VanityLightWide:{
+  fontFamily:'Vanity-LightWide'
+},
+
   //text Color
   white: {
     color: colors.white,

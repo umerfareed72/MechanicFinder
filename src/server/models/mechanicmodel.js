@@ -55,9 +55,9 @@ mechanicschema.methods.comparePassword = function (candidatepassword) {
 };
 
 const Locationschema = new mongoose.Schema({
-  longitude:String,
-  latitude:String
- 
+  mechanicid:String,
+  distance:String
+
  });
  
  mongoose.model('Locationmodel', Locationschema);

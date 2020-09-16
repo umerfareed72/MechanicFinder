@@ -40,7 +40,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import StarRating from 'react-native-star-rating';
 
-export default class Overview extends Component {
+export default class Items extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
@@ -126,19 +126,19 @@ console.log(responseJson)
         <View style={style.flex1}>
           <ImageBackground
             imageStyle={{borderRadius: 8}}
-            style={[image.storeImg, style.w100]}
+            style={[{height:screenHeight.height30}]}
             source={images.userImg}>
             <View style={style.bgOverlay} />
-            <View style={[style.rowBtw, style.ph20, style.pb10]}>
+            <View style={[style.rowBtw, style.ph20,style.mt30]}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('HomeDetail')}>
+                onPress={() => this.props.navigation.navigate('BuyItems')}>
                 <Image
                   source={images.backarrowh}
                   style={[image.backArrow2, {tintColor: colors.white}]}></Image>
               </TouchableOpacity>
 
               <View>
-                <Text style={[text.heading1, text.bold]}>Profile</Text>
+                <Text style={[text.heading1, text.bold]}>Product</Text>
               </View>
 
               <Text style={[text.text16, text.orange]}></Text>
@@ -147,26 +147,10 @@ console.log(responseJson)
 
           <View style={appStyle.curvedContainer}>
             <ScrollView style={style.ph20}>
-              <View style={[style.mt30]}>
-                <Text style={[text.h1Purple]}>Mian Umer Fareed</Text>
+              <View style={[style.mt10]}>
+                <Text style={[text.h1Purple]}>Gas Kit</Text>
               </View>
-              <View style={[appStyle.overviewStarsContainer]}>
-                <StarRating
-                  disabled={true}
-                  maxStars={5}
-                  rating={this.state.starCount}
-                  selectedStar={(rating) => this.onStarRatingPress(rating)}
-                  fullStarColor={'#E9B60D'}
-                  emptyStarColor={'#E9B60D'}
-                  starSize={10}
-                  containerStyle={style.w40}
-                />
-                <Text style={[text.text10, style.pl10, text.lightGrey]}>
-                  Reviews(85)
-                </Text>
-              </View>
-
-              <View style={[]}>
+              <View style={[style.mv10]}>
                 <Text style={[text.h1]}>Discription</Text>
                 <Text style={text.para}>
                   it is a long established fact that a reader will be distracted
@@ -174,63 +158,43 @@ console.log(responseJson)
                   a long established fact that a reader will be distracted by
                   the readable content of a page when looking at its layout.
                 </Text>
+              
               </View>
-
-              <View style={style.mt20}>
-                <View style={[style.row, style.aiCenter]}>
+              <View style={[style.row, style.aiCenter]}>
                   <Image
-                    style={[image.locationIcon, {tintColor: colors.orange}]}
-                    source={images.workshop}></Image>
-                  <Text style={[text.listItems, style.p5]}>Honda Workshop</Text>
-                </View>
-                <View style={[style.row, style.aiCenter]}>
-                  <Image
-                    style={[image.locationIcon, image.tintOrange]}
-                    source={images.timing}></Image>
-                  <Text style={[text.listItems, style.p5]}>
-                    11:00am-03:00pm
-                  </Text>
-                </View>
-                <View style={[style.row, style.aiCenter]}>
-                  <Image
-                    style={image.locationIcon}
-                    source={images.location}></Image>
-                  <Text style={[text.listItems, style.p5]}>
-                    Model town,Block b Lahore
-                  </Text>
-                </View>
-                <View style={[style.row, style.aiCenter]}>
-                  <Image
-                    style={image.locationIcon}
+                    style={image.drawerIconlarge}
                     source={images.dollar}></Image>
-                  <Text style={[text.listItems, style.p5]}>
-                    Estimated Rate: 5$
+                  <Text style={[text.heading2Gray]}>
+                    Product Estimated Rate: 5$
+                  </Text>
+                </View>
+              
+                <View style={[style.row,style.mv10,style.aiCenter ]}>
+                  <Image
+                    style={image.drawerIconlarge}
+                    source={images.dollar}></Image>
+                  <Text style={[text.heading2Gray]}>
+                Total Estimated Rate: 5$
                   </Text>
                 </View>
 
-                <Animated.View style={{...this.props.style, opacity: fadeAnim}}>
+              <View style={style.mt20,style.aiCenter}>
+        
+          
                   {/* {this.props.children} */}
-                  <TouchableOpacity
-                    onPress={this.makeCall}
-                    style={[button.Profilebutton]}>
-                   
-                    <Text style={[text.btntext, text.text16, text.ac]}>
-                    Call Now
-                    </Text>
-                  </TouchableOpacity>
-                </Animated.View>
-
-                  {/* {this.props.children} */}
+                  
                   <TouchableOpacity
                     onPress={() =>
-                      Linking.openURL('google.navigation:q=137+201')
+                   this.props.navigation.navigate('BookNow')
                     }
-                    style={[button.Profilebutton]}>
-                    <Text style={[text.btntext, text.text16, text.ac]}>
-                      Locate Now
+                    style={[button.buttoncontainer,style.mt20]}>
+                    <Text style={[text.heading1purple, text.text16, text.ac]}>
+       Add Product
                     </Text>
                   </TouchableOpacity>
+               
                   </View>
+                  
             </ScrollView>
           </View>
         </View>

@@ -20,7 +20,6 @@ import Memories from '../views/main/Memories';
 import MyBooking from '../views/main/MyBooking';
 import InviteFriend from '../views/main/InviteFriend';
 
-
 import EditProfile from '../views/main/EditProfile';
 import Setting from '../views/main/Setting';
 
@@ -32,10 +31,12 @@ import {colors, screenHeight, screenWidth, images} from '../config/Constant';
 import SideMenu from '../views/registration/SideMenu';
 import Privacy from '../views/main/Privacy';
 import Terms from '../views/main/Terms';
-import Help from "../views/main/Help";
+import Help from '../views/main/Help';
 
-import Mechaniclist from "../views/main/Mechaniclist"
+import Mechaniclist from '../views/main/Mechaniclist';
 import ChatBox from '../views/main/ChatBox';
+import BuyItems from '../views/main/BuyItems';
+import Items from '../views/main/Items';
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
@@ -48,22 +49,24 @@ const DashboardStack = createStackNavigator(
     Memories: {
       screen: Memories,
     },
-   
-    Mechaniclist:{
-      screen:Mechaniclist
+
+    Mechaniclist: {
+      screen: Mechaniclist,
     },
-  
+
     InviteFriend: {
       screen: InviteFriend,
     },
-    
 
     MyBooking: {
       screen: MyBooking,
     },
-   
-
-  
+    BuyItems: {
+      screen: BuyItems,
+    },
+    Items: {
+      screen: Items,
+    },
   },
   {
     headerMode: 'none',
@@ -86,12 +89,11 @@ const DiscoverStack = createStackNavigator(
 );
 const TabStack = createStackNavigator(
   {
-    Setting:Setting,
+    Setting: Setting,
     EditProfile: EditProfile,
-    Terms:Terms,
-    Privacy:Privacy,
+    Terms: Terms,
+    Privacy: Privacy,
     Help: Help,
-  
   },
   {
     headerMode: 'none',
@@ -179,8 +181,6 @@ const Navigators = createMaterialBottomTabNavigator(
         ),
       },
     },
-
-  
   },
   {
     initialRouteName: 'BookNow',

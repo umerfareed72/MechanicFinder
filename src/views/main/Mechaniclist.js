@@ -51,7 +51,7 @@ export default class Mechaniclist extends Component {
       dataSource: [],
       slot: '',
       Cars: 'Select Car Name',
-      vehicletype:'Select vehicle Type'
+      vehicletype: 'Select vehicle Type',
     };
   }
 
@@ -74,6 +74,8 @@ export default class Mechaniclist extends Component {
         this.setState({
           dataSource: responseJson,
         });
+        // const senddata = JSON.stringify(this.state.dataSource);
+        // AsyncStorage.setItem('MechanicData', senddata);
       })
       .catch((error) => console.log(error, 'error')); //to catch the errors if any
   }
@@ -108,13 +110,28 @@ export default class Mechaniclist extends Component {
         <ScrollView style={{}}>
           <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
             {/* row start */}
+
+            <View style={[style.dropBar, style.mv10]}>
+              <Picker
+                selectedValue={this.state.vehicletype}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({vehicletype: itemValue})
+                }>
+                <Picker.Item label="Select Vehicle Type" value="" />
+                <Picker.Item label="Heavy Truck" value="Heavy Truck" />
+                <Picker.Item label="Car" value="Car" />
+                <Picker.Item label="Jeep" value="Jeep" />
+                <Picker.Item label="Bus" value="Bus" />
+              </Picker>
+            </View>
+
             <View style={[style.dropBar, style.mv10]}>
               <Picker
                 selectedValue={this.state.Cars}
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({Cars: itemValue})
                 }>
-                <Picker.Item label="Select Car" value="Car" />
+                <Picker.Item label="Select Vehicle Name" value="Vehicle" />
                 <Picker.Item label="Honda" value="Honda" />
                 <Picker.Item label="Toyota" value="Toyota" />
                 <Picker.Item label="Suzuki" value="Suzuki" />
@@ -124,19 +141,6 @@ export default class Mechaniclist extends Component {
                 <Picker.Item label="Mercedese" value="Mercedese" />
                 <Picker.Item label="Range Rover" value="Range Rover" />
               </Picker>
-            </View>
-            <View style={[style.dropBar, style.mv10]}>
-            <Picker
-                      selectedValue={this.state.vehicletype}
-                      onValueChange={(itemValue, itemIndex) =>
-                        this.setState({vehicletype: itemValue})
-                      }>
-                      <Picker.Item label="Select Vehicle Type" value="" />
-                      <Picker.Item label="Heavy Truck" value="Heavy Truck" />
-                      <Picker.Item label="Car" value="Car" />
-                      <Picker.Item label="Jeep" value="Jeep" />
-                      <Picker.Item label="Bus" value="Bus" />
-                    </Picker>
             </View>
             {this.state.dataSource.map((data, index) => {
               return (

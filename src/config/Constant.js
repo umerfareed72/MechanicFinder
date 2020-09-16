@@ -39,7 +39,7 @@ export const screenWidth = {
 };
 //Url
 export const URL = {
-Url:'http://192.168.0.103:3000/'
+Url:'http://192.168.0.107:3000/'
 }
 //colors
 export const colors = {
@@ -78,7 +78,6 @@ export const images = {
   key: require('..//assets/images/key.png'),
   camera: require('../assets/images/photo-camera.png'),
   timing: require('../assets/images/clock.png'),
-  lock: require('../assets/images/clock.png'),
   dollar: require('../assets/images/dollar.png'),
   plus: require('../assets/images/plus.png'),
   camerdark: require('../assets/images/cameradark.png'),
@@ -87,10 +86,7 @@ export const images = {
   logoSmall: require('../assets/images/logo-small.png'),
   logout: require('../assets/images/logout.png'),
   HomeImg: require('../assets/images/other/HomeImg.png'),
-  HomeImg2: require('../assets/images/other/HomeImg2.png'),
-  category1: require('../assets/images/other/category1.png'),
-  category2: require('../assets/images/other/category2.png'),
-facebook:require("../assets/images/facebook.png"),
+  
 facebookdark:require("../assets/images/facebookdark.png"),
   arrowright: require('../assets/images/arrow-right.png'),
   cartype:require('../assets/images/cartype.png'),
@@ -104,17 +100,15 @@ facebookdark:require("../assets/images/facebookdark.png"),
   setting: require('../assets/images/settings.png'),
   success: require('../assets/images/success.png'),
   serach: require('../assets/images/search.png'),
-  beef: require('../assets/images/other/beef-cooked-cuisine-1268549.png'),
   leftarrow: require('../assets/images/left-arrow.png'),
   rightarrow: require('../assets/images/right-arrow.png'),
-  qrCode: require('../assets/images/qr-code.png'),
   cross: require('../assets/images/cross.png'),
-  circleTick: require('../assets/images/circleTick.png'),
   username: require('../assets/images/username.png'),
   clock: require('../assets/images/clock.png'),
   Subject:require('../assets/images/subject.png'),
   Question:require('../assets/images/question.png'),
-  
+  checkBoxEmpty:require('../assets/images/checkBoxEmpty.png'),
+  checkBoxTick:require('../assets/images/checkboxtick.png'),
   calendar: require('../assets/images/calendar.png'),
   user: require('../assets/images/user.png'),
   member: require('../assets/images/other/Group.png'),

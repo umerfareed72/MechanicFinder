@@ -13,7 +13,6 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -43,7 +42,8 @@ export default class HomeDetail extends Component {
       ColorGallery: colors.inputBordercolor,
       ColorReview: colors.inputBordercolor,
       BookNowView: 'flex',
-      data:[]
+      CheckBox: images.checkBoxEmpty,
+      data: [],
     };
   }
   onStarRatingPress(rating) {
@@ -51,14 +51,13 @@ export default class HomeDetail extends Component {
       starCount: rating,
     });
   }
-componentDidMount(){
-AsyncStorage.getItem("data").then((res)=>{
-res=JSON.parse(res)
-console.log(res)
-this.setState({data:res})
-})
-
-}
+  componentDidMount() {
+    AsyncStorage.getItem('data').then((res) => {
+      res = JSON.parse(res);
+      console.log(res);
+      this.setState({data: res});
+    });
+  }
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
       this.setState({TabDataGallery: 'none'}),
@@ -114,9 +113,24 @@ this.setState({data:res})
     this.setState({ColorReview: colors.darkBlue});
     this.setState({ColorGallery: colors.inputBordercolor});
   };
-
+  Checked = () => {
+    if (this.state.CheckBox == images.checkBoxEmpty) {
+      this.setState({CheckBox: images.checkBoxTick});
+    } else {
+      this.setState({CheckBox: images.checkBoxEmpty});
+    }
+  };
+  buyItems=()=>{
+    if(this.state.CheckBox==images.checkBoxTick){
+        this.props.navigation.navigate('BuyItems');
+     
+    }else{
+      this.props.navigation.navigate('BookNow');
+       
+    }
+  }
   render() {
-    const {data}=this.state;
+    const {data} = this.state;
     return (
       <SafeAreaView style={[appStyle.safeAreaHeight]}>
         <StatusBar />
@@ -126,7 +140,7 @@ this.setState({data:res})
           <ImageBackground
             source={images.userImg}
             style={{height: screenHeight.height35}}>
-                <View style={style.bgOverlay}/>
+            <View style={style.bgOverlay} />
             <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}
               style={[image.headerBackArrow]}>
@@ -138,7 +152,6 @@ this.setState({data:res})
               <View style={[style.mv5]}>
                 <StarRating
                   disabled={true}
-               
                   maxStars={5}
                   rating={this.state.starCount}
                   selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -151,7 +164,7 @@ this.setState({data:res})
 
               <View style={[style.mv5]}>
                 <Text style={[text.heading1, text.bold]}>
-    {data.firstname}{" "}{data.lastname}
+                  {data.firstname} {data.lastname}
                 </Text>
               </View>
               <View style={[style.mv5]}>
@@ -164,7 +177,7 @@ this.setState({data:res})
           </ImageBackground>
         </View>
 
-        <View style={[appStyle.bodyBg]}>
+        <View style={[appStyle.bodyBg, style.flex1]}>
           <View
             style={[
               appStyle.rowBtw,
@@ -182,7 +195,7 @@ this.setState({data:res})
                 Overview
               </Text>
             </TouchableOpacity>
-{/* 
+            {/* 
             <TouchableOpacity onPress={() => this.tabGallery()}>
               <Text
                 style={[
@@ -207,47 +220,57 @@ this.setState({data:res})
           </View>
           {/* <View style={[appStyle.bottomBorder]}></View> */}
 
-          <ScrollView >
+          <ScrollView style={style.mv5}>
             {/* OverView Tab */}
             <View
               style={[
                 appStyle.bodyLayout,
                 {display: this.state.TabDataOverview},
               ]}>
-             
-
-              <View style={[appStyle.rowAlignCenter, style.mb10]}>
+              <View style={[appStyle.rowAlignCenter, style.mv10]}>
                 <Image
                   style={[image.locationIcon, style.mr5]}
                   source={images.location}></Image>
-                <Text style={[text.heading3]}>{data.address}{data.city}{" "}{data.country}</Text>
+                <Text style={[text.heading2, text.bold]}>Address</Text>
               </View>
-              <View style={[appStyle.rowAlignCenter, style.mb10]}>
-                <Image
-                  style={[image.locationIcon, style.mr5]}
-                  source={images.carservice}></Image>
-                <Text style={[text.heading3]}>Mechanic Skills: Car{" "}{data.skilltype}</Text>
+              <View style={[style.borderbottom, style.mh20, style.mv10]}>
+                <Text style={[text.heading2Gray]}>
+                  {' '}
+                  {data.address}
+                  {data.city} {data.country}
+                </Text>
               </View>
-             <View style={[style.rowBtw]}>
-
-             <View style={[appStyle.rowAlignCenter, style.mb10]}>
+              <View style={[appStyle.rowAlignCenter, style.mv10]}>
                 <Image
                   style={[image.locationIcon, style.mr5]}
                   source={images.cartype}></Image>
-                <Text style={[text.heading3]}>Vehicle Type: {" "}{data.vehicletype}</Text>
+                <Text style={[text.heading2, text.bold]}>Vehicle Type</Text>
               </View>
-              <View style={[appStyle.rowAlignCenter, style.mb10]}>
+              <View style={[style.borderbottom, style.mh20, style.mv10]}>
+                <Text style={[text.heading2Gray]}> {data.vehicletype}</Text>
+              </View>
+              <View style={[appStyle.rowAlignCenter, style.mv10]}>
                 <Image
                   style={[image.locationIcon, style.mr5]}
                   source={images.Company}></Image>
-                <Text style={[text.heading3]}>Car Brand: {" "}{data.carcompany}</Text>
+                <Text style={[text.heading2, text.bold]}>Car Brand</Text>
+              </View>
+              <View style={[style.borderbottom, style.mh20, style.mv10]}>
+                <Text style={[text.heading2Gray]}> {data.carcompany}</Text>
               </View>
 
-             </View>
-            
-<View style={[style.mt20]}>
-  <Text style={[text.text16]}>Some Description</Text>
-</View>
+              <View style={[appStyle.rowAlignCenter, style.mv10]}>
+                <Image
+                  style={[image.locationIcon, style.mr5]}
+                  source={images.carservice}></Image>
+                <Text style={[text.heading2, text.bold]}>Skills Type</Text>
+              </View>
+              <View style={[style.borderbottom, style.mh20, style.mv10]}>
+                <Text style={[text.heading2Gray]}> {data.skilltype}</Text>
+              </View>
+              <View style={[style.mt20]}>
+                <Text style={[text.text16]}>Some Description</Text>
+              </View>
               <View style={[style.pv10]}>
                 <Text style={[text.paraGray]}>
                   Sed ut perspiciatis unde omnis iste natus error sit voluptatem
@@ -256,8 +279,17 @@ this.setState({data:res})
                   beatae vitae dicta sunt explicabo. Nemo.
                 </Text>
               </View>
+              <TouchableOpacity
+                style={[style.row, style.mt10, style.aiCenter]}
+                onPress={this.Checked}>
+                <Image
+                  style={image.InputImage}
+                  source={this.state.CheckBox}></Image>
+                <Text style={[text.text18, text.darkBlue]}>
+                  Are You Want To Buy Items
+                </Text>
+              </TouchableOpacity>
             </View>
-
             <View
               style={[
                 appStyle.bodyLayout,
@@ -281,9 +313,7 @@ this.setState({data:res})
                 </View>
                 <View style={style.flex1}>
                   <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.navigate('BookNow');
-                    }}>
+                    onPress={this.buyItems}>
                     <View
                       style={[
                         button.buttoncontainer,
@@ -302,53 +332,12 @@ this.setState({data:res})
                 </View>
               </View>
             </View>
-
-            {/* Gallery Tab View
-
-            <View style={[style.mv10, {display: this.state.TabDataGallery}]}>
-              <View style={[style.row, appStyle.rowBtw, appStyle.flexWrap]}>
-                <Image
-                  style={[image.galleryImg, style.mv5]}
-                  source={images.HomeImg}></Image>
-
-                <Image
-                  style={[image.galleryImg, style.mv5]}
-                  source={images.HomeImg}></Image>
-
-                <Image
-                  style={[image.galleryImg, style.mv5]}
-                  source={images.HomeImg}></Image>
-
-                <Image
-                  style={[image.galleryImg, style.mv5]}
-                  source={images.HomeImg}></Image>
-
-                <Image
-                  style={[image.galleryImg, style.mv5]}
-                  source={images.HomeImg}></Image>
-
-                <Image
-                  style={[image.galleryImg, style.mv5]}
-                  source={images.HomeImg}></Image>
-
-                <Image
-                  style={[image.galleryImg, style.mv5]}
-                  source={images.HomeImg}></Image>
-
-                <Image
-                  style={[image.galleryImg, style.mv5]}
-                  source={images.HomeImg}></Image>
-              </View>
-            </View> */}
-            {/* Gallery Tab View End */}
-
-            {/* Reviews Tab Start  */}
             <View
               style={[
                 appStyle.bodyLayout,
                 {display: this.state.TabDataReview},
               ]}>
-              <View style={[style.row, style.mv5]}>
+              <View style={[style.row, style.mv5, style.aiCenter]}>
                 <View style={[style.flex1, style.mr5]}>
                   <Image
                     style={appStyle.listImg}
@@ -359,7 +348,6 @@ this.setState({data:res})
                     <Text style={[style.mr5]}>Peter & Co</Text>
                     <StarRating
                       disabled={true}
-                     
                       maxStars={5}
                       rating={this.state.starCount}
                       selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -378,7 +366,7 @@ this.setState({data:res})
                 </View>
               </View>
 
-              <View style={[style.row, style.mv5]}>
+              <View style={[style.row, style.mv5, style.aiCenter]}>
                 <View style={[style.flex1, style.mr5]}>
                   <Image
                     style={appStyle.listImg}
@@ -389,7 +377,6 @@ this.setState({data:res})
                     <Text style={[style.mr5]}>Peter & Co</Text>
                     <StarRating
                       disabled={true}
-                     
                       maxStars={5}
                       rating={this.state.starCount}
                       selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -408,7 +395,7 @@ this.setState({data:res})
                 </View>
               </View>
 
-              <View style={[style.row, style.mv5]}>
+              <View style={[style.row, style.mv5, style.aiCenter]}>
                 <View style={[style.flex1, style.mr5]}>
                   <Image
                     style={appStyle.listImg}
@@ -419,7 +406,6 @@ this.setState({data:res})
                     <Text style={[style.mr5]}>Peter & Co</Text>
                     <StarRating
                       disabled={true}
-                     
                       maxStars={5}
                       rating={this.state.starCount}
                       selectedStar={(rating) => this.onStarRatingPress(rating)}

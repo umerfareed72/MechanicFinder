@@ -18,8 +18,8 @@ router.post('/userregister', (req, res) => {
     phone: req.body.phone,
     address: req.body.address,
     photo: req.body.photo,
-    longitude:req.body.longitude,
-    latitude:req.body.latitude,
+    longitude: req.body.longitude,
+    latitude: req.body.latitude,
     city: req.body.city,
     country: req.body.country,
     date: req.body.date,
@@ -29,10 +29,9 @@ router.post('/userregister', (req, res) => {
     .then((data) => {
       // console.log(data);
       // res.send(data);
-    const token = jwt.sign({userid: User._id}, jwtkey);
-    res.send({token});
-      
-})
+      const token = jwt.sign({userid: User._id}, jwtkey);
+      res.send({token});
+    })
     .catch((err) => {
       res.status(404).send(err.message);
     });
@@ -58,21 +57,19 @@ router.post('/usersignin', async (req, res) => {
   }
 });
 
-//Get Current User
-
-router.get('/meUser', function(req, res) {
-    var token = req.headers['x-access-token'];
-    if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
-    
-    jwt.verify(token, jwtkey, function(err, decoded) {
-      if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-      
-      res.status(200).send(decoded);
+//Get user By id
+router.get('/user/:id', (req, res) => {
+  Usermodel.findById(req.params.id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send('User Not Found');
+      }
+      return res.status(200).json(user);
+    })
+    .catch((error) => {
+      return res.send(error);
     });
-  });
-
-
-
+});
 
 //Add User longitude and latitude
 router.post('/adduserlocation', (req, res) => {
@@ -93,20 +90,21 @@ router.post('/adduserlocation', (req, res) => {
 });
 
 //Update User Lat & Long
-router.patch('/updateuserlocation', (req, res) => {
-  
+router.put('/userlocation/:id', (req, res) => {
   Usermodel.findByIdAndUpdate(
-    req.body.userid,
+    req.params.id,
     {longitude: req.body.longitude, latitude: req.body.latitude},
-    function (err, docs) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log('Updated User : ', docs);
-        res.send(docs);
-      }
-    },
-  );
+      ).then((user) => {
+        if (!user) {
+          return res.status(404).send('User Not Found');
+        }
+        return res.status(200).json(user);
+     
+      })
+      .catch((error) => {
+        return res.send(error);
+      });
+  
 });
 
 //Get Users Location
@@ -121,7 +119,6 @@ router.get('/getuserlocation', (req, res) => {
   }
   get();
 });
-
 
 //Get all Users
 router.get('/users', (req, res) => {
@@ -146,15 +143,6 @@ router.get('/users', (req, res) => {
   }
   get();
 });
-
-
-
-
-
-
-
-
-
 
 //Delete User
 

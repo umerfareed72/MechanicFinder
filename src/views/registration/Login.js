@@ -239,10 +239,10 @@ export default class Login extends Component {
         password: this.state.Password,
       })
       .then(async (res) => {
-        console.log(res.data);
+        // console.log(res.data);
 
         try {
-          await AsyncStorage.setItem('usertoken', res.data.token);
+          await AsyncStorage.setItem('usersignintoken', res.data.token);
          console.log(res.data.token)
           this.props.navigation.navigate('userStack');
           
@@ -337,10 +337,10 @@ export default class Login extends Component {
                   </View>
 
                   <TouchableOpacity 
-                  // onPress={this.submitData}
-                  onPress={() => {
-                    this.props.navigation.navigate('Dashboard');
-                  }}
+                  onPress={this.submitData}
+                  // onPress={() => {
+                  //   this.props.navigation.navigate('Dashboard');
+                  // }}
               
                   >
                     <View style={[button.buttoncontainer, style.mt20]}>

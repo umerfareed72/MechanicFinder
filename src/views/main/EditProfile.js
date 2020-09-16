@@ -9,15 +9,14 @@ import {
   TouchableOpacity,
   CheckBox,
   Image,
-  Picker,
   ImageBackground,
   Dimensions,
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-
   Button,
 } from 'react-native';
+import {Picker} from '@react-native-community/picker';
 import RNPickerSelect from 'react-native-picker-select';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
@@ -40,12 +39,10 @@ export default class EditProfile extends Component {
     this.state = {
       date: '2020-05-15',
       filePath: {},
+      photo: null,
+      Gender: 'Select Gender',
     };
   }
-
-  state = {
-    photo: null,
-  };
 
   handleChoosePhoto = () => {
     const options = {
@@ -61,73 +58,73 @@ export default class EditProfile extends Component {
   render() {
     const {photo} = this.state;
     return (
-        <SafeAreaView style={style.flex1}>
-            <StatusBar translucent={true} backgroundColor={'transparent'} />
+      <SafeAreaView style={style.flex1}>
+        <StatusBar translucent={true} backgroundColor={'transparent'} barStyle={'light-content'}/>
 
-<KeyboardAvoidingView style={{backgroundColor: colors.white,flexGrow:1}}>
-  <ScrollView>
-
-          <View>
+        <KeyboardAvoidingView
+          style={{backgroundColor: colors.white, flexGrow: 1}}>
+          <ScrollView>
             <View>
-              <LinearGradient
-                colors={colors.orablu}
-                start={{x: -0.9, y: 1}}
-                end={{x: 1, y: 0}}
-                style={[style.headerHeight1]}>
-                <StatusBar backgroundColor={'transparent'} />
+              <View>
+                <LinearGradient
+                  colors={colors.orablu}
+                  start={{x: -0.9, y: 1}}
+                  end={{x: 1, y: 0}}
+                  style={[style.headerHeight1]}>
+                  <StatusBar backgroundColor={'transparent'} />
 
-                <View style={{postion: 'absolute', top: 30, left: 10}}>
-                  <Hamburger />
-                </View>
-                <View style={[style.flex1, style.jcCenter, style.mh40]}>
-                  <View style={[style.jcSpaceBetween, style.row]}>
-                    <View style={style.mr20}>
-                      <View style={[image.ovalcontainer]}>
-                        {photo && (
-                          <Image
-                            source={{uri: photo.uri}}
-                            style={[image.ovalcontainerupload]}
-                          />
-                        )}
-                        <TouchableOpacity
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                          onPress={this.handleChoosePhoto}>
-                          <Image
-                            style={[image.mediumimagestyle]}
-                            source={images.camerdark}
-                          />
-                        </TouchableOpacity>
+                  <View style={{postion: 'absolute', top: 30, left: 10}}>
+                    <Hamburger />
+                  </View>
+                  <View style={[style.flex1, style.jcCenter, style.mh40]}>
+                    <View style={[style.jcSpaceBetween, style.row]}>
+                      <View style={style.mr20}>
+                        <View style={[image.ovalcontainer]}>
+                          {photo && (
+                            <Image
+                              source={{uri: photo.uri}}
+                              style={[image.ovalcontainerupload]}
+                            />
+                          )}
+                          <TouchableOpacity
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                            onPress={this.handleChoosePhoto}>
+                            <Image
+                              style={[image.mediumimagestyle]}
+                              source={images.camerdark}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                        <View>
+                          <Text style={[text.textheader6, style.asCenter]}>
+                            Edit Photo
+                          </Text>
+                        </View>
                       </View>
-                      <View>
-                        <Text style={[text.textheader6, style.asCenter]}>
-                          Edit Photo
-                        </Text>
+                      <View style={[style.flex1]}>
+                        <TextInput
+                          placeholder="First Name"
+                          style={input.largeinputstyle}
+                          placeholderTextColor={colors.white}></TextInput>
+                        <TextInput
+                          placeholder="Last Name"
+                          style={input.largeinputstyle}
+                          placeholderTextColor={colors.white}></TextInput>
                       </View>
-                    </View>
-                    <View style={[style.flex1]}>
-                      <TextInput
-                        placeholder="First Name"
-                        style={input.largeinputstyle}
-                        placeholderTextColor={colors.white}></TextInput>
-                      <TextInput
-                        placeholder="Last Name"
-                        style={input.largeinputstyle}
-                        placeholderTextColor={colors.white}></TextInput>
                     </View>
                   </View>
-                </View>
-              </LinearGradient>
-            </View>
+                </LinearGradient>
+              </View>
 
-            <View style={[appStyle.bodyBg, style.ph10]}>
+              <View style={[appStyle.bodyBg, style.ph10]}>
                 <View style={[style.padding10]}>
                   <Text style={[text.mediumlabel]}>Edit</Text>
                 </View>
@@ -173,13 +170,15 @@ export default class EditProfile extends Component {
                       <Text style={text.textheader4}>Gender</Text>
                     </View>
                     <View style={[input.drop]}>
-                      <RNPickerSelect
-                        onValueChange={(value) => console.log(value)}
-                        items={[
-                          {label: 'Male', value: 'male'},
-                          {label: 'Female', value: 'female'},
-                        ]}
-                      />
+                      <Picker
+                      style={text.regualGray}
+                        selectedValue={this.state.Gender}
+                        onValueChange={(itemValue, itemIndex) =>
+                          this.setState({Gender: itemValue})
+                        }>
+                        <Picker.Item label="Male" value="Male" />
+                        <Picker.Item label="Female" value="Female" />
+                      </Picker>
                     </View>
                   </View>
                 </View>
@@ -221,21 +220,21 @@ export default class EditProfile extends Component {
                     </View>
                   </View>
                 </View>
-      
+              </View>
             </View>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('ChatBox');
-            }}>
-            <View style={[button.buttoncontainer, style.mt20]}>
-              <Text style={[button.touchablebutton, {color: colors.darkBlue}]}>
-                Save
-              </Text>
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('ChatBox');
+              }}>
+              <View style={[button.buttoncontainer, style.mt20]}>
+                <Text
+                  style={[button.touchablebutton, {color: colors.darkBlue}]}>
+                  Save
+                </Text>
+              </View>
+            </TouchableOpacity>
 
-          {/* <View style={[image.ovalcontainer, style.jcCenter, style.aiCenter]}>
+            {/* <View style={[image.ovalcontainer, style.jcCenter, style.aiCenter]}>
                        
                             {photo && (
                                 <Image
@@ -248,10 +247,9 @@ export default class EditProfile extends Component {
 
                             </TouchableOpacity>
                         </View> */}
-    </ScrollView>
-    </KeyboardAvoidingView>
-        </SafeAreaView>
-
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     );
   }
 }

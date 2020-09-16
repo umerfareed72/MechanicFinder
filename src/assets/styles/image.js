@@ -178,6 +178,7 @@ export default StyleSheet.create({
     resizeMode: 'contain',
     marginHorizontal: 15,
   },
+  
   homeImgLarge: {
     width: screenWidth.width100 - 80,
     height: screenHeight.height25,

@@ -7,11 +7,11 @@ export default StyleSheet.create({
     flex: 2.5,
     alignItems: 'flex-end',
     backgroundColor: '#fff',
+   
   },
   drop: {
-    flex: 0.9,
-    alignItems: 'flex-end',
-    backgroundColor: '#fff',
+    flex: 0.8,
+   
   },
 
   areainputborder: {
