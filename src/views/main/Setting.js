@@ -88,7 +88,7 @@ export default class Settings extends Component {
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
-
+        
         <View style={{}}>
           <Modal
             isVisible={this.state.isModalVisible}

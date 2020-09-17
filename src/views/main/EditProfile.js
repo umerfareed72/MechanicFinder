@@ -73,9 +73,13 @@ export default class EditProfile extends Component {
                   style={[style.headerHeight1]}>
                   <StatusBar backgroundColor={'transparent'} />
 
-                  <View style={{postion: 'absolute', top: 30, left: 10}}>
-                    <Hamburger />
-                  </View>
+                  <TouchableOpacity
+                  onPress={() => this.props.navigation.goBack()}
+                  style={[image.headerBackArrow]}>
+                  <Image
+                    style={[image.backArrow]}
+                    source={images.backArrow}></Image>
+                </TouchableOpacity>
                   <View style={[style.flex1, style.jcCenter, style.mh40]}>
                     <View style={[style.jcSpaceBetween, style.row]}>
                       <View style={style.mr20}>

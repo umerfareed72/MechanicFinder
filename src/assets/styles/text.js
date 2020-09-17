@@ -93,7 +93,9 @@ export default StyleSheet.create({
     color: colors.gray,
     paddingTop: 10,
   },
-
+spacing:{
+  letterSpacing:1
+},
   textbox: {
     color: colors.grayB4,
     fontSize: 14,
@@ -371,6 +373,18 @@ export default StyleSheet.create({
   },
 
 //Font Family
+CinzelDecorativeRegular:{
+fontFamily:'CinzelDecorative-Regular'
+},
+CinzelDecorativeBold:{
+  fontFamily:'CinzelDecorative-Bold'
+  },
+  CinzelDecorativeBlack:{
+    fontFamily:'CinzelDecorative-Black'
+    },
+LobsterRegular:{
+  fontFamily:'Lobster-Regular'
+},
 Eutemia:{
   fontFamily:'Eutemia'
 },

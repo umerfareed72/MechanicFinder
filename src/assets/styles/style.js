@@ -410,7 +410,7 @@ marginHorizontal:15
 
   splashheight: {
     flex:1,
-    backgroundColor: colors.darkBlue,
+    backgroundColor: colors.white,
 
   },
   borderBottomNav:{

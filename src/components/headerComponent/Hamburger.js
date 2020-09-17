@@ -5,7 +5,7 @@ import {DrawerActions} from 'react-navigation-drawer';
 import {Image} from 'react-native';
 class Hamburger extends Component {
  
-  render() {
+  render(props) {
     return (
       <TouchableOpacity
         style={{
@@ -20,7 +20,9 @@ class Hamburger extends Component {
         onPress={()=>this.props.navigation.openDrawer()}>
          <Image style={{width: 27,
           height: 27,
-          resizeMode:'contain'}} source={require('../../assets/images/iconHam.png')}
+          resizeMode:'contain',
+          tintColor:this.props.tintColor
+        }} source={require('../../assets/images/iconHam.png')}
          />
       </TouchableOpacity>
     );

@@ -40,8 +40,8 @@ export const screenWidth = {
 
 //Url
 export const URL = {
-Url:'http://192.168.0.103:3000/'
-}
+  Url: 'http://192.168.0.103:3000/',
+};
 //colors
 export const colors = {
   orange: '#F59E52',
@@ -74,6 +74,8 @@ export const colors = {
 //Images
 export const images = {
   // local1: require('../assets/images/other/local1.jpg'),
+  appIcon: require('../assets/images/other/appicon.png'),
+
   logoDark: require('../assets/images/logoDark.png'),
   email: require('../assets/images/mail.png'),
   key: require('..//assets/images/key.png'),
@@ -87,16 +89,16 @@ export const images = {
   logoSmall: require('../assets/images/logo-small.png'),
   logout: require('../assets/images/logout.png'),
   HomeImg: require('../assets/images/other/HomeImg.png'),
-  
-facebookdark:require("../assets/images/facebookdark.png"),
+cart:require('../assets/images/cart.png'),
+  facebookdark: require('../assets/images/facebookdark.png'),
   arrowright: require('../assets/images/arrow-right.png'),
-  cartype:require('../assets/images/cartype.png'),
-  carservice:require('../assets/images/service.png'),
-  phone:require('../assets/images/phone.png'),
+  cartype: require('../assets/images/cartype.png'),
+  carservice: require('../assets/images/service.png'),
+  phone: require('../assets/images/phone.png'),
   mic: require('../assets/images/mic.png'),
   percent: require('../assets/images/percent.png'),
   picture: require('../assets/images/picture.png'),
-  Company:require('../assets/images/Company.png'),
+  Company: require('../assets/images/Company.png'),
   location: require('../assets/images/location.png'),
   setting: require('../assets/images/settings.png'),
   success: require('../assets/images/success.png'),
@@ -106,10 +108,10 @@ facebookdark:require("../assets/images/facebookdark.png"),
   cross: require('../assets/images/cross.png'),
   username: require('../assets/images/username.png'),
   clock: require('../assets/images/clock.png'),
-  Subject:require('../assets/images/subject.png'),
-  Question:require('../assets/images/question.png'),
-  checkBoxEmpty:require('../assets/images/checkBoxEmpty.png'),
-  checkBoxTick:require('../assets/images/checkboxtick.png'),
+  Subject: require('../assets/images/subject.png'),
+  Question: require('../assets/images/question.png'),
+  checkBoxEmpty: require('../assets/images/checkBoxEmpty.png'),
+  checkBoxTick: require('../assets/images/checkboxtick.png'),
   calendar: require('../assets/images/calendar.png'),
   user: require('../assets/images/user.png'),
   member: require('../assets/images/other/Group.png'),
@@ -120,7 +122,7 @@ facebookdark:require("../assets/images/facebookdark.png"),
   date: require('../assets/images/calendarOrange.png'),
   dummy1: require('../assets/images/userImg.png'),
   arrowLong: require('../assets/images/arrowLong.png'),
-  backarrowh:require("../assets/images/backarrowh.png"),
+  backarrowh: require('../assets/images/backarrowh.png'),
   complaints: require('../assets/images/complaints.png'),
   userPurple: require('../assets/images/userPurple.png'),
   logoutPurple: require('../assets/images/logoutPurple.png'),
@@ -132,8 +134,7 @@ facebookdark:require("../assets/images/facebookdark.png"),
   help: require('../assets/images/help.png'),
   refer: require('../assets/images/refer.png'),
   workshop: require('../assets/images/workshop.png'),
-  chatBox:require('../assets/images/chatbox.png'),
-
+  chatBox: require('../assets/images/chatbox.png'),
 
   //others
 
@@ -144,10 +145,5 @@ facebookdark:require("../assets/images/facebookdark.png"),
   engine1: require('../assets/images/other/engine1.jpg'),
   engine: require('../assets/images/other/engine.jpg'),
   electric: require('../assets/images/other/electric.jpg'),
-  body:require('../assets/images/other/body.jpg')
-  
-
-
-
+  body: require('../assets/images/other/body.jpg'),
 };
-

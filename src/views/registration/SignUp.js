@@ -230,15 +230,12 @@ latitude:this.state.latitude
                 start={{x: -0.9, y: 1}}
                 end={{x: 1, y: 0}}
                 style={[style.headerHeight4]}>
-                <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                  <Text style={[text.text35, {color: colors.white}]}>
-                    Create Account
-                  </Text>
-                  <Text style={[text.text20, {color: colors.white}]}>
-                    (For User Registeration)
-                  </Text>
-                </View>
-              </LinearGradient>
+                  <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
+                  <Text style={[text.Eutemia,text.white,text.text30]}>Smart Auto Mechanic Finder</Text>
+                  <Text style={[text.text18,text.CinzelDecorativeBold,text.white]}>(User Registration)</Text>
+                 
+                     </View>
+                  </LinearGradient>
             </View>
 
             <View style={[appStyle.bodyBg]}>

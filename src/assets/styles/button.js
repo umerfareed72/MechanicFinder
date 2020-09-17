@@ -73,4 +73,18 @@ export default StyleSheet.create({
     backgroundColor: colors.orange,
     justifyContent: 'center',
   },
+  //Mechanic Side Styling
+
+  button1:{
+    backgroundColor: colors.darkBlue,
+    borderRadius: 8,
+    padding: 10,
+    marginHorizontal: 30,
+  },
+  btntext1:{
+    fontSize:20,
+    fontFamily:'goodfishbd',
+   color:colors.white,
+    letterSpacing:1
+  }
 });

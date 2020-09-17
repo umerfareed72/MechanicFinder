@@ -14,6 +14,7 @@ import image from '../../assets/styles/image';
 import style from '../../assets/styles/style';
 
 import text from '../../assets/styles/text';
+import {color} from 'react-native-reanimated';
 
 export default class Splash extends React.Component {
   constructor(props) {
@@ -46,8 +47,17 @@ export default class Splash extends React.Component {
   render() {
     return (
       <SafeAreaView style={[style.splashheight]}>
+        <StatusBar
+          barStyle={'dark-content'}
+          backgroundColor={'transparent'}
+          translucent={true}></StatusBar>
         <View style={[text.splashtext]}>
-          <Image source={images.logoDark} style={[image.splashImg]} />
+          <Image source={images.appIcon} style={[image.splashImg]} />
+          <View style={style.mv40}>
+            <Text style={[text.Eutemia, text.blackish, text.text30]}>
+              Smart Auto Mechanic Finder
+            </Text>
+          </View>
         </View>
       </SafeAreaView>
     );

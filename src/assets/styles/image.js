@@ -2,7 +2,34 @@ import { StyleSheet, Dimensions } from 'react-native';
 const { height, width } = Dimensions.get('screen');
 import { colors, screenHeight, screenWidth, images } from '../../config/Constant';
 export default StyleSheet.create({
+  //All Sizes
+  tiny: {
+    height: 10,
+    width: 10,
+    resizeMode: "contain",
+    alignSelf: "center"
+  },
+  small:{
+height:14,
+width:14,
+resizeMode:'contain'
+  },
+  medium:{
+    height:18,
+    width:18,
+    resizeMode:'contain'
+  },
+  large:{
+    height:30,
+    width:30,
+    resizeMode:'contain'
+  },
+  
+  
   // all images  style here
+
+
+
   backArrow2: {
     width: 20,
     height: 25,
@@ -13,12 +40,7 @@ export default StyleSheet.create({
     height: 25, width: 25, resizeMode: 'contain'
   },
 
-  tiny: {
-    height: 10,
-    width: 10,
-    resizeMode: "contain",
-    alignSelf: "center"
-  },
+  
   userImg:{
     width:65,height:65,resizeMode:'cover',borderRadius:130/2
   },
@@ -158,6 +180,7 @@ export default StyleSheet.create({
     height: 100,
     width: 200,
     resizeMode: 'contain',
+  borderRadius:100
   },
   InputImage: {
     marginRight: 15,
@@ -295,5 +318,16 @@ export default StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'space-evenly',
   },
+//Mechanic Side Styling
+boxContainer:{
+  marginVertical: 10,
+  borderRadius: 20,
+  backgroundColor: colors.black,
+  paddingVertical: 10,
+  paddingHorizontal: 50,
+  borderWidth: 5,
+  borderColor: colors.darkyellow,
+}
+
 
 });

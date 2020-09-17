@@ -18,7 +18,13 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 // import RNPickerSelect from 'react-native-picker-select';
-import {colors, URL,screenHeight, screenWidth, images} from '../../config/Constant';
+import {
+  colors,
+  URL,
+  screenHeight,
+  screenWidth,
+  images,
+} from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
 import DatePicker from 'react-native-datepicker';
 import {Picker} from '@react-native-community/picker';
@@ -63,8 +69,8 @@ export default class MechanicRegister extends Component {
       carcompany: '',
       skilltype: '',
       vehicletype: '',
-      longitude:'',
-      latitude:'',
+      longitude: '',
+      latitude: '',
       date: 'Select Date Of Birth',
       filePath: {},
     };
@@ -78,7 +84,7 @@ export default class MechanicRegister extends Component {
   };
   submitData = () => {
     axios
-      .post(URL.Url+'mechanicregister', {
+      .post(URL.Url + 'mechanicregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
@@ -92,15 +98,15 @@ export default class MechanicRegister extends Component {
         skilltype: this.state.skilltype,
         vehicletype: this.state.vehicletype,
         date: this.state.date,
-        longitude:this.state.longitude,
-        latitude:this.state.latitude
+        longitude: this.state.longitude,
+        latitude: this.state.latitude,
       })
       .then(async (res) => {
         console.log(res);
         console.log(res.data.token);
         try {
           await AsyncStorage.setItem('token', res.data.token);
-        
+
           this.props.navigation.navigate('mechanicStack');
         } catch (e) {
           console.log('error hai', e);
@@ -271,11 +277,16 @@ export default class MechanicRegister extends Component {
                 end={{x: 1, y: 0}}
                 style={[style.headerHeight4]}>
                 <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                  <Text style={[text.text35, {color: colors.white}]}>
-                    Create Account
+                  <Text style={[text.Eutemia, text.white, text.text30]}>
+                    Smart Auto Mechanic Finder
                   </Text>
-                  <Text style={[text.text20, {color: colors.white}]}>
-                    (For Mechanics Registeration)
+                  <Text
+                    style={[
+                      text.text18,
+                      text.CinzelDecorativeBold,
+                      text.white,
+                    ]}>
+                    (Mechanic Registration)
                   </Text>
                 </View>
               </LinearGradient>

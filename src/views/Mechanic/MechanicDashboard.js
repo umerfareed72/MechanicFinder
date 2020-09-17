@@ -19,7 +19,13 @@ import {
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+import {
+  colors,
+  screenHeight,
+  screenWidth,
+  images,
+  URL,
+} from '../../config/Constant';
 const axios = require('axios');
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -30,9 +36,6 @@ import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import Hamburger from '../../components/headerComponent/Hamburger';
-import {DrawerNavigator} from 'react-navigation';
-
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
 
 export default class MechanicDashboard extends Component {
   constructor(props) {
@@ -45,11 +48,32 @@ export default class MechanicDashboard extends Component {
       items: [],
       refreshing: false,
       dataSource: [],
+      btncolor: colors.white,
+      btnbackgroundcolor: colors.darkBlue,
+      bordercolor: colors.grayd7,
+      btntext: 'Offline',
     };
   }
+  changeStatus = () => {
+    if (this.state.btnbackgroundcolor == colors.darkBlue) {
+      this.setState({
+        btnbackgroundcolor: colors.white,
+        btncolor: colors.black,
+        bordercolor: colors.darkyellow,
+        btntext: 'Online',
+      });
+    } else {
+      this.setState({
+        btnbackgroundcolor: colors.darkBlue,
+        btncolor: colors.white,
+        bordercolor: colors.grayd7,
+        btntext: 'Offline',
+      });
+    }
+  };
   getId = () => {
     axios
-      .get('http://192.168.0.110:3000/me', {
+      .get(URL.Url + 'me', {
         headers: {
           'x-access-token':
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZWNoYW5pY2lkIjoiNWY1MGE4M2FiMTRlNjIyYmQ4NjlkZTRkIiwiaWF0IjoxNTk5MTIxNDY4fQ.Dm6ItyGXXrPV4KtAEOgB8F9M6yJDhl56VVOyDjsHBWw',
@@ -96,7 +120,7 @@ export default class MechanicDashboard extends Component {
               latitude: position.coords.latitude,
             });
             axios
-              .patch('http://192.168.0.110:3000/mechanicregister', {
+              .patch(URL.Url + 'mechanicregister', {
                 mechanicid: this.state.mechanicid,
                 longitude: this.state.longitude,
                 latitude: this.state.latitude,
@@ -131,6 +155,7 @@ export default class MechanicDashboard extends Component {
   }
 
   render() {
+    if(this.state.dataSource==[]){
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar
@@ -146,55 +171,212 @@ export default class MechanicDashboard extends Component {
             start={{x: -0.9, y: 1}}
             end={{x: 1, y: 0}}
             style={{height: screenHeight.height30}}>
-            <View
-              style={{
-                postion: 'absolute',
-                top: 30,
-                left: 10,
-                width: 30,
-              }}></View>
-            <StatusBar backgroundColor={'transparent'} />
-            <View style={[appStyle.headInner]}>
-              <View style={[]}>
-                <Text style={[text.heading1]}>Discover</Text>
-              </View>
-              <View style={[appStyle.searchBg, style.mv10]}>
-                <View style={[style.row, style.aiCenter]}>
-                  <View>
-                    <Image
-                      style={[image.searchIcon]}
-                      source={images.serach}></Image>
-                  </View>
-                  <View style={[style.flex1]}>
-                    <TextInput
-                      style={[appStyle.inputTheme1]}
-                      placeholder="Search"
-                      underlineColorAndroid="transparent"
-                      placeholderTextColor="#fff"></TextInput>
-                  </View>
-                </View>
-              </View>
+            <View style={{postion: 'absolute', top: 30, left: 10, width: 30}}>
+              <Hamburger />
+            </View>
+
+            <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
+              <Text style={[text.VanityBold, text.white, text.text30]}>
+                Dashboard
+              </Text>
+              <Text style={[text.text18, text.Eutemia, text.white]}>
+                (Have a Nice day)
+              </Text>
             </View>
           </LinearGradient>
         </View>
-        <View style={[appStyle.bodyHeight35, appStyle.bodyBg]}>
+        <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
           <ScrollView>
             <View style={[style.pv20]}>
-              <View style={[appStyle.rowJustify, style.ph20]}>
-                <Text style={[text.heading4, text.semibold]}>Popular</Text>
+              <View style={[style.aiCenter]}>
+                <View style={[image.ovalcontainer]}>
+                  <Image
+                    source={images.HomeImg}
+                    style={[image.ovalcontainerupload]}
+                  />
+                </View>
+                <View style={style.mv5}>
+                  <Text style={[text.paraGray, text.text18, text.goodfishbd]}>
+                    Muhammad Umer Fareed
+                  </Text>
+                </View>
+                <View style={[style.mv5]}>
+                  <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.starCount}
+                    selectedStar={(rating) => this.onStarRatingPress(rating)}
+                    fullStarColor={'#000'}
+                    emptyStarColor={'#000'}
+                    starSize={20}
+                    containerStyle={{width: 110, marginTop: 3}}
+                  />
+                  <Text style={[text.center, style.mv5]}> Reviews(4/5.0)</Text>
+                </View>
+              </View>
+              <View style={[style.row, style.mv10, style.aiCenter]}>
+                <View style={style.mr15}>
+                  <Image source={images.cart} style={image.medium}></Image>
+                </View>
+                <Text style={text.heading2Gray}>Included Items</Text>
+              </View>
+              <View style={[style.row, style.mv10, style.aiCenter]}>
+                <View style={style.mr15}>
+                  <Image source={images.location} style={image.medium}></Image>
+                </View>
+                <Text style={text.heading2Gray}>Location</Text>
+              </View>
+              <View
+                style={[
+                  appStyle.rowBtw,
+                  style.mh15,
+                  style.mt40,
+                  appStyle.bodyShadowTop,
+                ]}>
                 <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('Mechaniclist');
-                  }}>
-                  <Text style={[text.link]}>See all</Text>
+                  style={[appStyle.colLeft, style.row, style.aiCenter]}>
+                  <View style={style.mr5}>
+                    <Image
+                      source={images.phone}
+                      style={[
+                        image.medium,
+                        {tintColor: colors.darkyellow},
+                      ]}></Image>
+                  </View>
+                  <Text
+                    style={[style.asCenter, text.heading2Gray, text.semibold]}>
+                    Contact Us
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[appStyle.colRight, style.row, style.aiCenter]}>
+                  <View style={style.mr5}>
+                    <Image
+                      source={images.location}
+                      style={image.medium}></Image>
+                  </View>
+
+                  <Text
+                    style={[style.asCenter, text.heading2Gray, text.semibold]}>
+                    Locate Me
+                  </Text>
                 </TouchableOpacity>
               </View>
-
-              <View style={[appStyle.bodyContainerLayout]}></View>
             </View>
           </ScrollView>
         </View>
       </SafeAreaView>
     );
+                    }
+                    else{
+                      return (
+                        <SafeAreaView style={[appStyle.safeContainer]}>
+                          <StatusBar
+                            barStyle={'light-content'}
+                            backgroundColor={'transparent'}
+                            translucent={true}
+                          />
+                  
+                          {/*Body */}
+                          <View style={{}}>
+                            <LinearGradient
+                              colors={colors.orablu}
+                              start={{x: -0.9, y: 1}}
+                              end={{x: 1, y: 0}}
+                              style={{height: screenHeight.height30}}>
+                              <View style={{postion: 'absolute', top: 30, left: 10, width: 30}}>
+                                <Hamburger />
+                              </View>
+                             
+                              <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
+                                <Text style={[text.VanityBold, text.white, text.text30]}>
+                                  Dashboard
+                                </Text>
+                                <Text style={[text.text18, text.Eutemia, text.white]}>
+                                  (Have a Nice day)
+                                </Text>
+                              </View>
+                            </LinearGradient>
+                          </View>
+                          <View style={[appStyle.bodyBg]}>
+                            <ScrollView>
+                              <View style={[style.pv20]}>
+                                <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
+                                  <Text style={[text.goodfishbd, text.text40, text.greyRegular]}>
+                                    Hi Umer
+                                  </Text>
+                                </View>
+                                <View style={[style.aiCenter, style.mv10]}>
+                                  <View style={image.boxContainer}>
+                                    <Text style={[text.text30, text.white]}> 5$</Text>
+                                  </View>
+                                  <View style={style.mv10}>
+                                    <Text style={[text.text20, text.goodfishbd, text.darkBlue]}>
+                                      {' '}
+                                      Your Earning
+                                    </Text>
+                                  </View>
+                                </View>
+                                <View style={[style.aiCenter, style.mv10]}>
+                                  <View style={[style.mv5]}>
+                                    <StarRating
+                                      disabled={true}
+                                      maxStars={5}
+                                      rating={this.state.starCount}
+                                      selectedStar={(rating) => this.onStarRatingPress(rating)}
+                                      fullStarColor={'#000'}
+                                      emptyStarColor={'#000'}
+                                      starSize={20}
+                                      containerStyle={{width: 110, marginTop: 3}}
+                                    />
+                                    <Text style={[text.center, style.mv5]}> Reviews(4/5.0)</Text>
+                                  </View>
+                                </View>
+                                <View
+                                  style={[
+                                    style.aiCenter,
+                                    style.mv10,
+                                    button.button1
+                                  ]}>
+                                  <Text
+                                    style={[
+                                    button.btntext1
+                                    ]}>
+                                    {' '}
+                                    You are {this.state.btntext}
+                                  </Text>
+                                </View>
+                                <View style={[style.aiCenter, style.mv10]}>
+                                  <TouchableOpacity
+                                    onPress={this.changeStatus}
+                                    style={[
+                                      image.ovalcontainer,
+                                      {
+                                        borderColor: this.state.bordercolor,
+                                        borderWidth: 5,
+                                        backgroundColor: this.state.btnbackgroundcolor,
+                                      },
+                                    ]}>
+                                    <Text
+                                      style={[
+                                        text.text16,
+                                        text.center,
+                                        text.spacing,
+                                        {color: this.state.btncolor},
+                                      ]}>
+                                      {' '}
+                                      {this.state.btntext}
+                                    </Text>
+                                  </TouchableOpacity>
+                                
+                                </View>
+                              </View>
+                            </ScrollView>
+                          </View>
+                        </SafeAreaView>
+                      );
+                  
+                    }
   }
 }

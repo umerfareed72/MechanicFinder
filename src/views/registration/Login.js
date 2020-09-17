@@ -286,17 +286,19 @@ export default class Login extends Component {
                   end={{x: 1, y: 0}}
                   style={[style.headerHeight4]}>
                   <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                    <Image source={images.logoDark} style={[image.splashImg]} />
-                  </View>
+                  <Text style={[text.Eutemia,text.white,text.text30]}>Smart Auto Mechanic Finder</Text>
+                  <Text style={[text.text18,text.CinzelDecorativeBold,text.white]}>(User)</Text>
+                 
+                     </View>
                 </LinearGradient>
               </View>
 
               <View style={[appStyle.bodyBg]}>
                 <View style={[appStyle.headingLayout]}>
-                  <Text style={[style.headerStyle]}>Welcome</Text>
+                  <Text style={[style.headerStyle,text.OpenSans]}>Welcome</Text>
                 </View>
                 <View>
-                  <View style={[input.textinputcontainer, style.mv20]}>
+                  <View style={[input.textinputcontainer]}>
                     <Image
                       source={images.email}
                       style={image.InputImage}></Image>
@@ -312,7 +314,7 @@ export default class Login extends Component {
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
 
-                  <View style={[input.textinputcontainer, style.mv20]}>
+                  <View style={[input.textinputcontainer, style.mt20]}>
                     <Image source={images.key} style={image.InputImage}></Image>
                     <TextInput
                       onFocus={this.changeheight}
@@ -326,12 +328,12 @@ export default class Login extends Component {
                       secureTextEntry={true}
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
-                  <View style={style.pv15}>
+                  <View style={[style.pv10,style.ph30]}>
                     <Text
                       onPress={() => {
                         this.props.navigation.navigate('Forgot');
                       }}
-                      style={[text.center, text.text10, {color: colors.gray}]}>
+                      style={[text.right, text.text14, {color: colors.link}]}>
                       Forgot Password
                     </Text>
                   </View>
@@ -372,54 +374,11 @@ export default class Login extends Component {
                     </TouchableOpacity>
                   </View>
                 </View>
-
-                <View style={[style.asCenter, style.mt40]}>
-                  <Text style={[text.heading6]}>DO YOU HAVE AN ACCOUNT?</Text>
-                </View>
-                <View
-                  style={[
-                    appStyle.rowBtw,
-                    style.mh15,
-                    style.mv10,
-                    appStyle.bodyShadowTop,
-                  ]}>
-                  <TouchableOpacity
-                    onPress={this.UserRegister}
-                    style={[
-                      {backgroundColor: this.state.Uregister},
-                      appStyle.colLeft,
-                    ]}>
-                    <Text
-                      style={[
-                        style.asCenter,
-                        text.heading3,
-                        text.semibold,
-                        {color: this.state.textUser},
-                      ]}>
-                      User
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={this.MechanicRegister}
-                    style={[
-                      appStyle.colRight,
-                      {backgroundColor: this.state.Mregister},
-                    ]}>
-                    <Text
-                      style={[
-                        style.asCenter,
-                        text.heading3,
-                        text.semibold,
-                        {color: this.state.textMechanic},
-                      ]}>
-                      Mechanic
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={[style.asCenter, style.mv10]}>
-                  <Text style={[text.heading6]}>Login as </Text>
-                </View>
+                <View style={[style.mv20, style.mh10]}>
+              <Text style={[text.goodfishbd, text.text18, text.center]}>
+              Login As
+              </Text>
+            </View>
                 <View
                   style={[
                     appStyle.rowBtw,
@@ -461,7 +420,53 @@ export default class Login extends Component {
                     </Text>
                   </TouchableOpacity>
                 </View>
-              </View>
+                <View style={[style.mv20, style.mh10]}>
+              <Text style={[text.goodfishbd, text.text18, text.center]}>
+               Do You have an Account?
+              </Text>
+            </View>
+                <View
+                  style={[
+                    appStyle.rowBtw,
+                    style.mh15,
+                    style.mv10,
+                    appStyle.bodyShadowTop,
+                  ]}>
+                  <TouchableOpacity
+                    onPress={this.UserRegister}
+                    style={[
+                      {backgroundColor: this.state.Uregister},
+                      appStyle.colLeft,
+                    ]}>
+                    <Text
+                      style={[
+                        style.asCenter,
+                        text.heading3,
+                        text.semibold,
+                        {color: this.state.textUser},
+                      ]}>
+                      User
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={this.MechanicRegister}
+                    style={[
+                      appStyle.colRight,
+                      {backgroundColor: this.state.Mregister},
+                    ]}>
+                    <Text
+                      style={[
+                        style.asCenter,
+                        text.heading3,
+                        text.semibold,
+                        {color: this.state.textMechanic},
+                      ]}>
+                      Mechanic
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                          </View>
             </ScrollView>
           </KeyboardAvoidingView>
         </SafeAreaView>
