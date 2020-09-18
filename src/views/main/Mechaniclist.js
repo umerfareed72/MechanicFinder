@@ -58,16 +58,22 @@ export default class Mechaniclist extends Component {
   }
 
   changebuttoncolor = (id) => {
-    this.setState({
-      slot: id,
-    });
-    if (this.state.slot == id) {
-      // console.log(this.state.dataSource[id])
-      this.props.navigation.navigate('HomeDetail');
-      const senddata = JSON.stringify(this.state.dataSource[id]);
+    AsyncStorage.getItem('bookdata').then((res) => {
+      if (res == null) {
+        this.setState({
+          slot: id,
+        });
+        if (this.state.slot == id) {
+          // console.log(this.state.dataSource[id])
+          this.props.navigation.navigate('HomeDetail');
+          const senddata = JSON.stringify(this.state.dataSource[id]);
 
-      AsyncStorage.setItem('data', senddata);
-    }
+          AsyncStorage.setItem('data', senddata);
+        }
+      } else {
+        alert('User Already book a mechanic');
+      }
+    });
   };
   showMechanics = () => {
     AsyncStorage.getItem('userId')
