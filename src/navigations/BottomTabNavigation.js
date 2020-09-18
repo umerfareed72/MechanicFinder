@@ -154,43 +154,43 @@ const Navigator = createMaterialBottomTabNavigator(
   },
 );
 
-const Navigators = createMaterialBottomTabNavigator(
-  {
-    BookNow: {
-      screen: BookNow,
-      navigationOptions: {
-        tabBarLabel: 'Profile',
-        tabBarIcon: ({tintColor}) => (
-          <Image
-            style={{resizeMode: 'contain', height: 25, width: 25}}
-            source={images.userIcon}
-          />
-        ),
-      },
-    },
+// const Navigators = createMaterialBottomTabNavigator(
+//   {
+//     BookNow: {
+//       screen: BookNow,
+//       navigationOptions: {
+//         tabBarLabel: 'Profile',
+//         tabBarIcon: ({tintColor}) => (
+//           <Image
+//             style={{resizeMode: 'contain', height: 25, width: 25}}
+//             source={images.userIcon}
+//           />
+//         ),
+//       },
+//     },
 
-    ChatBox: {
-      screen: ChatBox,
-      navigationOptions: {
-        tabBarLabel: 'ChatBox',
-        tabBarIcon: ({tintColor}) => (
-          <Image
-            style={{resizeMode: 'contain', height: 25, width: 25}}
-            source={images.chatBox}
-          />
-        ),
-      },
-    },
-  },
-  {
-    initialRouteName: 'BookNow',
-    activeColor: '#F59E52',
-    activeBackgroundColor: '#fff',
-    inactiveBackgroundColor: '#fff',
-    inactiveColor: '#4E5967',
-    barStyle: {backgroundColor: '#fff'},
-  },
-);
+//     ChatBox: {
+//       screen: ChatBox,
+//       navigationOptions: {
+//         tabBarLabel: 'ChatBox',
+//         tabBarIcon: ({tintColor}) => (
+//           <Image
+//             style={{resizeMode: 'contain', height: 25, width: 25}}
+//             source={images.chatBox}
+//           />
+//         ),
+//       },
+//     },
+//   },
+//   {
+//     initialRouteName: 'BookNow',
+//     activeColor: '#F59E52',
+//     activeBackgroundColor: '#fff',
+//     inactiveBackgroundColor: '#fff',
+//     inactiveColor: '#4E5967',
+//     barStyle: {backgroundColor: '#fff'},
+//   },
+// );
 const TabNavigator = createDrawerNavigator(
   {
     Navigator: {
@@ -199,9 +199,9 @@ const TabNavigator = createDrawerNavigator(
     Dashboard: {
       screen: DashboardStack,
     },
-    Navigators: {
-      screen: Navigators,
-    },
+    // Navigators: {
+    //   screen: Navigators,
+    // },
   },
   {
     contentComponent: SideMenu,

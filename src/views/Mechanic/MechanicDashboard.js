@@ -15,7 +15,6 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  AsyncStorage,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 
@@ -36,7 +35,7 @@ import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import Hamburger from '../../components/headerComponent/Hamburger';
-
+import AsyncStorage from '@react-native-community/async-storage';
 export default class MechanicDashboard extends Component {
   constructor(props) {
     super(props);
@@ -45,50 +44,61 @@ export default class MechanicDashboard extends Component {
       latitude: '',
       mechanicid: '',
       loading: false,
-      items: [],
+      token: '',
       refreshing: false,
       dataSource: [],
-      btncolor: colors.white,
-      btnbackgroundcolor: colors.darkBlue,
-      bordercolor: colors.grayd7,
-      btntext: 'Offline',
+      data:[]
     };
   }
-  changeStatus = () => {
-    if (this.state.btnbackgroundcolor == colors.darkBlue) {
-      this.setState({
-        btnbackgroundcolor: colors.white,
-        btncolor: colors.black,
-        bordercolor: colors.darkyellow,
-        btntext: 'Online',
-      });
-    } else {
-      this.setState({
-        btnbackgroundcolor: colors.darkBlue,
-        btncolor: colors.white,
-        bordercolor: colors.grayd7,
-        btntext: 'Offline',
-      });
-    }
+  getMechanicdata = () => {
+    AsyncStorage.getItem('token').then((res) => {
+      this.setState({token: res});
+      console.log(res);
+      axios
+        .get(URL.Url + 'me', {
+          headers: {
+            'x-access-token': this.state.token,
+          },
+        })
+        .then((response) => {
+          this.setState({mechanicid: response.data.mechanicid});
+          axios
+            .get(URL.Url + 'mechanic/' + this.state.mechanicid)
+            .then((response) => {
+              console.log(this.state.mechanicid);
+              axios
+                .put(URL.Url + 'mechaniclocation', {
+                  mechanicid: this.state.mechanicid,
+                  latitude: this.state.latitude,
+                  longitude: this.state.longitude,
+                })
+                .then((response) => {
+                  this.setState({dataSource: response.data});
+                  console.log(this.state.dataSource);
+                  axios
+                  .get(URL.Url + 'mechanic/' + this.state.mechanicid)
+                  .then((response) => {
+                    console.log(response.data);
+                    this.setState({data: response.data});
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+            
+                })
+                .catch((error) => {
+                  console.log('Error agya', error);
+                });
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
   };
-  getId = () => {
-    axios
-      .get(URL.Url + 'me', {
-        headers: {
-          'x-access-token':
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZWNoYW5pY2lkIjoiNWY1MGE4M2FiMTRlNjIyYmQ4NjlkZTRkIiwiaWF0IjoxNTk5MTIxNDY4fQ.Dm6ItyGXXrPV4KtAEOgB8F9M6yJDhl56VVOyDjsHBWw',
-        },
-      })
-      .then((response) => {
-        console.log(response.data.mechanicid);
-        this.setState({mechanicid: response.data.mechanicid});
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  requestUserLocation = async () => {
+  requestMechanicLocation = async () => {
     try {
+     
       const grantedLocation = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
@@ -119,18 +129,7 @@ export default class MechanicDashboard extends Component {
               longitude: position.coords.longitude,
               latitude: position.coords.latitude,
             });
-            axios
-              .patch(URL.Url + 'mechanicregister', {
-                mechanicid: this.state.mechanicid,
-                longitude: this.state.longitude,
-                latitude: this.state.latitude,
-              })
-              .then((response) => {
-                console.log(response);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+            this.getMechanicdata();
           },
           (error) => {
             // See error code charts below.
@@ -150,233 +149,143 @@ export default class MechanicDashboard extends Component {
     });
   }
   componentDidMount() {
-    this.requestUserLocation();
-    this.getId();
-  }
+    this.requestMechanicLocation();
+     }
 
   render() {
-    if(this.state.dataSource==[]){
-    return (
-      <SafeAreaView style={[appStyle.safeContainer]}>
-        <StatusBar
-          barStyle={'light-content'}
-          backgroundColor={'transparent'}
-          translucent={true}
-        />
+      return (
+        <SafeAreaView style={[appStyle.safeContainer]}>
+          <StatusBar
+            barStyle={'light-content'}
+            backgroundColor={'transparent'}
+            translucent={true}
+          />
 
-        {/*Body */}
-        <View style={{}}>
-          <LinearGradient
-            colors={colors.orablu}
-            start={{x: -0.9, y: 1}}
-            end={{x: 1, y: 0}}
-            style={{height: screenHeight.height30}}>
-            <View style={{postion: 'absolute', top: 30, left: 10, width: 30}}>
-              <Hamburger />
-            </View>
+          {/*Body */}
+          <View style={{}}>
+            <LinearGradient
+              colors={colors.orablu}
+              start={{x: -0.9, y: 1}}
+              end={{x: 1, y: 0}}
+              style={{height: screenHeight.height30}}>
+              <View style={{postion: 'absolute', top: 30, left: 10, width: 30}}>
+                <Hamburger />
+              </View>
 
-            <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-              <Text style={[text.VanityBold, text.white, text.text30]}>
-                Dashboard
-              </Text>
-              <Text style={[text.text18, text.Eutemia, text.white]}>
-                (Have a Nice day)
-              </Text>
-            </View>
-          </LinearGradient>
-        </View>
-        <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
-          <ScrollView>
-            <View style={[style.pv20]}>
-              <View style={[style.aiCenter]}>
-                <View style={[image.ovalcontainer]}>
-                  <Image
-                    source={images.HomeImg}
-                    style={[image.ovalcontainerupload]}
-                  />
-                </View>
-                <View style={style.mv5}>
-                  <Text style={[text.paraGray, text.text18, text.goodfishbd]}>
-                    Muhammad Umer Fareed
-                  </Text>
-                </View>
-                <View style={[style.mv5]}>
-                  <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.starCount}
-                    selectedStar={(rating) => this.onStarRatingPress(rating)}
-                    fullStarColor={'#000'}
-                    emptyStarColor={'#000'}
-                    starSize={20}
-                    containerStyle={{width: 110, marginTop: 3}}
-                  />
-                  <Text style={[text.center, style.mv5]}> Reviews(4/5.0)</Text>
-                </View>
+              <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
+                <Text style={[text.VanityBold, text.white, text.text30]}>
+                  Dashboard
+                </Text>
+                <Text style={[text.text18, text.Eutemia, text.white]}>
+                  (Have a Nice day)
+                </Text>
               </View>
-              <View style={[style.row, style.mv10, style.aiCenter]}>
-                <View style={style.mr15}>
-                  <Image source={images.cart} style={image.medium}></Image>
-                </View>
-                <Text style={text.heading2Gray}>Included Items</Text>
-              </View>
-              <View style={[style.row, style.mv10, style.aiCenter]}>
-                <View style={style.mr15}>
-                  <Image source={images.location} style={image.medium}></Image>
-                </View>
-                <Text style={text.heading2Gray}>Location</Text>
-              </View>
-              <View
-                style={[
-                  appStyle.rowBtw,
-                  style.mh15,
-                  style.mt40,
-                  appStyle.bodyShadowTop,
-                ]}>
-                <TouchableOpacity
-                  style={[appStyle.colLeft, style.row, style.aiCenter]}>
-                  <View style={style.mr5}>
-                    <Image
-                      source={images.phone}
-                      style={[
-                        image.medium,
-                        {tintColor: colors.darkyellow},
-                      ]}></Image>
-                  </View>
+            </LinearGradient>
+          </View>
+          <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
+            <ScrollView>
+              <View style={[style.pv20]}>
+                <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
                   <Text
-                    style={[style.asCenter, text.heading2Gray, text.semibold]}>
-                    Contact Us
+                    style={[text.goodfishbd, text.text40, text.greyRegular]}>
+                    Hi {this.state.data.firstname}
                   </Text>
-                </TouchableOpacity>
+                  <View style={[style.mv5]}>
+                    <StarRating
+                      disabled={true}
+                      maxStars={5}
+                      rating={this.state.starCount}
+                      selectedStar={(rating) => this.onStarRatingPress(rating)}
+                      fullStarColor={'#000'}
+                      emptyStarColor={'#000'}
+                      starSize={20}
+                      containerStyle={{width: 110, marginTop: 3}}
+                    />
+                    <Text style={[text.center, style.mv5]}>
+                      {' '}
+                      Reviews(4/5.0)
+                    </Text>
+                  </View>
+                </View>
+                <View style={[style.aiCenter, style.mv10]}>
+                  <View style={image.boxContainer}>
+                    <Text style={[text.text30]}> 5$</Text>
+                  </View>
+                  <View style={style.mv10}>
+                    <Text style={[text.text20, text.goodfishbd, text.darkBlue]}>
+                      {' '}
+                      Your Earning
+                    </Text>
+                  </View>
+                </View>
+
+              
+                <View style={[appStyle.rowJustify]}>
+                  <Text style={[text.heading4, text.semibold]}>
+                    Top Mechanics
+                  </Text>
+                  <Text style={[text.heading4, text.semibold]}>
+                   You need to Know
+                  </Text>
+                </View>
 
                 <TouchableOpacity
-                  style={[appStyle.colRight, style.row, style.aiCenter]}>
-                  <View style={style.mr5}>
-                    <Image
-                      source={images.location}
-                      style={image.medium}></Image>
-                  </View>
+                  onPress={()=>{this.props.navigation.navigate("UserProfile")}}
+                  style={[
+                    appStyle.slotCard,
+                    appStyle.rowJustify,
+                    style.aiCenter,
+                  ]}>
+                  <View style={[style.row, style.aiCenter]}>
+                    <View style={style.mr10}>
+                      <Image style={image.userImg} source={images.dummy1} />
+                    </View>
 
-                  <Text
-                    style={[style.asCenter, text.heading2Gray, text.semibold]}>
-                    Locate Me
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </ScrollView>
-        </View>
-      </SafeAreaView>
-    );
-                    }
-                    else{
-                      return (
-                        <SafeAreaView style={[appStyle.safeContainer]}>
-                          <StatusBar
-                            barStyle={'light-content'}
-                            backgroundColor={'transparent'}
-                            translucent={true}
+                    <View style={[style.rowBtw, style.aiCenter]}>
+                      <View style={[style.mr15]}>
+                        <Image
+                          source={images.imagep}
+                          style={[image.image50]}></Image>
+                      </View>
+                      <View>
+                        <View>
+                          <Text style={[text.text16, text.bold]}>
+                            Umer Fareed
+                          </Text>
+                        </View>
+                        <View style={style.row}>
+                          <Text style={[text.text15, {color: colors.gray}]}>
+                            umerfareeed72@gmail.com
+                          </Text>
+                        </View>
+                        <View style={[style.mv5]}>
+                          <StarRating
+                            disabled={true}
+                            maxStars={5}
+                            rating={this.state.starCount}
+                            selectedStar={(rating) =>
+                              this.onStarRatingPress(rating)
+                            }
+                            fullStarColor={'#F59E52'}
+                            emptyStarColor={'#F59E52'}
+                            starSize={18}
+                            containerStyle={{width: 110, marginTop: 3}}
                           />
-                  
-                          {/*Body */}
-                          <View style={{}}>
-                            <LinearGradient
-                              colors={colors.orablu}
-                              start={{x: -0.9, y: 1}}
-                              end={{x: 1, y: 0}}
-                              style={{height: screenHeight.height30}}>
-                              <View style={{postion: 'absolute', top: 30, left: 10, width: 30}}>
-                                <Hamburger />
-                              </View>
-                             
-                              <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                                <Text style={[text.VanityBold, text.white, text.text30]}>
-                                  Dashboard
-                                </Text>
-                                <Text style={[text.text18, text.Eutemia, text.white]}>
-                                  (Have a Nice day)
-                                </Text>
-                              </View>
-                            </LinearGradient>
-                          </View>
-                          <View style={[appStyle.bodyBg]}>
-                            <ScrollView>
-                              <View style={[style.pv20]}>
-                                <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                                  <Text style={[text.goodfishbd, text.text40, text.greyRegular]}>
-                                    Hi Umer
-                                  </Text>
-                                </View>
-                                <View style={[style.aiCenter, style.mv10]}>
-                                  <View style={image.boxContainer}>
-                                    <Text style={[text.text30, text.white]}> 5$</Text>
-                                  </View>
-                                  <View style={style.mv10}>
-                                    <Text style={[text.text20, text.goodfishbd, text.darkBlue]}>
-                                      {' '}
-                                      Your Earning
-                                    </Text>
-                                  </View>
-                                </View>
-                                <View style={[style.aiCenter, style.mv10]}>
-                                  <View style={[style.mv5]}>
-                                    <StarRating
-                                      disabled={true}
-                                      maxStars={5}
-                                      rating={this.state.starCount}
-                                      selectedStar={(rating) => this.onStarRatingPress(rating)}
-                                      fullStarColor={'#000'}
-                                      emptyStarColor={'#000'}
-                                      starSize={20}
-                                      containerStyle={{width: 110, marginTop: 3}}
-                                    />
-                                    <Text style={[text.center, style.mv5]}> Reviews(4/5.0)</Text>
-                                  </View>
-                                </View>
-                                <View
-                                  style={[
-                                    style.aiCenter,
-                                    style.mv10,
-                                    button.button1
-                                  ]}>
-                                  <Text
-                                    style={[
-                                    button.btntext1
-                                    ]}>
-                                    {' '}
-                                    You are {this.state.btntext}
-                                  </Text>
-                                </View>
-                                <View style={[style.aiCenter, style.mv10]}>
-                                  <TouchableOpacity
-                                    onPress={this.changeStatus}
-                                    style={[
-                                      image.ovalcontainer,
-                                      {
-                                        borderColor: this.state.bordercolor,
-                                        borderWidth: 5,
-                                        backgroundColor: this.state.btnbackgroundcolor,
-                                      },
-                                    ]}>
-                                    <Text
-                                      style={[
-                                        text.text16,
-                                        text.center,
-                                        text.spacing,
-                                        {color: this.state.btncolor},
-                                      ]}>
-                                      {' '}
-                                      {this.state.btntext}
-                                    </Text>
-                                  </TouchableOpacity>
-                                
-                                </View>
-                              </View>
-                            </ScrollView>
-                          </View>
-                        </SafeAreaView>
-                      );
-                  
-                    }
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+
+                  <TouchableOpacity>
+                    <Image
+                      style={[image.forward]}
+                      source={images.arrowLong}></Image>
+                  </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          </View>
+        </SafeAreaView>
+      );
   }
 }

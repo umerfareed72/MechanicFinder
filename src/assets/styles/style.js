@@ -314,6 +314,15 @@ marginHorizontal:15
   w100: {
     width: '100%',
   },
+  w40:{
+    width:'40%'
+  },
+  w45:{
+    width:'45%'
+  },
+  w60:{
+    width:'60%'
+  },
   w50: {
     width: '50%',
   },

@@ -1,48 +1,49 @@
-import { StyleSheet, Dimensions } from 'react-native';
-const { height, width } = Dimensions.get('screen');
-import { colors, screenHeight, screenWidth, images } from '../../config/Constant';
+import {StyleSheet, Dimensions} from 'react-native';
+const {height, width} = Dimensions.get('screen');
+import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 export default StyleSheet.create({
   //All Sizes
   tiny: {
     height: 10,
     width: 10,
-    resizeMode: "contain",
-    alignSelf: "center"
+    resizeMode: 'contain',
+    alignSelf: 'center',
   },
-  small:{
-height:14,
-width:14,
-resizeMode:'contain'
+  small: {
+    height: 14,
+    width: 14,
+    resizeMode: 'contain',
   },
-  medium:{
-    height:18,
-    width:18,
-    resizeMode:'contain'
+  medium: {
+    height: 18,
+    width: 18,
+    resizeMode: 'contain',
   },
-  large:{
-    height:30,
-    width:30,
-    resizeMode:'contain'
+  large: {
+    height: 30,
+    width: 30,
+    resizeMode: 'contain',
   },
-  
-  
+
   // all images  style here
-
-
 
   backArrow2: {
     width: 20,
     height: 25,
     top: 5,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   forward: {
-    height: 25, width: 25, resizeMode: 'contain'
+    height: 25,
+    width: 25,
+    resizeMode: 'contain',
   },
 
-  
-  userImg:{
-    width:65,height:65,resizeMode:'cover',borderRadius:130/2
+  userImg: {
+    width: 65,
+    height: 65,
+    resizeMode: 'cover',
+    borderRadius: 130 / 2,
   },
 
   insidebox: {
@@ -50,31 +51,27 @@ resizeMode:'contain'
     width: 20,
     resizeMode: 'contain',
     marginHorizontal: 10,
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     marginVertical: 10,
-
-
   },
   centerimage: {
     flexDirection: 'row',
     padding: 15,
     alignItems: 'center',
     backgroundColor: '#fff',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   Size50: {
     height: 45,
     width: 45,
-    alignSelf: "center",
-    resizeMode:"stretch"
-
+    alignSelf: 'center',
+    resizeMode: 'stretch',
   },
   Size57: {
     height: 45,
     width: 45,
-    alignSelf: "center",
-    resizeMode:"stretch"
-
+    alignSelf: 'center',
+    resizeMode: 'stretch',
   },
   smallovalcontainer: {
     height: 20,
@@ -93,9 +90,7 @@ resizeMode:'contain'
     backgroundColor: colors.lightgray,
     borderColor: colors.gray,
     justifyContent: 'center',
-    marginVertical:5,
-   
-    
+    marginVertical: 5,
   },
   largeovalcontainer: {
     height: 150,
@@ -104,9 +99,7 @@ resizeMode:'contain'
     backgroundColor: colors.lightgray,
     borderColor: colors.gray,
     justifyContent: 'center',
-    marginVertical:5,
-   
-    
+    marginVertical: 5,
   },
   largeovalcontainerupload: {
     height: 150,
@@ -116,7 +109,7 @@ resizeMode:'contain'
     borderColor: colors.gray,
     justifyContent: 'center',
   },
-    ovalcontainerupload: {
+  ovalcontainerupload: {
     height: 90,
     width: 90,
     borderRadius: 90,
@@ -125,28 +118,26 @@ resizeMode:'contain'
     justifyContent: 'center',
   },
   attachtextimageleft: {
-    flex:1,
-    flexDirection:"row",
+    flex: 1,
+    flexDirection: 'row',
     padding: 15,
     alignItems: 'center',
     // paddingHorizontal: 20
   },
   attachtextimageright: {
-    flex:1,
-    flexDirection:"row",
+    flex: 1,
+    flexDirection: 'row',
     padding: 15,
     alignItems: 'center',
     backgroundColor: '#fff',
-   
   },
 
   drawerIcon: {
     height: 20,
     width: 20,
     marginRight: 10,
-    resizeMode: "contain",
-    tintColor:colors.white
-
+    resizeMode: 'contain',
+    tintColor: colors.white,
   },
   smallimagestyle: {
     height: 18,
@@ -158,13 +149,13 @@ resizeMode:'contain'
     height: 26,
     width: 33,
     alignSelf: 'center',
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   largeimagestyle: {
     height: 35,
     width: 45,
     alignSelf: 'center',
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   leftimage: {
     height: 13,
@@ -180,7 +171,7 @@ resizeMode:'contain'
     height: 100,
     width: 200,
     resizeMode: 'contain',
-  borderRadius:100
+    borderRadius: 100,
   },
   InputImage: {
     marginRight: 15,
@@ -189,11 +180,11 @@ resizeMode:'contain'
     resizeMode: 'contain',
   },
   username: {
-
     marginRight: 15,
     height: 25,
 
-    width: 24, resizeMode: 'contain'
+    width: 24,
+    resizeMode: 'contain',
   },
   searchIcon: {
     height: 18,
@@ -201,7 +192,7 @@ resizeMode:'contain'
     resizeMode: 'contain',
     marginHorizontal: 15,
   },
-  
+
   homeImgLarge: {
     width: screenWidth.width100 - 80,
     height: screenHeight.height25,
@@ -209,7 +200,7 @@ resizeMode:'contain'
     resizeMode: 'cover',
   },
   homeCategoryImg: {
-  marginHorizontal:20,
+    marginHorizontal: 20,
     height: screenHeight.height20,
     borderRadius: 10,
     resizeMode: 'contain',
@@ -223,31 +214,27 @@ resizeMode:'contain'
     justifyContent: 'center',
   },
 
-  locationIcon: {
-    height: 20,
-    width: 20,
-    resizeMode: 'contain',
-    tintColor:colors.orange
-  },
   locationIconSmall: {
     height: 15,
     width: 15,
     resizeMode: 'contain',
-    marginRight: 5
+    marginRight: 5,
   },
   galleryImg: {
     width: screenWidth.width100 / 2 - 12,
-    height: screenHeight.height100 / 6, resizeMode: 'contain',
+    height: screenHeight.height100 / 6,
+    resizeMode: 'contain',
     marginHorizontal: 5,
-    borderRadius: 4
+    borderRadius: 4,
   },
   plusImg: {
     height: 17,
     width: 17,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   savedImage: {
-    width: '100%', height: screenWidth.width100 / 3
+    width: '100%',
+    height: screenWidth.width100 / 3,
   },
   crossImg: {
     position: 'absolute',
@@ -260,14 +247,13 @@ resizeMode:'contain'
   emailIcon: {
     width: 20,
     height: 13,
-    marginRight:15,
-    resizeMode: 'contain'
+    marginRight: 15,
+    resizeMode: 'contain',
   },
   circleTick: {
     height: 40,
     width: 40,
     resizeMode: 'contain',
-
   },
   clockIcon: {
     width: 18,
@@ -278,56 +264,56 @@ resizeMode:'contain'
   drawerIconsmall: {
     height: 16,
     width: 16,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   icon40: {
     height: 40,
     width: 40,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   drawerIconmedium: {
     height: 19,
     width: 19,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   drawerIconlarge: {
     height: 22,
     width: 22,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   backArrow: {
     width: 10,
     height: 14,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   headerBackArrow: {
-    position:"absolute",
+    position: 'absolute',
     top: 30,
     left: 10,
     padding: 10,
   },
 
-
   storeImg: {
-    
     // height:"80%",
-    width:"100%",
-    height:screenWidth.width45-30,
-    
+    width: '100%',
+    height: screenWidth.width45 - 30,
+
     borderRadius: 4,
     resizeMode: 'cover',
     justifyContent: 'space-evenly',
   },
-//Mechanic Side Styling
-boxContainer:{
-  marginVertical: 10,
-  borderRadius: 20,
-  backgroundColor: colors.black,
-  paddingVertical: 10,
-  paddingHorizontal: 50,
-  borderWidth: 5,
-  borderColor: colors.darkyellow,
-}
-
-
+  //Mechanic Side Styling
+  boxContainer: {
+    marginVertical: 10,
+    borderRadius: 20,
+    backgroundColor: colors.lightgray,
+    paddingVertical: 10,
+    paddingHorizontal: 50,
+    borderWidth: 5,
+    borderColor: colors.darkyellow,
+  },
+  //tin colors
+  Orange: {
+    tintColor: colors.orange,
+  },
 });

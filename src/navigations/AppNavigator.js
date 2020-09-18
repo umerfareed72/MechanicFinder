@@ -4,15 +4,21 @@ import TabNavigation from './BottomTabNavigation';
 import Splash from '../views/registration/Splash';
 import Login from '../views/registration/Login';
 import MechanicRegister from '../views/registration/MechanicRegister';
+import {
+  Button,
+  Image,
+  Text,
+  View,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
+import {colors, screenHeight, screenWidth, images} from '../config/Constant';
 // import TabNavigation from './BottomTabNavigation';
 import SignUp from '../views/registration/SignUp';
 import LoginasMechanic from '../views/registration/LoginasMechanic';
-
-import ChatBox from '../views/main/ChatBox';
 import ForgotPassword from '../views/registration/ForgotPassword';
-import MechanicNavigation from './MechanicNavigation'
-import React from 'react';
-import {colors} from '../config/Constant';
+import MechanicNavigation from './MechanicNavigation';
+import ProfileNavigator from './Profiles';
 
 const SplashStack = createStackNavigator(
   {
@@ -26,22 +32,31 @@ const SplashStack = createStackNavigator(
     },
   },
 );
+
 const AuthStack = createStackNavigator(
   {
     Login: Login,
     SignUp: SignUp,
-    LoginasMechanic:LoginasMechanic,
+    LoginasMechanic: LoginasMechanic,
     MechanicRegister: MechanicRegister,
     Forgot: ForgotPassword,
-
-    // BottomTabNavigation: TabNavigation,
-    ChatBox: ChatBox,
-  
   },
   {
     headerMode: 'none',
   },
 );
+
+
+
+const ProfileStack = createStackNavigator(
+  {
+    screen: ProfileNavigator,
+  },
+  {
+    headerMode: 'none',
+  },
+);
+
 const userStack = createStackNavigator(
   {
     screen: TabNavigation,
@@ -52,21 +67,21 @@ const userStack = createStackNavigator(
 );
 const mechanicStack = createStackNavigator(
   {
-screen: MechanicNavigation,
+    screen: MechanicNavigation,
   },
   {
     headerMode: 'none',
   },
 );
 
-
 export default createAppContainer(
   createSwitchNavigator(
     {
       Splash: SplashStack,
       Auth: AuthStack,
-    userStack:userStack,
-    mechanicStack:mechanicStack  
+      userStack: userStack,
+      mechanicStack: mechanicStack,
+      ProfileStack: ProfileStack,
     },
     {
       initialRouteName: 'Splash',

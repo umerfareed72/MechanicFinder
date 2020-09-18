@@ -278,58 +278,6 @@ export default class HomeDetail extends Component {
                   beatae vitae dicta sunt explicabo. Nemo.
                 </Text>
               </View>
-              <TouchableOpacity
-                style={[style.row, style.mt10, style.aiCenter]}
-                onPress={this.Checked}>
-                <Image
-                  style={image.InputImage}
-                  source={this.state.CheckBox}></Image>
-                <Text style={[text.text18, text.darkBlue]}>
-                  Are You Want To Buy Items
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={[
-                style.mb50,
-                appStyle.bodyLayout,
-                appStyle.bodyShadowBottom,
-                {
-                  backgroundColor: colors.white,
-                  display: this.state.BookNowView,
-                },
-              ]}>
-              <View style={[appStyle.rowCenter]}>
-                <View>
-                  <Text
-                    style={
-                      ({color: colors.Black323}, [text.text22, text.bold])
-                    }>
-                    $5
-                  </Text>
-                  <Text style={([text.text14], {color: colors.gray})}>
-                    Per Day
-                  </Text>
-                </View>
-                <View style={[{display: this.state.BookNowView}, style.flex1]}>
-                  <TouchableOpacity onPress={this.buyItems}>
-                    <View
-                      style={[
-                        button.buttoncontainer,
-                        {backgroundColor: colors.purple},
-                      ]}>
-                      <Text
-                        style={[
-                          {color: colors.white},
-                          button.touchablebutton,
-                          text.semibold,
-                        ]}>
-                        Book Now
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
             </View>
             <View
               style={[

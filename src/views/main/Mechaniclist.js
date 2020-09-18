@@ -15,6 +15,7 @@ import {
   Button,
   Platform,
 } from 'react-native';
+const axios = require('axios');
 import {
   URL,
   colors,
@@ -63,16 +64,25 @@ export default class Mechaniclist extends Component {
       // console.log(this.state.dataSource[id])
       this.props.navigation.navigate('HomeDetail');
       const senddata = JSON.stringify(this.state.dataSource[id]);
+      
       AsyncStorage.setItem('data', senddata);
+    0
     }
   };
 
   componentDidMount() {
-    AsyncStorage.getItem('Mechanicdata')
+    AsyncStorage.getItem('userId')
       .then((res) => {
-        res = JSON.parse(res);
-        this.setState({dataSource: res});
-        console.log(res);
+        const id = JSON.parse(res);
+        axios
+          .get(URL.Url + 'nearmechanics/' + id)
+          .then((response) => {
+            console.log(response.data);
+            this.setState({dataSource: response.data});
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       })
       .catch((error) => {
         console.log(error);
@@ -166,13 +176,12 @@ export default class Mechaniclist extends Component {
                       <View>
                         <View>
                           <Text style={[text.text16, text.bold]}>
-                            {data.firstname} {data.lastname}{' '}
+                            {data.firstname} {data.lastname}
                           </Text>
                         </View>
                         <View style={style.row}>
                           <Text style={[text.text15, {color: colors.gray}]}>
-                            {data.address}
-                            {data.city}
+                            {data.address} {data.city}
                           </Text>
                         </View>
                         <View style={[style.mv5]}>
@@ -194,8 +203,9 @@ export default class Mechaniclist extends Component {
                   </View>
 
                   <TouchableOpacity
+                    key={index}
                     onPress={() => {
-                      this.props.navigation.navigate('HomeDetail');
+                      this.changebuttoncolor(index);
                     }}>
                     <Image
                       style={[image.forward]}

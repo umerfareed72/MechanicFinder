@@ -80,7 +80,8 @@ export default class Login extends Component {
         console.log(res.data);
 
         try {
-          await AsyncStorage.setItem('mechanictoken', res.data.token);
+          await AsyncStorage.setItem('token', res.data.token);
+          console.log(res.data.token);
           this.props.navigation.navigate('mechanicStack');
         } catch (e) {
           console.log('error hai', e);
@@ -163,9 +164,7 @@ export default class Login extends Component {
                 </View>
 
                 <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('MechanicDashboard');
-                  }}>
+                  onPress={this.submitData}>
                   <View style={[button.buttoncontainer, style.mt20]}>
                     <Text
                       style={[

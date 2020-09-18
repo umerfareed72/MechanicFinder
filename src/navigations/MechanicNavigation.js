@@ -22,9 +22,6 @@ import {
   URL,
 } from '../config/Constant';
 
-
-
-
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
@@ -42,7 +39,7 @@ const DashboardStack = createStackNavigator(
 const SettingStack = createStackNavigator(
   {
     Setting: Setting,
-     },
+  },
   {
     headerMode: 'none',
     navigationOptions: {
@@ -91,11 +88,10 @@ const MechanicTabNavigator = createDrawerNavigator(
   {
     Navigator: {
       screen: Navigator,
-
     },
-    MechanicDashboard:{
-      screen:DashboardStack
-    }
+    MechanicDashboard: {
+      screen: DashboardStack,
+    },
   },
   {
     contentComponent: SideMenu,

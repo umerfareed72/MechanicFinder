@@ -57,40 +57,50 @@ export default class Overview extends Component {
       starCount: rating,
     });
   }
-
   makeCall = () => {
-    AsyncStorage.getItem('data').then((res) => {
-      res = JSON.parse(res);
-      console.log(res);
-      this.setState({data: res});
-      let phoneNumber = '';
-      if (Platform.OS === 'android') {
-        console.log(this.state.data.phone);
-        phoneNumber = 'tel:' + this.state.data.phone;
-      } else {
-        phoneNumber = 'telprompt:${1234567890}';
-      }
-  
-      Linking.openURL(phoneNumber);
-  
-    });
-     };
-  getMechanicLocation = () => {
-    AsyncStorage.getItem('data').then((res) => {
-      res = JSON.parse(res);
-      console.log(res);
-      this.setState({data: res});
-    });
-  };
+    let phoneNumber = '';
+    if (Platform.OS === 'android') {
+      console.log(this.state.data.phone);
+      phoneNumber = 'tel:' + this.state.data.phone;
+    } else {
+      phoneNumber = 'telprompt:${1234567890}';
+    }
 
+    Linking.openURL(phoneNumber);
+  };
+  getMechanicLocation = async () => {
+    try {
+      await AsyncStorage.getItem('data').then((res) => {
+        res = JSON.parse(res);
+        this.setState({data: res});
+        console.log(res);
+      });
+   this.RemoveBooking()
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  CancelBooking=()=>{
+      AsyncStorage.removeItem('data');
+      this.props.navigation.navigate('Dashboard')
+      }
+
+  RemoveBooking=()=>{
+    setTimeout(() => {
+      AsyncStorage.removeItem('data');
+      this.props.navigation.navigate('Dashboard')
+    
+    }, 100000);
+      }
   componentDidMount() {
+   
     Animated.loop(
       Animated.timing(
         // Animate over time
         this.state.fadeAnim, // The animated value to drive
         {
           toValue: 1, // Animate to opacity: 1 (opaque)
-          duration: 2000, // 2000ms
+          duration: 5000, // 5000ms
           useNativeDriver: true,
         },
       ),
@@ -116,10 +126,14 @@ export default class Overview extends Component {
   }
 
   render() {
-    let {fadeAnim} = this.state;
+    let {fadeAnim, data} = this.state;
     return (
       <SafeAreaView style={appStyle.safeContainer}>
-        <StatusBar barStyle={'light-content'} backgroundColor={'transparent'} />
+        <StatusBar
+          barStyle={'light-content'}
+          backgroundColor={'transparent'}
+          translucent={true}
+        />
 
         <View style={style.flex1}>
           <ImageBackground
@@ -128,17 +142,11 @@ export default class Overview extends Component {
             source={images.userImg}>
             <View style={style.bgOverlay} />
             <View style={[style.rowBtw, style.ph20, style.pb10]}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('HomeDetail')}>
-                <Image
-                  source={images.backarrowh}
-                  style={[image.backArrow2, {tintColor: colors.white}]}></Image>
-              </TouchableOpacity>
+              <View></View>
 
               <View>
                 <Text style={[text.heading1, text.bold]}>Profile</Text>
               </View>
-
               <Text style={[text.text16, text.orange]}></Text>
             </View>
           </ImageBackground>
@@ -146,7 +154,9 @@ export default class Overview extends Component {
           <View style={appStyle.curvedContainer}>
             <ScrollView style={style.ph20}>
               <View style={[style.mt30]}>
-                <Text style={[text.h1Purple]}>Mian Umer Fareed</Text>
+                <Text style={[text.h1Purple]}>
+                  {data.firstname} {data.lastname}{' '}
+                </Text>
               </View>
               <View style={[appStyle.overviewStarsContainer]}>
                 <StarRating
@@ -176,37 +186,28 @@ export default class Overview extends Component {
 
               <View style={style.mt20}>
                 <View style={[style.row, style.aiCenter]}>
-                  <Image
-                    style={[image.locationIcon, {tintColor: colors.orange}]}
-                    source={images.workshop}></Image>
-                  <Text style={[text.listItems, style.p5]}>Honda Workshop</Text>
-                </View>
-                <View style={[style.row, style.aiCenter]}>
-                  <Image
-                    style={[image.locationIcon, image.tintOrange]}
-                    source={images.timing}></Image>
+                  <Image style={[image.medium]} source={images.timing}></Image>
                   <Text style={[text.listItems, style.p5]}>
                     11:00am-03:00pm
                   </Text>
                 </View>
                 <View style={[style.row, style.aiCenter]}>
-                  <Image
-                    style={image.locationIcon}
-                    source={images.location}></Image>
+                  <Image style={image.medium} source={images.location}></Image>
                   <Text style={[text.listItems, style.p5]}>
-                    Model town,Block b Lahore
+                    {data.address} {data.city} {data.country}
                   </Text>
                 </View>
                 <View style={[style.row, style.aiCenter]}>
-                  <Image
-                    style={image.locationIcon}
-                    source={images.dollar}></Image>
+                  <Image style={image.medium} source={images.dollar}></Image>
                   <Text style={[text.listItems, style.p5]}>
                     Estimated Rate: 5$
                   </Text>
                 </View>
-
-                <Animated.View style={{...this.props.style, opacity: fadeAnim}}>
+                <Animated.View
+                  style={[
+                    {...this.props.style, opacity: fadeAnim},
+                    style.rowBtw,
+                  ]}>
                   {/* {this.props.children} */}
                   <TouchableOpacity
                     onPress={this.makeCall}
@@ -215,26 +216,33 @@ export default class Overview extends Component {
                       Call Now
                     </Text>
                   </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      Linking.openURL(
+                        'google.navigation:q=' + data.latitude + data.longitude,
+                      );
+                      console.log(data.latitude, data.longitude);
+                    }}
+                    style={[button.Profilebutton]}>
+                    <Text style={[text.btntext, text.text16, text.ac]}>
+                      Locate Now
+                    </Text>
+                  </TouchableOpacity>
                 </Animated.View>
+                <View style={[style.mt30]}>
+                  <TouchableOpacity style={[button.button1]} onPress={()=>{this.props.navigation.navigate('ProfileDetail')}}>
+                    <Text style={[button.btntext1, text.center]}>
+                      Go To Detail
+                    </Text>
+                  </TouchableOpacity>
 
-                {/* {this.props.children} */}
-                <TouchableOpacity
-                  onPress={() => {
-                    console.log(
-                      this.state.data.latitude + this.state.data.longitude,
-                    );
-                    Linking.openURL(
-                      'google.navigation:q=' +
-                        this.state.data.latitude +
-                        ',' +
-                        this.state.data.longitude,
-                    );
-                  }}
-                  style={[button.Profilebutton]}>
-                  <Text style={[text.btntext, text.text16, text.ac]}>
-                    Locate Now
-                  </Text>
-                </TouchableOpacity>
+                  <TouchableOpacity onPress={this.CancelBooking}
+                  style={[button.button1, style.mt10]}>
+                    <Text style={[button.btntext1, text.center]}>
+                      Cancel Booking
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </ScrollView>
           </View>

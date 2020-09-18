@@ -115,9 +115,7 @@ latitude:this.state.latitude
         console.log(res);
         console.log(res.data.token);
         try {
-          await AsyncStorage.setItem('usertoken', res.data.token);
-        
-          this.props.navigation.navigate('userStack');
+          this.props.navigation.navigate('Login');
         } catch (e) {
           console.log('error hai', e);
         }

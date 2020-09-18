@@ -12,7 +12,8 @@ const Userschema = new mongoose.Schema({
   country: String,
   date: String,
   longitude:String,
-  latitude:String
+  latitude:String,
+
 
 });
 

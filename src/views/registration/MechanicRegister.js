@@ -105,9 +105,9 @@ export default class MechanicRegister extends Component {
         console.log(res);
         console.log(res.data.token);
         try {
-          await AsyncStorage.setItem('token', res.data.token);
+      
 
-          this.props.navigation.navigate('mechanicStack');
+          this.props.navigation.navigate('LoginasMechanic');
         } catch (e) {
           console.log('error hai', e);
         }

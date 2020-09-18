@@ -44,6 +44,7 @@ export default class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      //Dashboard
       rating: 2,
       starCount: 3,
       longitude: '',
@@ -108,7 +109,7 @@ export default class Dashboard extends Component {
   getClientData = async () => {
     AsyncStorage.getItem('usersignintoken').then((res) => {
       this.setState({token: res});
-
+      console.log(this.state.token);
       axios
         .get(URL.Url + 'me', {
           headers: {
@@ -120,25 +121,32 @@ export default class Dashboard extends Component {
           axios
             .get(URL.Url + 'user/' + this.state.userid)
             .then((response) => {
+              // console.log(this.state.userid);
               axios
-                .put(URL.Url + 'userlocation/' + this.state.userid, {
+                .put(URL.Url + 'userlocation', {
+                  userid: this.state.userid,
                   latitude: this.state.latitude,
                   longitude: this.state.longitude,
                 })
                 .then((response) => {
                   this.setState({userdata: response.data});
+                  const senddata = JSON.stringify(this.state.userid);
+                  AsyncStorage.setItem('userId', senddata);
                   axios
-                    .get(URL.Url + 'nearmechanics/' + this.state.userid)
+                    .get(URL.Url + 'user/' + this.state.userid)
                     .then((response) => {
-                      const senddata = JSON.stringify(response.data);
-                      AsyncStorage.setItem('Mechanicdata', senddata);
+                      console.log(response.data);
+                      const send=JSON.stringify(response.data)
+                      AsyncStorage.setItem('userdata',send);
                     })
                     .catch((error) => {
                       console.log(error);
                     });
+
+                  // console.log(senddata);
                 })
                 .catch((error) => {
-                  console.log('Error', error);
+                  console.log('Error agya', error);
                 });
             })
             .catch((error) => {

@@ -40,7 +40,7 @@ export const screenWidth = {
 
 //Url
 export const URL = {
-  Url: 'http://192.168.0.103:3000/',
+  Url: 'http://192.168.0.105:3000/',
 };
 //colors
 export const colors = {
@@ -89,7 +89,7 @@ export const images = {
   logoSmall: require('../assets/images/logo-small.png'),
   logout: require('../assets/images/logout.png'),
   HomeImg: require('../assets/images/other/HomeImg.png'),
-cart:require('../assets/images/cart.png'),
+  cart: require('../assets/images/cart.png'),
   facebookdark: require('../assets/images/facebookdark.png'),
   arrowright: require('../assets/images/arrow-right.png'),
   cartype: require('../assets/images/cartype.png'),
@@ -133,7 +133,6 @@ cart:require('../assets/images/cart.png'),
   terms: require('../assets/images/terms.png'),
   help: require('../assets/images/help.png'),
   refer: require('../assets/images/refer.png'),
-  workshop: require('../assets/images/workshop.png'),
   chatBox: require('../assets/images/chatbox.png'),
 
   //others

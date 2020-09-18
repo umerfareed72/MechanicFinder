@@ -70,8 +70,9 @@ router.get('/user/:id', (req, res) => {
 });
 
 //Update User Lat & Long
-router.put('/userlocation/:id', (req, res) => {
-  Usermodel.findByIdAndUpdate(req.params.id, {
+router.put('/userlocation', (req, res) => {
+  Usermodel.findByIdAndUpdate({
+    userid: req.body.userid,
     longitude: req.body.longitude,
     latitude: req.body.latitude,
   })
@@ -97,6 +98,8 @@ router.get('/users', (req, res) => {
       phone: 1,
       address: 1,
       photo: 1,
+      latitude: 1,
+      longitude: 1,
       carcompany: 1,
       city: 1,
       country: 1,

@@ -334,5 +334,38 @@ bodyShadowBottom: {
     width:120,alignItems:'center',paddingVertical:10,
     flexDirection:'row',marginBottom:5
   },
-  
+  //Big Crads
+  bigdashboardCard: {
+    backgroundColor: colors.white,
+    padding: 15,
+    borderRadius: 6,
+   
+    width: screenWidth.width100 / 2.2 - 20,
+    shadowColor: colors.shadowColor0,
+    marginHorizontal: 10,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.0,
+    elevation: 6,
+  },
+  DashboardslotCard: {
+    backgroundColor: colors.white,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    borderRadius:8,
+    marginHorizontal: 15,
+    shadowColor: colors.shadowColor,
+    marginHorizontal: 25,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: .0,
+    elevation: 1,
+  },
+ 
 });

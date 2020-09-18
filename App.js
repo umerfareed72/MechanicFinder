@@ -20,7 +20,7 @@ export default class App extends React.Component {
 
   detectlogin = async () => {
     this.setState({isLoaded: true});
-    const token = await AsyncStorage.getItem('token');
+    const token = await AsyncStorage.getItem('usersignintoken');
     if (token) {
       this.setState({isloggedin: true});
     } else {

@@ -55,7 +55,7 @@ export default class Settings extends Component {
     login._signOut();
     AsyncStorage.removeItem('googleData');
     this.toggleModal();
-    AsyncStorage.removeItem('token').then(() => {
+    AsyncStorage.removeItem('usersignintoken').then(() => {
       this.props.navigation.navigate('Login');
     });
   };

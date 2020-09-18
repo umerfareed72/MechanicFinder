@@ -78,14 +78,15 @@ router.get('/me', function (req, res) {
 
 //Update Mechanic Lat and Long
 //Update User Lat & Long
-router.put('/userlocation/:id', (req, res) => {
-  Mechanicmodel.findByIdAndUpdate(req.params.id, {
+router.put('/mechaniclocation', (req, res) => {
+  Mechanicmodel.findByIdAndUpdate({
+    mechanicid: req.body.mechanicid,
     longitude: req.body.longitude,
     latitude: req.body.latitude,
   })
     .then((mechanic) => {
       if (!mechanic) {
-        return res.status(404).send('User Not Found');
+        return res.status(404).send('Mechanic Not Found');
       }
       return res.status(200).json(mechanic);
     })
@@ -112,10 +113,12 @@ router.get('/mechanic/:id', (req, res) => {
       skilltype: 1,
       vehicletype: 1,
       date: 1,
+      latitude:1,
+      longitude:1
     })
     .then((mechanic) => {
       if (!mechanic) {
-        return res.status(404).send('User Not Found');
+        return res.status(404).send('Mechanic Not Found');
       }
       return res.status(200).json(mechanic);
     })
@@ -135,6 +138,8 @@ router.get('/mechanics', (req, res) => {
       password: 1,
       phone: 1,
       address: 1,
+      latitude:1,
+      longitude:1,
       photo: 1,
       carcompany: 1,
       city: 1,
@@ -176,7 +181,7 @@ router.get('/nearmechanics/:id', (req, res) => {
           email: 1,
           phone: 1,
           city: 1,
-          address:1,
+          address: 1,
           country: 1,
           carcompany: 1,
           skilltype: 1,
@@ -219,7 +224,7 @@ router.get('/nearmechanics/:id', (req, res) => {
                 address: item.address,
                 country: item.country,
                 city: item.city,
-                address:item.address,
+                address: item.address,
                 latitude: item.latitude,
                 longitude: item.longitude,
                 distance: Math.trunc(result),

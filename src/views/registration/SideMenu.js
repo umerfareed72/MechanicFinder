@@ -44,9 +44,10 @@ export default class SideMenu extends React.Component {
     };
   }
   logout = () => {
-    AsyncStorage.removeItem('token').then(() => {
+    AsyncStorage.removeItem('usersignintoken').then((res) => {
       this.props.navigation.navigate('Login');
     });
+   
   };
 
   static navigationOptions = {
@@ -102,7 +103,7 @@ export default class SideMenu extends React.Component {
 
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('Feedback');
+                this.props.navigation.navigate('BookNow');
               }}>
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>

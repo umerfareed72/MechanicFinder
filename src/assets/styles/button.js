@@ -66,7 +66,7 @@ export default StyleSheet.create({
   },
   Profilebutton: {
     marginTop: 50,
-    width: '35%',
+    width: '45%',
     height: 35,
     borderColor: 'black',
     borderRadius: 15,
@@ -86,5 +86,25 @@ export default StyleSheet.create({
     fontFamily:'goodfishbd',
    color:colors.white,
     letterSpacing:1
-  }
+  },
+  buttonTheme: {
+    backgroundColor: colors.orange,
+    width: '100%',
+    // alignSelf: 'center',
+    paddingVertical: 10,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 25,
+    shadowColor: 'rgba(0,0,0,0.16)',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.16,
+    shadowRadius: 3.0,
+
+    elevation: 6,
+  },
+
 });

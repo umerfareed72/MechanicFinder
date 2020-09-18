@@ -32,7 +32,7 @@ import {
   screenWidth,
   images,
   height,
-  URL
+  URL,
 } from '../../config/Constant';
 const axios = require('axios');
 import LinearGradient from 'react-native-linear-gradient';
@@ -114,7 +114,10 @@ export default class Login extends Component {
     this.props.navigation.navigate('');
   };
   mechanicLogin = () => {
-    this.setState({textMechanicLogin: colors.white, mechanicLogin: colors.orange});
+    this.setState({
+      textMechanicLogin: colors.white,
+      mechanicLogin: colors.orange,
+    });
     this.props.navigation.navigate('LoginasMechanic');
   };
 
@@ -232,9 +235,8 @@ export default class Login extends Component {
   };
 
   submitData = () => {
-       
     axios
-      .post(URL.Url+'usersignin', {
+      .post(URL.Url + 'usersignin', {
         email: this.state.Email,
         password: this.state.Password,
       })
@@ -243,9 +245,8 @@ export default class Login extends Component {
 
         try {
           await AsyncStorage.setItem('usersignintoken', res.data.token);
-         console.log(res.data.token)
+          console.log(res.data.token);
           this.props.navigation.navigate('userStack');
-          
         } catch (e) {
           console.log('error hai', e);
           Alert.alert('Invalid email password');
@@ -286,16 +287,26 @@ export default class Login extends Component {
                   end={{x: 1, y: 0}}
                   style={[style.headerHeight4]}>
                   <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                  <Text style={[text.Eutemia,text.white,text.text30]}>Smart Auto Mechanic Finder</Text>
-                  <Text style={[text.text18,text.CinzelDecorativeBold,text.white]}>(User)</Text>
-                 
-                     </View>
+                    <Text style={[text.Eutemia, text.white, text.text30]}>
+                      Smart Auto Mechanic Finder
+                    </Text>
+                    <Text
+                      style={[
+                        text.text18,
+                        text.CinzelDecorativeBold,
+                        text.white,
+                      ]}>
+                      (User)
+                    </Text>
+                  </View>
                 </LinearGradient>
               </View>
 
               <View style={[appStyle.bodyBg]}>
                 <View style={[appStyle.headingLayout]}>
-                  <Text style={[style.headerStyle,text.OpenSans]}>Welcome</Text>
+                  <Text style={[style.headerStyle, text.OpenSans]}>
+                    Welcome
+                  </Text>
                 </View>
                 <View>
                   <View style={[input.textinputcontainer]}>
@@ -328,7 +339,7 @@ export default class Login extends Component {
                       secureTextEntry={true}
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
-                  <View style={[style.pv10,style.ph30]}>
+                  <View style={[style.pv10, style.ph30]}>
                     <Text
                       onPress={() => {
                         this.props.navigation.navigate('Forgot');
@@ -338,12 +349,11 @@ export default class Login extends Component {
                     </Text>
                   </View>
 
-                  <TouchableOpacity 
-                  onPress={this.submitData}
-                  // onPress={() => {
-                  //   this.props.navigation.navigate('Dashboard');
-                  // }}
-              
+                  <TouchableOpacity
+                    onPress={this.submitData}
+                    // onPress={() => {
+                    //   this.props.navigation.navigate('Dashboard');
+                    // }}
                   >
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text
@@ -375,10 +385,10 @@ export default class Login extends Component {
                   </View>
                 </View>
                 <View style={[style.mv20, style.mh10]}>
-              <Text style={[text.goodfishbd, text.text18, text.center]}>
-              Login As
-              </Text>
-            </View>
+                  <Text style={[text.goodfishbd, text.text18, text.center]}>
+                    Login As
+                  </Text>
+                </View>
                 <View
                   style={[
                     appStyle.rowBtw,
@@ -421,10 +431,10 @@ export default class Login extends Component {
                   </TouchableOpacity>
                 </View>
                 <View style={[style.mv20, style.mh10]}>
-              <Text style={[text.goodfishbd, text.text18, text.center]}>
-               Do You have an Account?
-              </Text>
-            </View>
+                  <Text style={[text.goodfishbd, text.text18, text.center]}>
+                    Do You have an Account?
+                  </Text>
+                </View>
                 <View
                   style={[
                     appStyle.rowBtw,
@@ -466,7 +476,7 @@ export default class Login extends Component {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                          </View>
+              </View>
             </ScrollView>
           </KeyboardAvoidingView>
         </SafeAreaView>
