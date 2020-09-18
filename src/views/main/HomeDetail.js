@@ -122,11 +122,13 @@ export default class HomeDetail extends Component {
     }
   };
   buyItems = () => {
+    AsyncStorage.setItem('bookdata',JSON.stringify(this.state.data))
     if (this.state.CheckBox == images.checkBoxTick) {
       this.props.navigation.navigate('BuyItems');
     } else {
       this.setState({BookNowView: 'none'});
       this.props.navigation.navigate('BookNow');
+      
     }
   };
   render() {

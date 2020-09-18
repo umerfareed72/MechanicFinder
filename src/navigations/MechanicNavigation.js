@@ -14,6 +14,9 @@ import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import SideMenu from '../views/registration/SideMenu';
 import Setting from '../views/main/Setting';
+import UserProfile from "../views/Mechanic/UserProfile"
+import Chat from "../views/Mechanic/Chat"
+import UserProfileDetail from "../views/Mechanic/UserProfileDetail"
 import {
   colors,
   screenHeight,
@@ -83,6 +86,54 @@ const Navigator = createMaterialBottomTabNavigator(
     barStyle: {backgroundColor: '#fff'},
   },
 );
+const UserBookNowStack = createStackNavigator(
+  {
+   UserProfile:UserProfile,
+   UserProfileDetail:UserProfileDetail
+  },
+  {
+    headerMode: 'none',
+  },
+);
+
+const Navigators = createMaterialBottomTabNavigator(
+  {
+    UserBookNow: {
+      screen: UserBookNowStack,
+      navigationOptions: {
+        tabBarLabel: 'Profile',
+        tabBarIcon: ({tintColor}) => (
+          <Image
+            style={{resizeMode: 'contain', height: 25, width: 25}}
+            source={images.userIcon}
+          />
+        ),
+      },
+    },
+
+    Chat: {
+      screen: Chat,
+      navigationOptions: {
+        tabBarLabel: 'ChatBox',
+        tabBarIcon: ({tintColor}) => (
+          <Image
+            style={{resizeMode: 'contain', height: 25, width: 25}}
+            source={images.chatBox}
+          />
+        ),
+      },
+    },
+  },
+  {
+    initialRouteName: 'UserBookNow',
+    activeColor: '#F59E52',
+    activeBackgroundColor: '#fff',
+    inactiveBackgroundColor: '#fff',
+    inactiveColor: '#4E5967',
+    barStyle: {backgroundColor: '#fff'},
+  },
+);
+
 
 const MechanicTabNavigator = createDrawerNavigator(
   {
@@ -92,6 +143,9 @@ const MechanicTabNavigator = createDrawerNavigator(
     MechanicDashboard: {
       screen: DashboardStack,
     },
+    Navigators:{
+      screen:Navigators
+    }
   },
   {
     contentComponent: SideMenu,

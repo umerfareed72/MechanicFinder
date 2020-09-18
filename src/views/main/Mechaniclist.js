@@ -51,8 +51,9 @@ export default class Mechaniclist extends Component {
     this.state = {
       dataSource: [],
       slot: '',
-      Cars: 'Select Car Name',
-      vehicletype: 'Select vehicle Type',
+      carcompany: 'Select Vehicle Name',
+      skilltype: 'Select Skill Type',
+      vehicletype: 'Select Vehicle Type',
     };
   }
 
@@ -64,18 +65,26 @@ export default class Mechaniclist extends Component {
       // console.log(this.state.dataSource[id])
       this.props.navigation.navigate('HomeDetail');
       const senddata = JSON.stringify(this.state.dataSource[id]);
-      
+
       AsyncStorage.setItem('data', senddata);
-    0
     }
   };
-
-  componentDidMount() {
+  showMechanics = () => {
     AsyncStorage.getItem('userId')
       .then((res) => {
         const id = JSON.parse(res);
         axios
-          .get(URL.Url + 'nearmechanics/' + id)
+          .get(
+            URL.Url +
+              'nearmechanics/' +
+              this.state.skilltype +
+              '/' +
+              this.state.vehicletype +
+              '/' +
+              this.state.carcompany +
+              '/' +
+              id,
+          )
           .then((response) => {
             console.log(response.data);
             this.setState({dataSource: response.data});
@@ -87,6 +96,11 @@ export default class Mechaniclist extends Component {
       .catch((error) => {
         console.log(error);
       });
+  };
+  componentDidMount() {
+    AsyncStorage.getItem('skilltype').then((res) => {
+      this.setState({skilltype: res});
+    });
   }
 
   onStarRatingPress(rating) {
@@ -128,17 +142,16 @@ export default class Mechaniclist extends Component {
                 }>
                 <Picker.Item label="Select Vehicle Type" value="" />
                 <Picker.Item label="Heavy Truck" value="Heavy Truck" />
-                <Picker.Item label="Car" value="Car" />
+                <Picker.Item label="Cars" value="Cars" />
                 <Picker.Item label="Jeep" value="Jeep" />
                 <Picker.Item label="Bus" value="Bus" />
               </Picker>
             </View>
-
             <View style={[style.dropBar, style.mv10]}>
               <Picker
-                selectedValue={this.state.Cars}
+                selectedValue={this.state.carcompany}
                 onValueChange={(itemValue, itemIndex) =>
-                  this.setState({Cars: itemValue})
+                  this.setState({carcompany: itemValue})
                 }>
                 <Picker.Item label="Select Vehicle Name" value="Vehicle" />
                 <Picker.Item label="Honda" value="Honda" />
@@ -151,6 +164,27 @@ export default class Mechaniclist extends Component {
                 <Picker.Item label="Range Rover" value="Range Rover" />
               </Picker>
             </View>
+            <TouchableOpacity
+              style={[
+                button.button1,
+                style.mv10,
+                style.mh40,
+                {backgroundColor: colors.lightgray},
+                style.aiCenter,
+              ]}
+              onPress={this.showMechanics}>
+              <View style={[style.row, style.aiCenter]}>
+                <View style={style.mr5}>
+                  <Image
+                    style={[image.medium]}
+                    source={images.searchBottom}></Image>
+                </View>
+                <Text style={[button.btntext1, text.orange]}>
+                  Click To Serach
+                </Text>
+              </View>
+            </TouchableOpacity>
+
             {this.state.dataSource.map((data, index) => {
               return (
                 <TouchableOpacity

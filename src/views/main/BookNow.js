@@ -47,6 +47,7 @@ export default class Overview extends Component {
     this.state = {
       rating: 2,
       data: [],
+   
       starCount: 3.5,
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
@@ -70,30 +71,36 @@ export default class Overview extends Component {
   };
   getMechanicLocation = async () => {
     try {
-      await AsyncStorage.getItem('data').then((res) => {
+      const data=await AsyncStorage.getItem('bookdata').then((res) => {
         res = JSON.parse(res);
         this.setState({data: res});
         console.log(res);
       });
-   this.RemoveBooking()
-    } catch (error) {
+      } catch (error) {
       console.log(error);
     }
   };
   CancelBooking=()=>{
-      AsyncStorage.removeItem('data');
+      AsyncStorage.removeItem('bookdata');
       this.props.navigation.navigate('Dashboard')
       }
 
   RemoveBooking=()=>{
-    setTimeout(() => {
-      AsyncStorage.removeItem('data');
+    setInterval(() => {
+      AsyncStorage.removeItem('bookdata');
       this.props.navigation.navigate('Dashboard')
     
-    }, 100000);
+    }, 10000000);
       }
   componentDidMount() {
-   
+
+    const { navigation } = this.props;
+    this.getMechanicLocation();
+    this.focusListener = navigation.addListener('didFocus', () => {
+        this.getMechanicLocation()
+        });
+
+   this.RemoveBooking();
     Animated.loop(
       Animated.timing(
         // Animate over time
@@ -109,6 +116,8 @@ export default class Overview extends Component {
 
     // Starts the animation
     this.getMechanicLocation();
+   
+   
   }
 
   fadeOut() {
@@ -127,6 +136,7 @@ export default class Overview extends Component {
 
   render() {
     let {fadeAnim, data} = this.state;
+   if(data!=null){
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar
@@ -249,5 +259,19 @@ export default class Overview extends Component {
         </View>
       </SafeAreaView>
     );
+    }
+  else {
+    return(
+      <SafeAreaView style={[appStyle.safeContainer]}>   
+      <StatusBar barStyle={'dark-content'}></StatusBar>        
+        <View style={[style.flex1,style.jcCenter]}>
+        <View style={[style.aiCenter]}>
+   <Text style={[text.h1Purple]}>No Data Available</Text>
+ </View>
+ </View>
+ </SafeAreaView>
+
+    )
+  }
   }
 }

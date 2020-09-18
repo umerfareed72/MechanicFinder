@@ -44,6 +44,8 @@ export default class HomeDetail extends Component {
       BookNowView: 'flex',
       CheckBox: images.checkBoxEmpty,
       data: [],
+    
+
     };
   }
   onStarRatingPress(rating) {
@@ -52,11 +54,12 @@ export default class HomeDetail extends Component {
     });
   }
   componentDidMount() {
-    AsyncStorage.getItem('data').then((res) => {
+    const data=AsyncStorage.getItem('data').then((res) => {
       res = JSON.parse(res);
       console.log(res);
       this.setState({data: res});
     });
+   
   }
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
@@ -131,6 +134,7 @@ export default class HomeDetail extends Component {
   };
   render() {
     const {data} = this.state;
+  if(data!=null){
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
@@ -376,5 +380,19 @@ export default class HomeDetail extends Component {
         </View>
       </SafeAreaView>
     );
+            }
+            else{
+              return(
+                <SafeAreaView style={[appStyle.safeContainer]}>   
+                <StatusBar barStyle={'dark-content'}></StatusBar>        
+                  <View style={[style.flex1,style.jcCenter]}>
+                  <View style={[style.aiCenter]}>
+             <Text style={[text.h1Purple]}>No Data Available</Text>
+           </View>
+           </View>
+           </SafeAreaView>
+
+              )
+            }
   }
 }

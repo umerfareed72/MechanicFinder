@@ -47,6 +47,9 @@ export default class SideMenu extends React.Component {
     AsyncStorage.removeItem('usersignintoken').then((res) => {
       this.props.navigation.navigate('Login');
     });
+    AsyncStorage.removeItem('token').then((res) => {
+      this.props.navigation.navigate('Login');
+    });
    
   };
 

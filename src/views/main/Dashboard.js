@@ -199,7 +199,9 @@ export default class Dashboard extends Component {
             <View>
               <TouchableOpacity
                 onPress={() => {
+                  AsyncStorage.setItem('skilltype','Electric')
                   this.props.navigation.navigate('Mechaniclist');
+            
                 }}
                 style={[style.pv10]}>
                 <ImageBackground
@@ -216,8 +218,10 @@ export default class Dashboard extends Component {
               <TouchableOpacity
                 style={[style.pv10]}
                 onPress={() => {
+                  AsyncStorage.setItem('skilltype','Painter')
                   this.props.navigation.navigate('Mechaniclist');
-                }}>
+             
+               }}>
                 <ImageBackground
                   imageStyle={{borderRadius: 8}}
                   style={image.homeCategoryImg}
@@ -232,8 +236,10 @@ export default class Dashboard extends Component {
               <TouchableOpacity
                 style={[style.pv10]}
                 onPress={() => {
+                  AsyncStorage.setItem('skilltype','Engine')
                   this.props.navigation.navigate('Mechaniclist');
-                }}>
+             
+             }}>
                 <ImageBackground
                   imageStyle={{borderRadius: 8}}
                   style={image.homeCategoryImg}
@@ -246,8 +252,11 @@ export default class Dashboard extends Component {
               <TouchableOpacity
                 style={[style.pv10]}
                 onPress={() => {
+                  AsyncStorage.setItem('skilltype','Body')
                   this.props.navigation.navigate('Mechaniclist');
-                }}>
+                  
+             
+             }}>
                 <ImageBackground
                   imageStyle={{borderRadius: 8}}
                   style={image.homeCategoryImg}

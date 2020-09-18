@@ -36,6 +36,8 @@ import Help from '../views/main/Help';
 import Mechaniclist from '../views/main/Mechaniclist';
 import ChatBox from '../views/main/ChatBox';
 import BuyItems from '../views/main/BuyItems';
+import ProfileDetail from '../views/main/ProfileDetail';
+
 import Items from '../views/main/Items';
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
@@ -79,6 +81,7 @@ const DashboardStack = createStackNavigator(
 const DiscoverStack = createStackNavigator(
   {
     Memories: Memories,
+ 
   },
   {
     headerMode: 'none',
@@ -89,6 +92,7 @@ const DiscoverStack = createStackNavigator(
 );
 const TabStack = createStackNavigator(
   {
+    
     Setting: Setting,
     EditProfile: EditProfile,
     Terms: Terms,
@@ -154,43 +158,52 @@ const Navigator = createMaterialBottomTabNavigator(
   },
 );
 
-// const Navigators = createMaterialBottomTabNavigator(
-//   {
-//     BookNow: {
-//       screen: BookNow,
-//       navigationOptions: {
-//         tabBarLabel: 'Profile',
-//         tabBarIcon: ({tintColor}) => (
-//           <Image
-//             style={{resizeMode: 'contain', height: 25, width: 25}}
-//             source={images.userIcon}
-//           />
-//         ),
-//       },
-//     },
+const BookNowStack = createStackNavigator(
+  {
+  BookNow:BookNow,
+  ProfileDetail:ProfileDetail
+  },
+  {
+    headerMode: 'none',
+  },
+);
+const Navigators = createMaterialBottomTabNavigator(
+  {
+    BookNow: {
+      screen: BookNowStack,
+      navigationOptions: {
+        tabBarLabel: 'Profile',
+        tabBarIcon: ({tintColor}) => (
+          <Image
+            style={{resizeMode: 'contain', height: 25, width: 25}}
+            source={images.userIcon}
+          />
+        ),
+      },
+    },
 
-//     ChatBox: {
-//       screen: ChatBox,
-//       navigationOptions: {
-//         tabBarLabel: 'ChatBox',
-//         tabBarIcon: ({tintColor}) => (
-//           <Image
-//             style={{resizeMode: 'contain', height: 25, width: 25}}
-//             source={images.chatBox}
-//           />
-//         ),
-//       },
-//     },
-//   },
-//   {
-//     initialRouteName: 'BookNow',
-//     activeColor: '#F59E52',
-//     activeBackgroundColor: '#fff',
-//     inactiveBackgroundColor: '#fff',
-//     inactiveColor: '#4E5967',
-//     barStyle: {backgroundColor: '#fff'},
-//   },
-// );
+    ChatBox: {
+      screen: ChatBox,
+      navigationOptions: {
+        tabBarLabel: 'ChatBox',
+        tabBarIcon: ({tintColor}) => (
+          <Image
+            style={{resizeMode: 'contain', height: 25, width: 25}}
+            source={images.chatBox}
+          />
+        ),
+      },
+    },
+  },
+  {
+    initialRouteName: 'BookNow',
+    activeColor: '#F59E52',
+    activeBackgroundColor: '#fff',
+    inactiveBackgroundColor: '#fff',
+    inactiveColor: '#4E5967',
+    barStyle: {backgroundColor: '#fff'},
+  },
+);
 const TabNavigator = createDrawerNavigator(
   {
     Navigator: {
@@ -199,9 +212,9 @@ const TabNavigator = createDrawerNavigator(
     Dashboard: {
       screen: DashboardStack,
     },
-    // Navigators: {
-    //   screen: Navigators,
-    // },
+    Navigators: {
+      screen: Navigators,
+    },
   },
   {
     contentComponent: SideMenu,

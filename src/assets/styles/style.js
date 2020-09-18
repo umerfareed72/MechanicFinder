@@ -414,7 +414,8 @@ marginHorizontal:15
     marginBottom: 50,
   },
   fullheight: {
-    height: screenHeight.height100,
+  flex:1,
+  backgroundColor:colors.white
   },
 
   splashheight: {

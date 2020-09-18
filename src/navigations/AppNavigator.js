@@ -18,7 +18,6 @@ import SignUp from '../views/registration/SignUp';
 import LoginasMechanic from '../views/registration/LoginasMechanic';
 import ForgotPassword from '../views/registration/ForgotPassword';
 import MechanicNavigation from './MechanicNavigation';
-import ProfileNavigator from './Profiles';
 
 const SplashStack = createStackNavigator(
   {
@@ -48,15 +47,6 @@ const AuthStack = createStackNavigator(
 
 
 
-const ProfileStack = createStackNavigator(
-  {
-    screen: ProfileNavigator,
-  },
-  {
-    headerMode: 'none',
-  },
-);
-
 const userStack = createStackNavigator(
   {
     screen: TabNavigation,
@@ -81,7 +71,6 @@ export default createAppContainer(
       Auth: AuthStack,
       userStack: userStack,
       mechanicStack: mechanicStack,
-      ProfileStack: ProfileStack,
     },
     {
       initialRouteName: 'Splash',

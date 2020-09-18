@@ -113,8 +113,8 @@ router.get('/mechanic/:id', (req, res) => {
       skilltype: 1,
       vehicletype: 1,
       date: 1,
-      latitude:1,
-      longitude:1
+      latitude: 1,
+      longitude: 1,
     })
     .then((mechanic) => {
       if (!mechanic) {
@@ -138,8 +138,8 @@ router.get('/mechanics', (req, res) => {
       password: 1,
       phone: 1,
       address: 1,
-      latitude:1,
-      longitude:1,
+      latitude: 1,
+      longitude: 1,
       photo: 1,
       carcompany: 1,
       city: 1,
@@ -154,89 +154,96 @@ router.get('/mechanics', (req, res) => {
   get();
 });
 
-router.get('/nearmechanics/:id', (req, res) => {
-  var latitude;
-  var longitude;
-  var nearest = [];
-  Usermodel.findById(req.params.id)
-    .sort('id')
-    .select({
-      longitude: 1,
-      latitude: 1,
-    })
-    .then((user) => {
-      if (!user) {
-        return res.status(404).send('User Not Found');
-      }
-      // return res.status(200).json(user);
-      latitude = user.latitude;
-      longitude = user.longitude;
-    })
-    .then((near) => {
-      Mechanicmodel.find()
-        .sort('id')
-        .select({
-          firstname: 1,
-          lastname: 1,
-          email: 1,
-          phone: 1,
-          city: 1,
-          address: 1,
-          country: 1,
-          carcompany: 1,
-          skilltype: 1,
-          vehicletype: 1,
-          longitude: 1,
-          latitude: 1,
+router.get(
+  '/nearmechanics/:skilltype/:vehicletype/:carcompany/:id',
+  (req, res) => {
+    var latitude;
+    var longitude;
+    var nearest = [];
+    Usermodel.findById(req.params.id)
+      .sort('id')
+      .select({
+        longitude: 1,
+        latitude: 1,
+      })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).send('User Not Found');
+        }
+        // return res.status(200).json(user);
+        latitude = user.latitude;
+        longitude = user.longitude;
+      })
+      .then((near) => {
+        Mechanicmodel.find({
+          skilltype: req.params.skilltype,
+          vehicletype: req.params.vehicletype,
+          carcompany: req.params.carcompany,
         })
-        .then((mechanics) => {
-          if (!mechanics) return res.status(404).send('Not Found');
-          mechanics.map((item) => {
-            let Lat1 = latitude / 57.29577951;
-            let Lat2 = item.latitude / 57.29577951;
-            let Long1 = longitude / 57.29577951;
-            let Long2 = item.longitude / 57.29577951;
-            // Calaculate distance
-            let dlat = Lat2 - Lat1;
-            let dlong = Long2 - Long1;
-            //Apply Heversine Formula to calculate  Distance of Spherical Objects
-            let a =
-              Math.pow(Math.sin(dlat / 2), 2) +
-              Math.cos(Lat1) *
-                Math.cos(Lat2) *
-                Math.pow(Math.sin(dlong / 2), 2);
-            let c = 2 * Math.asin(Math.sqrt(a));
-            let r = 6371;
-            let result = c * r; //Get Result In KM
-            //Found In 10 KM
+          .sort('id')
+          .select({
+            firstname: 1,
+            lastname: 1,
+            email: 1,
+            phone: 1,
+            city: 1,
+            address: 1,
+            country: 1,
+            carcompany: 1,
+            skilltype: 1,
+            vehicletype: 1,
+            longitude: 1,
+            latitude: 1,
+          })
+          .then((mechanics) => {
+            if (!mechanics) return res.status(404).send('Not Found');
+            mechanics.map((item) => {
+              let Lat1 = latitude / 57.29577951;
+              let Lat2 = item.latitude / 57.29577951;
+              let Long1 = longitude / 57.29577951;
+              let Long2 = item.longitude / 57.29577951;
+              // Calaculate distance
+              let dlat = Lat2 - Lat1;
+              let dlong = Long2 - Long1;
+              //Apply Heversine Formula to calculate  Distance of Spherical Objects
+              let a =
+                Math.pow(Math.sin(dlat / 2), 2) +
+                Math.cos(Lat1) *
+                  Math.cos(Lat2) *
+                  Math.pow(Math.sin(dlong / 2), 2);
+              let c = 2 * Math.asin(Math.sqrt(a));
+              let r = 6371;
+              let result = c * r; //Get Result In KM
+              //Found In 10 KM
 
-            if (result <= 10000) {
-              //Distance get
-              nearest.push({
-                mechanicid: item.id,
-                firstname: item.firstname,
-                lastname: item.lastname,
-                email: item.email,
-                phone: item.phone,
-                carcompany: item.carcompany,
-                vehicletype: item.vehicletype,
-                skilltype: item.skilltype,
-                address: item.address,
-                country: item.country,
-                city: item.city,
-                address: item.address,
-                latitude: item.latitude,
-                longitude: item.longitude,
-                distance: Math.trunc(result),
-              });
-            }
+              if (result <= 50) {
+                //Distance get
+                nearest.push({
+                  mechanicid: item.id,
+                  firstname: item.firstname,
+                  lastname: item.lastname,
+                  email: item.email,
+                  phone: item.phone,
+                  carcompany: item.carcompany,
+                  vehicletype: item.vehicletype,
+                  skilltype: item.skilltype,
+                  address: item.address,
+                  country: item.country,
+                  city: item.city,
+                  address: item.address,
+                  latitude: item.latitude,
+                  longitude: item.longitude,
+                  distance: Math.trunc(result),
+                });
+              }
+            });
+            return res.json(nearest);
+          })
+          .catch((error) => {
+            return res.send(error);
           });
-          return res.json(nearest);
-        })
-        .catch((error) => {
-          return res.send(error);
-        });
-    });
-});
+      });
+  },
+);
 
 module.exports = router;
