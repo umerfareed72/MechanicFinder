@@ -144,15 +144,11 @@ export default class HomeDetail extends Component {
       axios
         .post(URL.Url + 'addbookedUser/' + mechanicid + '/' + userid)
         .then((res) => {
-          axios
-            .get(URL.Url + 'mechanic/' + res.data.mechanicid)
-            .then((mechanic) => {
-              const sendMechanicdata = JSON.stringify(mechanic.data);
+              const sendMechanicid = JSON.stringify(res.data.mechanicid);
                const sendId=JSON.stringify(res.data._id)
             AsyncStorage.setItem('BookedMechanicId',sendId)
-            AsyncStorage.setItem('Mechanicdata', sendMechanicdata); 
-            });
-        });
+            AsyncStorage.setItem('Mechanicid', sendMechanicid); 
+         });
     });
     if (this.state.CheckBox == images.checkBoxTick) {
       this.props.navigation.navigate('BuyItems');

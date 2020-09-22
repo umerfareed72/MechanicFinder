@@ -74,11 +74,21 @@ export default class BookNow extends Component {
   };
   getMechanicLocation = async () => {
     try {
-      await AsyncStorage.getItem('Mechanicdata')
+      await AsyncStorage.getItem('Mechanicid')
         .then((response) => {
           const data = JSON.parse(response);
-          console.log(response, 'data agya');
-          this.setState({data: data});
+          console.log(data, 'data agya');
+          axios.get(URL.Url + 'getbookedUser/' + data).then((res) => {
+            res.data.map((item) => {
+              axios
+                .get(URL.Url + 'mechanic/' + item.mechanicid)
+                .then((mechanic) => {
+                  this.setState({data: mechanic.data});
+                  const sendMechanicdata = JSON.stringify(this.state.data);
+                  AsyncStorage.setItem('Mechanicdata', sendMechanicdata);
+                });
+            });
+          });
         })
         .then((bookid) => {
           AsyncStorage.getItem('BookedMechanicId').then((res) => {
@@ -95,11 +105,11 @@ export default class BookNow extends Component {
   };
 
   CancelBooking = async () => {
-    console.log(this.state.bookedMechanicId);
     axios
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
         AsyncStorage.removeItem('Mechanicdata');
+        AsyncStorage.removeItem('Mechanicid');
         this.setState({refreshing: false});
         this.props.navigation.navigate('Dashboard');
         console.log(res.data, 'data updated');
@@ -116,6 +126,7 @@ export default class BookNow extends Component {
         .then((res) => {
           this.setState({refreshing: false});
           AsyncStorage.removeItem('Mechanicdata');
+          AsyncStorage.removeItem('Mechanicid');
           this.props.navigation.navigate('Dashboard');
           console.log(res.data, 'data updated');
         })
@@ -144,7 +155,6 @@ export default class BookNow extends Component {
       ),
       {iterations: 1000},
     ).start();
-
   }
 
   fadeOut() {
@@ -180,9 +190,7 @@ export default class BookNow extends Component {
               <View style={style.bgOverlay} />
               <View style={[style.rowBtw, style.ph20, style.pb10]}>
                 <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('Dashboard')
-                  }>
+                  onPress={() => this.props.navigation.navigate('Dashboard')}>
                   <Image
                     source={images.backarrowh}
                     style={[
