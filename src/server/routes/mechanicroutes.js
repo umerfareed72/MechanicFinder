@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const Mechanicmodel = mongoose.model('mechanicmodel');
 
 const Usermodel = mongoose.model('Usermodel');
+const BookedUsermodel = mongoose.model('BookedUsermodel');
 
 //Mechanic Login
 router.post('/mechanicsignin', async (req, res) => {
@@ -24,6 +25,104 @@ router.post('/mechanicsignin', async (req, res) => {
   } catch (err) {
     return res.status(422).send({error: 'Password not exist!!'});
   }
+});
+router.post('/addbookedUser/:mid/:uid', async (req, res) => {
+  Usermodel.findById(req.params.uid)
+    .select({
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      address: 1,
+      city: 1,
+      country: 1,
+      photo: 1,
+      phone: 1,
+      latitude: 1,
+      longitude: 1,
+    })
+    .then((user) => {
+      Mechanicmodel.findById(req.params.mid).then((data) => {
+        const bookeduser = new BookedUsermodel({
+          userid: req.params.uid,
+          mechanicid: req.params.mid,
+          Status: 'Online',
+        });
+        bookeduser.save();
+        res.json(bookeduser);
+      });
+    })
+    //  res.send(userdata)
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+router.get('/getbookedUser/:mid', async (req, res) => {
+  BookedUsermodel.find({mechanicid: req.params.mid, Status: 'Online'})
+    .then((bookeduser) => {
+      res.json(bookeduser);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+router.put('/cancelbookeduser/:id', (req, res) => {
+  BookedUsermodel.findByIdAndUpdate(
+    {_id: req.params.id},
+    {
+      Status: 'Offline',
+    },
+  )
+    .then((canceluser) => {
+      if (!canceluser) {
+        return res.status(404).send('Mechanic Not Found');
+      } else {
+        return res.status(200).json(canceluser);
+   canceluser.save();    
+      }
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
+
+// router.get('/getUserProfile/:mid/:uid/:bid', async (req, res) => {
+//   Usermodel.findById(req.params.uid)
+//     .select({
+//       firstname: 1,
+//       lastname: 1,
+//       email: 1,
+//       address: 1,
+//       city: 1,
+//       country: 1,
+//       photo: 1,
+//       phone: 1,
+//       latitude: 1,
+//       longitude: 1,
+//     })
+//     .then((user) => {
+//       Mechanicmodel.findById(req.params.mid).then((data) => {
+//         BookedUsermodel.findById(req.params.bid).then((data) => {
+//           res.json(data);
+//         });
+//       });
+//     })
+//     //  res.send(userdata)
+//     .catch((err) => {
+//       res.status(404).send(err.message);
+//     });
+// });
+
+router.get('/bookedusers', async (req, res) => {
+  BookedUsermodel.find()
+    .then((data) => {
+      res.json(data);
+    })
+    //  res.send(userdata)
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
 });
 
 //Mechanic Registeration
@@ -78,17 +177,21 @@ router.get('/me', function (req, res) {
 
 //Update Mechanic Lat and Long
 //Update User Lat & Long
-router.put('/mechaniclocation', (req, res) => {
-  Mechanicmodel.findByIdAndUpdate({
-    mechanicid: req.body.mechanicid,
-    longitude: req.body.longitude,
-    latitude: req.body.latitude,
-  })
+router.put('/mechaniclocation/:id', (req, res) => {
+  Mechanicmodel.findByIdAndUpdate(
+    {_id: req.params.id},
+    {
+      longitude: req.body.longitude,
+      latitude: req.body.latitude,
+    },
+  )
     .then((mechanic) => {
       if (!mechanic) {
         return res.status(404).send('Mechanic Not Found');
+      } else {
+        // mechanic.update();
+        return res.status(200).json(mechanic);
       }
-      return res.status(200).json(mechanic);
     })
     .catch((error) => {
       return res.send(error);
@@ -103,7 +206,6 @@ router.get('/mechanic/:id', (req, res) => {
       firstname: 1,
       lastname: 1,
       email: 1,
-      password: 1,
       phone: 1,
       address: 1,
       photo: 1,
@@ -159,12 +261,17 @@ router.get(
   (req, res) => {
     var latitude;
     var longitude;
+    var city;
+    var country;
+
     var nearest = [];
     Usermodel.findById(req.params.id)
       .sort('id')
       .select({
         longitude: 1,
         latitude: 1,
+        city: 1,
+        country: 1,
       })
       .then((user) => {
         if (!user) {
@@ -173,12 +280,16 @@ router.get(
         // return res.status(200).json(user);
         latitude = user.latitude;
         longitude = user.longitude;
+        city = user.city;
+        country = user.country;
       })
       .then((near) => {
         Mechanicmodel.find({
           skilltype: req.params.skilltype,
           vehicletype: req.params.vehicletype,
           carcompany: req.params.carcompany,
+          city: city,
+          country: country,
         })
           .sort('id')
           .select({
@@ -216,7 +327,7 @@ router.get(
               let result = c * r; //Get Result In KM
               //Found In 10 KM
 
-              if (result <= 50) {
+              if (result <= 100) {
                 //Distance get
                 nearest.push({
                   mechanicid: item.id,
@@ -235,9 +346,9 @@ router.get(
                   longitude: item.longitude,
                   distance: Math.trunc(result),
                 });
+                return res.json(nearest);
               }
             });
-            return res.json(nearest);
           })
           .catch((error) => {
             return res.send(error);

@@ -13,14 +13,20 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-PermissionsAndroid,
-Permission,
+  PermissionsAndroid,
+  Permission,
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-import AsyncStorage from "@react-native-community/async-storage"
+import AsyncStorage from '@react-native-community/async-storage';
 // import RNPickerSelect from 'react-native-picker-select';
-import {colors, URL,screenHeight, screenWidth, images} from '../../config/Constant';
+import {
+  colors,
+  URL,
+  screenHeight,
+  screenWidth,
+  images,
+} from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
 import DatePicker from 'react-native-datepicker';
 import {Picker} from '@react-native-community/picker';
@@ -33,6 +39,7 @@ import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
+import Login from "./Login"
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
@@ -52,42 +59,46 @@ export default class MechanicRegister extends Component {
 
       City: 'Select City',
       Country: 'Select Country',
-      FirstName: '',
-      LastName: '',
-      Email: '',
+      FirstName: 'First Name',
+      LastName: 'Last Name',
+      Email: 'Your Email',
       Password: '',
       CPassword: '',
       address: '',
-      photo: '',
+      photo: null,
       Phone: '',
-      date: 'Select Date Of Birth',
-      longitude:'',
-      latitude:'',
+      date: 'Date Of Birth',
+      longitude: '',
+      latitude: '',
       filePath: {},
-    
-
     };
   }
 
-//   cloudinaryUpload = (photo) => {
-//     const data = new FormData()
-//     data.append('file', photo)
-//     data.append('upload_preset', "dng1vvycv")
-//     data.append("cloud_name", "dng1vvycv")
-//     axios
-//       .post('https://api.cloudinary.com/v1_1/dng1vvycv/image/upload', {
-   
-//  data
-//     }).then(res => res.json()).
-//       then(data => {
-//         console.log(data)
-//        this.setState({photo:data.secure_url})
+  //   cloudinaryUpload = (photo) => {
+  //     const data = new FormData()
+  //     data.append('file', photo)
+  //     data.append('upload_preset', "dng1vvycv")
+  //     data.append("cloud_name", "dng1vvycv")
+  //     axios
+  //       .post('https://api.cloudinary.com/v1_1/dng1vvycv/image/upload', {
 
-//       }).catch(err => {
-//         Alert.alert("An Error Occured While Uploading")
-//     console.log(err)
-//       })
-//   }
+  //  data
+  //     }).then(res => res.json()).
+  //       then(data => {
+  //         console.log(data)
+  //        this.setState({photo:data.secure_url})
+
+  //       }).catch(err => {
+  //         Alert.alert("An Error Occured While Uploading")
+  //     console.log(err)
+  //       })
+  //   }
+  _Signout = async () => {
+    const login = new Login();
+    login._signOut();
+    await AsyncStorage.removeItem('googleData')
+     };
+
   check = () => {
     if (this.state.Password == this.state.CPassword) {
       this.submitData();
@@ -95,9 +106,12 @@ export default class MechanicRegister extends Component {
       alert('Confirm Password Not Matched');
     }
   };
+  componentDidMount(){
+this._Signout()
+  }
   submitData = () => {
     axios
-      .post(URL.Url+'userregister', {
+      .post(URL.Url + 'userregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
@@ -108,8 +122,8 @@ export default class MechanicRegister extends Component {
         city: this.state.City,
         country: this.state.Country,
         date: this.state.date,
-longitude:this.state.longitude,
-latitude:this.state.latitude
+        longitude: this.state.longitude,
+        latitude: this.state.latitude,
       })
       .then(async (res) => {
         console.log(res);
@@ -125,7 +139,7 @@ latitude:this.state.latitude
 
         console.log(error);
       });
-    }
+  };
   handleChoosePhoto = () => {
     const options = {
       title: 'Take Image From',
@@ -134,7 +148,7 @@ latitude:this.state.latitude
         path: 'images',
       },
     };
-    
+
     ImagePicker.showImagePicker(options, (response) => {
       if (response) {
         console.log(response);
@@ -148,7 +162,6 @@ latitude:this.state.latitude
         //   name,
         // }
         // this.cloudinaryUpload(source)
-     
       } else if (response.didCancel) {
         console.log('User Cancelled Image Picker');
       } else if (response.error) {
@@ -217,7 +230,11 @@ latitude:this.state.latitude
     const {photo} = this.state;
     return (
       <SafeAreaView style={style.flex1}>
-        <StatusBar />
+        <StatusBar
+          barStyle={'light-content'}
+          backgroundColor={'transparent'}
+          translucent={true}
+        />
         <KeyboardAvoidingView
           style={{backgroundColor: colors.white, flexGrow: 1}}>
           <ScrollView>
@@ -228,12 +245,20 @@ latitude:this.state.latitude
                 start={{x: -0.9, y: 1}}
                 end={{x: 1, y: 0}}
                 style={[style.headerHeight4]}>
-                  <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                  <Text style={[text.Eutemia,text.white,text.text30]}>Smart Auto Mechanic Finder</Text>
-                  <Text style={[text.text18,text.CinzelDecorativeBold,text.white]}>(User Registration)</Text>
-                 
-                     </View>
-                  </LinearGradient>
+                <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
+                  <Text style={[text.Eutemia, text.white, text.text30]}>
+                    Smart Auto Mechanic Finder
+                  </Text>
+                  <Text
+                    style={[
+                      text.text18,
+                      text.CinzelDecorativeBold,
+                      text.white,
+                    ]}>
+                    (User Registration)
+                  </Text>
+                </View>
+              </LinearGradient>
             </View>
 
             <View style={[appStyle.bodyBg]}>
@@ -300,12 +325,13 @@ latitude:this.state.latitude
                       style={[image.username]}></Image>
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="First Name"
+                      placeholder={'First Name'}
                       onChangeText={(text) => {
                         this.setState({
                           FirstName: text,
                         });
                       }}
+                      editable={this.state.editable}
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
 
@@ -315,12 +341,13 @@ latitude:this.state.latitude
                       style={image.username}></Image>
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Last Name"
+                      placeholder={'Last Name'}
                       onChangeText={(text) => {
                         this.setState({
                           LastName: text,
                         });
                       }}
+                      editable={this.state.editable}
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
 
@@ -330,12 +357,13 @@ latitude:this.state.latitude
                       style={image.InputImage}></Image>
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Email"
+                      placeholder={'Email'}
                       onChangeText={(text) => {
                         this.setState({
                           Email: text,
                         });
                       }}
+                      editable={this.state.editable}
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
 
@@ -343,7 +371,7 @@ latitude:this.state.latitude
                     <Image source={images.key} style={image.InputImage}></Image>
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Password"
+                      placeholder="Enter Your Password"
                       secureTextEntry={true}
                       onChangeText={(text) => {
                         this.setState({
@@ -357,7 +385,7 @@ latitude:this.state.latitude
 
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Confirm Password"
+                      placeholder="Enter Your Password"
                       secureTextEntry={true}
                       secureTextEntry={true}
                       onChangeText={(text) => {
@@ -406,7 +434,7 @@ latitude:this.state.latitude
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <View>
                       <DatePicker
-                        style={{width: 180}}
+                        style={{width: 145}}
                         mode="date"
                         placeholder={this.state.date}
                         format="YYYY-MM-DD"
@@ -420,10 +448,9 @@ latitude:this.state.latitude
                             resizeMode: 'contain',
                           },
                           dateInput: {
-                            marginLeft: 25,
-
                             borderColor: colors.white,
                           },
+
                           dateText: {
                             color: colors.gray,
                           },

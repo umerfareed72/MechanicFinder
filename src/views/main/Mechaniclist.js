@@ -58,7 +58,7 @@ export default class Mechaniclist extends Component {
   }
 
   changebuttoncolor = (id) => {
-    AsyncStorage.getItem('bookdata').then((res) => {
+    AsyncStorage.getItem('Mechanicdata').then((res) => {
       if (res == null) {
         this.setState({
           slot: id,
@@ -67,8 +67,8 @@ export default class Mechaniclist extends Component {
           // console.log(this.state.dataSource[id])
           this.props.navigation.navigate('HomeDetail');
           const senddata = JSON.stringify(this.state.dataSource[id]);
-
           AsyncStorage.setItem('data', senddata);
+         
         }
       } else {
         alert('User Already book a mechanic');
@@ -106,6 +106,7 @@ export default class Mechaniclist extends Component {
   componentDidMount() {
     AsyncStorage.getItem('skilltype').then((res) => {
       this.setState({skilltype: res});
+    
     });
   }
 

@@ -14,9 +14,15 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+import {
+  colors,
+  screenHeight,
+  screenWidth,
+  images,
+  URL,
+} from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
-
+const axios = require('axios');
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -43,7 +49,7 @@ export default class HomeDetail extends Component {
       ColorReview: colors.inputBordercolor,
       BookNowView: 'flex',
       CheckBox: images.checkBoxEmpty,
-      data: [],
+      mechanicdata: [],
     };
   }
   onStarRatingPress(rating) {
@@ -51,11 +57,20 @@ export default class HomeDetail extends Component {
       starCount: rating,
     });
   }
+  getData = async () => {
+    try {
+      await AsyncStorage.getItem('data').then((res) => {
+        res = JSON.parse(res);
+        console.log(res);
+        this.setState({mechanicdata: res});
+      });
+    } catch (error) {}
+  };
   componentDidMount() {
-    AsyncStorage.getItem('data').then((res) => {
-      res = JSON.parse(res);
-      console.log(res);
-      this.setState({data: res});
+    const {navigation} = this.props;
+    this.getData();
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.getData();
     });
   }
   tabOverview = () => {
@@ -122,17 +137,32 @@ export default class HomeDetail extends Component {
     }
   };
   buyItems = () => {
-    AsyncStorage.setItem('bookdata',JSON.stringify(this.state.data))
+    AsyncStorage.getItem('userdata').then((response) => {
+      const res = JSON.parse(response);
+      const userid = res._id;
+      const mechanicid = this.state.mechanicdata.mechanicid;
+      axios
+        .post(URL.Url + 'addbookedUser/' + mechanicid + '/' + userid)
+        .then((res) => {
+          axios
+            .get(URL.Url + 'mechanic/' + res.data.mechanicid)
+            .then((mechanic) => {
+              const sendMechanicdata = JSON.stringify(mechanic.data);
+               const sendId=JSON.stringify(res.data._id)
+            AsyncStorage.setItem('BookedMechanicId',sendId)
+            AsyncStorage.setItem('Mechanicdata', sendMechanicdata); 
+            });
+        });
+    });
     if (this.state.CheckBox == images.checkBoxTick) {
       this.props.navigation.navigate('BuyItems');
     } else {
       this.setState({BookNowView: 'none'});
       this.props.navigation.navigate('BookNow');
-      
     }
   };
   render() {
-    const {data} = this.state;
+    const {mechanicdata} = this.state;
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
@@ -166,7 +196,7 @@ export default class HomeDetail extends Component {
 
               <View style={[style.mv5]}>
                 <Text style={[text.heading1, text.bold]}>
-                  {data.firstname} {data.lastname}
+                  {mechanicdata.firstname} {mechanicdata.lastname}
                 </Text>
               </View>
               <View style={[style.mv5]}>
@@ -238,7 +268,8 @@ export default class HomeDetail extends Component {
               <View style={[style.borderbottom, style.mt10]}>
                 <Text style={[text.heading2Gray]}>
                   {' '}
-                  {data.address} {data.city} {data.country}
+                  {mechanicdata.address} {mechanicdata.city}{' '}
+                  {mechanicdata.country}
                 </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
@@ -248,7 +279,10 @@ export default class HomeDetail extends Component {
                 <Text style={[text.heading2, text.bold]}>Vehicle Type</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}> {data.vehicletype}</Text>
+                <Text style={[text.heading2Gray]}>
+                  {' '}
+                  {mechanicdata.vehicletype}
+                </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
@@ -257,7 +291,10 @@ export default class HomeDetail extends Component {
                 <Text style={[text.heading2, text.bold]}>Car Brand</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}> {data.carcompany}</Text>
+                <Text style={[text.heading2Gray]}>
+                  {' '}
+                  {mechanicdata.carcompany}
+                </Text>
               </View>
 
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
@@ -267,7 +304,10 @@ export default class HomeDetail extends Component {
                 <Text style={[text.heading2, text.bold]}>Skills Type</Text>
               </View>
               <View style={[style.borderbottom, style.mv10]}>
-                <Text style={[text.heading2Gray]}> {data.skilltype}</Text>
+                <Text style={[text.heading2Gray]}>
+                  {' '}
+                  {mechanicdata.skilltype}
+                </Text>
               </View>
               <View style={[style.mt20]}>
                 <Text style={[text.text16]}>Some Description</Text>

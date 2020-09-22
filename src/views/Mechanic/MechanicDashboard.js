@@ -45,12 +45,13 @@ export default class MechanicDashboard extends Component {
       mechanicid: '',
       loading: false,
       token: '',
-      refreshing: false,
-      dataSource: [],
-      data:[]
+      refreshing: true,
+      bookedUserData: [],
+      data: [],
+      bookedUserid: '',
     };
   }
-  getMechanicdata = () => {
+  getData = () => {
     AsyncStorage.getItem('token').then((res) => {
       this.setState({token: res});
       console.log(res);
@@ -62,43 +63,71 @@ export default class MechanicDashboard extends Component {
         })
         .then((response) => {
           this.setState({mechanicid: response.data.mechanicid});
+
           axios
             .get(URL.Url + 'mechanic/' + this.state.mechanicid)
             .then((response) => {
               console.log(this.state.mechanicid);
               axios
-                .put(URL.Url + 'mechaniclocation', {
-                  mechanicid: this.state.mechanicid,
+                .put(URL.Url + 'mechaniclocation/' + this.state.mechanicid, {
                   latitude: this.state.latitude,
                   longitude: this.state.longitude,
                 })
                 .then((response) => {
-                  this.setState({dataSource: response.data});
-                  console.log(this.state.dataSource);
                   axios
-                  .get(URL.Url + 'mechanic/' + this.state.mechanicid)
-                  .then((response) => {
-                    console.log(response.data);
-                    this.setState({data: response.data});
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-            
+                    .get(URL.Url + 'mechanic/' + this.state.mechanicid)
+                    .then((response) => {
+                      console.log(response.data);
+                      this.setState({data: response.data});
+                      const send = JSON.stringify(response.data);
+                      AsyncStorage.setItem('Mechanicdata', send);
+                    })
+                    .then((res) => {
+                      axios
+                        .get(URL.Url + 'getbookedUser/' + this.state.mechanicid)
+                        .then((response) => {
+                          console.log(response.data);
+                          response.data.map((item) => {
+                            axios
+                              .get(URL.Url + 'user/' + item.userid)
+                              .then((response) => {
+                                this.setState({
+                                  bookedUserData: response.data,
+                                });
+                                this.setState({refreshing: false});
+                                const sendUserData = JSON.stringify(
+                                  response.data,
+                                );
+                                this.setState({bookedUserid: item._id});
+
+                                const sendUserId = JSON.stringify(item._id);
+                                AsyncStorage.setItem(
+                                  'BookedUserId',
+                                  sendUserId,
+                                );
+                                AsyncStorage.setItem('userData', sendUserData);
+                                console.log(sendUserData);
+                              });
+                          });
+                        })
+                        .catch((error) => {
+                          console.log(error, 'Booked User Not Accesible');
+                        });
+                    });
                 })
                 .catch((error) => {
-                  console.log('Error agya', error);
+                  console.log('Mechanic Location Not Updated', error);
                 });
             });
         })
         .catch((error) => {
-          console.log(error);
+          console.log('Mechanic Data Not Accessible', error);
         });
     });
   };
+
   requestMechanicLocation = async () => {
     try {
-     
       const grantedLocation = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
@@ -129,7 +158,7 @@ export default class MechanicDashboard extends Component {
               longitude: position.coords.longitude,
               latitude: position.coords.latitude,
             });
-            this.getMechanicdata();
+            this.getData();
           },
           (error) => {
             // See error code charts below.
@@ -148,144 +177,171 @@ export default class MechanicDashboard extends Component {
       starCount: rating,
     });
   }
+  removeBooking = () => {
+    setInterval(() => {
+      axios
+        .put(URL.Url + 'cancelbookeduser/' + this.state.bookedUserid)
+        .then((res) => {
+          this.setState({bookedUserData: null});
+          this.setState({refreshing: true});
+          console.log(res.data, 'data updated');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, 100000);
+  };
   componentDidMount() {
+    console.log(this.state.data, 'hello');
+    const {navigation} = this.props;
     this.requestMechanicLocation();
-     }
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.requestMechanicLocation();
+    });
+    this.removeBooking();
+  }
+  bookedUser = () => {
+    const {bookedUserData, refreshing} = this.state;
+    if (refreshing != true) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            this.props.navigation.navigate('UserProfile');
+          }}
+          style={[appStyle.slotCard, appStyle.rowJustify, style.aiCenter]}>
+          <View style={[style.row, style.aiCenter]}>
+            <View style={style.mr10}>
+              <Image style={image.userImg} source={images.dummy1} />
+            </View>
+
+            <View style={[style.rowBtw, style.aiCenter]}>
+              <View style={[style.mr15]}>
+                <Image source={images.imagep} style={[image.image50]}></Image>
+              </View>
+              <View>
+                <View>
+                  <Text style={[text.text16, text.bold]}>
+                    {bookedUserData.firstname} {bookedUserData.lastname}
+                  </Text>
+                </View>
+                <View style={style.row}>
+                  <Text style={[text.text15, {color: colors.gray}]}>
+                    {bookedUserData.email}
+                  </Text>
+                </View>
+                <View style={[style.mv5]}>
+                  <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.starCount}
+                    selectedStar={(rating) => this.onStarRatingPress(rating)}
+                    fullStarColor={'#F59E52'}
+                    emptyStarColor={'#F59E52'}
+                    starSize={18}
+                    containerStyle={{width: 110, marginTop: 3}}
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          <TouchableOpacity>
+            <Image style={[image.forward]} source={images.arrowLong}></Image>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View
+          style={[
+            style.mv20,
+            style.aiCenter,
+            {backgroundColor: colors.lightgray},
+          ]}>
+          <View style={[style.mv20]}>
+            <Text style={[text.heading1purple]}>No Data Available</Text>
+          </View>
+        </View>
+      );
+    }
+  };
 
   render() {
-      return (
-        <SafeAreaView style={[appStyle.safeContainer]}>
-          <StatusBar
-            barStyle={'light-content'}
-            backgroundColor={'transparent'}
-            translucent={true}
-          />
+    return (
+      <SafeAreaView style={[appStyle.safeContainer]}>
+        <StatusBar
+          barStyle={'light-content'}
+          backgroundColor={'transparent'}
+          translucent={true}
+        />
 
-          {/*Body */}
-          <View style={{}}>
-            <LinearGradient
-              colors={colors.orablu}
-              start={{x: -0.9, y: 1}}
-              end={{x: 1, y: 0}}
-              style={{height: screenHeight.height30}}>
-              <View style={{postion: 'absolute', top: 30, left: 10, width: 30}}>
-                <Hamburger />
-              </View>
+        {/*Body */}
+        <View style={{}}>
+          <LinearGradient
+            colors={colors.orablu}
+            start={{x: -0.9, y: 1}}
+            end={{x: 1, y: 0}}
+            style={{height: screenHeight.height30}}>
+            <View style={{postion: 'absolute', top: 30, left: 10, width: 30}}>
+              <Hamburger />
+            </View>
 
+            <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
+              <Text style={[text.VanityBold, text.white, text.text30]}>
+                Dashboard
+              </Text>
+              <Text style={[text.text18, text.Eutemia, text.white]}>
+                (Have a Nice day)
+              </Text>
+            </View>
+          </LinearGradient>
+        </View>
+        <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
+          <ScrollView>
+            <View style={[style.pv20]}>
               <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                <Text style={[text.VanityBold, text.white, text.text30]}>
-                  Dashboard
+                <Text style={[text.goodfishbd, text.text40, text.greyRegular]}>
+                  Hi {this.state.data.firstname}
                 </Text>
-                <Text style={[text.text18, text.Eutemia, text.white]}>
-                  (Have a Nice day)
+                <View style={[style.mv5]}>
+                  <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.starCount}
+                    selectedStar={(rating) => this.onStarRatingPress(rating)}
+                    fullStarColor={'#000'}
+                    emptyStarColor={'#000'}
+                    starSize={20}
+                    containerStyle={{width: 110, marginTop: 3}}
+                  />
+                  <Text style={[text.center, style.mv5]}> Reviews(4/5.0)</Text>
+                </View>
+              </View>
+              <View style={[style.aiCenter, style.mv10]}>
+                <View style={image.boxContainer}>
+                  <Text style={[text.text30]}> 5$</Text>
+                </View>
+                <View style={style.mv10}>
+                  <Text style={[text.text20, text.goodfishbd, text.darkBlue]}>
+                    {' '}
+                    Your Earning
+                  </Text>
+                </View>
+              </View>
+
+              <View style={[appStyle.rowJustify]}>
+                <Text style={[text.heading4, text.semibold]}>
+                  Top Mechanics
+                </Text>
+                <Text style={[text.heading4, text.semibold]}>
+                  You need to Know
                 </Text>
               </View>
-            </LinearGradient>
-          </View>
-          <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
-            <ScrollView>
-              <View style={[style.pv20]}>
-                <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                  <Text
-                    style={[text.goodfishbd, text.text40, text.greyRegular]}>
-                    Hi {this.state.data.firstname}
-                  </Text>
-                  <View style={[style.mv5]}>
-                    <StarRating
-                      disabled={true}
-                      maxStars={5}
-                      rating={this.state.starCount}
-                      selectedStar={(rating) => this.onStarRatingPress(rating)}
-                      fullStarColor={'#000'}
-                      emptyStarColor={'#000'}
-                      starSize={20}
-                      containerStyle={{width: 110, marginTop: 3}}
-                    />
-                    <Text style={[text.center, style.mv5]}>
-                      {' '}
-                      Reviews(4/5.0)
-                    </Text>
-                  </View>
-                </View>
-                <View style={[style.aiCenter, style.mv10]}>
-                  <View style={image.boxContainer}>
-                    <Text style={[text.text30]}> 5$</Text>
-                  </View>
-                  <View style={style.mv10}>
-                    <Text style={[text.text20, text.goodfishbd, text.darkBlue]}>
-                      {' '}
-                      Your Earning
-                    </Text>
-                  </View>
-                </View>
-
-              
-                <View style={[appStyle.rowJustify]}>
-                  <Text style={[text.heading4, text.semibold]}>
-                    Top Mechanics
-                  </Text>
-                  <Text style={[text.heading4, text.semibold]}>
-                   You need to Know
-                  </Text>
-                </View>
-
-                <TouchableOpacity
-                  onPress={()=>{this.props.navigation.navigate("UserProfile")}}
-                  style={[
-                    appStyle.slotCard,
-                    appStyle.rowJustify,
-                    style.aiCenter,
-                  ]}>
-                  <View style={[style.row, style.aiCenter]}>
-                    <View style={style.mr10}>
-                      <Image style={image.userImg} source={images.dummy1} />
-                    </View>
-
-                    <View style={[style.rowBtw, style.aiCenter]}>
-                      <View style={[style.mr15]}>
-                        <Image
-                          source={images.imagep}
-                          style={[image.image50]}></Image>
-                      </View>
-                      <View>
-                        <View>
-                          <Text style={[text.text16, text.bold]}>
-                            Umer Fareed
-                          </Text>
-                        </View>
-                        <View style={style.row}>
-                          <Text style={[text.text15, {color: colors.gray}]}>
-                            umerfareeed72@gmail.com
-                          </Text>
-                        </View>
-                        <View style={[style.mv5]}>
-                          <StarRating
-                            disabled={true}
-                            maxStars={5}
-                            rating={this.state.starCount}
-                            selectedStar={(rating) =>
-                              this.onStarRatingPress(rating)
-                            }
-                            fullStarColor={'#F59E52'}
-                            emptyStarColor={'#F59E52'}
-                            starSize={18}
-                            containerStyle={{width: 110, marginTop: 3}}
-                          />
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-
-                  <TouchableOpacity>
-                    <Image
-                      style={[image.forward]}
-                      source={images.arrowLong}></Image>
-                  </TouchableOpacity>
-                </TouchableOpacity>
-              </View>
-            </ScrollView>
-          </View>
-        </SafeAreaView>
-      );
+              <View>{this.bookedUser()}</View>
+            </View>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    );
   }
 }

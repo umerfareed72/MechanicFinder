@@ -90,7 +90,7 @@ export default class Login extends Component {
     } else {
       //response alert
       console.log(JSON.stringify(result));
-      this.props.navigation.navigate('Dashboard');
+      this.props.navigation.navigate('GoogleUserSignUp');
 
       // this.setState({ Bussinessid:  result.id });
 
@@ -205,10 +205,10 @@ export default class Login extends Component {
       });
       const userInfo = await GoogleSignin.signIn();
       console.log('User Info --> ', userInfo);
-      const sendData = JSON.stringify(userInfo);
       this.setState({userInfo: userInfo});
+      const sendData = JSON.stringify(userInfo);
       AsyncStorage.setItem('googleData', sendData);
-      this.props.navigation.navigate('Dashboard');
+      this.props.navigation.navigate('GoogleUserSignUp');
     } catch (error) {
       console.log('Message', error.message);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -255,232 +255,209 @@ export default class Login extends Component {
   };
 
   render() {
-    if (this.state.userInfo != null) {
-      return (
-        <View style={{alignSelf: 'center'}}>
-          <View style={{alignSelf: 'center', marginTop: 150}}>
+    return (
+      <SafeAreaView style={style.flex1}>
+        <StatusBar translucent={true} backgroundColor={'transparent'} />
+
+        <KeyboardAvoidingView
+          style={{backgroundColor: colors.white, flexGrow: 1}}>
+          <ScrollView>
             <View>
-              <Image
-                style={{height: 50, width: 50}}
-                source={{uri: this.state.userInfo.user.photo}}></Image>
-              <Text>Email: {this.state.userInfo.user.name}</Text>
-              <Text>Email: {this.state.userInfo.user.email}</Text>
-              <TouchableOpacity onPress={this._signOut}>
-                <Text>Logout</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      );
-    } else {
-      return (
-        <SafeAreaView style={style.flex1}>
-          <StatusBar translucent={true} backgroundColor={'transparent'} />
-
-          <KeyboardAvoidingView
-            style={{backgroundColor: colors.white, flexGrow: 1}}>
-            <ScrollView>
-              <View>
-                <LinearGradient
-                  colors={colors.orablu}
-                  start={{x: -0.9, y: 1}}
-                  end={{x: 1, y: 0}}
-                  style={[style.headerHeight4]}>
-                  <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                    <Text style={[text.Eutemia, text.white, text.text30]}>
-                      Smart Auto Mechanic Finder
-                    </Text>
-                    <Text
-                      style={[
-                        text.text18,
-                        text.CinzelDecorativeBold,
-                        text.white,
-                      ]}>
-                      (User)
-                    </Text>
-                  </View>
-                </LinearGradient>
-              </View>
-
-              <View style={[appStyle.bodyBg]}>
-                <View style={[appStyle.headingLayout]}>
-                  <Text style={[style.headerStyle, text.OpenSans]}>
-                    Welcome
+              <LinearGradient
+                colors={colors.orablu}
+                start={{x: -0.9, y: 1}}
+                end={{x: 1, y: 0}}
+                style={[style.headerHeight4]}>
+                <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
+                  <Text style={[text.Eutemia, text.white, text.text30]}>
+                    Smart Auto Mechanic Finder
+                  </Text>
+                  <Text
+                    style={[
+                      text.text18,
+                      text.CinzelDecorativeBold,
+                      text.white,
+                    ]}>
+                    (User)
                   </Text>
                 </View>
-                <View>
-                  <View style={[input.textinputcontainer]}>
-                    <Image
-                      source={images.email}
-                      style={image.InputImage}></Image>
-                    <TextInput
-                      onFocus={this.changeheight}
-                      style={input.textinputstyle}
-                      placeholder="Email"
-                      onChangeText={(text) => {
-                        this.setState({
-                          Email: text,
-                        });
-                      }}
-                      underlineColorAndroid="transparent"></TextInput>
-                  </View>
+              </LinearGradient>
+            </View>
 
-                  <View style={[input.textinputcontainer, style.mt20]}>
-                    <Image source={images.key} style={image.InputImage}></Image>
-                    <TextInput
-                      onFocus={this.changeheight}
-                      style={input.textinputstyle}
-                      placeholder="Password"
-                      onChangeText={(text) => {
-                        this.setState({
-                          Password: text,
-                        });
-                      }}
-                      secureTextEntry={true}
-                      underlineColorAndroid="transparent"></TextInput>
-                  </View>
-                  <View style={[style.pv10, style.ph30]}>
+            <View style={[appStyle.bodyBg]}>
+              <View style={[appStyle.headingLayout]}>
+                <Text style={[style.headerStyle, text.OpenSans]}>Welcome</Text>
+              </View>
+              <View>
+                <View style={[input.textinputcontainer]}>
+                  <Image source={images.email} style={image.InputImage}></Image>
+                  <TextInput
+                    onFocus={this.changeheight}
+                    style={input.textinputstyle}
+                    placeholder="Email"
+                    onChangeText={(text) => {
+                      this.setState({
+                        Email: text,
+                      });
+                    }}
+                    underlineColorAndroid="transparent"></TextInput>
+                </View>
+
+                <View style={[input.textinputcontainer, style.mt20]}>
+                  <Image source={images.key} style={image.InputImage}></Image>
+                  <TextInput
+                    onFocus={this.changeheight}
+                    style={input.textinputstyle}
+                    placeholder="Password"
+                    onChangeText={(text) => {
+                      this.setState({
+                        Password: text,
+                      });
+                    }}
+                    secureTextEntry={true}
+                    underlineColorAndroid="transparent"></TextInput>
+                </View>
+                <View style={[style.pv10, style.ph30]}>
+                  <Text
+                    onPress={() => {
+                      this.props.navigation.navigate('Forgot');
+                    }}
+                    style={[text.right, text.text14, {color: colors.link}]}>
+                    Forgot Password
+                  </Text>
+                </View>
+
+                <TouchableOpacity
+                  onPress={this.submitData}
+                  // onPress={() => {
+                  //   this.props.navigation.navigate('Dashboard');
+                  // }}
+                >
+                  <View style={[button.buttoncontainer, style.mt20]}>
                     <Text
-                      onPress={() => {
-                        this.props.navigation.navigate('Forgot');
-                      }}
-                      style={[text.right, text.text14, {color: colors.link}]}>
-                      Forgot Password
+                      style={[
+                        button.touchablebutton,
+                        {color: colors.darkBlue},
+                      ]}>
+                      Login
                     </Text>
                   </View>
+                </TouchableOpacity>
 
-                  <TouchableOpacity
-                    onPress={this.submitData}
-                    // onPress={() => {
-                    //   this.props.navigation.navigate('Dashboard');
-                    // }}
-                  >
-                    <View style={[button.buttoncontainer, style.mt20]}>
-                      <Text
-                        style={[
-                          button.touchablebutton,
-                          {color: colors.darkBlue},
-                        ]}>
-                        Login
-                      </Text>
+                <View style={[style.mv10, style.row, style.asCenter]}>
+                  <GoogleSigninButton
+                    style={[style.asCenter]}
+                    size={GoogleSigninButton.Size.Icon}
+                    color={GoogleSigninButton.Color.Light}
+                    onPress={this._signIn}
+                    disabled={this.state.isSigninInProgress}
+                  />
+
+                  <TouchableOpacity onPress={this.handleFacebookLogin}>
+                    <View style={[style.jcCenter, style.flex1, style.mh20]}>
+                      <Image
+                        style={[image.icon40]}
+                        source={images.facebookdark}></Image>
                     </View>
                   </TouchableOpacity>
-
-                  <View style={[style.mv10, style.row, style.asCenter]}>
-                    <GoogleSigninButton
-                      style={[style.asCenter]}
-                      size={GoogleSigninButton.Size.Icon}
-                      color={GoogleSigninButton.Color.Light}
-                      onPress={this._signIn}
-                      disabled={this.state.isSigninInProgress}
-                    />
-
-                    <TouchableOpacity onPress={this.handleFacebookLogin}>
-                      <View style={[style.jcCenter, style.flex1, style.mh20]}>
-                        <Image
-                          style={[image.icon40]}
-                          source={images.facebookdark}></Image>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={[style.mv20, style.mh10]}>
-                  <Text style={[text.goodfishbd, text.text18, text.center]}>
-                    Login As
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    appStyle.rowBtw,
-                    style.mh15,
-                    style.mv10,
-                    appStyle.bodyShadowTop,
-                  ]}>
-                  <TouchableOpacity
-                    onPress={this.adminLogin}
-                    style={[
-                      {backgroundColor: this.state.adminLogin},
-                      appStyle.colLeft,
-                    ]}>
-                    <Text
-                      style={[
-                        style.asCenter,
-                        text.heading3,
-                        text.semibold,
-                        {color: this.state.textAdmin},
-                      ]}>
-                      Admin
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={this.mechanicLogin}
-                    style={[
-                      appStyle.colRight,
-                      {backgroundColor: this.state.mechanicLogin},
-                    ]}>
-                    <Text
-                      style={[
-                        style.asCenter,
-                        text.heading3,
-                        text.semibold,
-                        {color: this.state.textMechanicLogin},
-                      ]}>
-                      Mechanic
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={[style.mv20, style.mh10]}>
-                  <Text style={[text.goodfishbd, text.text18, text.center]}>
-                    Do You have an Account?
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    appStyle.rowBtw,
-                    style.mh15,
-                    style.mv10,
-                    appStyle.bodyShadowTop,
-                  ]}>
-                  <TouchableOpacity
-                    onPress={this.UserRegister}
-                    style={[
-                      {backgroundColor: this.state.Uregister},
-                      appStyle.colLeft,
-                    ]}>
-                    <Text
-                      style={[
-                        style.asCenter,
-                        text.heading3,
-                        text.semibold,
-                        {color: this.state.textUser},
-                      ]}>
-                      User
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={this.MechanicRegister}
-                    style={[
-                      appStyle.colRight,
-                      {backgroundColor: this.state.Mregister},
-                    ]}>
-                    <Text
-                      style={[
-                        style.asCenter,
-                        text.heading3,
-                        text.semibold,
-                        {color: this.state.textMechanic},
-                      ]}>
-                      Mechanic
-                    </Text>
-                  </TouchableOpacity>
                 </View>
               </View>
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </SafeAreaView>
-      );
-    }
+              <View style={[style.mv20, style.mh10]}>
+                <Text style={[text.goodfishbd, text.text18, text.center]}>
+                  Login As
+                </Text>
+              </View>
+              <View
+                style={[
+                  appStyle.rowBtw,
+                  style.mh15,
+                  style.mv10,
+                  appStyle.bodyShadowTop,
+                ]}>
+                <TouchableOpacity
+                  onPress={this.adminLogin}
+                  style={[
+                    {backgroundColor: this.state.adminLogin},
+                    appStyle.colLeft,
+                  ]}>
+                  <Text
+                    style={[
+                      style.asCenter,
+                      text.heading3,
+                      text.semibold,
+                      {color: this.state.textAdmin},
+                    ]}>
+                    Admin
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={this.mechanicLogin}
+                  style={[
+                    appStyle.colRight,
+                    {backgroundColor: this.state.mechanicLogin},
+                  ]}>
+                  <Text
+                    style={[
+                      style.asCenter,
+                      text.heading3,
+                      text.semibold,
+                      {color: this.state.textMechanicLogin},
+                    ]}>
+                    Mechanic
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={[style.mv20, style.mh10]}>
+                <Text style={[text.goodfishbd, text.text18, text.center]}>
+                  Do You have an Account?
+                </Text>
+              </View>
+              <View
+                style={[
+                  appStyle.rowBtw,
+                  style.mh15,
+                  style.mv10,
+                  appStyle.bodyShadowTop,
+                ]}>
+                <TouchableOpacity
+                  onPress={this.UserRegister}
+                  style={[
+                    {backgroundColor: this.state.Uregister},
+                    appStyle.colLeft,
+                  ]}>
+                  <Text
+                    style={[
+                      style.asCenter,
+                      text.heading3,
+                      text.semibold,
+                      {color: this.state.textUser},
+                    ]}>
+                    User
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={this.MechanicRegister}
+                  style={[
+                    appStyle.colRight,
+                    {backgroundColor: this.state.Mregister},
+                  ]}>
+                  <Text
+                    style={[
+                      style.asCenter,
+                      text.heading3,
+                      text.semibold,
+                      {color: this.state.textMechanic},
+                    ]}>
+                    Mechanic
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    );
   }
 }

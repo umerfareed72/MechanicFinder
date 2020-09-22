@@ -34,7 +34,7 @@ import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
 import Login from '../registration/Login';
 
-export default class Settings extends Component {
+export default class MechanicSetting extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,20 +52,16 @@ export default class Settings extends Component {
     // };
   }
   onSignout = () => {
-    const {navigation} = this.props;
-      const login = new Login();
-      login._signOut();
-
-      AsyncStorage.removeItem('googleData').then(() => {
-        navigation.navigate('Login');
-      });
-      AsyncStorage.removeItem('usersignintoken').then(() => {
-        navigation.navigate('Login');
-      });
-     };
+    const {navigation}=this.props;
+    
+    AsyncStorage.removeItem('token').then(() => {
+      navigation.navigate('LoginasMechanic');
+    });
+ 
+  };
   LoginUserData = () => {
     try {
-      AsyncStorage.getItem('userdata').then((res) => {
+      AsyncStorage.getItem('Mechanicdata').then((res) => {
         res = JSON.parse(res);
         console.log(this.state.data, 'User data');
         this.setState({data: res});
@@ -123,7 +119,7 @@ export default class Settings extends Component {
                   <TouchableOpacity
                     style={[style.mh10]}
                     onPress={() => {
-                      this.props.navigation.navigate('Login');
+                      this.props.navigation.navigate('LoginasMechanic');
                     }}>
                     <View style={[button.modalButton]}>
                       <Text style={[text.heading5white]}>Yes</Text>

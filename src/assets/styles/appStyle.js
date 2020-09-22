@@ -186,7 +186,8 @@ bodyShadowBottom: {
     flexWrap: 'wrap',
   },
   listImg: {
-    height: 66, width: 66,
+    height: 66,
+     width: 66,
     borderRadius: 66 / 2,
     resizeMode: 'contain'
   },

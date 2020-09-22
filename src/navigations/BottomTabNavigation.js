@@ -39,6 +39,7 @@ import BuyItems from '../views/main/BuyItems';
 import ProfileDetail from '../views/main/ProfileDetail';
 
 import Items from '../views/main/Items';
+import Login from '../views/registration/Login';
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
@@ -81,7 +82,6 @@ const DashboardStack = createStackNavigator(
 const DiscoverStack = createStackNavigator(
   {
     Memories: Memories,
- 
   },
   {
     headerMode: 'none',
@@ -92,7 +92,6 @@ const DiscoverStack = createStackNavigator(
 );
 const TabStack = createStackNavigator(
   {
-    
     Setting: Setting,
     EditProfile: EditProfile,
     Terms: Terms,
@@ -160,13 +159,23 @@ const Navigator = createMaterialBottomTabNavigator(
 
 const BookNowStack = createStackNavigator(
   {
-  BookNow:BookNow,
-  ProfileDetail:ProfileDetail
+    BookNow: BookNow,
+    ProfileDetail: ProfileDetail,
   },
   {
     headerMode: 'none',
   },
 );
+
+const LoginStack = createStackNavigator(
+  {
+    Login: Login,
+  },
+  {
+    headerMode: 'none',
+  },
+);
+
 const Navigators = createMaterialBottomTabNavigator(
   {
     BookNow: {
@@ -209,12 +218,13 @@ const TabNavigator = createDrawerNavigator(
     Navigator: {
       screen: Navigator,
     },
-    Dashboard: {
-      screen: DashboardStack,
-    },
+    // Dashboard: {
+    //   screen: DashboardStack,
+    // },
     Navigators: {
       screen: Navigators,
     },
+
   },
   {
     contentComponent: SideMenu,

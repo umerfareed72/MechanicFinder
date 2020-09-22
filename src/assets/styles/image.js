@@ -117,6 +117,16 @@ export default StyleSheet.create({
     borderColor: colors.gray,
     justifyContent: 'center',
   },
+  mediumovalcontainerupload: {
+    height: 60,
+    width: 60,
+    borderRadius: 60,
+    backgroundColor: colors.lightgray,
+    borderColor: colors.gray,
+    justifyContent: 'center',
+  },
+  
+  
   attachtextimageleft: {
     flex: 1,
     flexDirection: 'row',
@@ -177,14 +187,16 @@ export default StyleSheet.create({
     marginRight: 15,
     height: 15,
     width: 24,
+    tintColor:colors.black2B,
     resizeMode: 'contain',
   },
   username: {
     marginRight: 15,
     height: 25,
+width: 24,
+tintColor:colors.black2B,
+resizeMode: 'contain',
 
-    width: 24,
-    resizeMode: 'contain',
   },
   searchIcon: {
     height: 18,

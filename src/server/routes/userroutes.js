@@ -57,7 +57,20 @@ router.post('/usersignin', async (req, res) => {
 
 //Get user By id
 router.get('/user/:id', (req, res) => {
-  Usermodel.findById(req.params.id)
+  Usermodel.findById(req.params.id).select({
+    firstname:1,
+    lastname:1,
+    latitude:1,
+    longitude:1,
+    email:1,
+    phone:1,
+    photo:1,
+    address:1,
+    city:1,
+    country:1
+
+
+  })
     .then((user) => {
       if (!user) {
         return res.status(404).send('User Not Found');
@@ -70,18 +83,23 @@ router.get('/user/:id', (req, res) => {
 });
 
 //Update User Lat & Long
-router.put('/userlocation', (req, res) => {
-  Usermodel.findByIdAndUpdate({
-    userid: req.body.userid,
-    longitude: req.body.longitude,
-    latitude: req.body.latitude,
-  })
+router.put('/userlocation/:id', (req, res) => {
+  Usermodel.findByIdAndUpdate(
+    {_id: req.params.id},
+    {
+      longitude: req.body.longitude,
+      latitude: req.body.latitude,
+    },
+  )
     .then((user) => {
       if (!user) {
         return res.status(404).send('User Not Found');
+      } else {
+        // user.update();
+        return res.status(200).json(user);
       }
-      return res.status(200).json(user);
     })
+
     .catch((error) => {
       return res.send(error);
     });

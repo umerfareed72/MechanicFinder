@@ -13,9 +13,12 @@ import {
   Dimensions,
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../config/Constant';
+
 // import TabNavigation from './BottomTabNavigation';
 import SignUp from '../views/registration/SignUp';
 import LoginasMechanic from '../views/registration/LoginasMechanic';
+import GoogleUserSignUp from '../views/registration/GoogleUserSignUp';
+
 import ForgotPassword from '../views/registration/ForgotPassword';
 import MechanicNavigation from './MechanicNavigation';
 
@@ -36,6 +39,7 @@ const AuthStack = createStackNavigator(
   {
     Login: Login,
     SignUp: SignUp,
+    GoogleUserSignUp: GoogleUserSignUp,
     LoginasMechanic: LoginasMechanic,
     MechanicRegister: MechanicRegister,
     Forgot: ForgotPassword,
@@ -44,8 +48,6 @@ const AuthStack = createStackNavigator(
     headerMode: 'none',
   },
 );
-
-
 
 const userStack = createStackNavigator(
   {

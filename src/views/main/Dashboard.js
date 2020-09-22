@@ -123,21 +123,21 @@ export default class Dashboard extends Component {
             .then((response) => {
               // console.log(this.state.userid);
               axios
-                .put(URL.Url + 'userlocation', {
-                  userid: this.state.userid,
+                .put(URL.Url + 'userlocation/' + this.state.userid, {
                   latitude: this.state.latitude,
                   longitude: this.state.longitude,
                 })
                 .then((response) => {
                   this.setState({userdata: response.data});
+                  // console.log(this.state.userdata+'Data Updated')
                   const senddata = JSON.stringify(this.state.userid);
                   AsyncStorage.setItem('userId', senddata);
                   axios
                     .get(URL.Url + 'user/' + this.state.userid)
                     .then((response) => {
                       console.log(response.data);
-                      const send=JSON.stringify(response.data)
-                      AsyncStorage.setItem('userdata',send);
+                      const send = JSON.stringify(response.data);
+                      AsyncStorage.setItem('userdata', send);
                     })
                     .catch((error) => {
                       console.log(error);
@@ -199,9 +199,8 @@ export default class Dashboard extends Component {
             <View>
               <TouchableOpacity
                 onPress={() => {
-                  AsyncStorage.setItem('skilltype','Electric')
+                  AsyncStorage.setItem('skilltype', 'Electric');
                   this.props.navigation.navigate('Mechaniclist');
-            
                 }}
                 style={[style.pv10]}>
                 <ImageBackground
@@ -218,10 +217,9 @@ export default class Dashboard extends Component {
               <TouchableOpacity
                 style={[style.pv10]}
                 onPress={() => {
-                  AsyncStorage.setItem('skilltype','Painter')
+                  AsyncStorage.setItem('skilltype', 'Painter');
                   this.props.navigation.navigate('Mechaniclist');
-             
-               }}>
+                }}>
                 <ImageBackground
                   imageStyle={{borderRadius: 8}}
                   style={image.homeCategoryImg}
@@ -236,10 +234,9 @@ export default class Dashboard extends Component {
               <TouchableOpacity
                 style={[style.pv10]}
                 onPress={() => {
-                  AsyncStorage.setItem('skilltype','Engine')
+                  AsyncStorage.setItem('skilltype', 'Engine');
                   this.props.navigation.navigate('Mechaniclist');
-             
-             }}>
+                }}>
                 <ImageBackground
                   imageStyle={{borderRadius: 8}}
                   style={image.homeCategoryImg}
@@ -252,11 +249,9 @@ export default class Dashboard extends Component {
               <TouchableOpacity
                 style={[style.pv10]}
                 onPress={() => {
-                  AsyncStorage.setItem('skilltype','Body')
+                  AsyncStorage.setItem('skilltype', 'Body');
                   this.props.navigation.navigate('Mechaniclist');
-                  
-             
-             }}>
+                }}>
                 <ImageBackground
                   imageStyle={{borderRadius: 8}}
                   style={image.homeCategoryImg}

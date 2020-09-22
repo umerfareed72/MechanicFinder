@@ -39,6 +39,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-community/async-storage';
+const axios = require('axios');
 export default class Overview extends Component {
   constructor(props) {
     super(props);
@@ -47,7 +48,10 @@ export default class Overview extends Component {
     this.state = {
       rating: 2,
       data: [],
+      refreshing: true,
+      bookedUserid: '',
       starCount: 3.5,
+
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
     this.fadeOut = this.fadeOut.bind(this);
@@ -70,28 +74,66 @@ export default class Overview extends Component {
   };
   getMechanicLocation = async () => {
     try {
-      await AsyncStorage.getItem('userdata').then((res) => {
-        res = JSON.parse(res);
-        this.setState({data: res});
-        console.log(res);
-      });
-      this.RemoveBooking();
+      await AsyncStorage.getItem('userData')
+        .then((response) => {
+          const data = JSON.parse(response);
+          console.log(response);
+          this.setState({data: data});
+        })
+        .then((bookid) => {
+          AsyncStorage.getItem('BookedUserId').then((res) => {
+            const bookedId = JSON.parse(res);
+            this.setState({bookedUserid: bookedId});
+          });
+        })
+        .catch((error) => {
+          console.log('User data not Fetched', error);
+        });
     } catch (error) {
       console.log(error);
     }
   };
-  RemoveBooking = () => {
-    setTimeout(() => {
-      AsyncStorage.removeItem('userdata');
-      this.props.navigation.navigate('MechanicDashboard');
-    }, 100000);
+
+  CancelBooking = async () => {
+    console.log(this.state.bookedUserid);
+    axios
+      .put(URL.Url + 'cancelbookeduser/' + this.state.bookedUserid)
+      .then((res) => {
+        AsyncStorage.removeItem('userData');
+        this.setState({refreshing: false});
+        this.props.navigation.navigate('MechanicDashboard');
+        console.log(res.data, 'data updated');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  CancelBooking = () => {
-    AsyncStorage.removeItem('userdata');
-    this.props.navigation.navigate('MechanicDashboard');
+  RemoveBooking = () => {
+    setInterval(() => {
+      axios
+        .put(URL.Url + 'cancelbookeduser/' + this.state.bookedUserid)
+        .then((res) => {
+          this.setState({refreshing: false});
+          AsyncStorage.removeItem('userData');
+          this.props.navigation.navigate('MechanicDashboard');
+          console.log(res.data, 'data updated');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, 10000000);
   };
   componentDidMount() {
+    console.log(this.state.data, 'hello');
+    const {navigation} = this.props;
+    this.getMechanicLocation();
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.getMechanicLocation();
+    });
+    this.RemoveBooking();
+    // this.getMechanicLocation();
+
     Animated.loop(
       Animated.timing(
         // Animate over time
@@ -106,7 +148,6 @@ export default class Overview extends Component {
     ).start();
 
     // Starts the animation
-    this.getMechanicLocation();
   }
 
   fadeOut() {
@@ -124,8 +165,8 @@ export default class Overview extends Component {
   }
 
   render() {
-    let {fadeAnim, data} = this.state;
-    if (data != null) {
+    let {fadeAnim, data, refreshing} = this.state;
+    if (refreshing != false && data != null) {
       return (
         <SafeAreaView style={appStyle.safeContainer}>
           <StatusBar
@@ -141,8 +182,17 @@ export default class Overview extends Component {
               source={images.userImg}>
               <View style={style.bgOverlay} />
               <View style={[style.rowBtw, style.ph20, style.pb10]}>
-                <View></View>
-
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('MechanicDashboard')
+                  }>
+                  <Image
+                    source={images.backarrowh}
+                    style={[
+                      image.backArrow2,
+                      {tintColor: colors.white},
+                    ]}></Image>
+                </TouchableOpacity>
                 <View>
                   <Text style={[text.heading1, text.bold]}>Profile</Text>
                 </View>
@@ -262,9 +312,50 @@ export default class Overview extends Component {
       );
     } else {
       return (
-        <View>
-          <Text>No Data Available</Text>
-        </View>
+        <SafeAreaView style={appStyle.safeContainer}>
+          <StatusBar
+            barStyle={'light-content'}
+            backgroundColor={'transparent'}
+            translucent={true}
+          />
+
+          <View style={[style.flex1]}>
+            <ImageBackground
+              imageStyle={{borderRadius: 8}}
+              style={[image.storeImg, style.w100]}
+              source={images.userImg}>
+              <View style={style.bgOverlay} />
+              <View style={[style.rowBtw, style.ph20, style.pb10]}>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('MechanicDashboard')
+                  }>
+                  <Image
+                    source={images.backarrowh}
+                    style={[
+                      image.backArrow2,
+                      {tintColor: colors.white},
+                    ]}></Image>
+                </TouchableOpacity>
+
+                <View>
+                  <Text style={[text.heading1, text.bold]}>Profile</Text>
+                </View>
+                <Text style={[text.text16, text.orange]}></Text>
+              </View>
+            </ImageBackground>
+
+            <View style={[appStyle.curvedContainer]}>
+              <ScrollView style={style.ph20}>
+                <View style={[style.mt40]}>
+                  <View style={[style.aiCenter]}>
+                    <Text style={[text.h1Purple]}>No Data Available</Text>
+                  </View>
+                </View>
+              </ScrollView>
+            </View>
+          </View>
+        </SafeAreaView>
       );
     }
   }

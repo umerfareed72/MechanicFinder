@@ -12,11 +12,11 @@ import MechanicDashboard from '../views/Mechanic/MechanicDashboard';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createDrawerNavigator} from 'react-navigation-drawer';
-import SideMenu from '../views/registration/SideMenu';
-import Setting from '../views/main/Setting';
-import UserProfile from "../views/Mechanic/UserProfile"
-import Chat from "../views/Mechanic/Chat"
-import UserProfileDetail from "../views/Mechanic/UserProfileDetail"
+import MechanicSideMenu from '../views/registration/MechanicSideMenu';
+import MechanicSetting from '../views/Mechanic/MechanicSetting';
+import UserProfile from '../views/Mechanic/UserProfile';
+import Chat from '../views/Mechanic/Chat';
+import UserProfileDetail from '../views/Mechanic/UserProfileDetail';
 import {
   colors,
   screenHeight,
@@ -24,6 +24,7 @@ import {
   images,
   URL,
 } from '../config/Constant';
+import LoginasMechanic from '../views/registration/LoginasMechanic';
 
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
@@ -41,7 +42,7 @@ const DashboardStack = createStackNavigator(
 );
 const SettingStack = createStackNavigator(
   {
-    Setting: Setting,
+    MechanicSetting: MechanicSetting,
   },
   {
     headerMode: 'none',
@@ -88,8 +89,8 @@ const Navigator = createMaterialBottomTabNavigator(
 );
 const UserBookNowStack = createStackNavigator(
   {
-   UserProfile:UserProfile,
-   UserProfileDetail:UserProfileDetail
+    UserProfile: UserProfile,
+    UserProfileDetail: UserProfileDetail,
   },
   {
     headerMode: 'none',
@@ -140,15 +141,15 @@ const MechanicTabNavigator = createDrawerNavigator(
     Navigator: {
       screen: Navigator,
     },
-    MechanicDashboard: {
-      screen: DashboardStack,
+    // MechanicDashboard: {
+    //   screen: DashboardStack,
+    // },
+    Navigators: {
+      screen: Navigators,
     },
-    Navigators:{
-      screen:Navigators
-    }
   },
   {
-    contentComponent: SideMenu,
+    contentComponent: MechanicSideMenu,
     drawerWidth: (Dimensions.get('window').width / 4) * 3,
   },
 );

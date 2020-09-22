@@ -15,14 +15,6 @@ import text from '../../assets/styles/text';
 import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
-import Login from '../registration/Login';
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
-import {ListItem, Separator} from 'native-base';
-
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {color} from 'react-native-reanimated';
 import {SafeAreaView} from 'react-navigation';
@@ -55,19 +47,15 @@ export default class SideMenu extends React.Component {
   }
 
   _Signout = async () => {
-    const login = new Login();
-    login._signOut();
-
-    await AsyncStorage.removeItem('googleData').then(() => {
-      this.props.navigation.navigate('Login');
-    });
-    await AsyncStorage.removeItem('usersignintoken').then(() => {
-      this.props.navigation.navigate('Login');
-    });
-  };
+    const {navigation} = this.props;
+      AsyncStorage.removeItem('token').then(() => {
+        navigation.navigate('LoginasMechanic');
+      });
+     
+    };
   LoginUserData = async () => {
     try {
-      await AsyncStorage.getItem('userdata').then((res) => {
+      await AsyncStorage.getItem('Mechanicdata').then((res) => {
         res = JSON.parse(res);
         console.log(this.state.data, 'Agya Oy Data');
         this.setState({data: res});
@@ -132,7 +120,7 @@ export default class SideMenu extends React.Component {
 
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('BookNow');
+                this.props.navigation.navigate('UserProfile');
               }}>
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>
@@ -146,9 +134,10 @@ export default class SideMenu extends React.Component {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('MyBooking');
-              }}>
+            //   onPress={() => {
+            //     this.props.navigation.navigate('MyBooking');
+            //   }}
+            >
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>
                   <Image
@@ -162,9 +151,10 @@ export default class SideMenu extends React.Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('Setting');
-              }}>
+            //   onPress={() => {
+            //     this.props.navigation.navigate('Setting');
+            //   }}
+            >
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>
                   <Image
@@ -178,9 +168,10 @@ export default class SideMenu extends React.Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('InviteFriend');
-              }}>
+            //   onPress={() => {
+            //     this.props.navigation.navigate('InviteFriend');
+            //   }}
+            >
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>
                   <Image

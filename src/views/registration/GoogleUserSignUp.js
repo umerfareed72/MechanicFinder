@@ -13,6 +13,8 @@ import {
   Dimensions,
   Keyboard,
   Platform,
+  PermissionsAndroid,
+  Permission,
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
@@ -50,31 +52,29 @@ export default class MechanicRegister extends Component {
       TabDataStep1: 'flex',
       TabDataStep2: 'none',
       TabDataStep3: 'none',
-      TabDataStep4: 'none',
       ColorStep1: colors.darkBlue,
       ColorStep2: colors.inputBordercolor,
       ColorStep3: colors.inputBordercolor,
-      ColorStep4: colors.inputBordercolor,
-      BookNowView: 'flex',
+
       City: 'Select City',
       Country: 'Select Country',
-      FirstName: '',
-      LastName: '',
-      Email: '',
+      FirstName: 'First Name',
+      LastName: 'Last Name',
+      Email: 'Your Email',
       Password: '',
       CPassword: '',
       address: '',
-      photo: '',
+      photo: null,
       Phone: '',
-      carcompany: '',
-      skilltype: '',
-      vehicletype: '',
+      googleData: [],
+      date: 'Date Of Birth',
       longitude: '',
       latitude: '',
-      date: 'Date Of Birth',
       filePath: {},
+      editable: false,
     };
   }
+
   check = () => {
     if (this.state.Password == this.state.CPassword) {
       this.submitData();
@@ -84,7 +84,7 @@ export default class MechanicRegister extends Component {
   };
   submitData = () => {
     axios
-      .post(URL.Url + 'mechanicregister', {
+      .post(URL.Url + 'userregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
         email: this.state.Email,
@@ -92,11 +92,8 @@ export default class MechanicRegister extends Component {
         phone: this.state.Phone,
         address: this.state.address,
         photo: this.state.photo,
-        carcompany: this.state.carcompany,
         city: this.state.City,
         country: this.state.Country,
-        skilltype: this.state.skilltype,
-        vehicletype: this.state.vehicletype,
         date: this.state.date,
         longitude: this.state.longitude,
         latitude: this.state.latitude,
@@ -105,7 +102,7 @@ export default class MechanicRegister extends Component {
         console.log(res);
         console.log(res.data.token);
         try {
-          this.props.navigation.navigate('LoginasMechanic');
+          this.props.navigation.navigate('Login');
         } catch (e) {
           console.log('error hai', e);
         }
@@ -115,34 +112,6 @@ export default class MechanicRegister extends Component {
 
         console.log(error);
       });
-
-    // fetch('http://192.168.8.103/mechanicregister', {
-    //   method: 'post',
-    //   headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
-    //   body: JSON.stringify({
-    //     firstname: this.state.FirstName,
-    //     lastname: this.state.LastName,
-    //     email: this.state.Email,
-    //     password: this.state.Password,
-    //     phone: this.state.Phone,
-    //     address: this.state.address,
-    //     photo: this.state.photo,
-    //     carcompany: this.state.carcompany,
-    //     city: this.state.City,
-    //     country: this.state.Country,
-    //     skilltype: this.state.skilltype,
-    //     vehicletype: this.state.vehicletype,
-    //     date: this.state.date,
-    //   }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     Alert.alert(`${data.firstname} Information saved successfully!!`);
-    //     this.props.navigation.navigate('Dashboard');
-    //   })
-    //   .catch((err) => {
-    //     Alert.alert('something went Wrong!!');
-    //   });
   };
   handleChoosePhoto = () => {
     const options = {
@@ -152,9 +121,20 @@ export default class MechanicRegister extends Component {
         path: 'images',
       },
     };
+
     ImagePicker.showImagePicker(options, (response) => {
-      if (response.uri) {
+      if (response) {
+        console.log(response);
         this.setState({photo: response.uri});
+        // const uri = response.uri;
+        // const type = response.type;
+        // const name = response.fileName;
+        // const source = {
+        //   uri,
+        //   type,
+        //   name,
+        // }
+        // this.cloudinaryUpload(source)
       } else if (response.didCancel) {
         console.log('User Cancelled Image Picker');
       } else if (response.error) {
@@ -162,7 +142,35 @@ export default class MechanicRegister extends Component {
       }
     });
   };
+  googleUserdata = () => {
+    try {
+      AsyncStorage.getItem('googleData').then((res) => {
+        res = JSON.parse(res);
+        this.setState({googleData: res});
+        this.setState({
+          FirstName: this.state.googleData.user.givenName,
+        });
+        this.setState({
+          LastName: this.state.googleData.user.familyName,
+        });
+        this.setState({
+          Email: this.state.googleData.user.email,
+        });
 
+        this.setState({
+          photo: this.state.googleData.user.photo,
+        });
+
+        console.log(this.state.googleData, 'Agya Oy Data');
+      });
+    } catch (error) {
+      console.log('error');
+    }
+  };
+
+  componentDidMount = () => {
+    this.googleUserdata();
+  };
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
@@ -173,89 +181,49 @@ export default class MechanicRegister extends Component {
     if (this.state.TabDataStep1 == 'flex') {
       this.setState({TabDataStep2: 'none'}),
         this.setState({TabDataStep3: 'none'}),
-        this.setState({TabDataStep4: 'none'});
-      this.setState({BookNowView: 'flex'}),
         this.setState({ColorStep1: colors.darkBlue}),
         this.setState({ColorStep3: colors.inputBordercolor}),
         this.setState({ColorStep2: colors.inputBordercolor});
-      this.setState({ColorStep4: colors.inputBordercolor});
     } else
       this.setState({TabDataStep1: 'flex'}),
         this.setState({TabDataStep2: 'none'}),
         this.setState({TabDataStep3: 'none'});
-    this.setState({TabDataStep4: 'none'});
-    this.setState({BookNowView: 'flex'});
     this.setState({ColorStep1: colors.darkBlue});
     this.setState({ColorStep3: colors.inputBordercolor});
     this.setState({ColorStep2: colors.inputBordercolor});
-    this.setState({ColorStep4: colors.inputBordercolor});
   };
 
   tabStep2 = () => {
     if (this.state.TabDataStep2 == 'flex') {
       this.setState({TabDataStep1: 'none'}),
         this.setState({TabDataStep3: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({TabDataStep4: 'none'});
-      this.setState({color: 'none'});
+        this.setState({color: 'none'});
       this.setState({ColorStep1: colors.inputBordercolor}),
         this.setState({ColorStep3: colors.inputBordercolor}),
-        this.setState({ColorStep4: colors.inputBordercolor}),
         this.setState({ColorStep2: colors.darkBlue});
     } else
       this.setState({TabDataStep2: 'flex'}),
         this.setState({TabDataStep1: 'none'}),
-        this.setState({BookNowView: 'none'}),
         this.setState({TabDataStep3: 'none'});
-    this.setState({TabDataStep4: 'none'});
     this.setState({ColorStep1: colors.inputBordercolor});
     this.setState({ColorStep3: colors.inputBordercolor});
     this.setState({ColorStep2: colors.darkBlue});
-    this.setState({ColorStep4: colors.inputBordercolor});
   };
 
   tabStep3 = () => {
     if (this.state.TabDataStep3 == 'flex') {
       this.setState({TabDataStep2: 'none'}),
         this.setState({TabDataStep1: 'none'}),
-        this.setState({TabDataStep4: 'none'});
-      this.setState({BookNowView: 'none'}), this.setState({color: 'none'});
+        this.setState({color: 'none'});
       this.setState({ColorStep1: colors.inputBordercolor}),
         this.setState({ColorStep3: colors.darkBlue}),
         this.setState({ColorStep2: colors.inputBordercolor});
-      this.setState({ColorStep4: colors.inputBordercolor});
     } else
       this.setState({TabDataStep3: 'flex'}),
         this.setState({TabDataStep2: 'none'}),
-        this.setState({TabDataStep4: 'none'}),
-        this.setState({BookNowView: 'none'}),
         this.setState({TabDataStep1: 'none'});
     this.setState({ColorStep1: colors.inputBordercolor});
-    this.setState({ColorStep4: colors.inputBordercolor});
     this.setState({ColorStep3: colors.darkBlue});
-    this.setState({ColorStep2: colors.inputBordercolor});
-  };
-  tabStep4 = () => {
-    if (this.state.TabDataStep4 == 'flex') {
-      this.setState({TabDataStep3: 'none'}),
-        this.setState({TabDataStep2: 'none'}),
-        this.setState({TabDataStep1: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({color: 'none'});
-      this.setState({ColorStep1: colors.inputBordercolor}),
-        this.setState({ColorStep4: colors.darkBlue}),
-        this.setState({ColorStep3: colors.inputBordercolor});
-      this.setState({ColorStep2: colors.inputBordercolor});
-    } else
-      this.setState({TabDataStep4: 'flex'}),
-        this.setState({TabDataStep3: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({TabDataStep2: 'none'});
-    this.setState({TabDataStep1: 'none'});
-    this.setState({ColorStep1: colors.inputBordercolor});
-    this.setState({ColorStep3: colors.inputBordercolor});
-    this.setState({ColorStep4: colors.darkBlue});
-
     this.setState({ColorStep2: colors.inputBordercolor});
   };
 
@@ -263,7 +231,11 @@ export default class MechanicRegister extends Component {
     const {photo} = this.state;
     return (
       <SafeAreaView style={style.flex1}>
-        <StatusBar />
+        <StatusBar
+          barStyle={'light-content'}
+          backgroundColor={'transparent'}
+          translucent={true}
+        />
         <KeyboardAvoidingView
           style={{backgroundColor: colors.white, flexGrow: 1}}>
           <ScrollView>
@@ -284,7 +256,7 @@ export default class MechanicRegister extends Component {
                       text.CinzelDecorativeBold,
                       text.white,
                     ]}>
-                    (Mechanic Registration)
+                    (Complete User Registration)
                   </Text>
                 </View>
               </LinearGradient>
@@ -330,16 +302,6 @@ export default class MechanicRegister extends Component {
                     Step 3
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => this.tabStep4()}>
-                  <Text
-                    style={[
-                      text.tab,
-                      text.semibold,
-                      {color: this.state.ColorStep4},
-                    ]}>
-                    Step 4
-                  </Text>
-                </TouchableOpacity>
               </View>
               {/* <View style={[appStyle.bottomBorder]}></View> */}
 
@@ -349,7 +311,7 @@ export default class MechanicRegister extends Component {
                 style={[
                   {
                     backgroundColor: colors.white,
-                    display: this.state.BookNowView,
+                    display: this.state.TabDataStep1,
                   },
                 ]}>
                 <View style={[appStyle.headingLayout]}>
@@ -364,12 +326,13 @@ export default class MechanicRegister extends Component {
                       style={[image.username]}></Image>
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="First Name"
+                      placeholder={this.state.FirstName}
                       onChangeText={(text) => {
                         this.setState({
                           FirstName: text,
                         });
                       }}
+                      editable={this.state.editable}
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
 
@@ -379,12 +342,13 @@ export default class MechanicRegister extends Component {
                       style={image.username}></Image>
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Last Name"
+                      placeholder={this.state.LastName}
                       onChangeText={(text) => {
                         this.setState({
                           LastName: text,
                         });
                       }}
+                      editable={this.state.editable}
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
 
@@ -394,12 +358,13 @@ export default class MechanicRegister extends Component {
                       style={image.InputImage}></Image>
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Email"
+                      placeholder={this.state.Email}
                       onChangeText={(text) => {
                         this.setState({
                           Email: text,
                         });
                       }}
+                      editable={this.state.editable}
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
 
@@ -407,7 +372,7 @@ export default class MechanicRegister extends Component {
                     <Image source={images.key} style={image.InputImage}></Image>
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Password"
+                      placeholder="Enter Your Password"
                       secureTextEntry={true}
                       onChangeText={(text) => {
                         this.setState({
@@ -421,7 +386,7 @@ export default class MechanicRegister extends Component {
 
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Confirm Password"
+                      placeholder="Enter Your Password"
                       secureTextEntry={true}
                       secureTextEntry={true}
                       onChangeText={(text) => {
@@ -486,6 +451,7 @@ export default class MechanicRegister extends Component {
                           dateInput: {
                             borderColor: colors.white,
                           },
+
                           dateText: {
                             color: colors.gray,
                           },
@@ -587,108 +553,6 @@ export default class MechanicRegister extends Component {
 
               {/* Mechanic SKILLS Page */}
 
-              <View
-                style={[
-                  {
-                    backgroundColor: colors.white,
-                    display: this.state.TabDataStep3,
-                  },
-                ]}>
-                <View style={[appStyle.headingLayout]}>
-                  <Text style={[style.headerStyle, style.bottomborder]}>
-                    Mechanic Skills{' '}
-                  </Text>
-                </View>
-                <View>
-                  <View style={style.mv10}>
-                    <Text
-                      style={[
-                        text.textheader5,
-                        style.asCenter,
-                        {textAlign: 'center'},
-                      ]}>
-                      You Need to be Careful during entering your skills because
-                      work will be assign you on the base of your skills.
-                    </Text>
-                  </View>
-
-                  <View style={[input.textinputcontainer, style.mv10]}>
-                    <Image
-                      source={images.carservice}
-                      style={image.InputImage}></Image>
-
-                    <Picker
-                      selectedValue={this.state.skilltype}
-                      style={[text.pickerstyle]}
-                      onValueChange={(itemValue, itemIndex) =>
-                        this.setState({skilltype: itemValue})
-                      }>
-                      <Picker.Item label="Select Mechanic Type" value="" />
-                      <Picker.Item label="Engine" value="Engine" />
-                      <Picker.Item label="Body" value="Body" />
-                      <Picker.Item label="Painter" value="Painter" />
-                      <Picker.Item label="Electric" value="Electric" />
-                    </Picker>
-                  </View>
-
-                  <View style={[input.textinputcontainer, style.mv10]}>
-                    <Image
-                      source={images.cartype}
-                      style={image.InputImage}></Image>
-
-                    <Picker
-                      selectedValue={this.state.vehicletype}
-                      style={[text.pickerstyle]}
-                      onValueChange={(itemValue, itemIndex) =>
-                        this.setState({vehicletype: itemValue})
-                      }>
-                      <Picker.Item label="Select Vehicle Type" value="" />
-                      <Picker.Item label="Heavy Truck" value="Heavy Truck" />
-                      <Picker.Item label="Cars" value="Cars" />
-                      <Picker.Item label="Jeep" value="Jeep" />
-                    </Picker>
-                  </View>
-                  <View style={[input.textinputcontainer, style.mv10]}>
-                    <Image
-                      source={images.Company}
-                      style={image.InputImage}></Image>
-
-                    <Picker
-                      selectedValue={this.state.carcompany}
-                      style={[text.pickerstyle]}
-                      onValueChange={(itemValue, itemIndex) =>
-                        this.setState({carcompany: itemValue})
-                      }>
-                      <Picker.Item label="Select Vehicle Name" value="" />
-                      <Picker.Item label="Honda" value="Honda" />
-                      <Picker.Item label="Toyota" value="Toyota" />
-                      <Picker.Item label="Suzuki" value="Suzuki" />
-                      <Picker.Item label="Audi" value="Audi" />
-                      <Picker.Item label="KIA" value="KIA" />
-                      <Picker.Item label="Mercedes" value="Merecedes" />
-                    </Picker>
-                  </View>
-                </View>
-                <TouchableOpacity onPress={this.tabStep4}>
-                  <View
-                    style={[
-                      button.buttoncontainer,
-                      style.mt20,
-                      style.mh50,
-                      {backgroundColor: colors.purple},
-                    ]}>
-                    <Text
-                      style={[
-                        {color: colors.white},
-                        button.touchablebutton,
-                        text.semibold,
-                      ]}>
-                      Next
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-
               {/* Gallery Tab View End */}
 
               {/* Reviews Tab Start  */}
@@ -696,7 +560,7 @@ export default class MechanicRegister extends Component {
                 style={[
                   {
                     backgroundColor: colors.white,
-                    display: this.state.TabDataStep4,
+                    display: this.state.TabDataStep3,
                   },
                 ]}>
                 <View style={appStyle.headingLayout}>

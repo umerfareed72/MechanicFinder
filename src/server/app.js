@@ -8,9 +8,11 @@ require('./models/mechanicmodel');
 const requiretoken = require('./middlewares/requiretoken');
 require('./models/Usermodel');
 const usertoken = require('./middlewares/Usertoken');
+require('./models/BookedUsers');
 
 const mechanicroutes1 = require('./routes/mechanicroutes');
 const userroutes1 = require('./routes/Userroutes');
+
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(mechanicroutes1);
