@@ -61,12 +61,11 @@ export default class HomeDetail extends Component {
     try {
       await AsyncStorage.getItem('data').then((res) => {
         res = JSON.parse(res);
-        console.log(res);
         this.setState({mechanicdata: res});
       });
     } catch (error) {}
   };
-  componentDidMount() {
+ async componentDidMount() {
     const {navigation} = this.props;
     this.getData();
     this.focusListener = navigation.addListener('didFocus', () => {
@@ -136,26 +135,26 @@ export default class HomeDetail extends Component {
       this.setState({CheckBox: images.checkBoxEmpty});
     }
   };
-  buyItems = () => {
-    AsyncStorage.getItem('userdata').then((response) => {
+  buyItems = async () => {
+    await AsyncStorage.getItem('userdata').then((response) => {
       const res = JSON.parse(response);
       const userid = res._id;
       const mechanicid = this.state.mechanicdata.mechanicid;
       axios
         .post(URL.Url + 'addbookedUser/' + mechanicid + '/' + userid)
         .then((res) => {
-              const sendMechanicid = JSON.stringify(res.data.mechanicid);
-               const sendId=JSON.stringify(res.data._id)
-            AsyncStorage.setItem('BookedMechanicId',sendId)
-            AsyncStorage.setItem('Mechanicid', sendMechanicid); 
-         });
+        console.log('Mechanic Booked Successfully')
+        });
     });
-    if (this.state.CheckBox == images.checkBoxTick) {
-      this.props.navigation.navigate('BuyItems');
-    } else {
-      this.setState({BookNowView: 'none'});
-      this.props.navigation.navigate('BookNow');
-    }
+    setTimeout(() => {
+      if (this.state.CheckBox == images.checkBoxTick) {
+        this.props.navigation.navigate('BuyItems');
+      } else {
+        this.setState({BookNowView: 'none'});
+
+        this.props.navigation.navigate('BookNow');
+      }
+    }, 3000);
   };
   render() {
     const {mechanicdata} = this.state;

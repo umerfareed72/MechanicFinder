@@ -39,8 +39,9 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-community/async-storage';
+import {ActivityIndicator} from 'react-native-paper';
 const axios = require('axios');
-export default class Overview extends Component {
+export default class UserProfile extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
@@ -48,10 +49,9 @@ export default class Overview extends Component {
     this.state = {
       rating: 2,
       data: [],
-      refreshing: true,
-      bookedUserid: '',
+      refreshing: false,
+      bookedMechanicId: '',
       starCount: 3.5,
-
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
     this.fadeOut = this.fadeOut.bind(this);
@@ -74,16 +74,26 @@ export default class Overview extends Component {
   };
   getMechanicLocation = async () => {
     try {
-      await AsyncStorage.getItem('userData')
+      AsyncStorage.getItem('UserId')
         .then((response) => {
-          const data = JSON.parse(response);
-          console.log(response);
-          this.setState({data: data});
-        })
-        .then((bookid) => {
-          AsyncStorage.getItem('BookedUserId').then((res) => {
-            const bookedId = JSON.parse(res);
-            this.setState({bookedUserid: bookedId});
+          console.log(response,'User id');
+          const userid = JSON.parse(response);
+          axios.get(URL.Url + 'getbookedMechanic/' + userid).then((res) => {
+           console.log(res.data)
+          if(res.data==''){
+          console.log('No data ')  
+          }else{
+            res.data.map((item) => {
+              this.setState({bookedMechanicId: item._id});
+              axios.get(URL.Url + 'user/' + item.userid).then((response) => {
+                this.setState({data: response.data});
+                this.setState({refreshing: true});
+            const send=JSON.stringify(response.data)
+                AsyncStorage.setItem('bookUserdata',send)
+              });
+            });
+          
+          }
           });
         })
         .catch((error) => {
@@ -95,13 +105,12 @@ export default class Overview extends Component {
   };
 
   CancelBooking = async () => {
-    console.log(this.state.bookedUserid);
     axios
-      .put(URL.Url + 'cancelbookeduser/' + this.state.bookedUserid)
+      .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
-        AsyncStorage.removeItem('userData');
         this.setState({refreshing: false});
-        this.props.navigation.navigate('MechanicDashboard');
+        this.props.navigation.navigate('MecchanicDashboard');
+       AsyncStorage.removeItem('bookUserdata')
         console.log(res.data, 'data updated');
       })
       .catch((error) => {
@@ -109,21 +118,20 @@ export default class Overview extends Component {
       });
   };
 
-  RemoveBooking = () => {
-    setInterval(() => {
-      axios
-        .put(URL.Url + 'cancelbookeduser/' + this.state.bookedUserid)
-        .then((res) => {
-          this.setState({refreshing: false});
-          AsyncStorage.removeItem('userData');
-          this.props.navigation.navigate('MechanicDashboard');
-          console.log(res.data, 'data updated');
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }, 10000000);
-  };
+  // RemoveBooking = () => {
+  //   setInterval(() => {
+  //     axios
+  //       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
+  //       .then((res) => {
+  //         this.setState({refreshing: false});
+  //         this.props.navigation.navigate('MechanicDashboard');
+  //         console.log(res.data, 'data updated');
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }, 10000000);
+  // };
   componentDidMount() {
     console.log(this.state.data, 'hello');
     const {navigation} = this.props;
@@ -131,9 +139,7 @@ export default class Overview extends Component {
     this.focusListener = navigation.addListener('didFocus', () => {
       this.getMechanicLocation();
     });
-    this.RemoveBooking();
-    // this.getMechanicLocation();
-
+    // this.RemoveBooking();
     Animated.loop(
       Animated.timing(
         // Animate over time
@@ -146,8 +152,6 @@ export default class Overview extends Component {
       ),
       {iterations: 1000},
     ).start();
-
-    // Starts the animation
   }
 
   fadeOut() {
@@ -183,9 +187,7 @@ export default class Overview extends Component {
               <View style={style.bgOverlay} />
               <View style={[style.rowBtw, style.ph20, style.pb10]}>
                 <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('MechanicDashboard')
-                  }>
+                  onPress={() => this.props.navigation.navigate('MechanicDashboard')}>
                   <Image
                     source={images.backarrowh}
                     style={[
@@ -327,9 +329,7 @@ export default class Overview extends Component {
               <View style={style.bgOverlay} />
               <View style={[style.rowBtw, style.ph20, style.pb10]}>
                 <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('MechanicDashboard')
-                  }>
+                  onPress={() => this.props.navigation.navigate('MechanicDashboard')}>
                   <Image
                     source={images.backarrowh}
                     style={[

@@ -55,9 +55,11 @@ export default class MechanicSetting extends Component {
     const {navigation}=this.props;
     
     AsyncStorage.removeItem('token').then(() => {
-      navigation.navigate('LoginasMechanic');
+      setTimeout(() => {
+        navigation.navigate('LoginasMechanic') 
+      }, 2000);
     });
- 
+   
   };
   LoginUserData = () => {
     try {

@@ -52,7 +52,7 @@ export default class HomeDetail extends Component {
     });
   }
   componentDidMount() {
-    const data = AsyncStorage.getItem('Mechanicdata').then((res) => {
+    const data = AsyncStorage.getItem('bookMechanicData').then((res) => {
       res = JSON.parse(res);
       console.log(res);
       this.setState({data: res});

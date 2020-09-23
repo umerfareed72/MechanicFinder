@@ -29,7 +29,7 @@ import StarRating from 'react-native-star-rating';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 
-export default class HomeDetail extends Component {
+export default class UserProfileDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,6 +40,7 @@ export default class HomeDetail extends Component {
       BookNowView: 'flex',
       CheckBox: images.checkBoxEmpty,
       data: [],
+      refreshing:false
     };
   }
   onStarRatingPress(rating) {
@@ -47,13 +48,18 @@ export default class HomeDetail extends Component {
       starCount: rating,
     });
   }
+  
   componentDidMount() {
-    AsyncStorage.getItem('data').then((res) => {
-      res = JSON.parse(res);
-      console.log(res);
-      this.setState({data: res});
-    });
-  }
+   setTimeout(() => {
+    AsyncStorage.getItem('bookUserdata').then((res) => {
+      const data = JSON.parse(res);
+      this.setState({data: data});
+   this.setState({refreshing:true})
+      console.log(data);
+      });
+  
+   }, 2000);
+     }
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
       this.setState({ColorOverview: colors.darkBlue});
@@ -63,7 +69,8 @@ export default class HomeDetail extends Component {
   };
 
   render() {
-    const {data} = this.state;
+    const {data,refreshing} = this.state;
+   if(refreshing!=false){
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
@@ -113,8 +120,8 @@ export default class HomeDetail extends Component {
         <View style={[appStyle.bodyBg, style.flex1]}>
           <View
             style={[
-            //   appStyle.rowBtw,
-            style.aiCenter,
+              //   appStyle.rowBtw,
+              style.aiCenter,
               appStyle.bodyLayout,
               appStyle.bodyShadowTop,
               {backgroundColor: '#fff'},
@@ -219,6 +226,53 @@ export default class HomeDetail extends Component {
           </ScrollView>
         </View>
       </SafeAreaView>
+    )
+  }else{
+    return (
+      <SafeAreaView style={appStyle.safeContainer}>
+        <StatusBar
+          barStyle={'light-content'}
+          backgroundColor={'transparent'}
+          translucent={true}
+        />
+
+        <View style={[style.flex1]}>
+          <ImageBackground
+            imageStyle={{borderRadius: 8}}
+            style={[image.storeImg, style.w100]}
+            source={images.userImg}>
+            <View style={style.bgOverlay} />
+            <View style={[style.rowBtw, style.ph20, style.pb10]}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Dashboard')}>
+                <Image
+                  source={images.backarrowh}
+                  style={[
+                    image.backArrow2,
+                    {tintColor: colors.white},
+                  ]}></Image>
+              </TouchableOpacity>
+
+              <View>
+                <Text style={[text.heading1, text.bold]}>Profile</Text>
+              </View>
+              <Text style={[text.text16, text.orange]}></Text>
+            </View>
+          </ImageBackground>
+
+          <View style={[appStyle.curvedContainer]}>
+            <ScrollView style={style.ph20}>
+              <View style={[style.mt40]}>
+                <View style={[style.aiCenter]}>
+                  <Text style={[text.h1Purple]}>No Data Available</Text>
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      </SafeAreaView>
     );
+
+  }
   }
 }

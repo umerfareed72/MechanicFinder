@@ -45,7 +45,7 @@ export default class MechanicDashboard extends Component {
       mechanicid: '',
       loading: false,
       token: '',
-      refreshing: true,
+      refreshing: false,
       bookedUserData: [],
       data: [],
       bookedUserid: '',
@@ -63,11 +63,6 @@ export default class MechanicDashboard extends Component {
         })
         .then((response) => {
           this.setState({mechanicid: response.data.mechanicid});
-
-          axios
-            .get(URL.Url + 'mechanic/' + this.state.mechanicid)
-            .then((response) => {
-              console.log(this.state.mechanicid);
               axios
                 .put(URL.Url + 'mechaniclocation/' + this.state.mechanicid, {
                   latitude: this.state.latitude,
@@ -87,32 +82,32 @@ export default class MechanicDashboard extends Component {
                         .get(URL.Url + 'getbookedUser/' + this.state.mechanicid)
                         .then((response) => {
                           console.log(response.data);
+                       
                           response.data.map((item) => {
+                        
                             axios
                               .get(URL.Url + 'user/' + item.userid)
                               .then((response) => {
+                               setTimeout(() => {
                                 this.setState({
                                   bookedUserData: response.data,
                                 });
-                                this.setState({refreshing: false});
-                                const sendUserData = JSON.stringify(
-                                  response.data,
-                                );
+                                this.setState({refreshing: true});
                                 this.setState({bookedUserid: item._id});
-
-                                const sendUserId = JSON.stringify(item._id);
-                                AsyncStorage.setItem(
-                                  'BookedUserId',
-                                  sendUserId,
-                                );
-                                AsyncStorage.setItem('userData', sendUserData);
-                                console.log(sendUserData);
+                            
+                
+                               }, 2000);
+                             
+                               const sendUserId = JSON.stringify(item.userid);
+                               AsyncStorage.setItem(
+                                 'UserId',
+                                 sendUserId,
+                               );
                               });
                           });
                         })
                         .catch((error) => {
                           console.log(error, 'Booked User Not Accesible');
-                        });
                     });
                 })
                 .catch((error) => {
@@ -177,20 +172,19 @@ export default class MechanicDashboard extends Component {
       starCount: rating,
     });
   }
-  removeBooking = () => {
-    setInterval(() => {
-      axios
-        .put(URL.Url + 'cancelbookeduser/' + this.state.bookedUserid)
-        .then((res) => {
-          this.setState({bookedUserData: null});
-          this.setState({refreshing: true});
-          console.log(res.data, 'data updated');
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }, 100000);
-  };
+  // removeBooking = () => {
+  //   setInterval(() => {
+  //     axios
+  //       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedUserid)
+  //       .then((res) => {
+  //         this.setState({bookedUserData: null});
+  //         console.log(res.data, 'data updated');
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }, 100000);
+  // };
   componentDidMount() {
     console.log(this.state.data, 'hello');
     const {navigation} = this.props;
@@ -198,11 +192,11 @@ export default class MechanicDashboard extends Component {
     this.focusListener = navigation.addListener('didFocus', () => {
       this.requestMechanicLocation();
     });
-    this.removeBooking();
+    // this.removeBooking();
   }
   bookedUser = () => {
     const {bookedUserData, refreshing} = this.state;
-    if (refreshing != true) {
+    if (refreshing != false) {
       return (
         <TouchableOpacity
           onPress={() => {
@@ -274,7 +268,6 @@ export default class MechanicDashboard extends Component {
           backgroundColor={'transparent'}
           translucent={true}
         />
-
         {/*Body */}
         <View style={{}}>
           <LinearGradient

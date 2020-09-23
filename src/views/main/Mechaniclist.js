@@ -51,6 +51,7 @@ export default class Mechaniclist extends Component {
     this.state = {
       dataSource: [],
       slot: '',
+      userId: '',
       carcompany: 'Select Vehicle Name',
       skilltype: 'Select Skill Type',
       vehicletype: 'Select Vehicle Type',
@@ -58,27 +59,35 @@ export default class Mechaniclist extends Component {
   }
 
   changebuttoncolor = (id) => {
-    AsyncStorage.getItem('Mechanicdata').then((res) => {
-      if (res == null) {
-        this.setState({
-          slot: id,
-        });
-        if (this.state.slot == id) {
-          // console.log(this.state.dataSource[id])
-          this.props.navigation.navigate('HomeDetail');
-          const senddata = JSON.stringify(this.state.dataSource[id]);
-          AsyncStorage.setItem('data', senddata);
-         
+    axios
+      .get(URL.Url + 'getbookedMechanic/' + this.state.userId)
+      .then((res) => {
+        if (res.data == '') {
+          this.setState({
+            slot: id,
+          });
+          if (this.state.slot == id) {
+            // console.log(this.state.dataSource[id])
+            const senddata = JSON.stringify(this.state.dataSource[id]);
+            AsyncStorage.setItem('data', senddata);
+            setTimeout(() => {
+              this.props.navigation.navigate('HomeDetail');
+            }, 2000);
+          }
+        } else {
+          alert('User Already book a mechanic');
+          console.log(res.data);
         }
-      } else {
-        alert('User Already book a mechanic');
-      }
-    });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   showMechanics = () => {
     AsyncStorage.getItem('userId')
       .then((res) => {
         const id = JSON.parse(res);
+        this.setState({userId: id});
         axios
           .get(
             URL.Url +
@@ -106,7 +115,6 @@ export default class Mechaniclist extends Component {
   componentDidMount() {
     AsyncStorage.getItem('skilltype').then((res) => {
       this.setState({skilltype: res});
-    
     });
   }
 

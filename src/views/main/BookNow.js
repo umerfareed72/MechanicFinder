@@ -39,6 +39,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-community/async-storage';
+import {ActivityIndicator} from 'react-native-paper';
 const axios = require('axios');
 export default class BookNow extends Component {
   constructor(props) {
@@ -48,10 +49,9 @@ export default class BookNow extends Component {
     this.state = {
       rating: 2,
       data: [],
-      refreshing: true,
+      refreshing: false,
       bookedMechanicId: '',
       starCount: 3.5,
-
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
     this.fadeOut = this.fadeOut.bind(this);
@@ -74,26 +74,22 @@ export default class BookNow extends Component {
   };
   getMechanicLocation = async () => {
     try {
-      await AsyncStorage.getItem('Mechanicid')
+      AsyncStorage.getItem('userId')
         .then((response) => {
-          const data = JSON.parse(response);
-          console.log(data, 'data agya');
-          axios.get(URL.Url + 'getbookedUser/' + data).then((res) => {
+          console.log(response);
+          const userid = JSON.parse(response);
+          axios.get(URL.Url + 'getbookedMechanic/' + userid).then((res) => {
             res.data.map((item) => {
+              this.setState({bookedMechanicId:item._id});
               axios
                 .get(URL.Url + 'mechanic/' + item.mechanicid)
-                .then((mechanic) => {
-                  this.setState({data: mechanic.data});
-                  const sendMechanicdata = JSON.stringify(this.state.data);
-                  AsyncStorage.setItem('Mechanicdata', sendMechanicdata);
+                .then((response) => {
+                  this.setState({data: response.data});
+                  this.setState({refreshing: true});
+               const sendMechanicData=JSON.stringify(response.data);
+               AsyncStorage.setItem('bookMechanicData',sendMechanicData)
                 });
             });
-          });
-        })
-        .then((bookid) => {
-          AsyncStorage.getItem('BookedMechanicId').then((res) => {
-            const bookedId = JSON.parse(res);
-            this.setState({bookedMechanicId: bookedId});
           });
         })
         .catch((error) => {
@@ -108,9 +104,8 @@ export default class BookNow extends Component {
     axios
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
-        AsyncStorage.removeItem('Mechanicdata');
-        AsyncStorage.removeItem('Mechanicid');
         this.setState({refreshing: false});
+        AsyncStorage.removeItem('bookMechanicData')
         this.props.navigation.navigate('Dashboard');
         console.log(res.data, 'data updated');
       })
@@ -125,8 +120,6 @@ export default class BookNow extends Component {
         .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
         .then((res) => {
           this.setState({refreshing: false});
-          AsyncStorage.removeItem('Mechanicdata');
-          AsyncStorage.removeItem('Mechanicid');
           this.props.navigation.navigate('Dashboard');
           console.log(res.data, 'data updated');
         })
@@ -135,14 +128,15 @@ export default class BookNow extends Component {
         });
     }, 10000000);
   };
-  componentDidMount() {
-    console.log(this.state.data, 'hello');
+  async componentDidMount() {
+  setTimeout(() => {
     const {navigation} = this.props;
     this.getMechanicLocation();
     this.focusListener = navigation.addListener('didFocus', () => {
       this.getMechanicLocation();
     });
-    this.RemoveBooking();
+  }, 2000);
+    
     Animated.loop(
       Animated.timing(
         // Animate over time

@@ -125,6 +125,17 @@ router.get('/bookedusers', async (req, res) => {
     });
 });
 
+router.get('/bookeduserid/:id', async (req, res) => {
+  BookedUsermodel.findById(req.params.id)
+    .then((data) => {
+      res.json(data);
+    })
+    //  res.send(userdata)
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
 //Mechanic Registeration
 router.post('/mechanicregister', async (req, res) => {
   const mechanic = new Mechanicmodel({

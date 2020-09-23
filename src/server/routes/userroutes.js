@@ -4,6 +4,7 @@ const {jwtkey} = require('../keys');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Usermodel = mongoose.model('Usermodel');
+const BookedUsermodel = mongoose.model('BookedUsermodel');
 
 //User Register
 
@@ -57,20 +58,19 @@ router.post('/usersignin', async (req, res) => {
 
 //Get user By id
 router.get('/user/:id', (req, res) => {
-  Usermodel.findById(req.params.id).select({
-    firstname:1,
-    lastname:1,
-    latitude:1,
-    longitude:1,
-    email:1,
-    phone:1,
-    photo:1,
-    address:1,
-    city:1,
-    country:1
-
-
-  })
+  Usermodel.findById(req.params.id)
+    .select({
+      firstname: 1,
+      lastname: 1,
+      latitude: 1,
+      longitude: 1,
+      email: 1,
+      phone: 1,
+      photo: 1,
+      address: 1,
+      city: 1,
+      country: 1,
+    })
     .then((user) => {
       if (!user) {
         return res.status(404).send('User Not Found');
@@ -129,6 +129,19 @@ router.get('/users', (req, res) => {
     res.send(users);
   }
   get();
+});
+
+router.get('/getbookedMechanic/:uid', async (req, res) => {
+  BookedUsermodel.find({userid: req.params.uid, Status: 'Online'})
+    .then((bookedmechanic) => {
+      if (bookedmechanic.length == 0) {
+        return res.status(202).send(null);
+      }
+      return res.json(bookedmechanic);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
 });
 
 module.exports = router;

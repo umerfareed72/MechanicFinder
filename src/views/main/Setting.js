@@ -57,12 +57,14 @@ export default class Settings extends Component {
       login._signOut();
 
       AsyncStorage.removeItem('googleData').then(() => {
-        navigation.navigate('Login');
+          navigation.navigate('Login')    
       });
       AsyncStorage.removeItem('usersignintoken').then(() => {
-        navigation.navigate('Login');
+        navigation.navigate('Login') 
+     
       });
-     };
+     
+        };
   LoginUserData = () => {
     try {
       AsyncStorage.getItem('userdata').then((res) => {
