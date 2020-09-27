@@ -40,7 +40,7 @@ export const screenWidth = {
 
 //Url
 export const URL = {
-  Url: 'http://192.168.8.101:3000/',
+  Url: 'http://192.168.0.108:3000/',
 };
 //colors
 export const colors = {

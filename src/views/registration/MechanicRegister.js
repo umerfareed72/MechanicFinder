@@ -115,34 +115,6 @@ export default class MechanicRegister extends Component {
 
         console.log(error);
       });
-
-    // fetch('http://192.168.8.103/mechanicregister', {
-    //   method: 'post',
-    //   headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
-    //   body: JSON.stringify({
-    //     firstname: this.state.FirstName,
-    //     lastname: this.state.LastName,
-    //     email: this.state.Email,
-    //     password: this.state.Password,
-    //     phone: this.state.Phone,
-    //     address: this.state.address,
-    //     photo: this.state.photo,
-    //     carcompany: this.state.carcompany,
-    //     city: this.state.City,
-    //     country: this.state.Country,
-    //     skilltype: this.state.skilltype,
-    //     vehicletype: this.state.vehicletype,
-    //     date: this.state.date,
-    //   }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     Alert.alert(`${data.firstname} Information saved successfully!!`);
-    //     this.props.navigation.navigate('Dashboard');
-    //   })
-    //   .catch((err) => {
-    //     Alert.alert('something went Wrong!!');
-    //   });
   };
   handleChoosePhoto = () => {
     const options = {
@@ -154,7 +126,32 @@ export default class MechanicRegister extends Component {
     };
     ImagePicker.showImagePicker(options, (response) => {
       if (response.uri) {
-        this.setState({photo: response.uri});
+        var data = new FormData();
+        const source = {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName,
+        };
+        data.append('file', source);
+        data.append('upload_preset', 'rjrthtdu');
+        data.append('cloud_name', 'dbkmbaxmk');
+        fetch('https://api.cloudinary.com/v1_1/dbkmbaxmk/image/upload', {
+          method: 'post',
+          body: data,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.secure_url);
+         this.setState({photo:data.secure_url})
+          })
+          .catch((err) => {
+            Alert.alert('An Error Occured While Uploading');
+            console.log(err);
+          });
       } else if (response.didCancel) {
         console.log('User Cancelled Image Picker');
       } else if (response.error) {

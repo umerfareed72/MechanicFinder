@@ -4,11 +4,10 @@ const {jwtkey} = require('../keys');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Mechanicmodel = mongoose.model('mechanicmodel');
-
 const Usermodel = mongoose.model('Usermodel');
 const BookedUsermodel = mongoose.model('BookedUsermodel');
 
-//Mechanic Login
+
 router.post('/mechanicsignin', async (req, res) => {
   const {email, password} = req.body;
   if (!email || !password) {
@@ -79,7 +78,7 @@ router.put('/cancelbookeduser/:id', (req, res) => {
         return res.status(404).send('Mechanic Not Found');
       } else {
         return res.status(200).json(canceluser);
-   canceluser.save();    
+        canceluser.save();
       }
     })
     .catch((error) => {
@@ -308,6 +307,7 @@ router.get(
             lastname: 1,
             email: 1,
             phone: 1,
+            photo:1,
             city: 1,
             address: 1,
             country: 1,
@@ -338,13 +338,14 @@ router.get(
               let result = c * r; //Get Result In KM
               //Found In 10 KM
 
-              if (result <= 100) {
+              if (result <= 100000000) {
                 //Distance get
                 nearest.push({
                   mechanicid: item.id,
                   firstname: item.firstname,
                   lastname: item.lastname,
                   email: item.email,
+                 photo:item.photo,
                   phone: item.phone,
                   carcompany: item.carcompany,
                   vehicletype: item.vehicletype,

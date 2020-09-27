@@ -1,10 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
 const app = express();
-require('./models/mechanicmodel');
 
+require('./models/mechanicmodel');
 const requiretoken = require('./middlewares/requiretoken');
 require('./models/Usermodel');
 const usertoken = require('./middlewares/Usertoken');
@@ -13,13 +12,12 @@ require('./models/BookedUsers');
 const mechanicroutes1 = require('./routes/mechanicroutes');
 const userroutes1 = require('./routes/Userroutes');
 
-
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(mechanicroutes1);
 app.use(userroutes1);
 const mongouri =
   // 'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';
-'mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/SmartAutoMechanicFinder?retryWrites=true&w=majority';
+  'mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/SmartAutoMechanicFinder?retryWrites=true&w=majority';
 // "mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/test"
 mongoose.connect(mongouri, {
   useNewUrlParser: true,
