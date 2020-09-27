@@ -117,7 +117,7 @@ export default class UserProfileDetail extends Component {
         <View style={{}}>
       <TouchableOpacity onPress={this.toggleModal}>
           <ImageBackground
-            source={{uri:data.photo}}
+            source={{uri:data.photo  }}
             style={{height: screenHeight.height25}}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
