@@ -43,6 +43,7 @@ export default class Settings extends Component {
       firstname: 'Username',
       lastname: '',
       isModalVisible: false,
+      isImageVisible: false,
       isLogin: null,
     };
     // this.state = {
@@ -53,18 +54,16 @@ export default class Settings extends Component {
   }
   onSignout = () => {
     const {navigation} = this.props;
-      const login = new Login();
-      login._signOut();
+    const login = new Login();
+    login._signOut();
 
-      AsyncStorage.removeItem('googleData').then(() => {
-          navigation.navigate('Login')    
-      });
-      AsyncStorage.removeItem('usersignintoken').then(() => {
-        navigation.navigate('Login') 
-     
-      });
-     
-        };
+    AsyncStorage.removeItem('googleData').then(() => {
+      navigation.navigate('Login');
+    });
+    AsyncStorage.removeItem('usersignintoken').then(() => {
+      navigation.navigate('Login');
+    });
+  };
   LoginUserData = () => {
     try {
       AsyncStorage.getItem('userdata').then((res) => {
@@ -92,7 +91,8 @@ export default class Settings extends Component {
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
-
+  
+  
   componentDidMount() {
     const {navigation} = this.props;
     this.LoginUserData();
@@ -104,7 +104,7 @@ export default class Settings extends Component {
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
-
+       
         <View style={{}}>
           <Modal
             isVisible={this.state.isModalVisible}
@@ -136,10 +136,11 @@ export default class Settings extends Component {
             </View>
           </Modal>
         </View>
-        {/*Body */}
-        <View style={{marginTop: 40}} />
 
-        <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
+        {/*Body */}
+        <View  />
+
+        <View style={[style.row, style.jcSpaceBetween, style.ph20, style.mt40]}>
           <View style={{postion: 'absolute', top: 0, left: -5}}>
             <Hamburger tintColor={colors.purple} />
           </View>
@@ -152,13 +153,13 @@ export default class Settings extends Component {
         <ScrollView style={{}}>
           <View style={[appStyle.bodyBg, appStyle.bodyLayout, style.mt20]}>
             {/* header */}
-            <View style={style.asCenter}>
+            <TouchableOpacity style={style.asCenter} >
               <Image
                 style={[image.ovalcontainerupload, style.shadow]}
                 source={{uri: this.state.photo}}
               />
               {/* <Text style={[text.text18,text.orange,text.semibold]}>Sam Adams</Text> */}
-            </View>
+            </TouchableOpacity>
             <View style={[style.asCenter, style.pt5]}>
               <Text style={[text.text18, text.orange, text.semibold]}>
                 {this.state.firstname} {this.state.lastname}

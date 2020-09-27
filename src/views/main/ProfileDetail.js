@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import Modal from 'react-native-modal';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -43,9 +43,14 @@ export default class HomeDetail extends Component {
       ColorReview: colors.inputBordercolor,
       BookNowView: 'flex',
       CheckBox: images.checkBoxEmpty,
+      isModalVisible:false,
       data: [],
     };
   }
+  toggleModal = () => {
+    this.setState({isModalVisible: !this.state.isModalVisible});
+  };
+
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
@@ -120,11 +125,45 @@ export default class HomeDetail extends Component {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
           <StatusBar />
+          <View style={{}}>
+          <Modal
+            isVisible={this.state.isModalVisible}
+            animationInTiming={500}
+            animationOutTiming={500}>
+            <View style={[style.flex1, appStyle.rowEven]}>
+              <TouchableOpacity
+                style={[appStyle.DashboardslotCard,style.w100]}
+                onPress={this.toggleModal}>
+                <View style={[style.mv10, style.aiCenter]}>
+                  <Text style={[text.h1]}>Preview Image</Text>
+                  <Text style={[text.heading2Gray]}>
+                    {data.firstname} {data.lastname}{' '}
+                  </Text>
+                </View>
+                <Image
+                  source={{uri: data.photo}}
+                  style={{
+                    height: 470,
+                    
+                    resizeMode: 'stretch',
+                    borderRadius: 10,
+                  }}></Image>
+                <TouchableOpacity
+                  style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                  onPress={this.toggleModal}>
+                  <Text style={[button.btntext1]}> Close Preview </Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
 
+ 
           {/*Body */}
           <View style={{}}>
+           <TouchableOpacity onPress={this.toggleModal}>
             <ImageBackground
-              source={images.userImg}
+              source={{uri:data.photo}}
               style={{height: screenHeight.height25}}>
               <View style={style.bgOverlay} />
               <TouchableOpacity
@@ -161,6 +200,7 @@ export default class HomeDetail extends Component {
                 </View>
               </View>
             </ImageBackground>
+            </TouchableOpacity>
           </View>
 
           <View style={[appStyle.bodyBg, style.flex1]}>

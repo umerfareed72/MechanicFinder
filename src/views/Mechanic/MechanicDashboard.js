@@ -205,7 +205,7 @@ export default class MechanicDashboard extends Component {
           style={[appStyle.slotCard, appStyle.rowJustify, style.aiCenter]}>
           <View style={[style.row, style.aiCenter]}>
             <View style={style.mr10}>
-              <Image style={image.userImg} source={images.dummy1} />
+              <Image style={image.userImg} source={{uri:bookedUserData.photo}} />
             </View>
 
             <View style={[style.rowBtw, style.aiCenter]}>

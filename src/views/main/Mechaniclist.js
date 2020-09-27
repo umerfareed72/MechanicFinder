@@ -115,6 +115,7 @@ export default class Mechaniclist extends Component {
   componentDidMount() {
     AsyncStorage.getItem('skilltype').then((res) => {
       this.setState({skilltype: res});
+      console.log(res)
     });
   }
 
@@ -213,7 +214,7 @@ export default class Mechaniclist extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={images.dummy1} />
+                      <Image style={image.userImg} source={{uri:data.photo}} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>

@@ -34,7 +34,7 @@ import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
-
+import Modal from 'react-native-modal';
 export default class HomeDetail extends Component {
   constructor(props) {
     super(props);
@@ -50,6 +50,7 @@ export default class HomeDetail extends Component {
       BookNowView: 'flex',
       CheckBox: images.checkBoxEmpty,
       mechanicdata: [],
+      isModalVisible: false,
     };
   }
   onStarRatingPress(rating) {
@@ -65,7 +66,7 @@ export default class HomeDetail extends Component {
       });
     } catch (error) {}
   };
- async componentDidMount() {
+  async componentDidMount() {
     const {navigation} = this.props;
     this.getData();
     this.focusListener = navigation.addListener('didFocus', () => {
@@ -143,7 +144,7 @@ export default class HomeDetail extends Component {
       axios
         .post(URL.Url + 'addbookedUser/' + mechanicid + '/' + userid)
         .then((res) => {
-        console.log('Mechanic Booked Successfully')
+          console.log('Mechanic Booked Successfully');
         });
     });
     setTimeout(() => {
@@ -156,52 +157,94 @@ export default class HomeDetail extends Component {
       }
     }, 3000);
   };
+  toggleModal = () => {
+    this.setState({isModalVisible: !this.state.isModalVisible});
+  };
+
   render() {
     const {mechanicdata} = this.state;
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
-        <StatusBar />
+        <StatusBar
+          backgroundColor={'transparent'}
+          translucent={true}
+          barStyle={'light-content'}
+        />
+        <View style={{}}>
+          <Modal
+            isVisible={this.state.isModalVisible}
+            animationInTiming={500}
+            animationOutTiming={500}>
+            <View style={[style.flex1, appStyle.rowEven]}>
+              <TouchableOpacity
+                style={[appStyle.DashboardslotCard, style.w100]}
+                onPress={this.toggleModal}>
+                <View style={[style.mv10, style.aiCenter]}>
+                  <Text style={[text.h1]}>Preview Image</Text>
+                  <Text style={[text.heading2Gray]}>
+                    {mechanicdata.firstname} {mechanicdata.lastname}{' '}
+                  </Text>
+                </View>
+                <Image
+                  source={{uri: mechanicdata.photo}}
+                  style={{
+                    height: 470,
+
+                    resizeMode: 'stretch',
+                    borderRadius: 10,
+                  }}></Image>
+                <TouchableOpacity
+                  style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                  onPress={this.toggleModal}>
+                  <Text style={[button.btntext1]}> Close Preview </Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
 
         {/*Body */}
         <View style={{}}>
-          <ImageBackground
-            source={images.userImg}
-            style={{height: screenHeight.height25}}>
-            <View style={style.bgOverlay} />
-            <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
-              style={[image.headerBackArrow]}>
-              <Image
-                style={[image.backArrow]}
-                source={images.backArrow}></Image>
-            </TouchableOpacity>
-            <View style={[appStyle.headInner, style.ph20]}>
-              <View style={[style.mv5]}>
-                <StarRating
-                  disabled={true}
-                  maxStars={5}
-                  rating={this.state.starCount}
-                  selectedStar={(rating) => this.onStarRatingPress(rating)}
-                  fullStarColor={'#fff'}
-                  emptyStarColor={'#fff'}
-                  starSize={20}
-                  containerStyle={{width: 110, marginTop: 3}}
-                />
-              </View>
+          <TouchableOpacity onPress={this.toggleModal}>
+            <ImageBackground
+              source={{uri: mechanicdata.photo}}
+              style={{height: screenHeight.height25}}>
+              <View style={style.bgOverlay} />
+              <TouchableOpacity
+                onPress={() => this.props.navigation.goBack()}
+                style={[image.headerBackArrow]}>
+                <Image
+                  style={[image.backArrow]}
+                  source={images.backArrow}></Image>
+              </TouchableOpacity>
+              <View style={[appStyle.headInner, style.ph20]}>
+                <View style={[style.mv5]}>
+                  <StarRating
+                    disabled={true}
+                    maxStars={5}
+                    rating={this.state.starCount}
+                    selectedStar={(rating) => this.onStarRatingPress(rating)}
+                    fullStarColor={'#fff'}
+                    emptyStarColor={'#fff'}
+                    starSize={20}
+                    containerStyle={{width: 110, marginTop: 3}}
+                  />
+                </View>
 
-              <View style={[style.mv5]}>
-                <Text style={[text.heading1, text.bold]}>
-                  {mechanicdata.firstname} {mechanicdata.lastname}
-                </Text>
+                <View style={[style.mv5]}>
+                  <Text style={[text.heading1, text.bold]}>
+                    {mechanicdata.firstname} {mechanicdata.lastname}
+                  </Text>
+                </View>
+                <View style={[style.mv5]}>
+                  <Text style={[text.paraWhite, text.regular]}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                    diam nonumy eirmod
+                  </Text>
+                </View>
               </View>
-              <View style={[style.mv5]}>
-                <Text style={[text.paraWhite, text.regular]}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod
-                </Text>
-              </View>
-            </View>
-          </ImageBackground>
+            </ImageBackground>
+          </TouchableOpacity>
         </View>
 
         <View style={[appStyle.bodyBg, style.flex1]}>

@@ -338,7 +338,7 @@ router.get(
               let result = c * r; //Get Result In KM
               //Found In 10 KM
 
-              if (result <= 100000000) {
+              if (result <= 100) {
                 //Distance get
                 nearest.push({
                   mechanicid: item.id,

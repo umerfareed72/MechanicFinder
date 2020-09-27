@@ -17,6 +17,7 @@ import {
   Button,
 } from 'react-native';
 import {Picker} from '@react-native-community/picker';
+import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
@@ -41,6 +42,7 @@ export default class EditProfile extends Component {
       filePath: {},
       photo: null,
       Gender: 'Select Gender',
+      isImageVisible: false,
     };
   }
 
@@ -54,12 +56,100 @@ export default class EditProfile extends Component {
       }
     });
   };
+  handleChoosePhoto = () => {
+    const options = {
+      title: 'Take Image From',
+      StorageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.uri) {
+        var data = new FormData();
+        const source = {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName,
+        };
+        data.append('file', source);
+        data.append('upload_preset', 'rjrthtdu');
+        data.append('cloud_name', 'dbkmbaxmk');
+        fetch('https://api.cloudinary.com/v1_1/dbkmbaxmk/image/upload', {
+          method: 'post',
+          body: data,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.secure_url);
+            this.setState({photo: data.secure_url});
+          })
+          .catch((err) => {
+            Alert.alert('An Error Occured While Uploading');
+            console.log(err);
+          });
+      } else if (response.didCancel) {
+        console.log('User Cancelled Image Picker');
+      } else if (response.error) {
+        console.log('Image Picker Error', response.error);
+      }
+    });
+  };
 
+  ImageModal = () => {
+    this.setState({isImageVisible: !this.state.isImageVisible});
+  };
   render() {
     const {photo} = this.state;
     return (
       <SafeAreaView style={style.flex1}>
-        <StatusBar translucent={true} backgroundColor={'transparent'} barStyle={'light-content'}/>
+        <StatusBar
+          translucent={true}
+          backgroundColor={'transparent'}
+          barStyle={'light-content'}
+        />
+        <View style={{}}>
+          <Modal
+            isVisible={this.state.isImageVisible}
+            animationInTiming={500}
+            animationOutTiming={500}>
+            <ScrollView>
+              <View style={[style.flex1, appStyle.rowEven]}>
+                <TouchableOpacity
+                  style={[appStyle.DashboardslotCard, style.w100]}
+                  onPress={this.ImageModal}>
+                  <View style={[style.mv10, style.aiCenter]}>
+                    <Text style={[text.h1]}>Preview Image</Text>
+                    <Text style={[text.heading2Gray]}>
+                      {this.state.firstname} {this.state.lastname}
+                    </Text>
+                  </View>
+                  <Image
+                    source={{uri: this.state.photo}}
+                    style={{
+                      height: 450,
+                      resizeMode: 'stretch',
+                      borderRadius: 10,
+                    }}></Image>
+                  <TouchableOpacity
+                    style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                    onPress={this.handleChoosePhoto}>
+                    <Text style={[button.btntext1]}> Upload Pucture </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[button.buttonTheme, style.mt10, style.aiCenter]}
+                    onPress={this.ImageModal}>
+                    <Text style={[button.btntext1]}> Close Preview </Text>
+                  </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          </Modal>
+        </View>
 
         <KeyboardAvoidingView
           style={{backgroundColor: colors.white, flexGrow: 1}}>
@@ -74,12 +164,12 @@ export default class EditProfile extends Component {
                   <StatusBar backgroundColor={'transparent'} />
 
                   <TouchableOpacity
-                  onPress={() => this.props.navigation.goBack()}
-                  style={[image.headerBackArrow]}>
-                  <Image
-                    style={[image.backArrow]}
-                    source={images.backArrow}></Image>
-                </TouchableOpacity>
+                    onPress={() => this.props.navigation.goBack()}
+                    style={[image.headerBackArrow]}>
+                    <Image
+                      style={[image.backArrow]}
+                      source={images.backArrow}></Image>
+                  </TouchableOpacity>
                   <View style={[style.flex1, style.jcCenter, style.mh40]}>
                     <View style={[style.jcSpaceBetween, style.row]}>
                       <View style={style.mr20}>
@@ -100,7 +190,7 @@ export default class EditProfile extends Component {
                               justifyContent: 'center',
                               alignItems: 'center',
                             }}
-                            onPress={this.handleChoosePhoto}>
+                            onPress={this.ImageModal}>
                             <Image
                               style={[image.mediumimagestyle]}
                               source={images.camerdark}
@@ -175,7 +265,7 @@ export default class EditProfile extends Component {
                     </View>
                     <View style={[input.drop]}>
                       <Picker
-                      style={text.regualGray}
+                        style={text.regualGray}
                         selectedValue={this.state.Gender}
                         onValueChange={(itemValue, itemIndex) =>
                           this.setState({Gender: itemValue})

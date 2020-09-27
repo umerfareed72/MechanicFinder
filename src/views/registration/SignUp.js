@@ -65,7 +65,7 @@ export default class MechanicRegister extends Component {
       Password: '',
       CPassword: '',
       address: '',
-      photo: null,
+      photo: '',
       Phone: '',
       date: 'Date Of Birth',
       longitude: '',
@@ -74,25 +74,6 @@ export default class MechanicRegister extends Component {
     };
   }
 
-  //   cloudinaryUpload = (photo) => {
-  //     const data = new FormData()
-  //     data.append('file', photo)
-  //     data.append('upload_preset', "dng1vvycv")
-  //     data.append("cloud_name", "dng1vvycv")
-  //     axios
-  //       .post('https://api.cloudinary.com/v1_1/dng1vvycv/image/upload', {
-
-  //  data
-  //     }).then(res => res.json()).
-  //       then(data => {
-  //         console.log(data)
-  //        this.setState({photo:data.secure_url})
-
-  //       }).catch(err => {
-  //         Alert.alert("An Error Occured While Uploading")
-  //     console.log(err)
-  //       })
-  //   }
   _Signout = async () => {
     const login = new Login();
     login._signOut();
@@ -140,6 +121,7 @@ this._Signout()
         console.log(error);
       });
   };
+
   handleChoosePhoto = () => {
     const options = {
       title: 'Take Image From',
@@ -148,20 +130,34 @@ this._Signout()
         path: 'images',
       },
     };
-
     ImagePicker.showImagePicker(options, (response) => {
-      if (response) {
-        console.log(response);
-        this.setState({photo: response.uri});
-        // const uri = response.uri;
-        // const type = response.type;
-        // const name = response.fileName;
-        // const source = {
-        //   uri,
-        //   type,
-        //   name,
-        // }
-        // this.cloudinaryUpload(source)
+      if (response.uri) {
+        var data = new FormData();
+        const source = {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName,
+        };
+        data.append('file', source);
+        data.append('upload_preset', 'rjrthtdu');
+        data.append('cloud_name', 'dbkmbaxmk');
+        fetch('https://api.cloudinary.com/v1_1/dbkmbaxmk/image/upload', {
+          method: 'post',
+          body: data,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.secure_url);
+         this.setState({photo:data.secure_url})
+          })
+          .catch((err) => {
+            Alert.alert('An Error Occured While Uploading');
+            console.log(err);
+          });
       } else if (response.didCancel) {
         console.log('User Cancelled Image Picker');
       } else if (response.error) {

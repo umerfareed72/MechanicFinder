@@ -28,6 +28,7 @@ import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import Modal from 'react-native-modal';
 
 export default class UserProfileDetail extends Component {
   constructor(props) {
@@ -40,9 +41,14 @@ export default class UserProfileDetail extends Component {
       BookNowView: 'flex',
       CheckBox: images.checkBoxEmpty,
       data: [],
-      refreshing:false
+      refreshing:false,
+      isModalVisible:false,
     };
   }
+  toggleModal = () => {
+    this.setState({isModalVisible: !this.state.isModalVisible});
+  };
+
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
@@ -74,11 +80,44 @@ export default class UserProfileDetail extends Component {
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
+        <View style={{}}>
+          <Modal
+            isVisible={this.state.isModalVisible}
+            animationInTiming={500}
+            animationOutTiming={500}>
+            <View style={[style.flex1, appStyle.rowEven]}>
+              <TouchableOpacity
+                style={[appStyle.DashboardslotCard,style.w100]}
+                onPress={this.toggleModal}>
+                <View style={[style.mv10, style.aiCenter]}>
+                  <Text style={[text.h1]}>Preview Image</Text>
+                  <Text style={[text.heading2Gray]}>
+                    {data.firstname} {data.lastname}{' '}
+                  </Text>
+                </View>
+                <Image
+                  source={{uri: data.photo}}
+                  style={{
+                    height: 470,
+                    
+                    resizeMode: 'stretch',
+                    borderRadius: 10,
+                  }}></Image>
+                <TouchableOpacity
+                  style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                  onPress={this.toggleModal}>
+                  <Text style={[button.btntext1]}> Close Preview </Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
 
         {/*Body */}
         <View style={{}}>
+      <TouchableOpacity onPress={this.toggleModal}>
           <ImageBackground
-            source={images.userImg}
+            source={{uri:data.photo}}
             style={{height: screenHeight.height25}}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
@@ -115,6 +154,7 @@ export default class UserProfileDetail extends Component {
               </View>
             </View>
           </ImageBackground>
+          </TouchableOpacity>
         </View>
 
         <View style={[appStyle.bodyBg, style.flex1]}>

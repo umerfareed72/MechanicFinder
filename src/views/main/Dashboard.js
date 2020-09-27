@@ -250,6 +250,7 @@ export default class Dashboard extends Component {
                 style={[style.pv10]}
                 onPress={() => {
                   AsyncStorage.setItem('skilltype', 'Body');
+                
                   this.props.navigation.navigate('Mechaniclist');
                 }}>
                 <ImageBackground

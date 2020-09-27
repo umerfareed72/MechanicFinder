@@ -40,6 +40,7 @@ import appStyle from '../../assets/styles/appStyle';
 import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ActivityIndicator} from 'react-native-paper';
+import Modal from 'react-native-modal';
 const axios = require('axios');
 export default class BookNow extends Component {
   constructor(props) {
@@ -52,6 +53,7 @@ export default class BookNow extends Component {
       refreshing: false,
       bookedMechanicId: '',
       starCount: 3.5,
+      isModalVisible: false,
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
     this.fadeOut = this.fadeOut.bind(this);
@@ -98,6 +100,9 @@ export default class BookNow extends Component {
     } catch (error) {
       console.log(error);
     }
+  };
+  toggleModal = () => {
+    this.setState({isModalVisible: !this.state.isModalVisible});
   };
 
   CancelBooking = async () => {
@@ -175,12 +180,45 @@ export default class BookNow extends Component {
             backgroundColor={'transparent'}
             translucent={true}
           />
+<View style={{}}>
+          <Modal
+            isVisible={this.state.isModalVisible}
+            animationInTiming={500}
+            animationOutTiming={500}>
+            <View style={[style.flex1, appStyle.rowEven]}>
+              <TouchableOpacity
+                style={[appStyle.DashboardslotCard,style.w100]}
+                onPress={this.toggleModal}>
+                <View style={[style.mv10, style.aiCenter]}>
+                  <Text style={[text.h1]}>Preview Image</Text>
+                  <Text style={[text.heading2Gray]}>
+                    {data.firstname} {data.lastname}{' '}
+                  </Text>
+                </View>
+                <Image
+                  source={{uri: data.photo}}
+                  style={{
+                    height: 470,
+                    
+                    resizeMode: 'stretch',
+                    borderRadius: 10,
+                  }}></Image>
+                <TouchableOpacity
+                  style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                  onPress={this.toggleModal}>
+                  <Text style={[button.btntext1]}> Close Preview </Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
 
           <View style={style.flex1}>
+            <TouchableOpacity onPress={this.toggleModal}>
             <ImageBackground
               imageStyle={{borderRadius: 8}}
               style={[image.storeImg, style.w100]}
-              source={images.userImg}>
+              source={{uri:data.photo}}>
               <View style={style.bgOverlay} />
               <View style={[style.rowBtw, style.ph20, style.pb10]}>
                 <TouchableOpacity
@@ -198,7 +236,7 @@ export default class BookNow extends Component {
                 <Text style={[text.text16, text.orange]}></Text>
               </View>
             </ImageBackground>
-
+            </TouchableOpacity>
             <View style={appStyle.curvedContainer}>
               <ScrollView style={style.ph20}>
                 <View style={[style.mt30]}>
