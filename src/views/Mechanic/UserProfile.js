@@ -52,8 +52,11 @@ export default class UserProfile extends Component {
       data: [],
       refreshing: false,
       bookedMechanicId: '',
+      mechanicData: [],
       starCount: 3.5,
-      isModalVisible:false,
+      cancelButton: 'flex',
+
+      isModalVisible: false,
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
     this.fadeOut = this.fadeOut.bind(this);
@@ -80,28 +83,45 @@ export default class UserProfile extends Component {
 
   getMechanicLocation = async () => {
     try {
-      AsyncStorage.getItem('UserId')
+      await AsyncStorage.getItem('Mechanicdata')
         .then((response) => {
-          console.log(response,'User id');
-          const userid = JSON.parse(response);
-          axios.get(URL.Url + 'getbookedMechanic/' + userid).then((res) => {
-           console.log(res.data)
-          if(res.data==''){
-          console.log('No data ')  
-          }else{
-            res.data.map((item) => {
-              this.setState({bookedMechanicId: item._id});
-              axios.get(URL.Url + 'user/' + item.userid).then((response) => {
-                this.setState({data: response.data});
-                this.setState({refreshing: true});
-            const send=JSON.stringify(response.data)
-                AsyncStorage.setItem('bookUserdata',send)
-              });
+          const res = JSON.parse(response);
+          this.setState({mechanicData: res});
+          const userId = res.userid;
+          const bookedUserId = res.bookedId;
+          if (res.data == '') {
+            console.log('No data ');
+          } else {
+            this.setState({bookedMechanicId: bookedUserId});
+            axios.get(URL.Url + 'user/' + userId).then((response) => {
+              this.setState({data: response.data});
+              this.setState({refreshing: true});
+
+              const {mechanicData} = this.state;
+              let Lat1 = response.data.latitude / 57.29577951;
+              let Lat2 = mechanicData.latitude / 57.29577951;
+              let Long1 = response.data.longitude / 57.29577951;
+              let Long2 = mechanicData.longitude / 57.29577951;
+              // Calaculate distance
+              let dlat = Lat2 - Lat1;
+              let dlong = Long2 - Long1;
+              //Apply Heversine Formula to calculate  Distance of Spherical Objects
+              let a =
+                Math.pow(Math.sin(dlat / 2), 2) +
+                Math.cos(Lat1) *
+                  Math.cos(Lat2) *
+                  Math.pow(Math.sin(dlong / 2), 2);
+              let c = 2 * Math.asin(Math.sqrt(a));
+              let r = 6371;
+              let result = c * r; //Get Result In KM
+              //Found In 10 KM
+              if (result <= 10) {
+                this.setState({cancelButton: 'none'});
+              }
             });
-          
           }
-          });
         })
+
         .catch((error) => {
           console.log('User data not Fetched', error);
         });
@@ -116,7 +136,6 @@ export default class UserProfile extends Component {
       .then((res) => {
         this.setState({refreshing: false});
         this.props.navigation.navigate('MecchanicDashboard');
-       AsyncStorage.removeItem('bookUserdata')
         console.log(res.data, 'data updated');
       })
       .catch((error) => {
@@ -184,62 +203,64 @@ export default class UserProfile extends Component {
             backgroundColor={'transparent'}
             translucent={true}
           />
-  <View style={{}}>
-          <Modal
-            isVisible={this.state.isModalVisible}
-            animationInTiming={500}
-            animationOutTiming={500}>
-            <View style={[style.flex1, appStyle.rowEven]}>
-              <TouchableOpacity
-                style={[appStyle.DashboardslotCard,style.w100]}
-                onPress={this.toggleModal}>
-                <View style={[style.mv10, style.aiCenter]}>
-                  <Text style={[text.h1]}>Preview Image</Text>
-                  <Text style={[text.heading2Gray]}>
-                    {data.firstname} {data.lastname}{' '}
-                  </Text>
-                </View>
-                <Image
-                  source={{uri: data.photo}}
-                  style={{
-                    height: 470,
-                    
-                    resizeMode: 'stretch',
-                    borderRadius: 10,
-                  }}></Image>
+          <View style={{}}>
+            <Modal
+              isVisible={this.state.isModalVisible}
+              animationInTiming={500}
+              animationOutTiming={500}>
+              <View style={[style.flex1, appStyle.rowEven]}>
                 <TouchableOpacity
-                  style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                  style={[appStyle.DashboardslotCard, style.w100]}
                   onPress={this.toggleModal}>
-                  <Text style={[button.btntext1]}> Close Preview </Text>
+                  <View style={[style.mv10, style.aiCenter]}>
+                    <Text style={[text.h1]}>Preview Image</Text>
+                    <Text style={[text.heading2Gray]}>
+                      {data.firstname} {data.lastname}{' '}
+                    </Text>
+                  </View>
+                  <Image
+                    source={{uri: data.photo}}
+                    style={{
+                      height: 470,
+
+                      resizeMode: 'stretch',
+                      borderRadius: 10,
+                    }}></Image>
+                  <TouchableOpacity
+                    style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                    onPress={this.toggleModal}>
+                    <Text style={[button.btntext1]}> Close Preview </Text>
+                  </TouchableOpacity>
                 </TouchableOpacity>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-        </View>
+              </View>
+            </Modal>
+          </View>
 
           <View style={style.flex1}>
-        <TouchableOpacity onPress={this.toggleModal}>
-            <ImageBackground
-              imageStyle={{borderRadius: 8}}
-              style={[image.storeImg, style.w100]}
-              source={{uri:data.photo}}>
-              <View style={style.bgOverlay} />
-              <View style={[style.rowBtw, style.ph20, style.pb10]}>
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('MechanicDashboard')}>
-                  <Image
-                    source={images.backarrowh}
-                    style={[
-                      image.backArrow2,
-                      {tintColor: colors.white},
-                    ]}></Image>
-                </TouchableOpacity>
-                <View>
-                  <Text style={[text.heading1, text.bold]}>Profile</Text>
+            <TouchableOpacity onPress={this.toggleModal}>
+              <ImageBackground
+                imageStyle={{borderRadius: 8}}
+                style={[image.storeImg, style.w100]}
+                source={{uri: data.photo}}>
+                <View style={style.bgOverlay} />
+                <View style={[style.rowBtw, style.ph20, style.pb10]}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate('MechanicDashboard')
+                    }>
+                    <Image
+                      source={images.backarrowh}
+                      style={[
+                        image.backArrow2,
+                        {tintColor: colors.white},
+                      ]}></Image>
+                  </TouchableOpacity>
+                  <View>
+                    <Text style={[text.heading1, text.bold]}>Profile</Text>
+                  </View>
+                  <Text style={[text.text16, text.orange]}></Text>
                 </View>
-                <Text style={[text.text16, text.orange]}></Text>
-              </View>
-            </ImageBackground>
+              </ImageBackground>
             </TouchableOpacity>
             <View style={appStyle.curvedContainer}>
               <ScrollView style={style.ph20}>
@@ -339,7 +360,11 @@ export default class UserProfile extends Component {
 
                     <TouchableOpacity
                       onPress={this.CancelBooking}
-                      style={[button.button1, style.mt10]}>
+                      style={[
+                        button.button1,
+                        style.mt10,
+                        {display: this.state.cancelButton},
+                      ]}>
                       <Text style={[button.btntext1, text.center]}>
                         Cancel Booking
                       </Text>
@@ -368,7 +393,9 @@ export default class UserProfile extends Component {
               <View style={style.bgOverlay} />
               <View style={[style.rowBtw, style.ph20, style.pb10]}>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('MechanicDashboard')}>
+                  onPress={() =>
+                    this.props.navigation.navigate('MechanicDashboard')
+                  }>
                   <Image
                     source={images.backarrowh}
                     style={[

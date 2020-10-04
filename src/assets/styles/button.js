@@ -84,7 +84,7 @@ export default StyleSheet.create({
   btntext1:{
     fontSize:20,
     fontFamily:'goodfishbd',
-   color:colors.white,
+    color:colors.white,
     letterSpacing:1
   },
   buttonTheme: {

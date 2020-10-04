@@ -8,13 +8,16 @@ const requiretoken = require('./middlewares/requiretoken');
 require('./models/Usermodel');
 const usertoken = require('./middlewares/Usertoken');
 require('./models/BookedUsers');
+require('./models/Reviewmodel');
 
 const mechanicroutes1 = require('./routes/mechanicroutes');
 const userroutes1 = require('./routes/Userroutes');
+const bookedroutes = require('./routes/BookedUseroutes');
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(mechanicroutes1);
 app.use(userroutes1);
+app.use(bookedroutes);
 const mongouri =
   // 'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';
   'mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/SmartAutoMechanicFinder?retryWrites=true&w=majority';

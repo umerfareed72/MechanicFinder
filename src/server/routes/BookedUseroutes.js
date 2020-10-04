@@ -1,12 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const {jwtkey} = require('../keys');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 const Mechanicmodel = mongoose.model('mechanicmodel');
-
 const Usermodel = mongoose.model('Usermodel');
 const BookedUsermodel = mongoose.model('BookedUsermodel');
+
 router.post('/addbookedUser/:mid/:uid', async (req, res) => {
   Usermodel.findById(req.params.uid)
     .select({
@@ -39,7 +37,7 @@ router.post('/addbookedUser/:mid/:uid', async (req, res) => {
 });
 
 router.get('/getbookedUser/:mid', async (req, res) => {
-  BookedUsermodel.find({mechanicid:req.params.mid,Status:'Online'})
+  BookedUsermodel.find({mechanicid: req.params.mid, Status: 'Online'})
     .then((bookeduser) => {
       res.json(bookeduser);
     })
@@ -52,15 +50,15 @@ router.put('/cancelbookeduser/:id', (req, res) => {
   BookedUsermodel.findByIdAndUpdate(
     {_id: req.params.id},
     {
-    Status:'Offline'
+      Status: 'Offline',
     },
   )
     .then((canceluser) => {
       if (!canceluser) {
         return res.status(404).send('Mechanic Not Found');
       } else {
-        // mechanic.update();
         return res.status(200).json(canceluser);
+        canceluser.save();
       }
     })
     .catch((error) => {
@@ -68,33 +66,6 @@ router.put('/cancelbookeduser/:id', (req, res) => {
     });
 });
 
-
-// router.get('/getUserProfile/:mid/:uid/:bid', async (req, res) => {
-//   Usermodel.findById(req.params.uid)
-//     .select({
-//       firstname: 1,
-//       lastname: 1,
-//       email: 1,
-//       address: 1,
-//       city: 1,
-//       country: 1,
-//       photo: 1,
-//       phone: 1,
-//       latitude: 1,
-//       longitude: 1,
-//     })
-//     .then((user) => {
-//       Mechanicmodel.findById(req.params.mid).then((data) => {
-//         BookedUsermodel.findById(req.params.bid).then((data) => {
-//           res.json(data);
-//         });
-//       });
-//     })
-//     //  res.send(userdata)
-//     .catch((err) => {
-//       res.status(404).send(err.message);
-//     });
-// });
 
 router.get('/bookedusers', async (req, res) => {
   BookedUsermodel.find()
@@ -106,6 +77,32 @@ router.get('/bookedusers', async (req, res) => {
       res.status(404).send(err.message);
     });
 });
+
+router.get('/bookeduserid/:id', async (req, res) => {
+  BookedUsermodel.findById(req.params.id)
+    .then((data) => {
+      res.json(data);
+    })
+    //  res.send(userdata)
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+//////////////////////////////////////User Side Booked Mechanic Routes///////////////
+
+router.get('/getbookedMechanic/:uid', async (req, res) => {
+  BookedUsermodel.find({userid: req.params.uid, Status: 'Online'})
+    .then((bookedmechanic) => {
+      if (bookedmechanic.length == 0) {
+        return res.status(202).send(null);
+      }
+      return res.json(bookedmechanic);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
 
 
 module.exports = router;

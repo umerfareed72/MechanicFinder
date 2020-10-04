@@ -27,7 +27,8 @@ import {
   URL,
   height,
 } from '../../config/Constant';
-
+import Geocoder from 'react-native-geocoding';
+Geocoder.init('AIzaSyCaEXhEWI8EDSE0TAEtFxU6ykRuKQK5F44');
 import LinearGradient from 'react-native-linear-gradient';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -52,8 +53,10 @@ export default class BookNow extends Component {
       data: [],
       refreshing: false,
       bookedMechanicId: '',
+      cancelButton: 'flex',
       starCount: 3.5,
       isModalVisible: false,
+
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
     this.fadeOut = this.fadeOut.bind(this);
@@ -74,22 +77,79 @@ export default class BookNow extends Component {
 
     Linking.openURL(phoneNumber);
   };
+
+  getCity = () => {
+    axios
+      .get(
+        'http://api.positionstack.com/v1/reverse?access_key=01bd92ff4d189472dbd298a5f7142f38&query=' +
+          this.state.data.latitude +
+          ',' +
+          this.state.data.longitude,
+      )
+
+      .then((res) => {
+        const {data} = this.state;
+        const address = res.data.data[0];
+
+        const street = address.street;
+        const city = address.county;
+        const country = address.country;
+        const location = street + ' ' + city + ' ' + country;
+        const latitude = data.latitude;
+        const longitude = data.longitude;
+        const label = JSON.stringify(location);
+        const url = Platform.select({
+          ios: 'maps:' + latitude + ',' + longitude + '?q=' + label,
+          android: 'geo:' + latitude + ',' + longitude + '?q=' + label,
+        });
+        console.log(latitude + longitude + label);
+        Linking.openURL(url);
+      });
+  };
+
   getMechanicLocation = async () => {
     try {
       AsyncStorage.getItem('userId')
         .then((response) => {
           console.log(response);
           const userid = JSON.parse(response);
+          this.setState({userId: userid});
           axios.get(URL.Url + 'getbookedMechanic/' + userid).then((res) => {
             res.data.map((item) => {
-              this.setState({bookedMechanicId:item._id});
+              this.setState({bookedMechanicId: item._id});
               axios
                 .get(URL.Url + 'mechanic/' + item.mechanicid)
                 .then((response) => {
                   this.setState({data: response.data});
                   this.setState({refreshing: true});
-               const sendMechanicData=JSON.stringify(response.data);
-               AsyncStorage.setItem('bookMechanicData',sendMechanicData)
+                  response.data['userId'] = userid;
+                  const sendMechanicData = JSON.stringify(response.data);
+                  AsyncStorage.setItem('bookMechanicData', sendMechanicData);
+                })
+                .then(async (res) => {
+                  await axios.get(URL.Url + 'user/' + userid).then((res) => {
+                    const {data} = this.state;
+                    let Lat1 = data.latitude / 57.29577951;
+                    let Lat2 = res.data.latitude / 57.29577951;
+                    let Long1 = data.longitude / 57.29577951;
+                    let Long2 = res.data.longitude / 57.29577951;
+                    // Calaculate distance
+                    let dlat = Lat2 - Lat1;
+                    let dlong = Long2 - Long1;
+                    //Apply Heversine Formula to calculate  Distance of Spherical Objects
+                    let a =
+                      Math.pow(Math.sin(dlat / 2), 2) +
+                      Math.cos(Lat1) *
+                        Math.cos(Lat2) *
+                        Math.pow(Math.sin(dlong / 2), 2);
+                    let c = 2 * Math.asin(Math.sqrt(a));
+                    let r = 6371;
+                    let result = c * r; //Get Result In KM
+                    //Found In 10 KM
+                    if (result <= 10) {
+                      // this.setState({cancelButton: 'none'});
+                    }
+                  });
                 });
             });
           });
@@ -110,7 +170,7 @@ export default class BookNow extends Component {
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
         this.setState({refreshing: false});
-        AsyncStorage.removeItem('bookMechanicData')
+        AsyncStorage.removeItem('bookMechanicData');
         this.props.navigation.navigate('Dashboard');
         console.log(res.data, 'data updated');
       })
@@ -119,29 +179,30 @@ export default class BookNow extends Component {
       });
   };
 
-  RemoveBooking = () => {
-    setInterval(() => {
-      axios
-        .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
-        .then((res) => {
-          this.setState({refreshing: false});
-          this.props.navigation.navigate('Dashboard');
-          console.log(res.data, 'data updated');
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }, 10000000);
-  };
+  // RemoveBooking = () => {
+  //   setInterval(() => {
+  //     axios
+  //       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
+  //       .then((res) => {
+  //         this.setState({refreshing: false});
+  //         this.props.navigation.navigate('Dashboard');
+  //         console.log(res.data, 'data updated');
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }, 10000000);
+  // };
   async componentDidMount() {
-  setTimeout(() => {
-    const {navigation} = this.props;
-    this.getMechanicLocation();
-    this.focusListener = navigation.addListener('didFocus', () => {
+    setTimeout(() => {
+      const {navigation} = this.props;
       this.getMechanicLocation();
-    });
-  }, 2000);
-    
+
+      this.focusListener = navigation.addListener('didFocus', () => {
+        this.getMechanicLocation();
+      });
+    }, 2000);
+
     Animated.loop(
       Animated.timing(
         // Animate over time
@@ -172,6 +233,7 @@ export default class BookNow extends Component {
 
   render() {
     let {fadeAnim, data, refreshing} = this.state;
+
     if (refreshing != false && data != null) {
       return (
         <SafeAreaView style={appStyle.safeContainer}>
@@ -180,62 +242,62 @@ export default class BookNow extends Component {
             backgroundColor={'transparent'}
             translucent={true}
           />
-<View style={{}}>
-          <Modal
-            isVisible={this.state.isModalVisible}
-            animationInTiming={500}
-            animationOutTiming={500}>
-            <View style={[style.flex1, appStyle.rowEven]}>
-              <TouchableOpacity
-                style={[appStyle.DashboardslotCard,style.w100]}
-                onPress={this.toggleModal}>
-                <View style={[style.mv10, style.aiCenter]}>
-                  <Text style={[text.h1]}>Preview Image</Text>
-                  <Text style={[text.heading2Gray]}>
-                    {data.firstname} {data.lastname}{' '}
-                  </Text>
-                </View>
-                <Image
-                  source={{uri: data.photo}}
-                  style={{
-                    height: 470,
-                    
-                    resizeMode: 'stretch',
-                    borderRadius: 10,
-                  }}></Image>
+          <View style={{}}>
+            <Modal
+              isVisible={this.state.isModalVisible}
+              animationInTiming={500}
+              animationOutTiming={500}>
+              <View style={[style.flex1, appStyle.rowEven]}>
                 <TouchableOpacity
-                  style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                  style={[appStyle.DashboardslotCard, style.w100]}
                   onPress={this.toggleModal}>
-                  <Text style={[button.btntext1]}> Close Preview </Text>
+                  <View style={[style.mv10, style.aiCenter]}>
+                    <Text style={[text.h1]}>Preview Image</Text>
+                    <Text style={[text.heading2Gray]}>
+                      {data.firstname} {data.lastname}{' '}
+                    </Text>
+                  </View>
+                  <Image
+                    source={{uri: data.photo}}
+                    style={{
+                      height: 470,
+
+                      resizeMode: 'stretch',
+                      borderRadius: 10,
+                    }}></Image>
+                  <TouchableOpacity
+                    style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                    onPress={this.toggleModal}>
+                    <Text style={[button.btntext1]}> Close Preview </Text>
+                  </TouchableOpacity>
                 </TouchableOpacity>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-        </View>
+              </View>
+            </Modal>
+          </View>
 
           <View style={style.flex1}>
             <TouchableOpacity onPress={this.toggleModal}>
-            <ImageBackground
-              imageStyle={{borderRadius: 8}}
-              style={[image.storeImg, style.w100]}
-              source={{uri:data.photo}}>
-              <View style={style.bgOverlay} />
-              <View style={[style.rowBtw, style.ph20, style.pb10]}>
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Dashboard')}>
-                  <Image
-                    source={images.backarrowh}
-                    style={[
-                      image.backArrow2,
-                      {tintColor: colors.white},
-                    ]}></Image>
-                </TouchableOpacity>
-                <View>
-                  <Text style={[text.heading1, text.bold]}>Profile</Text>
+              <ImageBackground
+                imageStyle={{borderRadius: 8}}
+                style={[image.storeImg, style.w100]}
+                source={{uri: data.photo}}>
+                <View style={style.bgOverlay} />
+                <View style={[style.rowBtw, style.ph20, style.pb10]}>
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate('Dashboard')}>
+                    <Image
+                      source={images.backarrowh}
+                      style={[
+                        image.backArrow2,
+                        {tintColor: colors.white},
+                      ]}></Image>
+                  </TouchableOpacity>
+                  <View>
+                    <Text style={[text.heading1, text.bold]}>Profile</Text>
+                  </View>
+                  <Text style={[text.text16, text.orange]}></Text>
                 </View>
-                <Text style={[text.text16, text.orange]}></Text>
-              </View>
-            </ImageBackground>
+              </ImageBackground>
             </TouchableOpacity>
             <View style={appStyle.curvedContainer}>
               <ScrollView style={style.ph20}>
@@ -308,14 +370,7 @@ export default class BookNow extends Component {
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => {
-                        Linking.openURL(
-                          'google.navigation:q=' +
-                            data.latitude +
-                            data.longitude,
-                        );
-                        console.log(data.latitude, data.longitude);
-                      }}
+                      onPress={this.getCity}
                       style={[button.Profilebutton]}>
                       <Text style={[text.btntext, text.text16, text.ac]}>
                         Locate Now
@@ -335,7 +390,11 @@ export default class BookNow extends Component {
 
                     <TouchableOpacity
                       onPress={this.CancelBooking}
-                      style={[button.button1, style.mt10]}>
+                      style={[
+                        button.button1,
+                        style.mt10,
+                        {display: this.state.cancelButton},
+                      ]}>
                       <Text style={[button.btntext1, text.center]}>
                         Cancel Booking
                       </Text>

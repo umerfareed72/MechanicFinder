@@ -51,6 +51,8 @@ export default class HomeDetail extends Component {
       CheckBox: images.checkBoxEmpty,
       mechanicdata: [],
       isModalVisible: false,
+      Rating: [],
+     
     };
   }
   onStarRatingPress(rating) {
@@ -60,11 +62,22 @@ export default class HomeDetail extends Component {
   }
   getData = async () => {
     try {
-      await AsyncStorage.getItem('data').then((res) => {
+      await AsyncStorage.getItem('data').then(async(res) => {
         res = JSON.parse(res);
         this.setState({mechanicdata: res});
+    
+        await axios
+        .get(URL.Url + 'getuser/' + res.mechanicid)
+        .then((res) => {
+          this.setState({Rating: res.data});
+        })
+        .catch((error) => {
+          console.log(error, 'Review not fetch');
+        });
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error,'Mechanic data not fetched')
+    }
   };
   async componentDidMount() {
     const {navigation} = this.props;
@@ -162,7 +175,7 @@ export default class HomeDetail extends Component {
   };
 
   render() {
-    const {mechanicdata} = this.state;
+    const {mechanicdata,Rating} = this.state;
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar
@@ -411,98 +424,52 @@ export default class HomeDetail extends Component {
                 </View>
               </View>
             </View>
-            <View
-              style={[
-                appStyle.bodyLayout,
-                {display: this.state.TabDataReview},
-              ]}>
-              <View style={[style.row, style.mv5, style.aiCenter]}>
-                <View style={[style.flex1, style.mr5]}>
-                  <Image
-                    style={appStyle.listImg}
-                    source={images.logoSmall}></Image>
-                </View>
-                <View style={{flex: 4}}>
-                  <View style={[style.row]}>
-                    <Text style={[style.mr5]}>Peter & Co</Text>
-                    <StarRating
-                      disabled={true}
-                      maxStars={5}
-                      rating={this.state.starCount}
-                      selectedStar={(rating) => this.onStarRatingPress(rating)}
-                      fullStarColor={'#F59E52'}
-                      emptyStarColor={'#F59E52'}
-                      starSize={15}
-                      containerStyle={{width: 80, marginTop: 2}}
-                    />
+            
+            {Rating.map((item,key) => {
+                
+                return (
+                  <View
+                    style={[style.ph10, {display: this.state.TabDataReview}]}>
+                    <View
+                    key={key}
+                      style={[
+                        style.row,
+                        style.mv5,
+                        style.aiCenter,
+                        appStyle.slotCard,
+                      ]}>
+                      <View style={[style.flex1, style.mr5]}>
+                        <Image
+                          style={appStyle.listImg}
+                          source={{uri: item.photo}}></Image>
+                      </View>
+                      <View style={{flex: 4}}>
+                        <View style={[style.row]}>
+                          <Text style={[style.mr5]}>
+                            {item.firstname} {item.lastname}
+                          </Text>
+                          <StarRating
+                            disabled={true}
+                            maxStars={5}
+                            rating={item.rating}
+                            selectedStar={(rating) =>
+                              this.onStarRatingPress(rating)
+                            }
+                            fullStarColor={'#F59E52'}
+                            emptyStarColor={'#F59E52'}
+                            starSize={15}
+                            containerStyle={{width: 80, marginTop: 2}}
+                          />
+                        </View>
+                        <View>
+                          <Text style={[text.text12]}>{item.description}</Text>
+                        </View>
+                      </View>
+                    </View>
                   </View>
-                  <View>
-                    <Text style={[text.text12]}>
-                      Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                      sed diam nonumy eirmod tempor invidunt ut
-                    </Text>
-                  </View>
-                </View>
-              </View>
+                );
+              })}
 
-              <View style={[style.row, style.mv5, style.aiCenter]}>
-                <View style={[style.flex1, style.mr5]}>
-                  <Image
-                    style={appStyle.listImg}
-                    source={images.logoSmall}></Image>
-                </View>
-                <View style={{flex: 4}}>
-                  <View style={[style.row]}>
-                    <Text style={[style.mr5]}>Peter & Co</Text>
-                    <StarRating
-                      disabled={true}
-                      maxStars={5}
-                      rating={this.state.starCount}
-                      selectedStar={(rating) => this.onStarRatingPress(rating)}
-                      fullStarColor={'#F59E52'}
-                      emptyStarColor={'#F59E52'}
-                      starSize={15}
-                      containerStyle={{width: 80, marginTop: 2}}
-                    />
-                  </View>
-                  <View style={{}}>
-                    <Text style={[text.text12]}>
-                      Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                      sed diam nonumy eirmod tempor invidunt ut
-                    </Text>
-                  </View>
-                </View>
-              </View>
-
-              <View style={[style.row, style.mv5, style.aiCenter]}>
-                <View style={[style.flex1, style.mr5]}>
-                  <Image
-                    style={appStyle.listImg}
-                    source={images.logoSmall}></Image>
-                </View>
-                <View style={{flex: 4}}>
-                  <View style={[style.row]}>
-                    <Text style={[style.mr5]}>Peter & Co</Text>
-                    <StarRating
-                      disabled={true}
-                      maxStars={5}
-                      rating={this.state.starCount}
-                      selectedStar={(rating) => this.onStarRatingPress(rating)}
-                      fullStarColor={'#F59E52'}
-                      emptyStarColor={'#F59E52'}
-                      starSize={15}
-                      containerStyle={{width: 80, marginTop: 2}}
-                    />
-                  </View>
-                  <View style={{}}>
-                    <Text style={[text.text12]}>
-                      Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                      sed diam nonumy eirmod tempor invidunt ut
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
             {/* Reviews Tab End  */}
           </ScrollView>
         </View>

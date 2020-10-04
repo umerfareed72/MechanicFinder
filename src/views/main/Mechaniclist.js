@@ -57,7 +57,6 @@ export default class Mechaniclist extends Component {
       vehicletype: 'Select Vehicle Type',
     };
   }
-
   changebuttoncolor = (id) => {
     axios
       .get(URL.Url + 'getbookedMechanic/' + this.state.userId)
@@ -65,7 +64,7 @@ export default class Mechaniclist extends Component {
         if (res.data == '') {
           this.setState({
             slot: id,
-          });
+          }); 
           if (this.state.slot == id) {
             // console.log(this.state.dataSource[id])
             const senddata = JSON.stringify(this.state.dataSource[id]);
@@ -115,7 +114,7 @@ export default class Mechaniclist extends Component {
   componentDidMount() {
     AsyncStorage.getItem('skilltype').then((res) => {
       this.setState({skilltype: res});
-      console.log(res)
+      console.log(res);
     });
   }
 
@@ -214,7 +213,7 @@ export default class Mechaniclist extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri:data.photo}} />
+                      <Image style={image.userImg} source={{uri: data.photo}} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>

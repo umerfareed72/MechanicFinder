@@ -34,7 +34,7 @@ import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
-import StarRating from 'react-native-star-rating';
+
 import Hamburger from '../../components/headerComponent/Hamburger';
 import {DrawerNavigator} from 'react-navigation';
 import * as geolib from 'geolib';
@@ -44,18 +44,14 @@ export default class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      //Dashboard
-      rating: 2,
-      starCount: 3,
       longitude: '',
       latitude: '',
-      loading: false,
       refreshing: false,
       userdata: [],
       dataSource: [],
       token: '',
       userid: '',
-      distance: [],
+ 
     };
   }
 

@@ -63,51 +63,46 @@ export default class MechanicDashboard extends Component {
         })
         .then((response) => {
           this.setState({mechanicid: response.data.mechanicid});
+          axios
+            .put(URL.Url + 'mechaniclocation/' + this.state.mechanicid, {
+              latitude: this.state.latitude,
+              longitude: this.state.longitude,
+            })
+            .then((response) => {
               axios
-                .put(URL.Url + 'mechaniclocation/' + this.state.mechanicid, {
-                  latitude: this.state.latitude,
-                  longitude: this.state.longitude,
+                .get(URL.Url + 'mechanic/' + this.state.mechanicid)
+                .then((mechanic) => {
+                  console.log(mechanic.data);
+                  this.setState({data: mechanic.data});
                 })
-                .then((response) => {
+                .then((res) => {
                   axios
-                    .get(URL.Url + 'mechanic/' + this.state.mechanicid)
+                    .get(URL.Url + 'getbookedUser/' + this.state.mechanicid)
                     .then((response) => {
                       console.log(response.data);
-                      this.setState({data: response.data});
-                      const send = JSON.stringify(response.data);
-                      AsyncStorage.setItem('Mechanicdata', send);
-                    })
-                    .then((res) => {
-                      axios
-                        .get(URL.Url + 'getbookedUser/' + this.state.mechanicid)
-                        .then((response) => {
-                          console.log(response.data);
-                       
-                          response.data.map((item) => {
-                        
-                            axios
-                              .get(URL.Url + 'user/' + item.userid)
-                              .then((response) => {
-                               setTimeout(() => {
-                                this.setState({
-                                  bookedUserData: response.data,
-                                });
-                                this.setState({refreshing: true});
-                                this.setState({bookedUserid: item._id});
-                            
-                
-                               }, 2000);
-                             
-                               const sendUserId = JSON.stringify(item.userid);
-                               AsyncStorage.setItem(
-                                 'UserId',
-                                 sendUserId,
-                               );
+
+                      response.data.map((item) => {
+                        axios
+                          .get(URL.Url + 'user/' + item.userid)
+                          .then((response) => {
+                            setTimeout(() => {
+                              this.setState({
+                                bookedUserData: response.data,
                               });
-                          });
-                        })
-                        .catch((error) => {
-                          console.log(error, 'Booked User Not Accesible');
+                              this.setState({refreshing: true});
+                              this.setState({bookedUserid: item._id});
+                            }, 2000);
+
+                            this.state.data['userid'] = item.userid;
+                            this.state.data['bookedId']=item._id
+                            const send = JSON.stringify(this.state.data);
+                            AsyncStorage.setItem('Mechanicdata', send);
+                            console.log(send);
+                                  });
+                      });
+                    })
+                    .catch((error) => {
+                      console.log(error, 'Booked User Not Accesible');
                     });
                 })
                 .catch((error) => {
@@ -205,7 +200,10 @@ export default class MechanicDashboard extends Component {
           style={[appStyle.slotCard, appStyle.rowJustify, style.aiCenter]}>
           <View style={[style.row, style.aiCenter]}>
             <View style={style.mr10}>
-              <Image style={image.userImg} source={{uri:bookedUserData.photo}} />
+              <Image
+                style={image.userImg}
+                source={{uri: bookedUserData.photo}}
+              />
             </View>
 
             <View style={[style.rowBtw, style.aiCenter]}>

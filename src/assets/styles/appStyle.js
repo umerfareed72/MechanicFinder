@@ -131,6 +131,7 @@ ObjectAlign:{
     paddingHorizontal: 20,
     paddingVertical: 20,
   },
+ 
   bottomBorder: {
     width: '100%',
     height: 1,
@@ -186,10 +187,10 @@ bodyShadowBottom: {
     flexWrap: 'wrap',
   },
   listImg: {
-    height: 66,
-     width: 66,
-    borderRadius: 66 / 2,
-    resizeMode: 'contain'
+    height: 50,
+     width: 50,
+    borderRadius: 50 / 2,
+    resizeMode: "cover"
   },
   dNone: {
     display: 'none'
@@ -354,7 +355,7 @@ bodyShadowBottom: {
   },
   DashboardslotCard: {
     backgroundColor: colors.white,
-    paddingVertical: 20,
+    paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius:8,
     marginHorizontal: 15,

@@ -40,7 +40,7 @@ export const screenWidth = {
 
 //Url
 export const URL = {
-  Url: 'http://192.168.0.108:3000/',
+  Url: 'http://192.168.0.109:3000/',
 };
 //colors
 export const colors = {
@@ -87,7 +87,7 @@ export const images = {
   leftarrow: require('../assets/images/left-arrow.png'),
   LegalPaper: require('../assets/images/legal-paper.png'),
   logoSmall: require('../assets/images/logo-small.png'),
-  lgoSmalluri:'../assets/images/logo-small.png',
+  lgoSmalluri: '../assets/images/logo-small.png',
   logout: require('../assets/images/logout.png'),
   HomeImg: require('../assets/images/other/HomeImg.png'),
   cart: require('../assets/images/cart.png'),

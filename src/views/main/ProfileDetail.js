@@ -9,12 +9,20 @@ import {
   TouchableOpacity,
   CheckBox,
   Image,
+  ActivityIndicator,
   ImageBackground,
   Dimensions,
   Keyboard,
   Platform,
 } from 'react-native';
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+const axios = require('axios');
+import {
+  colors,
+  screenHeight,
+  screenWidth,
+  images,
+  URL,
+} from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import Modal from 'react-native-modal';
 import style from '../../assets/styles/style';
@@ -27,13 +35,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
+import Textarea from 'react-native-textarea';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 
 export default class HomeDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rating: 2,
+      rating: 0,
       starCount: 5,
       TabDataOverview: 'flex',
       TabDataGallery: 'none',
@@ -41,33 +50,80 @@ export default class HomeDetail extends Component {
       ColorOverview: colors.darkBlue,
       ColorGallery: colors.inputBordercolor,
       ColorReview: colors.inputBordercolor,
-      BookNowView: 'flex',
+      BookNowView: 'none',
       CheckBox: images.checkBoxEmpty,
-      isModalVisible:false,
+      isModalVisible: false,
       data: [],
+      ratingModal: false,
+      fullStar: colors.darkyellow,
+      emptyStar: colors.black,
+      userid: '',
+      mechanicid: '',
+      description: '',
+      Rating: [],
+      firstname: '',
+      lastname: '',
+      photo: '',
     };
   }
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
 
+  ratingModal = () => {
+    this.setState({ratingModal: !this.state.ratingModal});
+  };
   onStarRatingPress(rating) {
     this.setState({
-      starCount: rating,
+      rating: rating,
     });
   }
-  componentDidMount() {
-    const data = AsyncStorage.getItem('bookMechanicData').then((res) => {
+  async componentDidMount() {
+    AsyncStorage.getItem('bookMechanicData').then(async (res) => {
       res = JSON.parse(res);
-      console.log(res);
+
       this.setState({data: res});
+      this.setState({mechanicid: res._id, userid: res.userId});
+      await axios.get(URL.Url + 'user/' + res.userId).then((res) => {
+        const {data} = this.state;
+        this.setState({
+          firstname: res.data.firstname,
+          lastname: res.data.lastname,
+          photo: res.data.photo,
+        });
+        let Lat1 = data.latitude / 57.29577951;
+        let Lat2 = res.data.latitude / 57.29577951;
+        let Long1 = data.longitude / 57.29577951;
+        let Long2 = res.data.longitude / 57.29577951;
+        // Calaculate distance
+        let dlat = Lat2 - Lat1;
+        let dlong = Long2 - Long1;
+        //Apply Heversine Formula to calculate  Distance of Spherical Objects
+        let a =
+          Math.pow(Math.sin(dlat / 2), 2) +
+          Math.cos(Lat1) * Math.cos(Lat2) * Math.pow(Math.sin(dlong / 2), 2);
+        let c = 2 * Math.asin(Math.sqrt(a));
+        let r = 6371;
+        let result = c * r; //Get Result In KM
+        //Found In 10 KM
+        if (result <= 10) {
+          this.setState({BookNowView: 'flex'});
+        }
+      });
+      await axios
+        .get(URL.Url + 'getuser/' + res._id)
+        .then((res) => {
+          this.setState({Rating: res.data});
+        })
+        .catch((error) => {
+          console.log(error, 'Review not fetch');
+        });
     });
   }
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
       this.setState({TabDataGallery: 'none'}),
         this.setState({TabDataReview: 'none'}),
-        this.setState({BookNowView: 'flex'}),
         this.setState({ColorOverview: colors.darkBlue}),
         this.setState({ColorReview: colors.inputBordercolor}),
         this.setState({ColorGallery: colors.inputBordercolor});
@@ -75,7 +131,6 @@ export default class HomeDetail extends Component {
       this.setState({TabDataOverview: 'flex'}),
         this.setState({TabDataGallery: 'none'}),
         this.setState({TabDataReview: 'none'});
-    this.setState({BookNowView: 'flex'});
     this.setState({ColorOverview: colors.darkBlue});
     this.setState({ColorReview: colors.inputBordercolor});
     this.setState({ColorGallery: colors.inputBordercolor});
@@ -85,7 +140,6 @@ export default class HomeDetail extends Component {
     if (this.state.TabDataGallery == 'flex') {
       this.setState({TabDataOverview: 'none'}),
         this.setState({TabDataReview: 'none'}),
-        this.setState({BookNowView: 'none'}),
         this.setState({color: 'none'});
       this.setState({ColorOverview: colors.inputBordercolor}),
         this.setState({ColorReview: colors.inputBordercolor}),
@@ -93,7 +147,6 @@ export default class HomeDetail extends Component {
     } else
       this.setState({TabDataGallery: 'flex'}),
         this.setState({TabDataOverview: 'none'}),
-        this.setState({BookNowView: 'none'}),
         this.setState({TabDataReview: 'none'});
     this.setState({ColorOverview: colors.inputBordercolor});
     this.setState({ColorReview: colors.inputBordercolor});
@@ -104,7 +157,6 @@ export default class HomeDetail extends Component {
     if (this.state.TabDataReview == 'flex') {
       this.setState({TabDataGallery: 'none'}),
         this.setState({TabDataOverview: 'none'}),
-        this.setState({BookNowView: 'none'}),
         this.setState({color: 'none'});
       this.setState({ColorOverview: colors.inputBordercolor}),
         this.setState({ColorReview: colors.darkBlue}),
@@ -112,94 +164,174 @@ export default class HomeDetail extends Component {
     } else
       this.setState({TabDataReview: 'flex'}),
         this.setState({TabDataGallery: 'none'}),
-        this.setState({BookNowView: 'none'}),
         this.setState({TabDataOverview: 'none'});
     this.setState({ColorOverview: colors.inputBordercolor});
     this.setState({ColorReview: colors.darkBlue});
     this.setState({ColorGallery: colors.inputBordercolor});
   };
+  submitReview = () => {
+            const userId = this.state.userid;
+            const mechanicid = this.state.mechanicid;
+            axios
+              .post(URL.Url + 'add/' + userId + '/' + mechanicid, {
+                firstname: this.state.firstname,
+                lastname: this.state.lastname,
+                photo: this.state.photo,
+                rating: this.state.rating,
+                description: this.state.description,
+              })
+              .then((response) => {
+                console.log(response.data)
+              })
+              .catch((error) => {
+                console.log(error, 'Review not added');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   render() {
-    const {data} = this.state;
+    const {data, Rating} = this.state;
     if (data != null) {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
           <StatusBar />
           <View style={{}}>
-          <Modal
-            isVisible={this.state.isModalVisible}
-            animationInTiming={500}
-            animationOutTiming={500}>
-            <View style={[style.flex1, appStyle.rowEven]}>
-              <TouchableOpacity
-                style={[appStyle.DashboardslotCard,style.w100]}
-                onPress={this.toggleModal}>
-                <View style={[style.mv10, style.aiCenter]}>
-                  <Text style={[text.h1]}>Preview Image</Text>
-                  <Text style={[text.heading2Gray]}>
-                    {data.firstname} {data.lastname}{' '}
-                  </Text>
-                </View>
-                <Image
-                  source={{uri: data.photo}}
-                  style={{
-                    height: 470,
-                    
-                    resizeMode: 'stretch',
-                    borderRadius: 10,
-                  }}></Image>
+            <Modal
+              isVisible={this.state.isModalVisible}
+              animationInTiming={500}
+              animationOutTiming={500}>
+              <View style={[style.flex1, appStyle.rowEven]}>
                 <TouchableOpacity
-                  style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                  style={[appStyle.DashboardslotCard, style.w100]}
                   onPress={this.toggleModal}>
-                  <Text style={[button.btntext1]}> Close Preview </Text>
+                  <View style={[style.mv10, style.aiCenter]}>
+                    <Text style={[text.h1]}>Preview Image</Text>
+                    <Text style={[text.heading2Gray]}>
+                      {data.firstname} {data.lastname}{' '}
+                    </Text>
+                  </View>
+                  <Image
+                    source={{uri: data.photo}}
+                    style={{
+                      height: 470,
+
+                      resizeMode: 'stretch',
+                      borderRadius: 10,
+                    }}></Image>
+                  <TouchableOpacity
+                    style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                    onPress={this.toggleModal}>
+                    <Text style={[button.btntext1]}> Close Preview </Text>
+                  </TouchableOpacity>
                 </TouchableOpacity>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-        </View>
+              </View>
+            </Modal>
+          </View>
 
- 
-          {/*Body */}
           <View style={{}}>
-           <TouchableOpacity onPress={this.toggleModal}>
-            <ImageBackground
-              source={{uri:data.photo}}
-              style={{height: screenHeight.height25}}>
-              <View style={style.bgOverlay} />
-              <TouchableOpacity
-                onPress={() => this.props.navigation.goBack()}
-                style={[image.headerBackArrow]}>
-                <Image
-                  style={[image.backArrow]}
-                  source={images.backArrow}></Image>
-              </TouchableOpacity>
-              <View style={[appStyle.headInner, style.ph20]}>
-                <View style={[style.mv5]}>
-                  <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.starCount}
-                    selectedStar={(rating) => this.onStarRatingPress(rating)}
-                    fullStarColor={'#fff'}
-                    emptyStarColor={'#fff'}
-                    starSize={20}
-                    containerStyle={{width: 110, marginTop: 3}}
-                  />
-                </View>
-
-                <View style={[style.mv5]}>
-                  <Text style={[text.heading1, text.bold]}>
-                    {data.firstname} {data.lastname}
-                  </Text>
-                </View>
-                <View style={[style.mv5]}>
-                  <Text style={[text.paraWhite, text.regular]}>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod
-                  </Text>
+            <Modal
+              isVisible={this.state.ratingModal}
+              animationInTiming={500}
+              animationOutTiming={500}>
+              <View style={[appStyle.bodyHeight50, appStyle.rowEven]}>
+                <View style={[appStyle.DashboardslotCard, style.w100]}>
+                  <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={style.aiFlexEnd}>
+                      <TouchableOpacity onPress={this.ratingModal}>
+                        <Image
+                          style={[image.medium, image.Orange]}
+                          source={images.cancel}></Image>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={[style.aiCenter]}>
+                      <Text style={[text.h1]}>Feedback</Text>
+                      <Text style={[text.heading2Gray]}>
+                        {data.firstname} {data.lastname}{' '}
+                      </Text>
+                    </View>
+                    <TouchableOpacity style={[style.mb10, style.aiCenter]}>
+                      <StarRating
+                        disabled={false}
+                        maxStars={5}
+                        rating={this.state.rating}
+                        selectedStar={(rating) =>
+                          this.onStarRatingPress(rating)
+                        }
+                        fullStarColor={this.state.fullStar}
+                        emptyStarColor={this.state.emptyStar}
+                        starSize={40}
+                        containerStyle={{marginTop: 3}}
+                      />
+                    </TouchableOpacity>
+                    <View style={[style.aiCenter]}>
+                      <View style={[appStyle.textareaBorder]}>
+                        <Textarea
+                          onChangeText={(text) => {
+                            this.setState({description: text});
+                          }}
+                          placeholder={
+                            'Please tell me something about your booked Mechanic'
+                          }
+                          placeholderTextColor={'#c7c7c7'}
+                          underlineColorAndroid={'transparent'}
+                        />
+                      </View>
+                      <TouchableOpacity
+                        onPress={this.submitReview}
+                        style={[button.Profilebutton, {marginTop: 20}]}>
+                        <Text style={[button.bookbutton, text.center]}>
+                          Submit Review
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </ScrollView>
                 </View>
               </View>
-            </ImageBackground>
+            </Modal>
+          </View>
+          {/*Body */}
+          <View style={{}}>
+            <TouchableOpacity onPress={this.toggleModal}>
+              <ImageBackground
+                source={{uri: data.photo}}
+                style={{height: screenHeight.height25}}>
+                <View style={style.bgOverlay} />
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.goBack()}
+                  style={[image.headerBackArrow]}>
+                  <Image
+                    style={[image.backArrow]}
+                    source={images.backArrow}></Image>
+                </TouchableOpacity>
+                <View style={[appStyle.headInner, style.ph20]}>
+                  <View style={[style.mv5]}>
+                    <StarRating
+                      disabled={true}
+                      maxStars={5}
+                      rating={this.state.starCount}
+                      selectedStar={(rating) => this.onStarRatingPress(rating)}
+                      fullStarColor={'#fff'}
+                      emptyStarColor={'#fff'}
+                      starSize={20}
+                      containerStyle={{width: 110, marginTop: 3}}
+                    />
+                  </View>
+
+                  <View style={[style.mv5]}>
+                    <Text style={[text.heading1, text.bold]}>
+                      {data.firstname} {data.lastname}
+                    </Text>
+                  </View>
+                  <View style={[style.mv5]}>
+                    <Text style={[text.paraWhite, text.regular]}>
+                      Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                      sed diam nonumy eirmod
+                    </Text>
+                  </View>
+                </View>
+              </ImageBackground>
             </TouchableOpacity>
           </View>
 
@@ -294,115 +426,80 @@ export default class HomeDetail extends Component {
                   <Text style={[text.heading2Gray]}> {data.skilltype}</Text>
                 </View>
                 <View style={[style.mt20]}>
-                  <Text style={[text.text16]}>Some Description</Text>
+                  <Text style={[text.text16]}>Alert !</Text>
                 </View>
                 <View style={[style.pv10]}>
                   <Text style={[text.paraGray]}>
-                    Sed ut perspiciatis unde omnis iste natus error sit
-                    voluptatem accusantium doloremque laudantium, totam rem
-                    aperiam, eaque ipsa quae ab illo inventore veritatis et
-                    quasi architecto beatae vitae dicta sunt explicabo. Nemo.
+                    Avoid to click on below button before delivering of Mechanic
+                    Services.Its mandatory to provide Feedback of Mechanic
+                    Services because without providing Mechanic Feedback,You
+                    will be unable to book new Mechnaic.
                   </Text>
                 </View>
-              </View>
-              <View
-                style={[
-                  appStyle.bodyLayout,
-                  {display: this.state.TabDataReview},
-                ]}>
-                <View style={[style.row, style.mv5, style.aiCenter]}>
-                  <View style={[style.flex1, style.mr5]}>
-                    <Image
-                      style={appStyle.listImg}
-                      source={images.logoSmall}></Image>
-                  </View>
-                  <View style={{flex: 4}}>
-                    <View style={[style.row]}>
-                      <Text style={[style.mr5]}>Peter & Co</Text>
-                      <StarRating
-                        disabled={true}
-                        maxStars={5}
-                        rating={this.state.starCount}
-                        selectedStar={(rating) =>
-                          this.onStarRatingPress(rating)
-                        }
-                        fullStarColor={'#F59E52'}
-                        emptyStarColor={'#F59E52'}
-                        starSize={15}
-                        containerStyle={{width: 80, marginTop: 2}}
-                      />
-                    </View>
-                    <View>
-                      <Text style={[text.text12]}>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                        sed diam nonumy eirmod tempor invidunt ut
+                <View style={[{display: this.state.BookNowView}, style.flex1]}>
+                  <TouchableOpacity onPress={this.ratingModal}>
+                    <View
+                      style={[
+                        button.buttoncontainer,
+                        {backgroundColor: colors.purple},
+                      ]}>
+                      <Text
+                        style={[
+                          {color: colors.white},
+                          button.touchablebutton,
+                          text.semibold,
+                        ]}>
+                        Service Completed
                       </Text>
                     </View>
-                  </View>
-                </View>
-
-                <View style={[style.row, style.mv5, style.aiCenter]}>
-                  <View style={[style.flex1, style.mr5]}>
-                    <Image
-                      style={appStyle.listImg}
-                      source={images.logoSmall}></Image>
-                  </View>
-                  <View style={{flex: 4}}>
-                    <View style={[style.row]}>
-                      <Text style={[style.mr5]}>Peter & Co</Text>
-                      <StarRating
-                        disabled={true}
-                        maxStars={5}
-                        rating={this.state.starCount}
-                        selectedStar={(rating) =>
-                          this.onStarRatingPress(rating)
-                        }
-                        fullStarColor={'#F59E52'}
-                        emptyStarColor={'#F59E52'}
-                        starSize={15}
-                        containerStyle={{width: 80, marginTop: 2}}
-                      />
-                    </View>
-                    <View style={{}}>
-                      <Text style={[text.text12]}>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                        sed diam nonumy eirmod tempor invidunt ut
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-
-                <View style={[style.row, style.mv5, style.aiCenter]}>
-                  <View style={[style.flex1, style.mr5]}>
-                    <Image
-                      style={appStyle.listImg}
-                      source={images.logoSmall}></Image>
-                  </View>
-                  <View style={{flex: 4}}>
-                    <View style={[style.row]}>
-                      <Text style={[style.mr5]}>Peter & Co</Text>
-                      <StarRating
-                        disabled={true}
-                        maxStars={5}
-                        rating={this.state.starCount}
-                        selectedStar={(rating) =>
-                          this.onStarRatingPress(rating)
-                        }
-                        fullStarColor={'#F59E52'}
-                        emptyStarColor={'#F59E52'}
-                        starSize={15}
-                        containerStyle={{width: 80, marginTop: 2}}
-                      />
-                    </View>
-                    <View style={{}}>
-                      <Text style={[text.text12]}>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                        sed diam nonumy eirmod tempor invidunt ut
-                      </Text>
-                    </View>
-                  </View>
+                  </TouchableOpacity>
                 </View>
               </View>
+              {Rating.map((item,key) => {
+                
+                return (
+                  <View
+                    style={[style.ph10, {display: this.state.TabDataReview}]}>
+                    <View
+                    key={key}
+                      style={[
+                        style.row,
+                        style.mv5,
+                        style.aiCenter,
+                        appStyle.slotCard,
+                      ]}>
+                      <View style={[style.flex1, style.mr5]}>
+                        <Image
+                          style={appStyle.listImg}
+                          source={{uri: item.photo}}></Image>
+                      </View>
+                      <View style={{flex: 4}}>
+                        <View style={[style.row]}>
+                          <Text style={[style.mr5]}>
+                            {item.firstname} {item.lastname}
+                          </Text>
+                          <StarRating
+                            disabled={true}
+                            maxStars={5}
+                            rating={item.rating}
+                            selectedStar={(rating) =>
+                              this.onStarRatingPress(rating)
+                            }
+                            fullStarColor={'#F59E52'}
+                            emptyStarColor={'#F59E52'}
+                            starSize={15}
+                            containerStyle={{width: 80, marginTop: 2}}
+                          />
+                        </View>
+                        <View>
+                          <Text style={[text.text12]}>{item.description}</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
+
               {/* Reviews Tab End  */}
             </ScrollView>
           </View>
@@ -414,7 +511,9 @@ export default class HomeDetail extends Component {
           <StatusBar barStyle={'dark-content'}></StatusBar>
           <View style={[style.flex1, style.jcCenter]}>
             <View style={[style.aiCenter]}>
-              <Text style={[text.h1Purple]}>No Data Available</Text>
+              <ActivityIndicator
+                color="#bc2b78"
+                size="large"></ActivityIndicator>
             </View>
           </View>
         </SafeAreaView>
