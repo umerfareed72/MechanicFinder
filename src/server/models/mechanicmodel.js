@@ -1,24 +1,36 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const mechanicschema = new mongoose.Schema({
-  firstname: String,
-  lastname: String,
-  email: String,
-  password: String,
-  phone: String,
-  address: String,
-  photo: String,
-  carcompany: String,
-  city: String,
-  country: String,
-  skilltype: String,
-  longitude:String,
-  latitude:String,
-  vehicletype: String,
-  date: String,
- 
- 
 
+var validateEmail = function (email) {
+  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return re.test(email);
+};
+const mechanicschema = new mongoose.Schema({
+  firstname: {type: String, required: 'FirstName is required'},
+  lastname: {type: String, required: 'LastName is required'},
+  email: {
+    type: String,
+    trim: true,
+    unique: true,
+    required: 'Email address is required',
+    validate: [validateEmail, 'Please fill a valid email address'],
+    match: [
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      'Please fill a valid email address',
+    ],
+  },
+  password: {type: String, required: 'Password is required', min: 6, max: 18},
+  phone: {type: Number, required: 'Phone Number is required'},
+  address: {type: String, required: 'Address is required'},
+  photo: String,
+  carcompany: {type: String, required: 'Car Company is required'},
+  city: {type: String, required: 'City is required'},
+  country: {type: String, required: 'Country is required'},
+  skilltype: {type: String, required: 'Skill Type is required'},
+  longitude: String,
+  latitude: String,
+  vehicletype: {type: String, required: 'Vehicle Type is required'},
+  date: {type: String, required: 'Date of Birth Required is required'},
 });
 
 mechanicschema.pre('save', function (next) {
@@ -54,8 +66,5 @@ mechanicschema.methods.comparePassword = function (candidatepassword) {
     });
   });
 };
-
- 
-
 
 mongoose.model('mechanicmodel', mechanicschema);

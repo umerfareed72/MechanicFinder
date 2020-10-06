@@ -17,6 +17,9 @@ import MechanicSetting from '../views/Mechanic/MechanicSetting';
 import UserProfile from '../views/Mechanic/UserProfile';
 import Chat from '../views/Mechanic/Chat';
 import UserProfileDetail from '../views/Mechanic/UserProfileDetail';
+import Products from '../views/Mechanic/Products'
+import AddProducts from '../views/Mechanic/AddProducts'
+
 import {
   colors,
   screenHeight,
@@ -25,6 +28,7 @@ import {
   URL,
 } from '../config/Constant';
 import LoginasMechanic from '../views/registration/LoginasMechanic';
+import EditProduct from '../views/Mechanic/EditProduct';
 
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
@@ -32,6 +36,20 @@ const DashboardStack = createStackNavigator(
     MechanicDashboard: {
       screen: MechanicDashboard,
     },
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+
+const  ProductsStack = createStackNavigator(
+  {
+    Products: Products,
+    AddProducts: AddProducts,
+    EditProduct:EditProduct
   },
   {
     headerMode: 'none',
@@ -61,6 +79,18 @@ const Navigator = createMaterialBottomTabNavigator(
           <Image
             style={{resizeMode: 'contain', height: 25, width: 25}}
             source={images.searchBottom}
+          />
+        ),
+      },
+    },
+    Products: {
+      screen: ProductsStack,
+      navigationOptions: {
+        tabBarLabel: 'Products',
+        tabBarIcon: ({tintColor}) => (
+          <Image
+            style={{resizeMode: 'contain', height: 25, width: 25}}
+            source={images.store}
           />
         ),
       },

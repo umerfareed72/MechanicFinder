@@ -90,7 +90,6 @@ export default class BookNow extends Component {
       .then((res) => {
         const {data} = this.state;
         const address = res.data.data[0];
-
         const street = address.street;
         const city = address.county;
         const country = address.country;
@@ -201,7 +200,7 @@ export default class BookNow extends Component {
       this.focusListener = navigation.addListener('didFocus', () => {
         this.getMechanicLocation();
       });
-    }, 2000);
+    }, 3000);
 
     Animated.loop(
       Animated.timing(
@@ -209,7 +208,7 @@ export default class BookNow extends Component {
         this.state.fadeAnim, // The animated value to drive
         {
           toValue: 1, // Animate to opacity: 1 (opaque)
-          duration: 5000, // 5000ms
+          duration: 3000, // 5000ms
           useNativeDriver: true,
         },
       ),
@@ -224,7 +223,7 @@ export default class BookNow extends Component {
         this.state.fadeAnim, // The animated value to drive
         {
           toValue: 0, // Animate to opacity: 1 (opaque)
-          duration: 2000, // 2000ms
+          duration: 3000, // 2000ms
           useNativeDriver: true,
         },
       ).start();
@@ -247,26 +246,26 @@ export default class BookNow extends Component {
               isVisible={this.state.isModalVisible}
               animationInTiming={500}
               animationOutTiming={500}>
-              <View style={[style.flex1, appStyle.rowEven]}>
+              <View style={[style.flex1, appStyle.rowCenter]}>
                 <TouchableOpacity
-                  style={[appStyle.DashboardslotCard, style.w100]}
+                  style={[appStyle.DashboardslotCard,style.w90,style.aiCenter]}
                   onPress={this.toggleModal}>
                   <View style={[style.mv10, style.aiCenter]}>
                     <Text style={[text.h1]}>Preview Image</Text>
                     <Text style={[text.heading2Gray]}>
-                      {data.firstname} {data.lastname}{' '}
-                    </Text>
+               {data.firstname}{' '}{data.lastname}
+                       </Text>
                   </View>
                   <Image
-                    source={{uri: data.photo}}
-                    style={{
-                      height: 470,
-
-                      resizeMode: 'stretch',
+                    source={{uri:data.photo}}
+                    style={[{
+                      height:'70%' ,
+                      alignSelf:'center',
+                      resizeMode: 'contain',
                       borderRadius: 10,
-                    }}></Image>
+                    },style.w100]}></Image>
                   <TouchableOpacity
-                    style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                    style={[button.buttonTheme, style.mt30, style.w50]}
                     onPress={this.toggleModal}>
                     <Text style={[button.btntext1]}> Close Preview </Text>
                   </TouchableOpacity>
@@ -274,6 +273,8 @@ export default class BookNow extends Component {
               </View>
             </Modal>
           </View>
+
+
 
           <View style={style.flex1}>
             <TouchableOpacity onPress={this.toggleModal}>

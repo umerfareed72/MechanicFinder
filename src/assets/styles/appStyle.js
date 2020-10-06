@@ -4,6 +4,14 @@ import { colors, screenHeight, screenWidth, images } from '../../config/Constant
 import text from './text';
 
 export default StyleSheet.create({
+  Headre1:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal:20,
+      paddingBottom:10,
+alignItems:"center"
+      
+  },
   safeContainer: {
     backgroundColor: colors.white, flex: 1
   },

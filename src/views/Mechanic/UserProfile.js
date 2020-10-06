@@ -36,11 +36,9 @@ import text from '../../assets/styles/text';
 import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
 var FloatingLabel = require('react-native-floating-labels');
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ActivityIndicator} from 'react-native-paper';
 const axios = require('axios');
 export default class UserProfile extends Component {
   constructor(props) {
@@ -66,6 +64,39 @@ export default class UserProfile extends Component {
       starCount: rating,
     });
   }
+
+  toggleModal = () => {
+    this.setState({isModalVisible: !this.state.isModalVisible});
+  };
+
+  getCity = () => {
+    axios
+      .get(
+        'http://api.positionstack.com/v1/reverse?access_key=01bd92ff4d189472dbd298a5f7142f38&query=' +
+          this.state.data.latitude +
+          ',' +
+          this.state.data.longitude,
+      )
+
+      .then((res) => {
+        const {data} = this.state;
+        const address = res.data.data[1];
+        const street = address.street;
+        const city = address.county;
+        const country = address.country;
+        const location = street + ' ' + city + ' ' + country;
+        const latitude = data.latitude;
+        const longitude = data.longitude;
+        const label = JSON.stringify(location);
+        const url = Platform.select({
+          ios: 'maps:' + latitude + ',' + longitude + '?q=' + label,
+          android: 'geo:' + latitude + ',' + longitude + '?q=' + label,
+        });
+        console.log(latitude + longitude + label);
+        Linking.openURL(url);
+      });
+  };
+
   makeCall = () => {
     let phoneNumber = '';
     if (Platform.OS === 'android') {
@@ -77,49 +108,61 @@ export default class UserProfile extends Component {
 
     Linking.openURL(phoneNumber);
   };
-  toggleModal = () => {
-    this.setState({isModalVisible: !this.state.isModalVisible});
-  };
 
   getMechanicLocation = async () => {
     try {
-      await AsyncStorage.getItem('Mechanicdata')
+      await AsyncStorage.getItem('mechanicid')
         .then((response) => {
           const res = JSON.parse(response);
-          this.setState({mechanicData: res});
-          const userId = res.userid;
-          const bookedUserId = res.bookedId;
-          if (res.data == '') {
-            console.log('No data ');
-          } else {
-            this.setState({bookedMechanicId: bookedUserId});
-            axios.get(URL.Url + 'user/' + userId).then((response) => {
-              this.setState({data: response.data});
-              this.setState({refreshing: true});
+          axios
+            .get(URL.Url + 'getbookedUser/' + res.mechanicid)
+            .then((book) => {
+              if (book.data == '') {
+                console.log('No data ');
+              } else {
+                book.data.map((item) => {
+                  const bookedUserId = item._id;
+                  this.setState({bookedMechanicId: bookedUserId});
 
-              const {mechanicData} = this.state;
-              let Lat1 = response.data.latitude / 57.29577951;
-              let Lat2 = mechanicData.latitude / 57.29577951;
-              let Long1 = response.data.longitude / 57.29577951;
-              let Long2 = mechanicData.longitude / 57.29577951;
-              // Calaculate distance
-              let dlat = Lat2 - Lat1;
-              let dlong = Long2 - Long1;
-              //Apply Heversine Formula to calculate  Distance of Spherical Objects
-              let a =
-                Math.pow(Math.sin(dlat / 2), 2) +
-                Math.cos(Lat1) *
-                  Math.cos(Lat2) *
-                  Math.pow(Math.sin(dlong / 2), 2);
-              let c = 2 * Math.asin(Math.sqrt(a));
-              let r = 6371;
-              let result = c * r; //Get Result In KM
-              //Found In 10 KM
-              if (result <= 10) {
-                this.setState({cancelButton: 'none'});
+                  axios
+                    .get(URL.Url + 'mechanic/' + item.mechanicid)
+                    .then((mechanic) => {
+                      this.setState({mechanicData: mechanic.data});
+
+                      axios
+                        .get(URL.Url + 'user/' + item.userid)
+                        .then((response) => {
+                          console.log(response.data);
+                          this.setState({data: response.data});
+                          this.setState({refreshing: true});
+
+                          const {mechanicData} = this.state;
+
+                          let Lat1 = response.data.latitude / 57.29577951;
+                          let Lat2 = mechanicData.latitude / 57.29577951;
+                          let Long1 = response.data.longitude / 57.29577951;
+                          let Long2 = mechanicData.longitude / 57.29577951;
+                          // Calaculate distance
+                          let dlat = Lat2 - Lat1;
+                          let dlong = Long2 - Long1;
+                          //Apply Heversine Formula to calculate  Distance of Spherical Objects
+                          let a =
+                            Math.pow(Math.sin(dlat / 2), 2) +
+                            Math.cos(Lat1) *
+                              Math.cos(Lat2) *
+                              Math.pow(Math.sin(dlong / 2), 2);
+                          let c = 2 * Math.asin(Math.sqrt(a));
+                          let r = 6371;
+                          let result = c * r; //Get Result In KM
+                          //Found In 10 KM
+                          if (result <= 10) {
+                            // this.setState({cancelButton: 'none'});
+                          }
+                        });
+                    });
+                });
               }
             });
-          }
         })
 
         .catch((error) => {
@@ -203,31 +246,31 @@ export default class UserProfile extends Component {
             backgroundColor={'transparent'}
             translucent={true}
           />
-          <View style={{}}>
+         <View style={{}}>
             <Modal
               isVisible={this.state.isModalVisible}
               animationInTiming={500}
               animationOutTiming={500}>
-              <View style={[style.flex1, appStyle.rowEven]}>
+              <View style={[style.flex1, appStyle.rowCenter]}>
                 <TouchableOpacity
-                  style={[appStyle.DashboardslotCard, style.w100]}
+                  style={[appStyle.DashboardslotCard,style.w90,style.aiCenter]}
                   onPress={this.toggleModal}>
                   <View style={[style.mv10, style.aiCenter]}>
                     <Text style={[text.h1]}>Preview Image</Text>
                     <Text style={[text.heading2Gray]}>
-                      {data.firstname} {data.lastname}{' '}
-                    </Text>
+               {data.firstname}{' '}{data.lastname}
+                       </Text>
                   </View>
                   <Image
-                    source={{uri: data.photo}}
-                    style={{
-                      height: 470,
-
-                      resizeMode: 'stretch',
+                    source={{uri:data.photo}}
+                    style={[{
+                      height:'70%' ,
+                      alignSelf:'center',
+                      resizeMode: 'contain',
                       borderRadius: 10,
-                    }}></Image>
+                    },style.w100]}></Image>
                   <TouchableOpacity
-                    style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                    style={[button.buttonTheme, style.mt30, style.w50]}
                     onPress={this.toggleModal}>
                     <Text style={[button.btntext1]}> Close Preview </Text>
                   </TouchableOpacity>
@@ -333,14 +376,7 @@ export default class UserProfile extends Component {
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => {
-                        Linking.openURL(
-                          'google.navigation:q=' +
-                            data.latitude +
-                            data.longitude,
-                        );
-                        console.log(data.latitude, data.longitude);
-                      }}
+                      onPress={this.getCity}
                       style={[button.Profilebutton]}>
                       <Text style={[text.btntext, text.text16, text.ac]}>
                         Locate Now

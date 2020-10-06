@@ -45,7 +45,12 @@ export default StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 130 / 2,
   },
-
+  imageCard:{
+    width:screenWidth.width50-20,
+    margin:10
+    
+    },
+    
   insidebox: {
     height: 25,
     width: 20,
@@ -141,7 +146,17 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-
+  iconAdd: {
+    height: 35, width: 35, resizeMode: 'contain',
+    shadowColor: 'rgba(0,0,0,0.16)',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.16,
+    shadowRadius: 3.0,
+    elevation: 6,
+  },
   drawerIcon: {
     height: 20,
     width: 20,

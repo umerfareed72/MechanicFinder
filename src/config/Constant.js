@@ -40,7 +40,7 @@ export const screenWidth = {
 
 //Url
 export const URL = {
-  Url: 'http://192.168.0.109:3000/',
+  Url: 'http://192.168.0.108:3000/',
 };
 //colors
 export const colors = {
@@ -97,7 +97,13 @@ export const images = {
   carservice: require('../assets/images/service.png'),
   phone: require('../assets/images/phone.png'),
   mic: require('../assets/images/mic.png'),
+  add: require('../assets/images/add.png'),
+  delete: require('../assets/images/delete.png'),
+  plusbox: require('../assets/images/plusbox.png'),
+  Lightcamera: require('../assets/images/camerawhite.png'),
+
   percent: require('../assets/images/percent.png'),
+  store: require('../assets/images/store.png'),
   picture: require('../assets/images/picture.png'),
   Company: require('../assets/images/Company.png'),
   location: require('../assets/images/location.png'),

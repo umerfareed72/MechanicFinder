@@ -150,26 +150,27 @@ export default class HomeDetail extends Component {
     }
   };
   buyItems = async () => {
-    await AsyncStorage.getItem('userdata').then((response) => {
-      const res = JSON.parse(response);
-      const userid = res._id;
-      const mechanicid = this.state.mechanicdata.mechanicid;
-      axios
-        .post(URL.Url + 'addbookedUser/' + mechanicid + '/' + userid)
-        .then((res) => {
-          console.log('Mechanic Booked Successfully');
-        });
-    });
-    setTimeout(() => {
       if (this.state.CheckBox == images.checkBoxTick) {
         this.props.navigation.navigate('BuyItems');
       } else {
-        this.setState({BookNowView: 'none'});
-
-        this.props.navigation.navigate('BookNow');
-      }
+    setTimeout(async() => {
+      await AsyncStorage.getItem('userdata').then((response) => {
+        const res = JSON.parse(response);
+        const userid = res._id;
+        const mechanicid = this.state.mechanicdata.mechanicid;
+        axios
+          .post(URL.Url + 'addbookedUser/' + mechanicid + '/' + userid)
+          .then((res) => {
+            this.setState({BookNowView: 'none'});
+            this.props.navigation.navigate('BookNow');
+            console.log('Mechanic Booked Successfully');
+          });
+      });
     }, 3000);
-  };
+        
+    
+      }
+     };
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
@@ -183,38 +184,39 @@ export default class HomeDetail extends Component {
           translucent={true}
           barStyle={'light-content'}
         />
-        <View style={{}}>
-          <Modal
-            isVisible={this.state.isModalVisible}
-            animationInTiming={500}
-            animationOutTiming={500}>
-            <View style={[style.flex1, appStyle.rowEven]}>
-              <TouchableOpacity
-                style={[appStyle.DashboardslotCard, style.w100]}
-                onPress={this.toggleModal}>
-                <View style={[style.mv10, style.aiCenter]}>
-                  <Text style={[text.h1]}>Preview Image</Text>
-                  <Text style={[text.heading2Gray]}>
-                    {mechanicdata.firstname} {mechanicdata.lastname}{' '}
-                  </Text>
-                </View>
-                <Image
-                  source={{uri: mechanicdata.photo}}
-                  style={{
-                    height: 470,
-
-                    resizeMode: 'stretch',
-                    borderRadius: 10,
-                  }}></Image>
+    <View style={{}}>
+            <Modal
+              isVisible={this.state.isModalVisible}
+              animationInTiming={500}
+              animationOutTiming={500}>
+              <View style={[style.flex1, appStyle.rowCenter]}>
                 <TouchableOpacity
-                  style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                  style={[appStyle.DashboardslotCard,style.w90,style.aiCenter]}
                   onPress={this.toggleModal}>
-                  <Text style={[button.btntext1]}> Close Preview </Text>
+                  <View style={[style.mv10, style.aiCenter]}>
+                    <Text style={[text.h1]}>Preview Image</Text>
+                    <Text style={[text.heading2Gray]}>
+               {mechanicdata.firstname}{' '}{mechanicdata.lastname}
+                       </Text>
+                  </View>
+                  <Image
+                    source={{uri:mechanicdata.photo}}
+                    style={[{
+                      height:'70%' ,
+                      alignSelf:'center',
+                      resizeMode: 'contain',
+                      borderRadius: 10,
+                    },style.w100]}></Image>
+                  <TouchableOpacity
+                    style={[button.buttonTheme, style.mt30, style.w50]}
+                    onPress={this.toggleModal}>
+                    <Text style={[button.btntext1]}> Close Preview </Text>
+                  </TouchableOpacity>
                 </TouchableOpacity>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-        </View>
+              </View>
+            </Modal>
+          </View>
+
 
         {/*Body */}
         <View style={{}}>

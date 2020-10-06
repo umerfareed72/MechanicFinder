@@ -111,7 +111,7 @@ export default class Login extends Component {
 
   adminLogin = () => {
     this.setState({textAdmin: colors.white, adminLogin: colors.orange});
-    this.props.navigation.navigate('');
+    this.props.navigation.navigate('LoginAsAdmin');
   };
   mechanicLogin = () => {
     this.setState({

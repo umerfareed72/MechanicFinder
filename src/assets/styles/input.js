@@ -10,9 +10,29 @@ export default StyleSheet.create({
    
   },
   drop: {
-    flex: 0.8,
-   
+    flex: 0.8,  
   },
+  floatInput: {
+    marginHorizontal: 20, marginVertical: 5,
+    borderBottomColor: colors.grayd7,
+    borderBottomWidth: 1
+  },
+  
+  labelInput: {
+    color: colors.gray,
+    fontSize: 14
+  },
+  formInput: {
+    borderBottomWidth: 0.2,
+
+    borderColor: colors.gray5d,
+  },
+  input: {
+    borderWidth: 0,
+    fontSize: 14
+  },
+
+
 
   areainputborder: {
     borderColor: colors.gray,

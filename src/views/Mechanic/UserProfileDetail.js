@@ -65,43 +65,58 @@ export default class UserProfileDetail extends Component {
 
   getMechanicLocation = async () => {
     try {
-      AsyncStorage.getItem('Mechanicdata')
+      await AsyncStorage.getItem('mechanicid')
         .then((response) => {
           const res = JSON.parse(response);
-          this.setState({mechanicData: res});
-          const userId = res.userid;
+          axios
+            .get(URL.Url + 'getbookedUser/' + res.mechanicid)
+            .then((book) => {
+              if (book.data == '') {
+                console.log('No data ');
+              } else {
+                book.data.map((item) => {
+                  const bookedUserId = item._id;
+                  this.setState({bookedMechanicId: bookedUserId});
 
-          if (res.data == '') {
-            console.log('No data ');
-          } else {
-            axios.get(URL.Url + 'user/' + userId).then((response) => {
-              this.setState({data: response.data});
-              this.setState({refreshing: true});
+                  axios
+                    .get(URL.Url + 'mechanic/' + item.mechanicid)
+                    .then((mechanic) => {
+                      this.setState({mechanicData: mechanic.data});
 
-              const {mechanicData} = this.state;
-              let Lat1 = response.data.latitude / 57.29577951;
-              let Lat2 = mechanicData.latitude / 57.29577951;
-              let Long1 = response.data.longitude / 57.29577951;
-              let Long2 = mechanicData.longitude / 57.29577951;
-              // Calaculate distance
-              let dlat = Lat2 - Lat1;
-              let dlong = Long2 - Long1;
-              //Apply Heversine Formula to calculate  Distance of Spherical Objects
-              let a =
-                Math.pow(Math.sin(dlat / 2), 2) +
-                Math.cos(Lat1) *
-                  Math.cos(Lat2) *
-                  Math.pow(Math.sin(dlong / 2), 2);
-              let c = 2 * Math.asin(Math.sqrt(a));
-              let r = 6371;
-              let result = c * r; //Get Result In KM
-              //Found In 10 KM
-              if (result <= 10) {
-            
-                this.setState({BookNowView: 'flex'});
+                      axios
+                        .get(URL.Url + 'user/' + item.userid)
+                        .then((response) => {
+                          console.log(response.data);
+                          this.setState({data: response.data});
+                          this.setState({refreshing: true});
+
+                          const {mechanicData} = this.state;
+
+                          let Lat1 = response.data.latitude / 57.29577951;
+                          let Lat2 = mechanicData.latitude / 57.29577951;
+                          let Long1 = response.data.longitude / 57.29577951;
+                          let Long2 = mechanicData.longitude / 57.29577951;
+                          // Calaculate distance
+                          let dlat = Lat2 - Lat1;
+                          let dlong = Long2 - Long1;
+                          //Apply Heversine Formula to calculate  Distance of Spherical Objects
+                          let a =
+                            Math.pow(Math.sin(dlat / 2), 2) +
+                            Math.cos(Lat1) *
+                              Math.cos(Lat2) *
+                              Math.pow(Math.sin(dlong / 2), 2);
+                          let c = 2 * Math.asin(Math.sqrt(a));
+                          let r = 6371;
+                          let result = c * r; //Get Result In KM
+                          //Found In 10 KM
+                          if (result <= 10) {
+                            this.setState({BookNowView: 'flex'});
+                          }
+                        });
+                    });
+                });
               }
             });
-          }
         })
 
         .catch((error) => {
@@ -136,26 +151,26 @@ export default class UserProfileDetail extends Component {
               isVisible={this.state.isModalVisible}
               animationInTiming={500}
               animationOutTiming={500}>
-              <View style={[style.flex1, appStyle.rowEven]}>
+              <View style={[style.flex1, appStyle.rowCenter]}>
                 <TouchableOpacity
-                  style={[appStyle.DashboardslotCard, style.w100]}
+                  style={[appStyle.DashboardslotCard,style.w90,style.aiCenter]}
                   onPress={this.toggleModal}>
                   <View style={[style.mv10, style.aiCenter]}>
                     <Text style={[text.h1]}>Preview Image</Text>
                     <Text style={[text.heading2Gray]}>
-                      {data.firstname} {data.lastname}{' '}
-                    </Text>
+               {data.firstname}{' '}{data.lastname}
+                       </Text>
                   </View>
                   <Image
-                    source={{uri: data.photo}}
-                    style={{
-                      height: 470,
-
-                      resizeMode: 'stretch',
+                    source={{uri:data.photo}}
+                    style={[{
+                      height:'70%' ,
+                      alignSelf:'center',
+                      resizeMode: 'contain',
                       borderRadius: 10,
-                    }}></Image>
+                    },style.w100]}></Image>
                   <TouchableOpacity
-                    style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                    style={[button.buttonTheme, style.mt30, style.w50]}
                     onPress={this.toggleModal}>
                     <Text style={[button.btntext1]}> Close Preview </Text>
                   </TouchableOpacity>
@@ -259,7 +274,7 @@ export default class UserProfileDetail extends Component {
                 <View style={[style.borderbottom, style.mt10]}>
                   <Text style={[text.heading2Gray]}>
                     Car
-                    {/* {data.vehicletype} */}
+                    {data.vehicletype}
                   </Text>
                 </View>
                 <View style={[appStyle.rowAlignCenter, style.mt10]}>

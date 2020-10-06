@@ -202,26 +202,26 @@ export default class HomeDetail extends Component {
               isVisible={this.state.isModalVisible}
               animationInTiming={500}
               animationOutTiming={500}>
-              <View style={[style.flex1, appStyle.rowEven]}>
+              <View style={[style.flex1, appStyle.rowCenter]}>
                 <TouchableOpacity
-                  style={[appStyle.DashboardslotCard, style.w100]}
+                  style={[appStyle.DashboardslotCard,style.w90,style.aiCenter]}
                   onPress={this.toggleModal}>
                   <View style={[style.mv10, style.aiCenter]}>
                     <Text style={[text.h1]}>Preview Image</Text>
                     <Text style={[text.heading2Gray]}>
-                      {data.firstname} {data.lastname}{' '}
-                    </Text>
+               {data.firstname}{' '}{data.lastname}
+                       </Text>
                   </View>
                   <Image
-                    source={{uri: data.photo}}
-                    style={{
-                      height: 470,
-
-                      resizeMode: 'stretch',
+                    source={{uri:data.photo}}
+                    style={[{
+                      height:'70%' ,
+                      alignSelf:'center',
+                      resizeMode: 'contain',
                       borderRadius: 10,
-                    }}></Image>
+                    },style.w100]}></Image>
                   <TouchableOpacity
-                    style={[button.buttonTheme, style.mt30, style.aiCenter]}
+                    style={[button.buttonTheme, style.mt30, style.w50]}
                     onPress={this.toggleModal}>
                     <Text style={[button.btntext1]}> Close Preview </Text>
                   </TouchableOpacity>
@@ -229,6 +229,7 @@ export default class HomeDetail extends Component {
               </View>
             </Modal>
           </View>
+
 
           <View style={{}}>
             <Modal

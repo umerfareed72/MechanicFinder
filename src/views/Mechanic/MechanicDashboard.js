@@ -93,11 +93,15 @@ export default class MechanicDashboard extends Component {
                               this.setState({bookedUserid: item._id});
                             }, 2000);
 
-                            this.state.data['userid'] = item.userid;
-                            this.state.data['bookedId']=item._id
+                            // this.state.data['userid'] = item.userid;
+                            // this.state.data['bookedId']=item._id
                             const send = JSON.stringify(this.state.data);
                             AsyncStorage.setItem('Mechanicdata', send);
-                            console.log(send);
+                            const ids={}
+                            ids['mechanicid']=item.mechanicid
+                            const sendids=JSON.stringify(ids);
+                            AsyncStorage.setItem('mechanicid', sendids);
+                      console.log(ids)
                                   });
                       });
                     })

@@ -21,7 +21,8 @@ import GoogleUserSignUp from '../views/registration/GoogleUserSignUp';
 
 import ForgotPassword from '../views/registration/ForgotPassword';
 import MechanicNavigation from './MechanicNavigation';
-
+import LoginAsAdmin from "../views/registration/LoginAsAdmin"
+import AdminNavigation from './AdminNavigation'
 const SplashStack = createStackNavigator(
   {
     Splash: Splash,
@@ -43,6 +44,7 @@ const AuthStack = createStackNavigator(
     LoginasMechanic: LoginasMechanic,
     MechanicRegister: MechanicRegister,
     Forgot: ForgotPassword,
+    LoginAsAdmin:LoginAsAdmin
   },
   {
     headerMode: 'none',
@@ -65,7 +67,14 @@ const mechanicStack = createStackNavigator(
     headerMode: 'none',
   },
 );
-
+const AdminStack = createStackNavigator(
+  {
+    screen: AdminNavigation,
+  },
+  {
+    headerMode: 'none',
+  },
+);
 export default createAppContainer(
   createSwitchNavigator(
     {
@@ -73,6 +82,7 @@ export default createAppContainer(
       Auth: AuthStack,
       userStack: userStack,
       mechanicStack: mechanicStack,
+      AdminStack:AdminStack
     },
     {
       initialRouteName: 'Splash',

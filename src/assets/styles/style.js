@@ -311,6 +311,32 @@ marginHorizontal:15
 
     elevation: 6,
   },
+  h100:{
+    height: '100%',
+ 
+  },
+  h70:{
+    height: '70%',
+ 
+  },
+  h80:{
+    height: '80%',
+ 
+  },
+  
+  h40:{
+    height:'40%'
+  },
+  h45:{
+   height:'45%'
+  },
+  h60:{
+    height:'60%'
+  },
+  h50: {
+    height: '50%',
+  },
+
   w100: {
     width: '100%',
   },
@@ -319,6 +345,12 @@ marginHorizontal:15
   },
   w45:{
     width:'45%'
+  },
+  w80:{
+    width:'80%'
+  },
+  w90:{
+    width:'90%'
   },
   w60:{
     width:'60%'

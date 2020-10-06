@@ -55,6 +55,12 @@ export default StyleSheet.create({
     borderRadius: 4,
     justifyContent: 'center',
   },
+  btnExtraSmall: {
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    alignSelf: 'center',
+    borderRadius: 20,
+  },
   inviteBtn: {
     height: 30,
     borderRadius: 20,
