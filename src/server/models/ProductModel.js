@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const Productschema = new mongoose.Schema({
   mechanicid: String,
-  title:String,
+  title:{type:String,required:'Title is required'},
   price:{type:Number},
   quantity:{type:Number},
-  paymentMethod:String,
-  description:String,
+  paymentMethod:{type:String,required:'Payment Method is required'},
+  description:{type:String,required:'Description is required'},
   photo:String
 });
 

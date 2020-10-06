@@ -23,6 +23,7 @@ const mechanicschema = new mongoose.Schema({
   phone: {type: Number, required: 'Phone Number is required'},
   address: {type: String, required: 'Address is required'},
   photo: String,
+  mechanicrate:{type:Number,required:'Mechanic Rate is required'},
   carcompany: {type: String, required: 'Car Company is required'},
   city: {type: String, required: 'City is required'},
   country: {type: String, required: 'Country is required'},

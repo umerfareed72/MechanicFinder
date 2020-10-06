@@ -10,7 +10,15 @@ export default StyleSheet.create({
     paddingHorizontal:20,
       paddingBottom:10,
 alignItems:"center"
-      
+     
+  },
+  smallbox:{
+  flexDirection:'row',
+   alignItems:'center',
+    borderWidth: 0.8,
+      borderColor: colors.lightblue,
+      marginHorizontal: 40,
+   
   },
   safeContainer: {
     backgroundColor: colors.white, flex: 1

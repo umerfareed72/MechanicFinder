@@ -125,24 +125,24 @@ export default class EditProduct extends Component {
           console.log(response.data);
         });
     });
-     };
+  };
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
     });
   }
   async componentDidMount() {
-   
     AsyncStorage.getItem('productdata').then((res) => {
       const data = JSON.parse(res);
-        this.setState({product: data})
-        this.setState({title:data.title})
-        this.setState({price:data.price})
-        this.setState({quantity:data.quantity})
-        this.setState({photo:data.photo})
-        this.setState({paymentMethod:data. paymentMethod})   
-        this.setState({description:data.description})
-        });
+      console.log(data);
+      this.setState({product: data});
+      this.setState({title: data.title});
+      this.setState({price: JSON.stringify(data.price)});
+      this.setState({quantity: JSON.stringify(data.quantity)});
+      this.setState({photo: data.photo});
+      this.setState({paymentMethod: data.paymentMethod});
+      this.setState({description: data.description});
+    });
   }
 
   render() {
@@ -312,7 +312,7 @@ export default class EditProduct extends Component {
                     this.setState({paymentMethod: itemValue})
                   }>
                   <Picker.Item
-                    label='Select Payment Method'
+                    label="Select Payment Method"
                     value="SelectRole"
                   />
                   <Picker.Item
@@ -330,7 +330,7 @@ export default class EditProduct extends Component {
                   onChangeText={(text) => {
                     this.setState({description: text});
                   }}
-                    value={this.state.description}
+                  value={this.state.description}
                   placeholderTextColor={'#c7c7c7'}
                   underlineColorAndroid={'transparent'}
                 />

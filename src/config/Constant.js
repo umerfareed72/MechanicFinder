@@ -40,7 +40,7 @@ export const screenWidth = {
 
 //Url
 export const URL = {
-  Url: 'http://192.168.0.108:3000/',
+  Url: 'http://192.168.0.111:3000/',
 };
 //colors
 export const colors = {
@@ -101,7 +101,7 @@ export const images = {
   delete: require('../assets/images/delete.png'),
   plusbox: require('../assets/images/plusbox.png'),
   Lightcamera: require('../assets/images/camerawhite.png'),
-
+subtract: require('../assets/images/subtract.png'),
   percent: require('../assets/images/percent.png'),
   store: require('../assets/images/store.png'),
   picture: require('../assets/images/picture.png'),

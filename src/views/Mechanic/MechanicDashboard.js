@@ -74,6 +74,8 @@ export default class MechanicDashboard extends Component {
                 .then((mechanic) => {
                   console.log(mechanic.data);
                   this.setState({data: mechanic.data});
+                  const send = JSON.stringify(mechanic.data);
+                  AsyncStorage.setItem('Mechanicdata', send);
                 })
                 .then((res) => {
                   axios
@@ -95,14 +97,13 @@ export default class MechanicDashboard extends Component {
 
                             // this.state.data['userid'] = item.userid;
                             // this.state.data['bookedId']=item._id
-                            const send = JSON.stringify(this.state.data);
-                            AsyncStorage.setItem('Mechanicdata', send);
-                            const ids={}
-                            ids['mechanicid']=item.mechanicid
-                            const sendids=JSON.stringify(ids);
+
+                            const ids = {};
+                            ids['mechanicid'] = item.mechanicid;
+                            const sendids = JSON.stringify(ids);
                             AsyncStorage.setItem('mechanicid', sendids);
-                      console.log(ids)
-                                  });
+                            console.log(ids);
+                          });
                       });
                     })
                     .catch((error) => {

@@ -37,6 +37,7 @@ router.post('/mechanicregister', async (req, res) => {
     carcompany: req.body.carcompany,
     city: req.body.city,
     country: req.body.country,
+    mechanicrate: req.body.mechanicrate,
     skilltype: req.body.skilltype,
     longitude: req.body.longitude,
     latitude: req.body.latitude,
@@ -116,6 +117,7 @@ router.get('/mechanic/:id', (req, res) => {
       date: 1,
       latitude: 1,
       longitude: 1,
+      mechanicrate: 1,
     })
     .then((mechanic) => {
       if (!mechanic) {
@@ -148,6 +150,7 @@ router.get('/mechanics', (req, res) => {
       skilltype: 1,
       vehicletype: 1,
       date: 1,
+      mechanicrate: 1,
     });
     if (!mechanics) return res.status(404).send('Not Found');
     res.send(mechanics);
@@ -196,13 +199,14 @@ router.get(
             lastname: 1,
             email: 1,
             phone: 1,
-            photo:1,
+            photo: 1,
             city: 1,
             address: 1,
             country: 1,
             carcompany: 1,
             skilltype: 1,
             vehicletype: 1,
+            mechanicrate: 1,
             longitude: 1,
             latitude: 1,
           })
@@ -234,7 +238,7 @@ router.get(
                   firstname: item.firstname,
                   lastname: item.lastname,
                   email: item.email,
-                 photo:item.photo,
+                  photo: item.photo,
                   phone: item.phone,
                   carcompany: item.carcompany,
                   vehicletype: item.vehicletype,
@@ -245,11 +249,12 @@ router.get(
                   address: item.address,
                   latitude: item.latitude,
                   longitude: item.longitude,
+                  mechanicrate: item.mechanicrate,
                   distance: Math.trunc(result),
                 });
-                return res.json(nearest);
               }
             });
+            return res.json(nearest);
           })
           .catch((error) => {
             return res.send(error);

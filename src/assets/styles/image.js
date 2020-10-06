@@ -9,6 +9,13 @@ export default StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'center',
   },
+  xsmall:{
+    height: 12,
+    width: 12,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+  
+  },
   small: {
     height: 14,
     width: 14,

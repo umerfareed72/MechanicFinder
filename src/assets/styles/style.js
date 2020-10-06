@@ -145,6 +145,10 @@ marginHorizontal:15
   mv30: {
     marginVertical: 30,
   },
+  
+  mr10: {
+    marginRight: 10,
+  },
   mr15: {
     marginRight: 15,
   },

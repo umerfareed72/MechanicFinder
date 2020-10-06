@@ -46,86 +46,108 @@ export default class Items extends Component {
     console.disableYellowBox = true;
     super(props);
     this.state = {
-      items:[],
+      items: [],
       isModalVisible: false,
+      mechanicdata: [],
+      qunatity: 1,
     };
   }
-  getProduct=async()=>{
-    await AsyncStorage.getItem('itemdata').then(async(res) => {
+  getProduct = async () => {
+    await AsyncStorage.getItem('itemdata').then(async (res) => {
       res = JSON.parse(res);
-   this.setState({items:res})
-  })
-   
-  }
+      this.setState({items: res});
+      AsyncStorage.getItem('data').then(async (data) => {
+        const mechanic = JSON.parse(data);
+        this.setState({mechanicdata: mechanic});
+      });
+    });
+  };
   componentDidMount() {
-    this.getProduct()
+    this.getProduct();
   }
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
-
+  addquantity = () => {
+    this.setState({qunatity: this.state.qunatity + 1});
+  };
+  minusquantity = () => {
+    this.setState({
+      qunatity:
+        this.state.qunatity == 0
+          ? this.state.qunatity + 1
+          : this.state.qunatity - 1,
+    });
+  };
   render() {
-    let {items} = this.state;
+    let {items, mechanicdata} = this.state;
+
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'light-content'} backgroundColor={'transparent'} />
         <View style={{}}>
-            <Modal
-              isVisible={this.state.isModalVisible}
-              animationInTiming={500}
-              animationOutTiming={500}>
-              <View style={[style.flex1, appStyle.rowCenter]}>
-                <TouchableOpacity
-                  style={[appStyle.DashboardslotCard,style.w90,style.aiCenter]}
-                  onPress={this.toggleModal}>
-                  <View style={[style.mv10, style.aiCenter]}>
-                    <Text style={[text.h1]}>Preview Image</Text>
-                    <Text style={[text.heading2Gray]}>
-                   {items.title}
-                       </Text>
-                  </View>
-                  <Image
-                    source={{uri:items.photo}}
-                    style={[{
-                      height:'70%' ,
-                      alignSelf:'center',
+          <Modal
+            isVisible={this.state.isModalVisible}
+            animationInTiming={500}
+            animationOutTiming={500}>
+            <View style={[style.flex1, appStyle.rowCenter]}>
+              <TouchableOpacity
+                style={[appStyle.DashboardslotCard, style.w90, style.aiCenter]}
+                onPress={this.toggleModal}>
+                <View style={[style.mv10, style.aiCenter]}>
+                  <Text style={[text.h1]}>Preview Image</Text>
+                  <Text style={[text.heading2Gray]}>{items.title}</Text>
+                </View>
+                <Image
+                  source={{uri: items.photo}}
+                  style={[
+                    {
+                      height: '70%',
+                      alignSelf: 'center',
                       resizeMode: 'contain',
                       borderRadius: 10,
-                    },style.w100]}></Image>
-                  <TouchableOpacity
-                    style={[button.buttonTheme, style.mt30, style.w50]}
-                    onPress={this.toggleModal}>
-                    <Text style={[button.btntext1]}> Close Preview </Text>
-                  </TouchableOpacity>
+                    },
+                    style.w100,
+                  ]}></Image>
+                <TouchableOpacity
+                  style={[button.buttonTheme, style.mt30, style.w50]}
+                  onPress={this.toggleModal}>
+                  <Text style={[button.btntext1]}> Close Preview </Text>
                 </TouchableOpacity>
-              </View>
-            </Modal>
-          </View>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
 
         <View style={style.flex1}>
-        <TouchableOpacity onPress={this.toggleModal}> 
-          <ImageBackground
-            imageStyle={{borderRadius: 8}}
-            style={[{height: screenHeight.height20}]}
-            source={{uri:items.photo}}>
-            <View style={style.bgOverlay} />
-            <View style={[style.rowBtw, style.ph20, style.mt30]}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('BuyItems')}>
-                <Image
-                  source={images.backarrowh}
-                  style={[image.backArrow2, {tintColor: colors.white}]}></Image>
-              </TouchableOpacity>
+          <TouchableOpacity onPress={this.toggleModal}>
+            <ImageBackground
+              imageStyle={{borderRadius: 8}}
+              style={[{height: screenHeight.height20}]}
+              source={{uri: items.photo}}>
+              <View style={style.bgOverlay} />
+              <View style={[style.rowBtw, style.ph20, style.mt30]}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('BuyItems')}>
+                  <Image
+                    source={images.backarrowh}
+                    style={[
+                      image.backArrow2,
+                      {tintColor: colors.white},
+                    ]}></Image>
+                </TouchableOpacity>
 
-              <View>
-                <Text style={[text.heading1, text.bold]}>Product Profile</Text>
+                <View>
+                  <Text style={[text.heading1, text.bold]}>
+                    Product Profile
+                  </Text>
+                </View>
+
+                <Text style={[text.text16, text.orange]}></Text>
               </View>
-
-              <Text style={[text.text16, text.orange]}></Text>
-            </View>
-          </ImageBackground>
+            </ImageBackground>
           </TouchableOpacity>
-         
+
           <View style={appStyle.curvedContainer}>
             <ScrollView style={style.ph20}>
               <View style={[style.mt10]}>
@@ -133,16 +155,55 @@ export default class Items extends Component {
               </View>
               <View style={[style.mv10]}>
                 <Text style={[text.h1]}>Discription</Text>
-                <Text style={text.para}>
-                {items.description}
-                 </Text>
+                <Text style={text.para}>{items.description}</Text>
               </View>
-              <View style={[style.row, style.aiCenter,style.mv10]}>
+              <View style={[style.row, style.aiCenter, style.mv10]}>
+                <Image
+                  style={[image.drawerIconlarge, image.Orange]}
+                  source={images.username}></Image>
+                <Text style={[text.heading2Gray]}>
+                  Delivered By: {mechanicdata.firstname} {mechanicdata.lastname}
+                </Text>
+              </View>
+              <View style={[style.row, style.mv10, style.aiCenter]}>
                 <Image
                   style={image.drawerIconlarge}
                   source={images.dollar}></Image>
                 <Text style={[text.heading2Gray]}>
-    Product Price: {items.price} $
+                  Payment Method: {items.paymentMethod}
+                </Text>
+              </View>
+              <View style={[style.row, style.aiCenter, style.mv10]}>
+                <Image
+                  style={[
+                    image.small,
+                    image.Orange,
+                    style.mr5,
+                    {marginLeft: 2},
+                  ]}
+                  source={images.cart}></Image>
+                <Text style={[text.heading2Gray]}>Add Quantity</Text>
+                <View style={[appStyle.smallbox]}>
+                  <TouchableOpacity onPress={this.addquantity}>
+                    <Image
+                      style={[image.xsmall, image.Orange, style.mh10]}
+                      source={images.plus}></Image>
+                  </TouchableOpacity>
+                  <Text style={text.heading2}>{this.state.qunatity}</Text>
+                  <TouchableOpacity onPress={this.minusquantity}>
+                    <Image
+                      style={[image.xsmall, image.Orange, style.mh10]}
+                      source={images.subtract}></Image>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <View style={[style.row, style.aiCenter, style.mv10]}>
+                <Image
+                  style={image.drawerIconlarge}
+                  source={images.dollar}></Image>
+                <Text style={[text.heading2Gray]}>
+                  Product Price: {items.price} $
                 </Text>
               </View>
 
@@ -151,16 +212,17 @@ export default class Items extends Component {
                   style={image.drawerIconlarge}
                   source={images.dollar}></Image>
                 <Text style={[text.heading2Gray]}>
-                  Mechanic Service Rate: 5 $
+                  Mechanic Service Rate: {mechanicdata.mechanicrate} $
                 </Text>
               </View>
 
               <View style={[style.row, style.mv10, style.aiCenter]}>
-                <Image
-                  style={image.drawerIconlarge}
-                  source={images.dollar}></Image>
-                <Text style={[text.heading2Gray]}>
-                  Total Estimated Rate: {parseInt(items.price) +10}   $
+                <Image style={image.large} source={images.dollar}></Image>
+                <Text style={[text.heading1purple]}>
+                  Total Estimated Rate :{' '}
+                  {(items.price + mechanicdata.mechanicrate) *
+                    this.state.qunatity}{' '}
+                  $
                 </Text>
               </View>
 

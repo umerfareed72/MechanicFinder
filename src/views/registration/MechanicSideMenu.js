@@ -49,6 +49,7 @@ export default class SideMenu extends React.Component {
   _Signout = async () => {
     const {navigation} = this.props;
       AsyncStorage.removeItem('token').then(() => {
+        AsyncStorage.removeItem('Mechanicdata')
         navigation.navigate('LoginasMechanic');
       });
      
