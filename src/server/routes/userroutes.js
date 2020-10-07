@@ -179,6 +179,7 @@ router.get('/getuser/:id', (req, res) => {
         // getSentiment expects an array of strings
         var word = tokenizer.tokenize(item.description);
         const r = analyzer.getSentiment(word);
+        console.log(r)
         if ((r > 1 && item.rating == 5) || (r > 1 && item.rating == 4)) {
           data.push({
             rating: item.rating,

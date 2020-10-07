@@ -3,17 +3,21 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const BookProductmodel = mongoose.model('BookProductmodel');
 const ProductModel = mongoose.model('ProductModel');
-
+const Mechanicmodel = mongoose.model('mechanicmodel');
 //Mechanic Registeration
-router.post('/addBuyProduct', async (req, res) => {
+router.post('/addbuyProduct', async (req, res) => {
   const add = new BookProductmodel({
-    userid: req.body.userid,
-    productid: req.body.productid,
-    quantity: req.body.quantity,
-    paymentMethod: req.body.paymentMethod,
-    status: 'Online',
+      userid: req.body.userid,
+      mechanicid:req.body.mechanicid,
+      title:req.body.title,
+      amount:req.body.amount,
+      paymentMethod:req.body.paymentMethod,
+      quantity: req.body.quantity,
+      description:req.body.description,
+      photo:req.body.photo,
+      status: 'Online',
   });
-   await add
+  await add
     .save()
     .then((data) => {
       res.send(data);
@@ -23,52 +27,54 @@ router.post('/addBuyProduct', async (req, res) => {
     });
 });
 
-router.get('/getbuyProduct/:id', (req, res) => {
+router.get('/getbuyProduct/:id/:mid', (req, res) => {
   async function get() {
-    const mechanics = await BookProductmodel.find({userid: req.params.id})
-      .sort('id')
-      .select({
-        userid: 1,
-        quantity: 1,
-        paymentMethod: 1,
-        status: 1,
-        productid: 1,
-      });
-    if (!mechanics) return res.status(404).send('Not Found');
-    res.send(mechanics);
+    const product = await BookProductmodel.find({
+      userid: req.params.id,
+      mechanicid:req.params.mid,
+      status: 'Online',
+    })
+      if (!product) return res.status(404).send('Not Found');
+    res.send(product);
   }
   get();
 });
 
-router.put('/updatebuyProduct/:id/:pid', (req, res) => {
-  async function get() {
-    const buyproduct = await BookProductmodel.findByIdAndUpdate(
-      {_id: req.params.id},
-      {
-        quantity: req.body.quantity,
-        status: 'Offline',
-      },
-    ).then(async (data) => {
-      const product = await ProductModel.findByIdAndUpdate(
-        {_id: req.params.pid},
-        {
-          quantity: req.body.quantity,
-        },
-      ).then((res) => {
-        res.send(res);
-      });
-    });
-    if (!product) return res.status(404).send('Not Found');
-  }
-  get();
-});
 router.delete('/deletebuyProduct/:id', (req, res) => {
   async function get() {
-    const product = await BookProductmodel.findByIdAndDelete({_id: req.params.id});
+    const product = await BookProductmodel.findByIdAndDelete({
+      _id: req.params.id,
+      status:'Online'
+    });
     if (!product) return res.status(404).send('Not Found');
     res.send(product);
   }
   get();
 });
+
+
+router.put('/bookedbuyProduct/:id', (req, res) => {
+  BookProductmodel.findByIdAndUpdate(
+    {_id: req.params.id},
+    {
+      status: 'Offline',
+    },
+  )
+    .then((product) => {
+      
+      if (!product) {
+        return res.status(404).send('Mechanic Not Found');
+      } else {
+        return res.status(200).json(product);
+          }
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
+
+
+
+
 
 module.exports = router;

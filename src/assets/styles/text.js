@@ -207,10 +207,10 @@ spacing:{
   ac: {
     textAlign: 'center',
   },
-  tab1: {
-    marginHorizontal: 40,
-    fontSize: 18,
-  },
+  // tab1: {
+  //   marginHorizontal: 40,
+  //   fontSize: 18,
+  // },
 
   heading4Bold: {
     fontSize: 14,

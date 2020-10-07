@@ -45,10 +45,10 @@ export default class HomeDetail extends Component {
       rating: 0,
       starCount: 5,
       TabDataOverview: 'flex',
-      TabDataGallery: 'none',
+      TabDataProduct: 'none',
       TabDataReview: 'none',
       ColorOverview: colors.darkBlue,
-      ColorGallery: colors.inputBordercolor,
+      ColorProduct: colors.inputBordercolor,
       ColorReview: colors.inputBordercolor,
       BookNowView: 'none',
       CheckBox: images.checkBoxEmpty,
@@ -59,8 +59,10 @@ export default class HomeDetail extends Component {
       emptyStar: colors.black,
       userid: '',
       mechanicid: '',
+      bookedMechanicId: '',
       description: '',
       Rating: [],
+      products: [],
       firstname: '',
       lastname: '',
       photo: '',
@@ -78,12 +80,17 @@ export default class HomeDetail extends Component {
       rating: rating,
     });
   }
-  async componentDidMount() {
+
+  getdata = () => {
     AsyncStorage.getItem('bookMechanicData').then(async (res) => {
       res = JSON.parse(res);
 
       this.setState({data: res});
-      this.setState({mechanicid: res._id, userid: res.userId});
+      this.setState({
+        mechanicid: res._id,
+        userid: res.userId,
+        bookedMechanicId: res.bookMechanicid,
+      });
       await axios.get(URL.Url + 'user/' + res.userId).then((res) => {
         const {data} = this.state;
         this.setState({
@@ -115,84 +122,139 @@ export default class HomeDetail extends Component {
         .then((res) => {
           this.setState({Rating: res.data});
         })
+        .then((product) => {
+          axios
+            .get(
+              URL.Url +
+                'getbuyProduct/' +
+                this.state.userid +
+                '/' +
+                this.state.mechanicid,
+            )
+            .then((prod) => {
+              this.setState({products: prod.data});
+            });
+        })
         .catch((error) => {
           console.log(error, 'Review not fetch');
         });
     });
+  };
+  async componentDidMount() {
+    const {navigation} = this.props;
+    this.getdata();
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.getdata();
+    });
   }
-  tabOverview = () => {
-    if (this.state.TabDataOverview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'}),
-        this.setState({ColorOverview: colors.darkBlue}),
-        this.setState({ColorReview: colors.inputBordercolor}),
-        this.setState({ColorGallery: colors.inputBordercolor});
-    } else
-      this.setState({TabDataOverview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'});
-    this.setState({ColorOverview: colors.darkBlue});
-    this.setState({ColorReview: colors.inputBordercolor});
-    this.setState({ColorGallery: colors.inputBordercolor});
-  };
 
-  tabGallery = () => {
-    if (this.state.TabDataGallery == 'flex') {
-      this.setState({TabDataOverview: 'none'}),
-        this.setState({TabDataReview: 'none'}),
-        this.setState({color: 'none'});
-      this.setState({ColorOverview: colors.inputBordercolor}),
-        this.setState({ColorReview: colors.inputBordercolor}),
-        this.setState({ColorGallery: colors.darkBlue});
-    } else
-      this.setState({TabDataGallery: 'flex'}),
-        this.setState({TabDataOverview: 'none'}),
-        this.setState({TabDataReview: 'none'});
-    this.setState({ColorOverview: colors.inputBordercolor});
-    this.setState({ColorReview: colors.inputBordercolor});
-    this.setState({ColorGallery: colors.darkBlue});
-  };
-
-  tabReview = () => {
-    if (this.state.TabDataReview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataOverview: 'none'}),
-        this.setState({color: 'none'});
-      this.setState({ColorOverview: colors.inputBordercolor}),
-        this.setState({ColorReview: colors.darkBlue}),
-        this.setState({ColorGallery: colors.inputBordercolor});
-    } else
-      this.setState({TabDataReview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataOverview: 'none'});
-    this.setState({ColorOverview: colors.inputBordercolor});
-    this.setState({ColorReview: colors.darkBlue});
-    this.setState({ColorGallery: colors.inputBordercolor});
-  };
-  submitReview = () => {
-            const userId = this.state.userid;
-            const mechanicid = this.state.mechanicid;
-            axios
-              .post(URL.Url + 'add/' + userId + '/' + mechanicid, {
-                firstname: this.state.firstname,
-                lastname: this.state.lastname,
-                photo: this.state.photo,
-                rating: this.state.rating,
-                description: this.state.description,
-              })
-              .then((response) => {
-                console.log(response.data)
-              })
-              .catch((error) => {
-                console.log(error, 'Review not added');
+  CancelBooking = async () => {
+    axios
+      .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
+      .then((res) => {
+        this.setState({refreshing: false});
+        AsyncStorage.removeItem('bookMechanicData');
+        this.props.navigation.navigate('Dashboard');
+        console.log(res.data, 'data updated');
+      })
+      .then(async (product) => {
+        await axios
+          .get(
+            URL.Url +
+              'getbuyProduct/' +
+              this.state.userid +
+              '/' +
+              this.state.mechanicid,
+          )
+          .then(async (prod) => {
+            prod.data.map(async (item) => {
+              await axios
+                .put(URL.Url + 'bookedbuyProduct/' + item._id)
+                .then((del) => {
+                  console.log(del.data);
+                });
+            });
+          });
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
+  tabOverview = () => {
+    if (this.state.TabDataOverview == 'flex') {
+      this.setState({TabDataProduct: 'none'}),
+        this.setState({TabDataReview: 'none'}),
+        this.setState({ColorOverview: colors.darkBlue}),
+        this.setState({ColorReview: colors.inputBordercolor}),
+        this.setState({ColorProduct: colors.inputBordercolor});
+    } else
+      this.setState({TabDataOverview: 'flex'}),
+        this.setState({TabDataProduct: 'none'}),
+        this.setState({TabDataReview: 'none'});
+    this.setState({ColorOverview: colors.darkBlue});
+    this.setState({ColorReview: colors.inputBordercolor});
+    this.setState({ColorProduct: colors.inputBordercolor});
+  };
+
+  tabProduct = () => {
+    if (this.state.TabDataProduct == 'flex') {
+      this.setState({TabDataOverview: 'none'}),
+        this.setState({TabDataReview: 'none'}),
+        this.setState({color: 'none'});
+      this.setState({ColorOverview: colors.inputBordercolor}),
+        this.setState({ColorReview: colors.inputBordercolor}),
+        this.setState({ColorProduct: colors.darkBlue});
+    } else
+      this.setState({TabDataProduct: 'flex'}),
+        this.setState({TabDataOverview: 'none'}),
+        this.setState({TabDataReview: 'none'});
+    this.setState({ColorOverview: colors.inputBordercolor});
+    this.setState({ColorReview: colors.inputBordercolor});
+    this.setState({ColorProduct: colors.darkBlue});
+  };
+
+  tabReview = () => {
+    if (this.state.TabDataReview == 'flex') {
+      this.setState({TabDataProduct: 'none'}),
+        this.setState({TabDataOverview: 'none'}),
+        this.setState({color: 'none'});
+      this.setState({ColorOverview: colors.inputBordercolor}),
+        this.setState({ColorReview: colors.darkBlue}),
+        this.setState({ColorProduct: colors.inputBordercolor});
+    } else
+      this.setState({TabDataReview: 'flex'}),
+        this.setState({TabDataProduct: 'none'}),
+        this.setState({TabDataOverview: 'none'});
+    this.setState({ColorOverview: colors.inputBordercolor});
+    this.setState({ColorReview: colors.darkBlue});
+    this.setState({ColorProduct: colors.inputBordercolor});
+  };
+  submitReview = () => {
+    const userId = this.state.userid;
+    const mechanicid = this.state.mechanicid;
+    axios
+      .post(URL.Url + 'add/' + userId + '/' + mechanicid, {
+        firstname: this.state.firstname,
+        lastname: this.state.lastname,
+        photo: this.state.photo,
+        rating: this.state.rating,
+        description: this.state.description,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error, 'Review not added');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    this.CancelBooking();
+  };
+
   render() {
-    const {data, Rating} = this.state;
+    const {data, Rating, products} = this.state;
     if (data != null) {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
@@ -204,22 +266,29 @@ export default class HomeDetail extends Component {
               animationOutTiming={500}>
               <View style={[style.flex1, appStyle.rowCenter]}>
                 <TouchableOpacity
-                  style={[appStyle.DashboardslotCard,style.w90,style.aiCenter]}
+                  style={[
+                    appStyle.DashboardslotCard,
+                    style.w90,
+                    style.aiCenter,
+                  ]}
                   onPress={this.toggleModal}>
                   <View style={[style.mv10, style.aiCenter]}>
                     <Text style={[text.h1]}>Preview Image</Text>
                     <Text style={[text.heading2Gray]}>
-               {data.firstname}{' '}{data.lastname}
-                       </Text>
+                      {data.firstname} {data.lastname}
+                    </Text>
                   </View>
                   <Image
-                    source={{uri:data.photo}}
-                    style={[{
-                      height:'70%' ,
-                      alignSelf:'center',
-                      resizeMode: 'contain',
-                      borderRadius: 10,
-                    },style.w100]}></Image>
+                    source={{uri: data.photo}}
+                    style={[
+                      {
+                        height: '70%',
+                        alignSelf: 'center',
+                        resizeMode: 'contain',
+                        borderRadius: 10,
+                      },
+                      style.w100,
+                    ]}></Image>
                   <TouchableOpacity
                     style={[button.buttonTheme, style.mt30, style.w50]}
                     onPress={this.toggleModal}>
@@ -229,7 +298,6 @@ export default class HomeDetail extends Component {
               </View>
             </Modal>
           </View>
-
 
           <View style={{}}>
             <Modal
@@ -347,29 +415,28 @@ export default class HomeDetail extends Component {
               <TouchableOpacity onPress={() => this.tabOverview()}>
                 <Text
                   style={[
-                    text.tab1,
+                    text.heading2,
                     text.semibold,
                     {color: this.state.ColorOverview},
                   ]}>
                   Overview
                 </Text>
               </TouchableOpacity>
-              {/* 
-            <TouchableOpacity onPress={() => this.tabGallery()}>
-              <Text
-                style={[
-                  text.tab1,
-                  text.semibold,
-                  {color: this.state.ColorGallery},
-                ]}>
-                Gallery
-              </Text>
-            </TouchableOpacity> */}
+              <TouchableOpacity onPress={() => this.tabProduct()}>
+                <Text
+                  style={[
+                    text.heading2,
+                    text.semibold,
+                    {color: this.state.ColorProduct},
+                  ]}>
+                  Product
+                </Text>
+              </TouchableOpacity>
 
               <TouchableOpacity onPress={() => this.tabReview()}>
                 <Text
                   style={[
-                    text.tab1,
+                    text.heading2,
                     text.semibold,
                     {color: this.state.ColorReview},
                   ]}>
@@ -456,13 +523,63 @@ export default class HomeDetail extends Component {
                   </TouchableOpacity>
                 </View>
               </View>
-              {Rating.map((item,key) => {
-                
+              {/* Product Tab */}
+              <View style={[style.ph10, {display: this.state.TabDataProduct}]}>
+                <ScrollView style={{}}>
+                  {products.map((item, index) => {
+                    return (
+                      <TouchableOpacity key={index}>
+                        <View
+                          style={[
+                            appStyle.slotCard,
+                            appStyle.rowJustify,
+                            style.aiCenter,
+                          ]}>
+                          <View style={[style.row, style.aiCenter]}>
+                            <View style={style.mr15}>
+                              <Image
+                                style={image.userImg}
+                                source={{uri: item.photo}}
+                              />
+                            </View>
+
+                            <View>
+                              <Text style={[text.text18, text.bold]}>
+                                {item.title}
+                              </Text>
+
+                              <View style={[style.pt5, style.row]}>
+                                <Text style={[text.text12, text.greyVLight]}>
+                                  Price :{' '}
+                                </Text>
+
+                                <Text style={[text.text12, text.darkYellow]}>
+                                  {item.amount} $
+                                </Text>
+                              </View>
+                              <View style={style.row}>
+                                <Text style={[text.text11]}>Quantity : </Text>
+                                <Text style={[text.text11]}>
+                                  {item.quantity}
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+
+              {/* Product Tab End */}
+              {/* Review Tab */}
+              {Rating.map((item, key) => {
                 return (
                   <View
                     style={[style.ph10, {display: this.state.TabDataReview}]}>
                     <View
-                    key={key}
+                      key={key}
                       style={[
                         style.row,
                         style.mv5,

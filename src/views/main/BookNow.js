@@ -56,7 +56,8 @@ export default class BookNow extends Component {
       cancelButton: 'flex',
       starCount: 3.5,
       isModalVisible: false,
-
+mechanicid:'',
+userId:'',
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
     this.fadeOut = this.fadeOut.bind(this);
@@ -115,13 +116,14 @@ export default class BookNow extends Component {
           this.setState({userId: userid});
           axios.get(URL.Url + 'getbookedMechanic/' + userid).then((res) => {
             res.data.map((item) => {
-              this.setState({bookedMechanicId: item._id});
+              this.setState({bookedMechanicId: item._id,mechanicid:item.mechanicid});
               axios
                 .get(URL.Url + 'mechanic/' + item.mechanicid)
                 .then((response) => {
                   this.setState({data: response.data});
                   this.setState({refreshing: true});
                   response.data['userId'] = userid;
+                  response.data['bookMechanicid']=item._id
                   const sendMechanicData = JSON.stringify(response.data);
                   AsyncStorage.setItem('bookMechanicData', sendMechanicData);
                 })
@@ -172,6 +174,25 @@ export default class BookNow extends Component {
         AsyncStorage.removeItem('bookMechanicData');
         this.props.navigation.navigate('Dashboard');
         console.log(res.data, 'data updated');
+      
+      }).then((product)=>{
+        axios
+        .get(
+          URL.Url +
+            'getbuyProduct/' +
+            this.state.userId +
+            '/' +
+            this.state.mechanicid,
+        )
+        .then((prod) => {
+         prod.data.map((item)=>{
+          axios.put(URL.Url+'bookedbuyProduct/'+item._id).then((del)=>{
+            console.log(del.data)
+          })
+         
+         })
+         });
+  
       })
       .catch((error) => {
         console.log(error);
@@ -248,22 +269,29 @@ export default class BookNow extends Component {
               animationOutTiming={500}>
               <View style={[style.flex1, appStyle.rowCenter]}>
                 <TouchableOpacity
-                  style={[appStyle.DashboardslotCard,style.w90,style.aiCenter]}
+                  style={[
+                    appStyle.DashboardslotCard,
+                    style.w90,
+                    style.aiCenter,
+                  ]}
                   onPress={this.toggleModal}>
                   <View style={[style.mv10, style.aiCenter]}>
                     <Text style={[text.h1]}>Preview Image</Text>
                     <Text style={[text.heading2Gray]}>
-               {data.firstname}{' '}{data.lastname}
-                       </Text>
+                      {data.firstname} {data.lastname}
+                    </Text>
                   </View>
                   <Image
-                    source={{uri:data.photo}}
-                    style={[{
-                      height:'70%' ,
-                      alignSelf:'center',
-                      resizeMode: 'contain',
-                      borderRadius: 10,
-                    },style.w100]}></Image>
+                    source={{uri: data.photo}}
+                    style={[
+                      {
+                        height: '70%',
+                        alignSelf: 'center',
+                        resizeMode: 'contain',
+                        borderRadius: 10,
+                      },
+                      style.w100,
+                    ]}></Image>
                   <TouchableOpacity
                     style={[button.buttonTheme, style.mt30, style.w50]}
                     onPress={this.toggleModal}>
@@ -273,8 +301,6 @@ export default class BookNow extends Component {
               </View>
             </Modal>
           </View>
-
-
 
           <View style={style.flex1}>
             <TouchableOpacity onPress={this.toggleModal}>
@@ -340,7 +366,7 @@ export default class BookNow extends Component {
                       style={[image.medium]}
                       source={images.timing}></Image>
                     <Text style={[text.listItems, style.p5]}>
-                      11:00am-03:00pm
+                      24 Hours Available
                     </Text>
                   </View>
                   <View style={[style.row, style.aiCenter]}>
@@ -354,7 +380,7 @@ export default class BookNow extends Component {
                   <View style={[style.row, style.aiCenter]}>
                     <Image style={image.medium} source={images.dollar}></Image>
                     <Text style={[text.listItems, style.p5]}>
-                      Estimated Rate: 5$
+                      Service Rate: {data.mechanicrate} $
                     </Text>
                   </View>
                   <Animated.View

@@ -40,6 +40,7 @@ import appStyle from '../../assets/styles/appStyle';
 import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-community/async-storage';
 import Modal from 'react-native-modal';
+import axios from 'axios';
 export default class Items extends Component {
   constructor(props) {
     super(props);
@@ -49,19 +50,53 @@ export default class Items extends Component {
       items: [],
       isModalVisible: false,
       mechanicdata: [],
-      qunatity: 1,
+      quantity: 1,
+      price: 0,
+      mechanicrate: 0,
+      userdata: [],
+      amount: 0,
+      bookbutton: 'none',
     };
   }
   getProduct = async () => {
     await AsyncStorage.getItem('itemdata').then(async (res) => {
       res = JSON.parse(res);
-      this.setState({items: res});
+      this.setState({items: res, price: res.price});
       AsyncStorage.getItem('data').then(async (data) => {
         const mechanic = JSON.parse(data);
-        this.setState({mechanicdata: mechanic});
+        this.setState({
+          mechanicdata: mechanic,
+          mechanicrate: mechanic.mechanicrate,
+        });
+      });
+      AsyncStorage.getItem('userdata').then(async (users) => {
+        const user = JSON.parse(users);
+        this.setState({userdata: user});
       });
     });
   };
+  addProduct = () => {
+    const amount =
+      this.state.price * this.state.quantity + this.state.mechanicrate;
+
+    axios
+      .post(URL.Url + 'addbuyProduct', {
+        userid: this.state.userdata._id,
+        mechanicid: this.state.mechanicdata.mechanicid,
+        quantity: this.state.quantity,
+        title: this.state.items.title,
+        description: this.state.items.description,
+        paymentMethod: this.state.items.paymentMethod,
+        photo: this.state.items.photo,
+        amount: amount,
+        price: this.state.items.price,
+      })
+      .then((res) => {
+        console.log(res.data);
+        this.setState({bookbutton: 'flex'});
+      });
+  };
+
   componentDidMount() {
     this.getProduct();
   }
@@ -69,16 +104,20 @@ export default class Items extends Component {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
   addquantity = () => {
-    this.setState({qunatity: this.state.qunatity + 1});
+    this.setState({quantity: this.state.quantity + 1});
   };
   minusquantity = () => {
     this.setState({
-      qunatity:
-        this.state.qunatity == 0
-          ? this.state.qunatity + 1
-          : this.state.qunatity - 1,
+      quantity:
+        this.state.quantity == 0
+          ? this.state.quantity + 1
+          : this.state.quantity - 1,
     });
   };
+  continueBooking = () => {
+    this.props.navigation.navigate('HomeDetail');
+  };
+
   render() {
     let {items, mechanicdata} = this.state;
 
@@ -189,7 +228,7 @@ export default class Items extends Component {
                       style={[image.xsmall, image.Orange, style.mh10]}
                       source={images.plus}></Image>
                   </TouchableOpacity>
-                  <Text style={text.heading2}>{this.state.qunatity}</Text>
+                  <Text style={text.heading2}>{this.state.quantity}</Text>
                   <TouchableOpacity onPress={this.minusquantity}>
                     <Image
                       style={[image.xsmall, image.Orange, style.mh10]}
@@ -220,8 +259,8 @@ export default class Items extends Component {
                 <Image style={image.large} source={images.dollar}></Image>
                 <Text style={[text.heading1purple]}>
                   Total Estimated Rate :{' '}
-                  {(items.price + mechanicdata.mechanicrate) *
-                    this.state.qunatity}{' '}
+                  {this.state.price * this.state.quantity +
+                    this.state.mechanicrate}{' '}
                   $
                 </Text>
               </View>
@@ -230,11 +269,37 @@ export default class Items extends Component {
                 {/* {this.props.children} */}
 
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('HomeDetail')}
+                  onPress={this.addProduct}
                   style={[button.buttoncontainer, style.mt20]}>
                   <Text style={[text.heading1purple, text.text16, text.ac]}>
                     Add Product
                   </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={[style.rowBtw, style.mv30]}>
+                <TouchableOpacity
+                  style={[style.row, style.aiCenter]}
+                  onPress={() => {
+                    this.props.navigation.navigate('BuyItems');
+                  }}>
+                  <Image
+                    source={images.leftarrow}
+                    style={[image.small, style.mr5]}></Image>
+                  <Text style={[text.heading3]}>See Items</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    style.row,
+                    style.aiCenter,
+                    {display: this.state.bookbutton},
+                  ]}
+                  onPress={this.continueBooking}>
+                  <Text style={[style.m5, text.heading3]}>
+                    Continue Booking
+                  </Text>
+                  <Image
+                    source={images.rightarrow}
+                    style={[image.small]}></Image>
                 </TouchableOpacity>
               </View>
             </ScrollView>

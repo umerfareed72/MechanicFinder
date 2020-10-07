@@ -72,7 +72,7 @@ export default class MechanicRegister extends Component {
       longitude: '',
       latitude: '',
       date: 'Date Of Birth',
-      filePath: {},
+      mechanicrate: 0,
     };
   }
   check = () => {
@@ -100,6 +100,7 @@ export default class MechanicRegister extends Component {
         date: this.state.date,
         longitude: this.state.longitude,
         latitude: this.state.latitude,
+        mechanicrate: this.state.mechanicrate,
       })
       .then(async (res) => {
         console.log(res);
@@ -146,7 +147,7 @@ export default class MechanicRegister extends Component {
           .then((res) => res.json())
           .then((data) => {
             console.log(data.secure_url);
-         this.setState({photo:data.secure_url})
+            this.setState({photo: data.secure_url});
           })
           .catch((err) => {
             Alert.alert('An Error Occured While Uploading');
@@ -607,6 +608,20 @@ export default class MechanicRegister extends Component {
                       You Need to be Careful during entering your skills because
                       work will be assign you on the base of your skills.
                     </Text>
+                  </View>
+                  <View style={[input.textinputcontainer, style.mv5]}>
+                    <Image
+                      source={images.dollar}
+                      style={[image.InputImage]}></Image>
+                    <TextInput
+                      style={input.textinputstyle}
+                      placeholder="Enter Your Service Rate"
+                      onChangeText={(text) => {
+                        this.setState({
+                          mechanicrate: text,
+                        });
+                      }}
+                      underlineColorAndroid="transparent"></TextInput>
                   </View>
 
                   <View style={[input.textinputcontainer, style.mv10]}>
