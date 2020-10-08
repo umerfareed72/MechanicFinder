@@ -119,8 +119,8 @@ const Navigator = createMaterialBottomTabNavigator(
 );
 const UserBookNowStack = createStackNavigator(
   {
-    UserProfile: UserProfile,
     UserProfileDetail: UserProfileDetail,
+    UserProfile: UserProfile,
   },
   {
     headerMode: 'none',

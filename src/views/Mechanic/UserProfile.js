@@ -18,7 +18,6 @@ import {
   Platform,
   Button,
 } from 'react-native';
-import Modal from 'react-native-modal';
 
 import {
   colors,
@@ -28,7 +27,8 @@ import {
   URL,
   height,
 } from '../../config/Constant';
-
+import Geocoder from 'react-native-geocoding';
+Geocoder.init('AIzaSyCaEXhEWI8EDSE0TAEtFxU6ykRuKQK5F44');
 import LinearGradient from 'react-native-linear-gradient';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -36,9 +36,12 @@ import text from '../../assets/styles/text';
 import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
 var FloatingLabel = require('react-native-floating-labels');
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-community/async-storage';
+import {ActivityIndicator} from 'react-native-paper';
+import Modal from 'react-native-modal';
 const axios = require('axios');
 export default class UserProfile extends Component {
   constructor(props) {
@@ -50,11 +53,7 @@ export default class UserProfile extends Component {
       data: [],
       refreshing: false,
       bookedMechanicId: '',
-      mechanicData: [],
       starCount: 3.5,
-      cancelButton: 'flex',
-      mechanicid: '',
-      userid: '',
       isModalVisible: false,
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
@@ -65,9 +64,16 @@ export default class UserProfile extends Component {
       starCount: rating,
     });
   }
+  makeCall = () => {
+    let phoneNumber = '';
+    if (Platform.OS === 'android') {
+      console.log(this.state.data.phone);
+      phoneNumber = 'tel:' + this.state.data.phone;
+    } else {
+      phoneNumber = 'telprompt:${1234567890}';
+    }
 
-  toggleModal = () => {
-    this.setState({isModalVisible: !this.state.isModalVisible});
+    Linking.openURL(phoneNumber);
   };
 
   getCity = () => {
@@ -81,7 +87,7 @@ export default class UserProfile extends Component {
 
       .then((res) => {
         const {data} = this.state;
-        const address = res.data.data[1];
+        const address = res.data.data[0];
         const street = address.street;
         const city = address.county;
         const country = address.country;
@@ -98,147 +104,34 @@ export default class UserProfile extends Component {
       });
   };
 
-  makeCall = () => {
-    let phoneNumber = '';
-    if (Platform.OS === 'android') {
-      console.log(this.state.data.phone);
-      phoneNumber = 'tel:' + this.state.data.phone;
-    } else {
-      phoneNumber = 'telprompt:${1234567890}';
-    }
-
-    Linking.openURL(phoneNumber);
-  };
-
   getMechanicLocation = async () => {
-    try {
-      await AsyncStorage.getItem('mechanicid')
-        .then((response) => {
-          const res = JSON.parse(response);
-          axios
-            .get(URL.Url + 'getbookedUser/' + res.mechanicid)
-            .then((book) => {
-              if (book.data == '') {
-                console.log('No data ');
-              } else {
-                book.data.map((item) => {
-                  const bookedUserId = item._id;
-                  this.setState({bookedMechanicId: bookedUserId});
-                  this.setState({
-                    userid: item.userid,
-                    mechanicid: item.mechanicid,
-                  });
-
-                  axios
-                    .get(URL.Url + 'mechanic/' + item.mechanicid)
-                    .then((mechanic) => {
-                      this.setState({mechanicData: mechanic.data});
-
-                      axios
-                        .get(URL.Url + 'user/' + item.userid)
-                        .then((response) => {
-                          console.log(response.data);
-                          this.setState({data: response.data});
-                          this.setState({refreshing: true});
-
-                          const {mechanicData} = this.state;
-
-                          let Lat1 = response.data.latitude / 57.29577951;
-                          let Lat2 = mechanicData.latitude / 57.29577951;
-                          let Long1 = response.data.longitude / 57.29577951;
-                          let Long2 = mechanicData.longitude / 57.29577951;
-                          // Calaculate distance
-                          let dlat = Lat2 - Lat1;
-                          let dlong = Long2 - Long1;
-                          //Apply Heversine Formula to calculate  Distance of Spherical Objects
-                          let a =
-                            Math.pow(Math.sin(dlat / 2), 2) +
-                            Math.cos(Lat1) *
-                              Math.cos(Lat2) *
-                              Math.pow(Math.sin(dlong / 2), 2);
-                          let c = 2 * Math.asin(Math.sqrt(a));
-                          let r = 6371;
-                          let result = c * r; //Get Result In KM
-                          //Found In 10 KM
-                          if (result <= 10) {
-                            // this.setState({cancelButton: 'none'});
-                          }
-                        });
-                    });
-                });
-              }
-            });
-        })
-
-        .catch((error) => {
-          console.log('User data not Fetched', error);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+   AsyncStorage.getItem('bookUserData').then((res)=>{
+    const user=JSON.parse(res) 
+    this.setState({data:user,refreshing:true})
+    console.log(user,'User data')
+    
+   })
+  };
+  toggleModal = () => {
+    this.setState({isModalVisible: !this.state.isModalVisible});
   };
 
-  CancelBooking = async () => {
-    axios
-      .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
-      .then((res) => {
-        this.setState({refreshing: false});
-        this.props.navigation.navigate('MecchanicDashboard');
-        console.log(res.data, 'data updated');
-      })
-      .then((product) => {
-        axios
-          .get(
-            URL.Url +
-              'getbuyProduct/' +
-              this.state.userid +
-              '/' +
-              this.state.mechanicid,
-          )
-          .then((prod) => {
-            prod.data.map((item) => {
-              axios
-                .put(URL.Url + 'bookedbuyProduct/' + item._id)
-                .then((del) => {
-                  console.log(del.data);
-                });
-            });
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
-  // RemoveBooking = () => {
-  //   setInterval(() => {
-  //     axios
-  //       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
-  //       .then((res) => {
-  //         this.setState({refreshing: false});
-  //         this.props.navigation.navigate('MechanicDashboard');
-  //         console.log(res.data, 'data updated');
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   }, 10000000);
-  // };
-  componentDidMount() {
-    console.log(this.state.data, 'hello');
-    const {navigation} = this.props;
-    this.getMechanicLocation();
-    this.focusListener = navigation.addListener('didFocus', () => {
+  async componentDidMount() {
+      const {navigation} = this.props;
       this.getMechanicLocation();
-    });
-    // this.RemoveBooking();
+
+      this.focusListener = navigation.addListener('didFocus', () => {
+        this.getMechanicLocation();
+      });
+    
     Animated.loop(
       Animated.timing(
         // Animate over time
         this.state.fadeAnim, // The animated value to drive
         {
           toValue: 1, // Animate to opacity: 1 (opaque)
-          duration: 5000, // 5000ms
+          duration: 3000, // 5000ms
           useNativeDriver: true,
         },
       ),
@@ -253,7 +146,7 @@ export default class UserProfile extends Component {
         this.state.fadeAnim, // The animated value to drive
         {
           toValue: 0, // Animate to opacity: 1 (opaque)
-          duration: 2000, // 2000ms
+          duration: 3000, // 2000ms
           useNativeDriver: true,
         },
       ).start();
@@ -319,9 +212,7 @@ export default class UserProfile extends Component {
                 <View style={style.bgOverlay} />
                 <View style={[style.rowBtw, style.ph20, style.pb10]}>
                   <TouchableOpacity
-                    onPress={() =>
-                      this.props.navigation.navigate('MechanicDashboard')
-                    }>
+                    onPress={() => this.props.navigation.navigate('UserProfileDetail')}>
                     <Image
                       source={images.backarrowh}
                       style={[
@@ -376,7 +267,7 @@ export default class UserProfile extends Component {
                       style={[image.medium]}
                       source={images.timing}></Image>
                     <Text style={[text.listItems, style.p5]}>
-                      11:00am-03:00pm
+                      24 Hours Available
                     </Text>
                   </View>
                   <View style={[style.row, style.aiCenter]}>
@@ -390,7 +281,8 @@ export default class UserProfile extends Component {
                   <View style={[style.row, style.aiCenter]}>
                     <Image style={image.medium} source={images.dollar}></Image>
                     <Text style={[text.listItems, style.p5]}>
-                      Estimated Rate: 5$
+                     Mechanic Service Charges: {data.mechanicrate} $
+
                     </Text>
                   </View>
                   <Animated.View
@@ -414,30 +306,7 @@ export default class UserProfile extends Component {
                       </Text>
                     </TouchableOpacity>
                   </Animated.View>
-                  <View style={[style.mt30]}>
-                    <TouchableOpacity
-                      style={[button.button1]}
-                      onPress={() => {
-                        this.props.navigation.navigate('UserProfileDetail');
-                      }}>
-                      <Text style={[button.btntext1, text.center]}>
-                        Go To Detail
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      onPress={this.CancelBooking}
-                      style={[
-                        button.button1,
-                        style.mt10,
-                        {display: this.state.cancelButton},
-                      ]}>
-                      <Text style={[button.btntext1, text.center]}>
-                        Cancel Booking
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+                   </View>
               </ScrollView>
             </View>
           </View>
@@ -460,9 +329,7 @@ export default class UserProfile extends Component {
               <View style={style.bgOverlay} />
               <View style={[style.rowBtw, style.ph20, style.pb10]}>
                 <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('MechanicDashboard')
-                  }>
+                  onPress={() => this.props.navigation.navigate('Dashboard')}>
                   <Image
                     source={images.backarrowh}
                     style={[

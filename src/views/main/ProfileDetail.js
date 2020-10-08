@@ -67,7 +67,7 @@ export default class HomeDetail extends Component {
       firstname: '',
       lastname: '',
       photo: '',
-      refreshing:false
+      refreshing: false,
     };
   }
   toggleModal = () => {
@@ -109,6 +109,12 @@ export default class HomeDetail extends Component {
                 .then(async (res) => {
                   await axios.get(URL.Url + 'user/' + userid).then((res) => {
                     const {data} = this.state;
+                    this.setState({
+                      firstname: res.data.firstname,
+                      lastname: res.data.lastname,
+                      photo: res.data.photo,
+                    });
+
                     let Lat1 = data.latitude / 57.29577951;
                     let Lat2 = res.data.latitude / 57.29577951;
                     let Long1 = data.longitude / 57.29577951;
@@ -126,8 +132,8 @@ export default class HomeDetail extends Component {
                     let r = 6371;
                     let result = c * r; //Get Result In KM
                     //Found In 10 KM
-                    if (result == 10) {
-                      this.setState({cancelButton:'none'})
+                    if (result <= 10) {
+                      // this.setState({cancelButton:'none'})
                       this.setState({BookNowView: 'flex'});
                     }
                   });
@@ -252,6 +258,7 @@ export default class HomeDetail extends Component {
       })
       .then((response) => {
         console.log(response.data);
+     alert('Review Added')
       })
       .catch((error) => {
         console.log(error, 'Review not added');
@@ -259,12 +266,12 @@ export default class HomeDetail extends Component {
       .catch((error) => {
         console.log(error);
       });
-    this.CancelBooking();
+    // this.CancelBooking();
   };
 
   render() {
-    const {data, Rating, products,refreshing} = this.state;
-    if (data != null && refreshing!=false) {
+    const {data, Rating, products, refreshing} = this.state;
+    if (data != null && refreshing != false) {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
           <StatusBar />
@@ -379,7 +386,7 @@ export default class HomeDetail extends Component {
                 {/* <View style={[{backgroundColor:colors.black},style.rowBtw]}>
                 </View> */}
 
-                <View style={[style.row, style.jcSpaceBetween, style.ph20,]}>
+                <View style={[style.row, style.jcSpaceBetween, style.ph20]}>
                   <TouchableOpacity
                     onPress={() => this.props.navigation.goBack()}
                     style={[image.headerBackArrow]}>
@@ -390,8 +397,15 @@ export default class HomeDetail extends Component {
                   <View></View>
                   <TouchableOpacity
                     onPress={this.CancelBooking}
-                    style={[button.buttonThemeWhite, style.w30, style.mt35,{display:this.state.cancelButton}]}>
-                    <Text style={[text.heading4,text.goodfishbd]}>Cancel Booking</Text>
+                    style={[
+                      button.buttonThemeWhite,
+                      style.w30,
+                      style.mt35,
+                      {display: this.state.cancelButton},
+                    ]}>
+                    <Text style={[text.heading4, text.goodfishbd]}>
+                      Cancel Booking
+                    </Text>
                   </TouchableOpacity>
                 </View>
                 <View style={[appStyle.headInner, style.ph20]}>
@@ -473,8 +487,7 @@ export default class HomeDetail extends Component {
                   appStyle.bodyLayout,
                   {display: this.state.TabDataOverview},
                 ]}>
-              
-              <View style={[appStyle.rowAlignCenter, style.mt10]}>
+                <View style={[appStyle.rowAlignCenter, style.mt10]}>
                   <Image
                     style={[image.medium, style.mr5, image.Orange]}
                     source={images.email}></Image>
@@ -527,7 +540,11 @@ export default class HomeDetail extends Component {
                   <View></View>
                   <View></View>
 
-                  <TouchableOpacity style={[style.row, style.aiCenter]} onPress={()=>{this.props.navigation.navigate('BookNow')}}>
+                  <TouchableOpacity
+                    style={[style.row, style.aiCenter]}
+                    onPress={() => {
+                      this.props.navigation.navigate('BookNow');
+                    }}>
                     <Text style={[text.heading2]}>Continue</Text>
                     <Image
                       source={images.arrowLong}
@@ -535,17 +552,17 @@ export default class HomeDetail extends Component {
                   </TouchableOpacity>
                 </View>
                 <View style={[{display: this.state.BookNowView}, style.flex1]}>
-                <View style={[style.mt20]}>
-                  <Text style={[text.text16]}>Alert !</Text>
-                </View>
-                <View style={[style.pv10]}>
-                  <Text style={[text.paraGray]}>
-                    Avoid to click on below button before delivering of Mechanic
-                    Services.Its mandatory to provide Feedback of Mechanic
-                    Services because without providing Mechanic Feedback,You
-                    will be unable to book new Mechnaic.
-                  </Text>
-                </View>
+                  <View style={[style.mt20]}>
+                    <Text style={[text.text16]}>Alert !</Text>
+                  </View>
+                  <View style={[style.pv10]}>
+                    <Text style={[text.paraGray]}>
+                      Avoid to click on below button before delivering of
+                      Mechanic Services.Its mandatory to provide Feedback of
+                      Mechanic Services because without providing Mechanic
+                      Feedback,You will be unable to book new Mechnaic.
+                    </Text>
+                  </View>
                   <TouchableOpacity onPress={this.ratingModal}>
                     <View
                       style={[
@@ -664,7 +681,7 @@ export default class HomeDetail extends Component {
           </View>
         </SafeAreaView>
       );
-    } else if(data.length==0)  {
+    } else if (data.length == 0) {
       return (
         <SafeAreaView style={appStyle.safeContainer}>
           <StatusBar
@@ -708,9 +725,8 @@ export default class HomeDetail extends Component {
             </View>
           </View>
         </SafeAreaView>
-      )
-    }
-    else{
+      );
+    } else {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
           <StatusBar barStyle={'dark-content'}></StatusBar>

@@ -121,7 +121,7 @@ export default class SideMenu extends React.Component {
 
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('UserProfile');
+                this.props.navigation.navigate('UserProfileDetail');
               }}>
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>

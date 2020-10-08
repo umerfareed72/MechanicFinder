@@ -49,11 +49,12 @@ export default class UserProfileDetail extends Component {
       ColorProduct: colors.inputBordercolor,
       CheckBox: images.checkBoxEmpty,
       data: [],
+      cancelButton: 'flex',
       mechanicData: [],
       mechanicid: '',
       userid: '',
       products: [],
-      bookedMechanicId:'',
+      bookedMechanicId: '',
       BookNowView: 'none',
       refreshing: false,
       isModalVisible: false,
@@ -91,13 +92,17 @@ export default class UserProfileDetail extends Component {
                     .get(URL.Url + 'mechanic/' + item.mechanicid)
                     .then((mechanic) => {
                       this.setState({mechanicData: mechanic.data});
+                     
                       axios
                         .get(URL.Url + 'user/' + item.userid)
                         .then((response) => {
-                          console.log(response.data);
                           this.setState({data: response.data});
                           this.setState({refreshing: true});
-
+                          console.log(mechanic.data.mechanicrate)
+                          response.data['mechanicrate'] = mechanic.data.mechanicrate;
+                             const sendMechanicData = JSON.stringify(response.data);
+                          AsyncStorage.setItem('bookUserData', sendMechanicData);
+    
                           const {mechanicData} = this.state;
 
                           let Lat1 = response.data.latitude / 57.29577951;
@@ -152,37 +157,24 @@ export default class UserProfileDetail extends Component {
     axios
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
-        this.setState({refreshing: false});
-        this.props.navigation.navigate('MecchanicDashboard');
-        console.log(res.data, 'data updated');
-      })
-      .then((product) => {
-        axios
-          .get(
-            URL.Url +
-              'getbuyProduct/' +
-              this.state.userid +
-              '/' +
-              this.state.mechanicid,
-          )
-          .then((prod) => {
-            prod.data.map((item) => {
-              axios
-                .put(URL.Url + 'bookedbuyProduct/' + item._id)
-                .then((del) => {
-                  console.log(del.data);
-                });
+        this.state.products.map((item) => {
+          axios
+            .put(
+              URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
+            )
+            .then((mod) => {
+              this.setState({refreshing: false});
+              AsyncStorage.removeItem('bookMechanicData');
+              this.props.navigation.navigate('MechanicDashboard');
+              console.log(res.data, 'data updated');
             });
-          });
+        });
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-
-
-  
   componentDidMount() {
     setTimeout(() => {
       this.getMechanicLocation();
@@ -213,7 +205,7 @@ export default class UserProfileDetail extends Component {
   };
 
   render() {
-    const {data, refreshing,products} = this.state;
+    const {data, refreshing, products, mechanicData} = this.state;
     if (refreshing != false) {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
@@ -265,13 +257,30 @@ export default class UserProfileDetail extends Component {
                 source={{uri: data.photo}}
                 style={{height: screenHeight.height25}}>
                 <View style={style.bgOverlay} />
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.goBack()}
-                  style={[image.headerBackArrow]}>
-                  <Image
-                    style={[image.backArrow]}
-                    source={images.backArrow}></Image>
-                </TouchableOpacity>
+
+                <View style={[style.row, style.jcSpaceBetween, style.ph20]}>
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.goBack()}
+                    style={[image.headerBackArrow]}>
+                    <Image
+                      style={[image.backArrow]}
+                      source={images.backArrow}></Image>
+                  </TouchableOpacity>
+                  <View></View>
+                  <TouchableOpacity
+                    onPress={this.completeBooking}
+                    style={[
+                      button.buttonThemeWhite,
+                      style.w30,
+                      style.mt35,
+                      {display: this.state.cancelButton},
+                    ]}>
+                    <Text style={[text.heading4, text.goodfishbd]}>
+                      Cancel Booking
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
                 <View style={[appStyle.headInner, style.ph20]}>
                   <View style={[style.mv5]}>
                     <StarRating
@@ -289,12 +298,6 @@ export default class UserProfileDetail extends Component {
                   <View style={[style.mv5]}>
                     <Text style={[text.heading1, text.bold]}>
                       {data.firstname} {data.lastname}
-                    </Text>
-                  </View>
-                  <View style={[style.mv5]}>
-                    <Text style={[text.paraWhite, text.regular]}>
-                      Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                      sed diam nonumy eirmod
                     </Text>
                   </View>
                 </View>
@@ -346,6 +349,28 @@ export default class UserProfileDetail extends Component {
                   appStyle.bodyLayout,
                   {display: this.state.TabDataOverview},
                 ]}>
+                <View style={[style.aiCenter]}>
+                  <Text
+                    style={
+                      ({color: colors.Black323}, [text.text22, text.bold])
+                    }>
+                    ${mechanicData.mechanicrate}
+                  </Text>
+                  <Text style={([text.text14], {color: colors.gray})}>
+                    Charge Per Day
+                  </Text>
+                </View>
+
+                <View style={[appStyle.rowAlignCenter, style.mt10]}>
+                  <Image
+                    style={[image.medium, style.mr5, image.Orange]}
+                    source={images.email}></Image>
+                  <Text style={[text.heading2, text.bold]}>Email</Text>
+                </View>
+                <View style={[style.borderbottom, style.mt10]}>
+                  <Text style={[text.heading2Gray]}> {data.email}</Text>
+                </View>
+
                 <View style={[appStyle.rowAlignCenter, style.mt10]}>
                   <Image
                     style={[image.medium, style.mr5, image.Orange]}
@@ -354,8 +379,7 @@ export default class UserProfileDetail extends Component {
                 </View>
                 <View style={[style.borderbottom, style.mt10]}>
                   <Text style={[text.heading2Gray]}>
-                    Car
-                    {data.vehicletype}
+                    {mechanicData.vehicletype}
                   </Text>
                 </View>
                 <View style={[appStyle.rowAlignCenter, style.mt10]}>
@@ -366,8 +390,7 @@ export default class UserProfileDetail extends Component {
                 </View>
                 <View style={[style.borderbottom, style.mt10]}>
                   <Text style={[text.heading2Gray]}>
-                    {/* {data.carcompany} */}
-                    Honda
+                    {mechanicData.carcompany}
                   </Text>
                 </View>
 
@@ -379,8 +402,7 @@ export default class UserProfileDetail extends Component {
                 </View>
                 <View style={[style.borderbottom, style.mv10]}>
                   <Text style={[text.heading2Gray]}>
-                    Engine
-                    {/* {data.skilltype} */}
+                    {mechanicData.skilltype}
                   </Text>
                 </View>
 
@@ -396,20 +418,38 @@ export default class UserProfileDetail extends Component {
                     {/* {data.skilltype} */}
                   </Text>
                 </View>
+                <View style={[style.mv10, style.rowBtw]}>
+                  <View></View>
+                  <View></View>
 
-                <View style={[style.mt20]}>
-                  <Text style={[text.text16]}>Some Description</Text>
+                  <TouchableOpacity
+                    style={[style.row, style.aiCenter]}
+                    onPress={() => {
+                      this.props.navigation.navigate('UserProfile');
+                    }}>
+                    <Text style={[text.heading2]}>Continue</Text>
+                    <Image
+                      source={images.arrowLong}
+                      style={[image.medium, style.mh5, style.mt5]}></Image>
+                  </TouchableOpacity>
                 </View>
-                <View style={[style.pv10]}>
-                  <Text style={[text.paraGray]}>
-                    Sed ut perspiciatis unde omnis iste natus error sit
-                    voluptatem accusantium doloremque laudantium, totam rem
-                    aperiam, eaque ipsa quae ab illo inventore veritatis et
-                    quasi architecto beatae vitae dicta sunt explicabo. Nemo.
-                  </Text>
-                </View>
+
                 <View style={[{display: this.state.BookNowView}, style.flex1]}>
-                  <TouchableOpacity onPress={this.completeBooking}>
+                  <View style={[style.mt20]}>
+                    <Text style={[text.text16]}>Alert !</Text>
+                  </View>
+                  <View style={[style.pv10]}>
+                    <Text style={[text.paraGray]}>
+                      Avoid to click on below button before delivering complete
+                      Services to User.Your Rating increase your demand so,avoid
+                      to click on this button before providing complete
+                      services.
+                    </Text>
+                  </View>
+
+                  <TouchableOpacity
+                    onPress={this.completeBooking}
+                    style={style.mt30}>
                     <View
                       style={[
                         button.buttoncontainer,
@@ -482,6 +522,51 @@ export default class UserProfileDetail extends Component {
               {/* Product Tab End */}
               {/* Reviews Tab End  */}
             </ScrollView>
+          </View>
+        </SafeAreaView>
+      );
+    } else if (data.length == 0) {
+      return (
+        <SafeAreaView style={appStyle.safeContainer}>
+          <StatusBar
+            barStyle={'light-content'}
+            backgroundColor={'transparent'}
+            translucent={true}
+          />
+
+          <View style={[style.flex1]}>
+            <ImageBackground
+              imageStyle={{borderRadius: 8}}
+              style={[image.storeImg, style.w100]}
+              source={images.userImg}>
+              <View style={style.bgOverlay} />
+              <View style={[style.rowBtw, style.ph20, style.pb10]}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Dashboard')}>
+                  <Image
+                    source={images.backarrowh}
+                    style={[
+                      image.backArrow2,
+                      {tintColor: colors.white},
+                    ]}></Image>
+                </TouchableOpacity>
+
+                <View>
+                  <Text style={[text.heading1, text.bold]}>Profile</Text>
+                </View>
+                <Text style={[text.text16, text.orange]}></Text>
+              </View>
+            </ImageBackground>
+
+            <View style={[appStyle.curvedContainer]}>
+              <ScrollView style={style.ph20}>
+                <View style={[style.mt40]}>
+                  <View style={[style.aiCenter]}>
+                    <Text style={[text.h1Purple]}>No Data Available</Text>
+                  </View>
+                </View>
+              </ScrollView>
+            </View>
           </View>
         </SafeAreaView>
       );

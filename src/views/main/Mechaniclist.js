@@ -136,10 +136,12 @@ export default class Mechaniclist extends Component {
             <Image source={images.backarrowh} style={image.backArrow2}></Image>
           </TouchableOpacity>
 
-          <View>
+          <View style={style.aiCenter}>
             <Text style={[text.heading1purple, text.bold]}>Mechanics</Text>
             <Text style={[text.text14, {color: '#4A4A4A'}]}>
-              Have a Nice Day
+             {'Search & Book Your Desire'} {this.state.skilltype} {'Mechanic'}
+              
+
             </Text>
           </View>
           <View></View>

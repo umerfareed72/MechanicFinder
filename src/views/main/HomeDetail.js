@@ -287,13 +287,7 @@ export default class HomeDetail extends Component {
                     {mechanicdata.firstname} {mechanicdata.lastname}
                   </Text>
                 </View>
-                <View style={[style.mv5]}>
-                  <Text style={[text.paraWhite, text.regular]}>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod
-                  </Text>
-                </View>
-              </View>
+                  </View>
             </ImageBackground>
           </TouchableOpacity>
         </View>
@@ -398,17 +392,7 @@ export default class HomeDetail extends Component {
                   {mechanicdata.skilltype}
                 </Text>
               </View>
-              <View style={[style.mt20]}>
-                <Text style={[text.text16]}>Some Description</Text>
-              </View>
-              <View style={[style.pv10]}>
-                <Text style={[text.paraGray]}>
-                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                  accusantium doloremque laudantium, totam rem aperiam, eaque
-                  ipsa quae ab illo inventore veritatis et quasi architecto
-                  beatae vitae dicta sunt explicabo. Nemo.
-                </Text>
-              </View>
+             
               <TouchableOpacity
                 style={[style.row, style.mt10, style.aiCenter]}
                 onPress={this.Checked}>

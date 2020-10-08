@@ -109,7 +109,6 @@ export default class AddProducts extends Component {
   submitdata = () => {
     AsyncStorage.getItem('Mechanicdata').then((res) => {
       const data = JSON.parse(res);
-
       axios
         .post(URL.Url + 'AddProduct', {
           mechanicid: data._id,
@@ -122,6 +121,7 @@ export default class AddProducts extends Component {
         })
         .then((response) => {
           console.log(response.data);
+          alert('Item Successfully Added')
         });
     });
   };

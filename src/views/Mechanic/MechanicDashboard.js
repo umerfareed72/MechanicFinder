@@ -186,7 +186,6 @@ export default class MechanicDashboard extends Component {
   //   }, 100000);
   // };
   componentDidMount() {
-    console.log(this.state.data, 'hello');
     const {navigation} = this.props;
     this.requestMechanicLocation();
     this.focusListener = navigation.addListener('didFocus', () => {
@@ -200,7 +199,7 @@ export default class MechanicDashboard extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('UserProfile');
+            this.props.navigation.navigate('UserProfileDetail');
           }}
           style={[appStyle.slotCard, appStyle.rowJustify, style.aiCenter]}>
           <View style={[style.row, style.aiCenter]}>
@@ -327,7 +326,7 @@ export default class MechanicDashboard extends Component {
 
               <View style={[appStyle.rowJustify]}>
                 <Text style={[text.heading4, text.semibold]}>
-                  Top Mechanics
+                  Available Customers
                 </Text>
                 <Text style={[text.heading4, text.semibold]}>
                   You need to Know

@@ -77,7 +77,7 @@ export default class Items extends Component {
   };
   addProduct = () => {
     if (this.state.items.quantity == 0 || this.state.quantity == 0) {
-      alert('No Product Available');
+      alert('No Product Added');
     } else {
       if (this.state.items.quantity != 0 && this.state.items.quantity >= 0) {
         const amount =
@@ -232,7 +232,7 @@ export default class Items extends Component {
                   ]}
                   source={images.store}></Image>
                 <Text style={[text.heading2Gray]}>
-                  Total Quantity: {items.quantity}
+                  Total Quantity Remaining: {items.quantity}
                 </Text>
               </View>
 
