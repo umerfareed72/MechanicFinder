@@ -159,8 +159,9 @@ const Navigator = createMaterialBottomTabNavigator(
 
 const BookNowStack = createStackNavigator(
   {
-    BookNow: BookNow,
     ProfileDetail: ProfileDetail,
+    BookNow: BookNow,
+   
   },
   {
     headerMode: 'none',

@@ -61,6 +61,26 @@ export default StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 20,
   },
+  buttonThemeWhite:{
+    backgroundColor: colors.white,
+    width: '100%',
+    // alignSelf: 'center',
+    paddingVertical: 4,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 25,
+    shadowColor: 'rgba(0,0,0,0.16)',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.16,
+    shadowRadius: 3.0,
+
+    elevation: 6,
+ 
+  },
   inviteBtn: {
     height: 30,
     borderRadius: 20,

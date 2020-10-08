@@ -46,6 +46,7 @@ export default class HomeDetail extends Component {
       ColorProduct: colors.inputBordercolor,
       ColorReview: colors.inputBordercolor,
       BookNowView: 'flex',
+      deletebutton: 'flex',
       CheckBox: images.checkBoxEmpty,
       mechanicdata: [],
       isModalVisible: false,
@@ -128,7 +129,8 @@ export default class HomeDetail extends Component {
           .post(URL.Url + 'addbookedUser/' + mechanicid + '/' + userid)
           .then((res) => {
             this.setState({BookNowView: 'none'});
-            this.props.navigation.navigate('BookNow');
+            this.setState({deletebutton: 'none'});
+            this.props.navigation.navigate('ProfileDetail');
             console.log('Mechanic Booked Successfully');
           });
       }, 3000);
@@ -434,7 +436,7 @@ export default class HomeDetail extends Component {
                     style={
                       ({color: colors.Black323}, [text.text22, text.bold])
                     }>
-                    $5
+                    ${mechanicdata.mechanicrate}
                   </Text>
                   <Text style={([text.text14], {color: colors.gray})}>
                     Per Day
@@ -532,7 +534,9 @@ export default class HomeDetail extends Component {
                             </View>
                           </View>
                         </View>
-                        <TouchableOpacity onPress={this.delToggleModel}>
+                        <TouchableOpacity
+                          onPress={this.delToggleModel}
+                          style={{display: this.state.deletebutton}}>
                           <Image
                             style={[image.forward]}
                             source={images.delete}></Image>

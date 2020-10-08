@@ -76,25 +76,34 @@ export default class Items extends Component {
     });
   };
   addProduct = () => {
-    const amount =
-      this.state.price * this.state.quantity + this.state.mechanicrate;
+    if (this.state.items.quantity == 0 || this.state.quantity == 0) {
+      alert('No Product Available');
+    } else {
+      if (this.state.items.quantity != 0 && this.state.items.quantity >= 0) {
+        const amount =
+          this.state.price * this.state.quantity + this.state.mechanicrate;
 
-    axios
-      .post(URL.Url + 'addbuyProduct', {
-        userid: this.state.userdata._id,
-        mechanicid: this.state.mechanicdata.mechanicid,
-        quantity: this.state.quantity,
-        title: this.state.items.title,
-        description: this.state.items.description,
-        paymentMethod: this.state.items.paymentMethod,
-        photo: this.state.items.photo,
-        amount: amount,
-        price: this.state.items.price,
-      })
-      .then((res) => {
-        console.log(res.data);
-        this.setState({bookbutton: 'flex'});
-      });
+        axios
+          .post(URL.Url + 'addbuyProduct', {
+            userid: this.state.userdata._id,
+            mechanicid: this.state.mechanicdata.mechanicid,
+            productid: this.state.items._id,
+            quantity: this.state.quantity,
+            title: this.state.items.title,
+            description: this.state.items.description,
+            paymentMethod: this.state.items.paymentMethod,
+            photo: this.state.items.photo,
+            amount: amount,
+            price: this.state.items.price,
+          })
+          .then((res) => {
+            console.log(res.data);
+            this.setState({bookbutton: 'flex'});
+          });
+      } else {
+        alert('No Product Available');
+      }
+    }
   };
 
   componentDidMount() {
@@ -212,6 +221,29 @@ export default class Items extends Component {
                   Payment Method: {items.paymentMethod}
                 </Text>
               </View>
+
+              <View style={[style.row, style.aiCenter, style.mv10]}>
+                <Image
+                  style={[
+                    image.small,
+                    image.Orange,
+                    style.mr5,
+                    {marginLeft: 2},
+                  ]}
+                  source={images.store}></Image>
+                <Text style={[text.heading2Gray]}>
+                  Total Quantity: {items.quantity}
+                </Text>
+              </View>
+
+              <View style={[style.row, style.aiCenter, style.mv10]}>
+                <Image
+                  style={image.drawerIconlarge}
+                  source={images.dollar}></Image>
+                <Text style={[text.heading2Gray]}>
+                  Product Price: {items.price} $
+                </Text>
+              </View>
               <View style={[style.row, style.aiCenter, style.mv10]}>
                 <Image
                   style={[
@@ -235,15 +267,6 @@ export default class Items extends Component {
                       source={images.subtract}></Image>
                   </TouchableOpacity>
                 </View>
-              </View>
-
-              <View style={[style.row, style.aiCenter, style.mv10]}>
-                <Image
-                  style={image.drawerIconlarge}
-                  source={images.dollar}></Image>
-                <Text style={[text.heading2Gray]}>
-                  Product Price: {items.price} $
-                </Text>
               </View>
 
               <View style={[style.row, style.mv10, style.aiCenter]}>

@@ -66,7 +66,6 @@ router.put('/cancelbookeduser/:id', (req, res) => {
     });
 });
 
-
 router.get('/bookedusers', async (req, res) => {
   BookedUsermodel.find()
     .then((data) => {
@@ -102,7 +101,5 @@ router.get('/getbookedMechanic/:uid', async (req, res) => {
       res.status(404).send(err.message);
     });
 });
-
-
 
 module.exports = router;

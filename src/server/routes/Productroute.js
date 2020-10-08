@@ -43,6 +43,24 @@ router.get('/getProduct/:id', (req, res) => {
   }
   get();
 });
+router.get('/getProducts', (req, res) => {
+  async function get() {
+    const mechanics = await ProductModel.find()
+      .sort('id')
+      .select({
+        mechanicid: 1,
+        title: 1,
+        photo: 1,
+        price: 1,
+        quantity: 1,
+        paymentMethod: 1,
+        description: 1,
+      });
+    if (!mechanics) return res.status(404).send('Not Found');
+    res.send(mechanics);
+  }
+  get();
+});
 
 
 router.put('/updateProduct/:id', (req, res) => {

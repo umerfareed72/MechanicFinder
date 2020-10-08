@@ -53,7 +53,8 @@ export default class UserProfile extends Component {
       mechanicData: [],
       starCount: 3.5,
       cancelButton: 'flex',
-
+      mechanicid: '',
+      userid: '',
       isModalVisible: false,
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
@@ -123,6 +124,10 @@ export default class UserProfile extends Component {
                 book.data.map((item) => {
                   const bookedUserId = item._id;
                   this.setState({bookedMechanicId: bookedUserId});
+                  this.setState({
+                    userid: item.userid,
+                    mechanicid: item.mechanicid,
+                  });
 
                   axios
                     .get(URL.Url + 'mechanic/' + item.mechanicid)
@@ -180,6 +185,25 @@ export default class UserProfile extends Component {
         this.setState({refreshing: false});
         this.props.navigation.navigate('MecchanicDashboard');
         console.log(res.data, 'data updated');
+      })
+      .then((product) => {
+        axios
+          .get(
+            URL.Url +
+              'getbuyProduct/' +
+              this.state.userid +
+              '/' +
+              this.state.mechanicid,
+          )
+          .then((prod) => {
+            prod.data.map((item) => {
+              axios
+                .put(URL.Url + 'bookedbuyProduct/' + item._id)
+                .then((del) => {
+                  console.log(del.data);
+                });
+            });
+          });
       })
       .catch((error) => {
         console.log(error);
@@ -246,29 +270,36 @@ export default class UserProfile extends Component {
             backgroundColor={'transparent'}
             translucent={true}
           />
-         <View style={{}}>
+          <View style={{}}>
             <Modal
               isVisible={this.state.isModalVisible}
               animationInTiming={500}
               animationOutTiming={500}>
               <View style={[style.flex1, appStyle.rowCenter]}>
                 <TouchableOpacity
-                  style={[appStyle.DashboardslotCard,style.w90,style.aiCenter]}
+                  style={[
+                    appStyle.DashboardslotCard,
+                    style.w90,
+                    style.aiCenter,
+                  ]}
                   onPress={this.toggleModal}>
                   <View style={[style.mv10, style.aiCenter]}>
                     <Text style={[text.h1]}>Preview Image</Text>
                     <Text style={[text.heading2Gray]}>
-               {data.firstname}{' '}{data.lastname}
-                       </Text>
+                      {data.firstname} {data.lastname}
+                    </Text>
                   </View>
                   <Image
-                    source={{uri:data.photo}}
-                    style={[{
-                      height:'70%' ,
-                      alignSelf:'center',
-                      resizeMode: 'contain',
-                      borderRadius: 10,
-                    },style.w100]}></Image>
+                    source={{uri: data.photo}}
+                    style={[
+                      {
+                        height: '70%',
+                        alignSelf: 'center',
+                        resizeMode: 'contain',
+                        borderRadius: 10,
+                      },
+                      style.w100,
+                    ]}></Image>
                   <TouchableOpacity
                     style={[button.buttonTheme, style.mt30, style.w50]}
                     onPress={this.toggleModal}>

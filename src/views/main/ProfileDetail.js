@@ -52,6 +52,7 @@ export default class HomeDetail extends Component {
       ColorReview: colors.inputBordercolor,
       BookNowView: 'none',
       CheckBox: images.checkBoxEmpty,
+      cancelButton: 'flex',
       isModalVisible: false,
       data: [],
       ratingModal: false,
@@ -66,6 +67,7 @@ export default class HomeDetail extends Component {
       firstname: '',
       lastname: '',
       photo: '',
+      refreshing:false
     };
   }
   toggleModal = () => {
@@ -82,63 +84,81 @@ export default class HomeDetail extends Component {
   }
 
   getdata = () => {
-    AsyncStorage.getItem('bookMechanicData').then(async (res) => {
-      res = JSON.parse(res);
-
-      this.setState({data: res});
-      this.setState({
-        mechanicid: res._id,
-        userid: res.userId,
-        bookedMechanicId: res.bookMechanicid,
-      });
-      await axios.get(URL.Url + 'user/' + res.userId).then((res) => {
-        const {data} = this.state;
-        this.setState({
-          firstname: res.data.firstname,
-          lastname: res.data.lastname,
-          photo: res.data.photo,
-        });
-        let Lat1 = data.latitude / 57.29577951;
-        let Lat2 = res.data.latitude / 57.29577951;
-        let Long1 = data.longitude / 57.29577951;
-        let Long2 = res.data.longitude / 57.29577951;
-        // Calaculate distance
-        let dlat = Lat2 - Lat1;
-        let dlong = Long2 - Long1;
-        //Apply Heversine Formula to calculate  Distance of Spherical Objects
-        let a =
-          Math.pow(Math.sin(dlat / 2), 2) +
-          Math.cos(Lat1) * Math.cos(Lat2) * Math.pow(Math.sin(dlong / 2), 2);
-        let c = 2 * Math.asin(Math.sqrt(a));
-        let r = 6371;
-        let result = c * r; //Get Result In KM
-        //Found In 10 KM
-        if (result <= 10) {
-          this.setState({BookNowView: 'flex'});
-        }
-      });
-      await axios
-        .get(URL.Url + 'getuser/' + res._id)
-        .then((res) => {
-          this.setState({Rating: res.data});
-        })
-        .then((product) => {
-          axios
-            .get(
-              URL.Url +
-                'getbuyProduct/' +
-                this.state.userid +
-                '/' +
-                this.state.mechanicid,
-            )
-            .then((prod) => {
-              this.setState({products: prod.data});
+    try {
+      AsyncStorage.getItem('userId')
+        .then((response) => {
+          console.log(response);
+          const userid = JSON.parse(response);
+          this.setState({userid: userid});
+          axios.get(URL.Url + 'getbookedMechanic/' + userid).then((res) => {
+            res.data.map((item) => {
+              this.setState({
+                bookedMechanicId: item._id,
+                mechanicid: item.mechanicid,
+              });
+              axios
+                .get(URL.Url + 'mechanic/' + item.mechanicid)
+                .then((response) => {
+                  this.setState({data: response.data});
+                  this.setState({refreshing: true});
+                  response.data['userId'] = userid;
+                  response.data['bookMechanicid'] = item._id;
+                  const sendMechanicData = JSON.stringify(response.data);
+                  AsyncStorage.setItem('bookMechanicData', sendMechanicData);
+                })
+                .then(async (res) => {
+                  await axios.get(URL.Url + 'user/' + userid).then((res) => {
+                    const {data} = this.state;
+                    let Lat1 = data.latitude / 57.29577951;
+                    let Lat2 = res.data.latitude / 57.29577951;
+                    let Long1 = data.longitude / 57.29577951;
+                    let Long2 = res.data.longitude / 57.29577951;
+                    // Calaculate distance
+                    let dlat = Lat2 - Lat1;
+                    let dlong = Long2 - Long1;
+                    //Apply Heversine Formula to calculate  Distance of Spherical Objects
+                    let a =
+                      Math.pow(Math.sin(dlat / 2), 2) +
+                      Math.cos(Lat1) *
+                        Math.cos(Lat2) *
+                        Math.pow(Math.sin(dlong / 2), 2);
+                    let c = 2 * Math.asin(Math.sqrt(a));
+                    let r = 6371;
+                    let result = c * r; //Get Result In KM
+                    //Found In 10 KM
+                    if (result == 10) {
+                      this.setState({cancelButton:'none'})
+                      this.setState({BookNowView: 'flex'});
+                    }
+                  });
+                  await axios
+                    .get(URL.Url + 'getuser/' + this.state.mechanicid)
+                    .then((res) => {
+                      this.setState({Rating: res.data});
+                    })
+                    .then((product) => {
+                      axios
+                        .get(
+                          URL.Url +
+                            'getbuyProduct/' +
+                            this.state.userid +
+                            '/' +
+                            this.state.mechanicid,
+                        )
+                        .then((prod) => {
+                          this.setState({products: prod.data});
+                        });
+                    });
+                });
             });
+          });
         })
         .catch((error) => {
-          console.log(error, 'Review not fetch');
+          console.log('User data not Fetched', error);
         });
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
   async componentDidMount() {
     const {navigation} = this.props;
@@ -152,29 +172,18 @@ export default class HomeDetail extends Component {
     axios
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
-        this.setState({refreshing: false});
-        AsyncStorage.removeItem('bookMechanicData');
-        this.props.navigation.navigate('Dashboard');
-        console.log(res.data, 'data updated');
-      })
-      .then(async (product) => {
-        await axios
-          .get(
-            URL.Url +
-              'getbuyProduct/' +
-              this.state.userid +
-              '/' +
-              this.state.mechanicid,
-          )
-          .then(async (prod) => {
-            prod.data.map(async (item) => {
-              await axios
-                .put(URL.Url + 'bookedbuyProduct/' + item._id)
-                .then((del) => {
-                  console.log(del.data);
-                });
+        this.state.products.map((item) => {
+          axios
+            .put(
+              URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
+            )
+            .then((mod) => {
+              this.setState({refreshing: false});
+              AsyncStorage.removeItem('bookMechanicData');
+              this.props.navigation.navigate('Dashboard');
+              console.log(res.data, 'data updated');
             });
-          });
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -254,8 +263,8 @@ export default class HomeDetail extends Component {
   };
 
   render() {
-    const {data, Rating, products} = this.state;
-    if (data != null) {
+    const {data, Rating, products,refreshing} = this.state;
+    if (data != null && refreshing!=false) {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
           <StatusBar />
@@ -365,15 +374,26 @@ export default class HomeDetail extends Component {
             <TouchableOpacity onPress={this.toggleModal}>
               <ImageBackground
                 source={{uri: data.photo}}
-                style={{height: screenHeight.height25}}>
+                style={{height: screenHeight.height30}}>
                 <View style={style.bgOverlay} />
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.goBack()}
-                  style={[image.headerBackArrow]}>
-                  <Image
-                    style={[image.backArrow]}
-                    source={images.backArrow}></Image>
-                </TouchableOpacity>
+                {/* <View style={[{backgroundColor:colors.black},style.rowBtw]}>
+                </View> */}
+
+                <View style={[style.row, style.jcSpaceBetween, style.ph20,]}>
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.goBack()}
+                    style={[image.headerBackArrow]}>
+                    <Image
+                      style={[image.backArrow]}
+                      source={images.backArrow}></Image>
+                  </TouchableOpacity>
+                  <View></View>
+                  <TouchableOpacity
+                    onPress={this.CancelBooking}
+                    style={[button.buttonThemeWhite, style.w30, style.mt35,{display:this.state.cancelButton}]}>
+                    <Text style={[text.heading4,text.goodfishbd]}>Cancel Booking</Text>
+                  </TouchableOpacity>
+                </View>
                 <View style={[appStyle.headInner, style.ph20]}>
                   <View style={[style.mv5]}>
                     <StarRating
@@ -393,12 +413,12 @@ export default class HomeDetail extends Component {
                       {data.firstname} {data.lastname}
                     </Text>
                   </View>
-                  <View style={[style.mv5]}>
+                  {/* <View style={[style.mv5]}>
                     <Text style={[text.paraWhite, text.regular]}>
                       Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
                       sed diam nonumy eirmod
                     </Text>
-                  </View>
+                  </View> */}
                 </View>
               </ImageBackground>
             </TouchableOpacity>
@@ -453,6 +473,16 @@ export default class HomeDetail extends Component {
                   appStyle.bodyLayout,
                   {display: this.state.TabDataOverview},
                 ]}>
+              
+              <View style={[appStyle.rowAlignCenter, style.mt10]}>
+                  <Image
+                    style={[image.medium, style.mr5, image.Orange]}
+                    source={images.email}></Image>
+                  <Text style={[text.heading2, text.bold]}>Email</Text>
+                </View>
+                <View style={[style.borderbottom, style.mt10]}>
+                  <Text style={[text.heading2Gray]}> {data.email}</Text>
+                </View>
                 <View style={[appStyle.rowAlignCenter, style.mt10]}>
                   <Image
                     style={[image.medium, style.mr5]}
@@ -493,6 +523,18 @@ export default class HomeDetail extends Component {
                 <View style={[style.borderbottom, style.mv10]}>
                   <Text style={[text.heading2Gray]}> {data.skilltype}</Text>
                 </View>
+                <View style={[style.mv10, style.rowBtw]}>
+                  <View></View>
+                  <View></View>
+
+                  <TouchableOpacity style={[style.row, style.aiCenter]} onPress={()=>{this.props.navigation.navigate('BookNow')}}>
+                    <Text style={[text.heading2]}>Continue</Text>
+                    <Image
+                      source={images.arrowLong}
+                      style={[image.medium, style.mh5, style.mt5]}></Image>
+                  </TouchableOpacity>
+                </View>
+                <View style={[{display: this.state.BookNowView}, style.flex1]}>
                 <View style={[style.mt20]}>
                   <Text style={[text.text16]}>Alert !</Text>
                 </View>
@@ -504,7 +546,6 @@ export default class HomeDetail extends Component {
                     will be unable to book new Mechnaic.
                   </Text>
                 </View>
-                <View style={[{display: this.state.BookNowView}, style.flex1]}>
                   <TouchableOpacity onPress={this.ratingModal}>
                     <View
                       style={[
@@ -623,7 +664,53 @@ export default class HomeDetail extends Component {
           </View>
         </SafeAreaView>
       );
-    } else {
+    } else if(data.length==0)  {
+      return (
+        <SafeAreaView style={appStyle.safeContainer}>
+          <StatusBar
+            barStyle={'light-content'}
+            backgroundColor={'transparent'}
+            translucent={true}
+          />
+
+          <View style={[style.flex1]}>
+            <ImageBackground
+              imageStyle={{borderRadius: 8}}
+              style={[image.storeImg, style.w100]}
+              source={images.userImg}>
+              <View style={style.bgOverlay} />
+              <View style={[style.rowBtw, style.ph20, style.pb10]}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Dashboard')}>
+                  <Image
+                    source={images.backarrowh}
+                    style={[
+                      image.backArrow2,
+                      {tintColor: colors.white},
+                    ]}></Image>
+                </TouchableOpacity>
+
+                <View>
+                  <Text style={[text.heading1, text.bold]}>Profile</Text>
+                </View>
+                <Text style={[text.text16, text.orange]}></Text>
+              </View>
+            </ImageBackground>
+
+            <View style={[appStyle.curvedContainer]}>
+              <ScrollView style={style.ph20}>
+                <View style={[style.mt40]}>
+                  <View style={[style.aiCenter]}>
+                    <Text style={[text.h1Purple]}>No Data Available</Text>
+                  </View>
+                </View>
+              </ScrollView>
+            </View>
+          </View>
+        </SafeAreaView>
+      )
+    }
+    else{
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
           <StatusBar barStyle={'dark-content'}></StatusBar>

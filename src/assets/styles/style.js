@@ -89,6 +89,9 @@ export default StyleSheet.create({
   mt20: {
     marginTop: 20,
   },
+  mt35:{
+    marginTop:35
+  },
   mt30: {
     marginTop: 30,
   },
@@ -343,6 +346,14 @@ marginHorizontal:15
 
   w100: {
     width: '100%',
+  },
+  w30:{
+    width:'30%'
+ 
+  },
+  w35:{
+    width:'35%'
+ 
   },
   w40:{
     width:'40%'

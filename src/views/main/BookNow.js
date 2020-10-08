@@ -53,11 +53,8 @@ export default class BookNow extends Component {
       data: [],
       refreshing: false,
       bookedMechanicId: '',
-      cancelButton: 'flex',
       starCount: 3.5,
       isModalVisible: false,
-mechanicid:'',
-userId:'',
       fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
     };
     this.fadeOut = this.fadeOut.bind(this);
@@ -108,121 +105,26 @@ userId:'',
   };
 
   getMechanicLocation = async () => {
-    try {
-      AsyncStorage.getItem('userId')
-        .then((response) => {
-          console.log(response);
-          const userid = JSON.parse(response);
-          this.setState({userId: userid});
-          axios.get(URL.Url + 'getbookedMechanic/' + userid).then((res) => {
-            res.data.map((item) => {
-              this.setState({bookedMechanicId: item._id,mechanicid:item.mechanicid});
-              axios
-                .get(URL.Url + 'mechanic/' + item.mechanicid)
-                .then((response) => {
-                  this.setState({data: response.data});
-                  this.setState({refreshing: true});
-                  response.data['userId'] = userid;
-                  response.data['bookMechanicid']=item._id
-                  const sendMechanicData = JSON.stringify(response.data);
-                  AsyncStorage.setItem('bookMechanicData', sendMechanicData);
-                })
-                .then(async (res) => {
-                  await axios.get(URL.Url + 'user/' + userid).then((res) => {
-                    const {data} = this.state;
-                    let Lat1 = data.latitude / 57.29577951;
-                    let Lat2 = res.data.latitude / 57.29577951;
-                    let Long1 = data.longitude / 57.29577951;
-                    let Long2 = res.data.longitude / 57.29577951;
-                    // Calaculate distance
-                    let dlat = Lat2 - Lat1;
-                    let dlong = Long2 - Long1;
-                    //Apply Heversine Formula to calculate  Distance of Spherical Objects
-                    let a =
-                      Math.pow(Math.sin(dlat / 2), 2) +
-                      Math.cos(Lat1) *
-                        Math.cos(Lat2) *
-                        Math.pow(Math.sin(dlong / 2), 2);
-                    let c = 2 * Math.asin(Math.sqrt(a));
-                    let r = 6371;
-                    let result = c * r; //Get Result In KM
-                    //Found In 10 KM
-                    if (result <= 10) {
-                      // this.setState({cancelButton: 'none'});
-                    }
-                  });
-                });
-            });
-          });
-        })
-        .catch((error) => {
-          console.log('User data not Fetched', error);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+   AsyncStorage.getItem('bookMechanicData').then((res)=>{
+    const mechanic=JSON.parse(res) 
+    this.setState({data:mechanic,refreshing:true})
+    console.log(mechanic,'Mechanic data')
+    
+   })
   };
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
 
-  CancelBooking = async () => {
-    axios
-      .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
-      .then((res) => {
-        this.setState({refreshing: false});
-        AsyncStorage.removeItem('bookMechanicData');
-        this.props.navigation.navigate('Dashboard');
-        console.log(res.data, 'data updated');
-      
-      }).then((product)=>{
-        axios
-        .get(
-          URL.Url +
-            'getbuyProduct/' +
-            this.state.userId +
-            '/' +
-            this.state.mechanicid,
-        )
-        .then((prod) => {
-         prod.data.map((item)=>{
-          axios.put(URL.Url+'bookedbuyProduct/'+item._id).then((del)=>{
-            console.log(del.data)
-          })
-         
-         })
-         });
-  
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
-  // RemoveBooking = () => {
-  //   setInterval(() => {
-  //     axios
-  //       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
-  //       .then((res) => {
-  //         this.setState({refreshing: false});
-  //         this.props.navigation.navigate('Dashboard');
-  //         console.log(res.data, 'data updated');
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   }, 10000000);
-  // };
   async componentDidMount() {
-    setTimeout(() => {
       const {navigation} = this.props;
       this.getMechanicLocation();
 
       this.focusListener = navigation.addListener('didFocus', () => {
         this.getMechanicLocation();
       });
-    }, 3000);
-
+    
     Animated.loop(
       Animated.timing(
         // Animate over time
@@ -253,7 +155,6 @@ userId:'',
 
   render() {
     let {fadeAnim, data, refreshing} = this.state;
-
     if (refreshing != false && data != null) {
       return (
         <SafeAreaView style={appStyle.safeContainer}>
@@ -404,30 +305,7 @@ userId:'',
                       </Text>
                     </TouchableOpacity>
                   </Animated.View>
-                  <View style={[style.mt30]}>
-                    <TouchableOpacity
-                      style={[button.button1]}
-                      onPress={() => {
-                        this.props.navigation.navigate('ProfileDetail');
-                      }}>
-                      <Text style={[button.btntext1, text.center]}>
-                        Go To Detail
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      onPress={this.CancelBooking}
-                      style={[
-                        button.button1,
-                        style.mt10,
-                        {display: this.state.cancelButton},
-                      ]}>
-                      <Text style={[button.btntext1, text.center]}>
-                        Cancel Booking
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+                   </View>
               </ScrollView>
             </View>
           </View>

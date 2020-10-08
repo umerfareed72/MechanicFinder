@@ -44,10 +44,16 @@ export default class UserProfileDetail extends Component {
       rating: 2,
       starCount: 5,
       TabDataOverview: 'flex',
-      ColorOverview: colors.darkBlue,
+      ColorOverview: colors.white,
+      TabDataProduct: 'none',
+      ColorProduct: colors.inputBordercolor,
       CheckBox: images.checkBoxEmpty,
       data: [],
       mechanicData: [],
+      mechanicid: '',
+      userid: '',
+      products: [],
+      bookedMechanicId:'',
       BookNowView: 'none',
       refreshing: false,
       isModalVisible: false,
@@ -77,12 +83,14 @@ export default class UserProfileDetail extends Component {
                 book.data.map((item) => {
                   const bookedUserId = item._id;
                   this.setState({bookedMechanicId: bookedUserId});
-
+                  this.setState({
+                    userid: item.userid,
+                    mechanicid: item.mechanicid,
+                  });
                   axios
                     .get(URL.Url + 'mechanic/' + item.mechanicid)
                     .then((mechanic) => {
                       this.setState({mechanicData: mechanic.data});
-
                       axios
                         .get(URL.Url + 'user/' + item.userid)
                         .then((response) => {
@@ -112,6 +120,19 @@ export default class UserProfileDetail extends Component {
                           if (result <= 10) {
                             this.setState({BookNowView: 'flex'});
                           }
+                        })
+                        .then((product) => {
+                          axios
+                            .get(
+                              URL.Url +
+                                'getbuyProduct/' +
+                                this.state.userid +
+                                '/' +
+                                this.state.mechanicid,
+                            )
+                            .then((prod) => {
+                              this.setState({products: prod.data});
+                            });
                         });
                     });
                 });
@@ -127,6 +148,41 @@ export default class UserProfileDetail extends Component {
     }
   };
 
+  completeBooking = async () => {
+    axios
+      .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
+      .then((res) => {
+        this.setState({refreshing: false});
+        this.props.navigation.navigate('MecchanicDashboard');
+        console.log(res.data, 'data updated');
+      })
+      .then((product) => {
+        axios
+          .get(
+            URL.Url +
+              'getbuyProduct/' +
+              this.state.userid +
+              '/' +
+              this.state.mechanicid,
+          )
+          .then((prod) => {
+            prod.data.map((item) => {
+              axios
+                .put(URL.Url + 'bookedbuyProduct/' + item._id)
+                .then((del) => {
+                  console.log(del.data);
+                });
+            });
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+
+
+  
   componentDidMount() {
     setTimeout(() => {
       this.getMechanicLocation();
@@ -134,14 +190,30 @@ export default class UserProfileDetail extends Component {
   }
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
-      this.setState({ColorOverview: colors.darkBlue});
+      this.setState({ColorOverview: colors.white});
+      this.setState({TabDataProduct: 'none'}),
+        this.setState({ColorProduct: colors.inputBordercolor});
     } else
       this.setState({TabDataOverview: 'flex'}),
-        this.setState({ColorOverview: colors.darkBlue});
+        this.setState({ColorOverview: colors.white});
+    this.setState({TabDataProduct: 'none'}),
+      this.setState({ColorProduct: colors.inputBordercolor});
+  };
+
+  tabProduct = () => {
+    if (this.state.TabDataProduct == 'flex') {
+      this.setState({TabDataOverview: 'none'}), this.setState({color: 'none'});
+      this.setState({ColorOverview: colors.inputBordercolor}),
+        this.setState({ColorProduct: colors.white});
+    } else
+      this.setState({TabDataProduct: 'flex'}),
+        this.setState({TabDataOverview: 'none'}),
+        this.setState({ColorOverview: colors.inputBordercolor});
+    this.setState({ColorProduct: colors.white});
   };
 
   render() {
-    const {data, refreshing} = this.state;
+    const {data, refreshing,products} = this.state;
     if (refreshing != false) {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
@@ -153,22 +225,29 @@ export default class UserProfileDetail extends Component {
               animationOutTiming={500}>
               <View style={[style.flex1, appStyle.rowCenter]}>
                 <TouchableOpacity
-                  style={[appStyle.DashboardslotCard,style.w90,style.aiCenter]}
+                  style={[
+                    appStyle.DashboardslotCard,
+                    style.w90,
+                    style.aiCenter,
+                  ]}
                   onPress={this.toggleModal}>
                   <View style={[style.mv10, style.aiCenter]}>
                     <Text style={[text.h1]}>Preview Image</Text>
                     <Text style={[text.heading2Gray]}>
-               {data.firstname}{' '}{data.lastname}
-                       </Text>
+                      {data.firstname} {data.lastname}
+                    </Text>
                   </View>
                   <Image
-                    source={{uri:data.photo}}
-                    style={[{
-                      height:'70%' ,
-                      alignSelf:'center',
-                      resizeMode: 'contain',
-                      borderRadius: 10,
-                    },style.w100]}></Image>
+                    source={{uri: data.photo}}
+                    style={[
+                      {
+                        height: '70%',
+                        alignSelf: 'center',
+                        resizeMode: 'contain',
+                        borderRadius: 10,
+                      },
+                      style.w100,
+                    ]}></Image>
                   <TouchableOpacity
                     style={[button.buttonTheme, style.mt30, style.w50]}
                     onPress={this.toggleModal}>
@@ -226,20 +305,35 @@ export default class UserProfileDetail extends Component {
           <View style={[appStyle.bodyBg, style.flex1]}>
             <View
               style={[
-                //   appStyle.rowBtw,
+                appStyle.rowBtw,
                 style.aiCenter,
                 appStyle.bodyLayout,
                 appStyle.bodyShadowTop,
-                {backgroundColor: '#fff'},
+                style.mh40,
+                {
+                  backgroundColor: colors.lightblue,
+                  borderBottomLeftRadius: 10,
+                  borderBottomRightRadius: 10,
+                },
               ]}>
               <TouchableOpacity onPress={() => this.tabOverview()}>
                 <Text
                   style={[
-                    text.tab1,
+                    text.heading2,
                     text.semibold,
                     {color: this.state.ColorOverview},
                   ]}>
                   Overview
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.tabProduct()}>
+                <Text
+                  style={[
+                    text.heading2,
+                    text.semibold,
+                    {color: this.state.ColorProduct},
+                  ]}>
+                  Product
                 </Text>
               </TouchableOpacity>
             </View>
@@ -252,19 +346,6 @@ export default class UserProfileDetail extends Component {
                   appStyle.bodyLayout,
                   {display: this.state.TabDataOverview},
                 ]}>
-                <View style={[appStyle.rowAlignCenter, style.mt10]}>
-                  <Image
-                    style={[image.medium, style.mr5, image.Orange]}
-                    source={images.cart}></Image>
-                  <Text style={[text.heading2, text.bold]}>Included Items</Text>
-                </View>
-                <View style={[style.borderbottom, style.mt10]}>
-                  <Text style={[text.heading2Gray]}>
-                    {' '}
-                    Gaskit
-                    {/* {data.address} {data.city} {data.country} */}
-                  </Text>
-                </View>
                 <View style={[appStyle.rowAlignCenter, style.mt10]}>
                   <Image
                     style={[image.medium, style.mr5, image.Orange]}
@@ -328,7 +409,7 @@ export default class UserProfileDetail extends Component {
                   </Text>
                 </View>
                 <View style={[{display: this.state.BookNowView}, style.flex1]}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={this.completeBooking}>
                     <View
                       style={[
                         button.buttoncontainer,
@@ -346,6 +427,59 @@ export default class UserProfileDetail extends Component {
                   </TouchableOpacity>
                 </View>
               </View>
+              {/* {Product Tab} */}
+              <View
+                style={[
+                  appStyle.bodyLayout,
+                  {display: this.state.TabDataProduct},
+                ]}>
+                <ScrollView style={{}}>
+                  {products.map((item, index) => {
+                    return (
+                      <TouchableOpacity key={index}>
+                        <View
+                          style={[
+                            appStyle.slotCard,
+                            appStyle.rowJustify,
+                            style.aiCenter,
+                          ]}>
+                          <View style={[style.row, style.aiCenter]}>
+                            <View style={style.mr15}>
+                              <Image
+                                style={image.userImg}
+                                source={{uri: item.photo}}
+                              />
+                            </View>
+
+                            <View>
+                              <Text style={[text.text18, text.bold]}>
+                                {item.title}
+                              </Text>
+
+                              <View style={[style.pt5, style.row]}>
+                                <Text style={[text.text12, text.greyVLight]}>
+                                  Price :{' '}
+                                </Text>
+
+                                <Text style={[text.text12, text.darkYellow]}>
+                                  {item.amount} $
+                                </Text>
+                              </View>
+                              <View style={style.row}>
+                                <Text style={[text.text11]}>Quantity : </Text>
+                                <Text style={[text.text11]}>
+                                  {item.quantity}
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+              {/* Product Tab End */}
               {/* Reviews Tab End  */}
             </ScrollView>
           </View>
