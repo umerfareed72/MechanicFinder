@@ -12,12 +12,13 @@ import {
   ImageBackground,
   Button,
   Dimensions,
+  ActivityIndicator,
   Keyboard,
   Platform,
-  AsyncStorage,
+ 
 } from 'react-native';
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
-
+import {colors, screenHeight,URL, screenWidth, images} from '../../config/Constant';
+import AsyncStorage from "@react-native-community/async-storage"
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -30,6 +31,7 @@ import Hamburger from '../../components/headerComponent/Hamburger';
 import Modal from 'react-native-modal';
 
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import axios from 'axios';
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -37,12 +39,11 @@ export default class Dashboard extends Component {
     this.state = {
       rating: 2,
       starCount: 3,
-    };
-    this.state = {
-      loading: false,
-      items: [],
-      refreshing: false,
-    };
+   bookedMechanics:[],
+   isModalVisible: false, 
+   refreshing:false
+  };
+   
   }
 
   onStarRatingPress(rating) {
@@ -51,9 +52,7 @@ export default class Dashboard extends Component {
     });
   }
 
-  state = {
-    isModalVisible: false,
-  };
+  
 
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
@@ -85,8 +84,31 @@ export default class Dashboard extends Component {
     };
   };
 
+  MyBooking=()=>{
+AsyncStorage.getItem('userId').then((res)=>{
+  const userid=JSON.parse(res)
+  axios.get(URL.Url+'mechanics/'+userid).then((data)=>{
+this.setState({bookedMechanics:data.data})
+console.log(data.data) 
+})
+})
+    
+  }
+
+componentDidMount(){
+  const {navigation} = this.props;
+  this.MyBooking()
+  this.focusListener = navigation.addListener('didFocus', () => {
+    this.MyBooking()
+  });
+}
+
   render() {
-    return (
+   const {bookedMechanics,refreshing}=this.state
+  
+  // if (bookedMechanics != null && refreshing != false) {
+  
+   return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar barStyle={'light-content'} backgroundColor={'transparent'} />
 
@@ -149,6 +171,10 @@ export default class Dashboard extends Component {
           </View>
           <ScrollView >
             <View style={[style.mv10]}>
+            {
+  bookedMechanics.map((item)=>{
+return(
+
               <View
                 style={[
                   appStyle.bookingShadow,
@@ -168,19 +194,19 @@ export default class Dashboard extends Component {
                     <ImageBackground
                       imageStyle={{borderRadius: 4}}
                       style={[style.mv5, {height: 80, width: '100%'}]}
-                      source={images.HomeImg}>
+                      source={{uri:item.photo}}>
                       <View style={[appStyle.popularInnerContent]}>
                         <Text style={[text.heading5white, text.bold]}>
-                          Resturant
+                       {item.firstname}
                         </Text>
 
                         <StarRating
                           disabled={true}
                           maxStars={5}
-                          rating={this.state.starCount}
-                          selectedStar={(rating) =>
-                            this.onStarRatingPress(rating)
-                          }
+                          rating={item.rating}
+                          // selectedStar={(rating) =>
+                          //   this.onStarRatingPress(rating)
+                          // }
                           fullStarColor={'#fff'}
                           emptyStarColor={'#fff'}
                           starSize={10}
@@ -193,12 +219,12 @@ export default class Dashboard extends Component {
                   <View style={[style.jcCenter, {width: screenWidth.width65}]}>
                     <View>
                       <Text style={[text.text14, text.semibold]}>
-                        Restaurant Name
+                        {item.firstname}
                       </Text>
                     </View>
                     <View>
                       <Text style={[text.text12, text.semibold]}>
-                        Price:$33
+                        {bookedMechanics.mechanicrate}
                       </Text>
                     </View>
 
@@ -225,473 +251,29 @@ export default class Dashboard extends Component {
                   </View>
                 </View>
               </View>
-
-              <View
-                style={[
-                  appStyle.bookingShadow,
-                  style.mv5,
-                  {backgroundColor: '#fff'},
-                ]}>
-                <View style={[style.row, style.jcCenter]}>
-                  <TouchableOpacity
-                    onPress={this.toggleModal}
-                    style={[image.crossImg]}>
-                    <Image
-                      style={[image.locationIconSmall]}
-                      source={images.cross}
-                    />
-                  </TouchableOpacity>
-                  <View style={{marginRight: 5, width: screenWidth.width25}}>
-                    <ImageBackground
-                      imageStyle={{borderRadius: 4}}
-                      style={[style.mv5, {height: 80, width: '100%'}]}
-                      source={images.HomeImg}>
-                      <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading5white, text.bold]}>
-                          Resturant
-                        </Text>
-
-                        <StarRating
-                          disabled={true}
-                          maxStars={5}
-                          rating={this.state.starCount}
-                          selectedStar={(rating) =>
-                            this.onStarRatingPress(rating)
-                          }
-                          fullStarColor={'#fff'}
-                          emptyStarColor={'#fff'}
-                          starSize={10}
-                          containerStyle={{width: 53, marginTop: 3}}
-                        />
-                      </View>
-                    </ImageBackground>
-                  </View>
-
-                  <View style={[style.jcCenter, {width: screenWidth.width65}]}>
-                    <View>
-                      <Text style={[text.text14, text.semibold]}>
-                        Restaurant Name
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={[text.text12, text.semibold]}>
-                        Price:$33
-                      </Text>
-                    </View>
-
-                    <View style={[appStyle.rowBtw]}>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.calendarOrange}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.clock}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.location}></Image>
-                        <Text style={[text.text9]}>Some Text Some here </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View>
-
-              <View
-                style={[
-                  appStyle.bookingShadow,
-                  style.mv5,
-                  {backgroundColor: '#fff'},
-                ]}>
-                <View style={[style.row, style.jcCenter]}>
-                  <TouchableOpacity
-                    onPress={this.toggleModal}
-                    style={[image.crossImg]}>
-                    <Image
-                      style={[image.locationIconSmall]}
-                      source={images.cross}
-                    />
-                  </TouchableOpacity>
-                  <View style={{marginRight: 5, width: screenWidth.width25}}>
-                    <ImageBackground
-                      imageStyle={{borderRadius: 4}}
-                      style={[style.mv5, {height: 80, width: '100%'}]}
-                      source={images.HomeImg}>
-                      <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading5white, text.bold]}>
-                          Resturant
-                        </Text>
-
-                        <StarRating
-                          disabled={true}
-                          maxStars={5}
-                          rating={this.state.starCount}
-                          selectedStar={(rating) =>
-                            this.onStarRatingPress(rating)
-                          }
-                          fullStarColor={'#fff'}
-                          emptyStarColor={'#fff'}
-                          starSize={10}
-                          containerStyle={{width: 53, marginTop: 3}}
-                        />
-                      </View>
-                    </ImageBackground>
-                  </View>
-
-                  <View style={[style.jcCenter, {width: screenWidth.width65}]}>
-                    <View>
-                      <Text style={[text.text14, text.semibold]}>
-                        Restaurant Name
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={[text.text12, text.semibold]}>
-                        Price:$33
-                      </Text>
-                    </View>
-
-                    <View style={[appStyle.rowBtw]}>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.calendarOrange}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.clock}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.location}></Image>
-                        <Text style={[text.text9]}>Some Text Some here </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View>
-
-              <View
-                style={[
-                  appStyle.bookingShadow,
-                  style.mv5,
-                  {backgroundColor: '#fff'},
-                ]}>
-                <View style={[style.row, style.jcCenter]}>
-                  <TouchableOpacity
-                    onPress={this.toggleModal}
-                    style={[image.crossImg]}>
-                    <Image
-                      style={[image.locationIconSmall]}
-                      source={images.cross}
-                    />
-                  </TouchableOpacity>
-                  <View style={{marginRight: 5, width: screenWidth.width25}}>
-                    <ImageBackground
-                      imageStyle={{borderRadius: 4}}
-                      style={[style.mv5, {height: 80, width: '100%'}]}
-                      source={images.HomeImg}>
-                      <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading5white, text.bold]}>
-                          Resturant
-                        </Text>
-
-                        <StarRating
-                          disabled={true}
-                          maxStars={5}
-                          rating={this.state.starCount}
-                          selectedStar={(rating) =>
-                            this.onStarRatingPress(rating)
-                          }
-                          fullStarColor={'#fff'}
-                          emptyStarColor={'#fff'}
-                          starSize={10}
-                          containerStyle={{width: 53, marginTop: 3}}
-                        />
-                      </View>
-                    </ImageBackground>
-                  </View>
-
-                  <View style={[style.jcCenter, {width: screenWidth.width65}]}>
-                    <View>
-                      <Text style={[text.text14, text.semibold]}>
-                        Restaurant Name
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={[text.text12, text.semibold]}>
-                        Price:$33
-                      </Text>
-                    </View>
-
-                    <View style={[appStyle.rowBtw]}>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.calendarOrange}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.clock}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.location}></Image>
-                        <Text style={[text.text9]}>Some Text Some here </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View>
-
-              <View
-                style={[
-                  appStyle.bookingShadow,
-                  style.mv5,
-                  {backgroundColor: '#fff'},
-                ]}>
-                <View style={[style.row, style.jcCenter]}>
-                  <TouchableOpacity
-                    onPress={this.toggleModal}
-                    style={[image.crossImg]}>
-                    <Image
-                      style={[image.locationIconSmall]}
-                      source={images.cross}
-                    />
-                  </TouchableOpacity>
-                  <View style={{marginRight: 5, width: screenWidth.width25}}>
-                    <ImageBackground
-                      imageStyle={{borderRadius: 4}}
-                      style={[style.mv5, {height: 80, width: '100%'}]}
-                      source={images.HomeImg}>
-                      <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading5white, text.bold]}>
-                          Resturant
-                        </Text>
-
-                        <StarRating
-                          disabled={true}
-                          maxStars={5}
-                          rating={this.state.starCount}
-                          selectedStar={(rating) =>
-                            this.onStarRatingPress(rating)
-                          }
-                          fullStarColor={'#fff'}
-                          emptyStarColor={'#fff'}
-                          starSize={10}
-                          containerStyle={{width: 53, marginTop: 3}}
-                        />
-                      </View>
-                    </ImageBackground>
-                  </View>
-
-                  <View style={[style.jcCenter, {width: screenWidth.width65}]}>
-                    <View>
-                      <Text style={[text.text14, text.semibold]}>
-                        Restaurant Name
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={[text.text12, text.semibold]}>
-                        Price:$33
-                      </Text>
-                    </View>
-
-                    <View style={[appStyle.rowBtw]}>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.calendarOrange}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.clock}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.location}></Image>
-                        <Text style={[text.text9]}>Some Text Some here </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View>
-              
-              <View
-                style={[
-                  appStyle.bookingShadow,
-                  style.mv5,
-                  {backgroundColor: '#fff'},
-                ]}>
-                <View style={[style.row, style.jcCenter]}>
-                  <TouchableOpacity
-                    onPress={this.toggleModal}
-                    style={[image.crossImg]}>
-                    <Image
-                      style={[image.locationIconSmall]}
-                      source={images.cross}
-                    />
-                  </TouchableOpacity>
-                  <View style={{marginRight: 5, width: screenWidth.width25}}>
-                    <ImageBackground
-                      imageStyle={{borderRadius: 4}}
-                      style={[style.mv5, {height: 80, width: '100%'}]}
-                      source={images.HomeImg}>
-                      <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading5white, text.bold]}>
-                          Resturant
-                        </Text>
-
-                        <StarRating
-                          disabled={true}
-                          maxStars={5}
-                          rating={this.state.starCount}
-                          selectedStar={(rating) =>
-                            this.onStarRatingPress(rating)
-                          }
-                          fullStarColor={'#fff'}
-                          emptyStarColor={'#fff'}
-                          starSize={10}
-                          containerStyle={{width: 53, marginTop: 3}}
-                        />
-                      </View>
-                    </ImageBackground>
-                  </View>
-
-                  <View style={[style.jcCenter, {width: screenWidth.width65}]}>
-                    <View>
-                      <Text style={[text.text14, text.semibold]}>
-                        Restaurant Name
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={[text.text12, text.semibold]}>
-                        Price:$33
-                      </Text>
-                    </View>
-
-                    <View style={[appStyle.rowBtw]}>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.calendarOrange}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.clock}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.location}></Image>
-                        <Text style={[text.text9]}>Some Text Some here </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View>
-
-              <View
-                style={[
-                  appStyle.bookingShadow,
-                  style.mv5,
-                  {backgroundColor: '#fff'},
-                ]}>
-                <View style={[style.row, style.jcCenter]}>
-                  <TouchableOpacity
-                    onPress={this.toggleModal}
-                    style={[image.crossImg]}>
-                    <Image
-                      style={[image.locationIconSmall]}
-                      source={images.cross}
-                    />
-                  </TouchableOpacity>
-                  <View style={{marginRight: 5, width: screenWidth.width25}}>
-                    <ImageBackground
-                      imageStyle={{borderRadius: 4}}
-                      style={[style.mv5, {height: 80, width: '100%'}]}
-                      source={images.HomeImg}>
-                      <View style={[appStyle.popularInnerContent]}>
-                        <Text style={[text.heading5white, text.bold]}>
-                          Resturant
-                        </Text>
-
-                        <StarRating
-                          disabled={true}
-                          maxStars={5}
-                          rating={this.state.starCount}
-                          selectedStar={(rating) =>
-                            this.onStarRatingPress(rating)
-                          }
-                          fullStarColor={'#fff'}
-                          emptyStarColor={'#fff'}
-                          starSize={10}
-                          containerStyle={{width: 53, marginTop: 3}}
-                        />
-                      </View>
-                    </ImageBackground>
-                  </View>
-
-                  <View style={[style.jcCenter, {width: screenWidth.width65}]}>
-                    <View>
-                      <Text style={[text.text14, text.semibold]}>
-                        Restaurant Name
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={[text.text12, text.semibold]}>
-                        Price:$33
-                      </Text>
-                    </View>
-
-                    <View style={[appStyle.rowBtw]}>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.calendarOrange}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.clock}></Image>
-                        <Text style={[text.text9]}>28-7-2020</Text>
-                      </View>
-                      <View style={[appStyle.BookingsmallWidth]}>
-                        <Image
-                          style={[image.locationIconSmall]}
-                          source={images.location}></Image>
-                        <Text style={[text.text9]}>Some Text Some here </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View>
-
+              )
+})
+}
             </View>
           </ScrollView>
-        </View>
+       
+</View>
       </SafeAreaView>
     );
+    //                     }
+    // else {
+    //   return (
+    //     <SafeAreaView style={[appStyle.safeContainer]}>
+    //       <StatusBar barStyle={'dark-content'}></StatusBar>
+    //       <View style={[style.flex1, style.jcCenter]}>
+    //         <View style={[style.aiCenter]}>
+    //           <ActivityIndicator
+    //             color="#bc2b78"
+    //             size="large"></ActivityIndicator>
+    //         </View>
+    //       </View>
+    //     </SafeAreaView>
+    //   );
+    // }
   }
 }

@@ -238,18 +238,17 @@ export default class BookNow extends Component {
                   <StarRating
                     disabled={true}
                     maxStars={5}
-                    rating={this.state.starCount}
-                    selectedStar={(rating) => this.onStarRatingPress(rating)}
+                    rating={data.rating}
+                    // selectedStar={(rating) => this.onStarRatingPress(rating)}
                     fullStarColor={'#E9B60D'}
                     emptyStarColor={'#E9B60D'}
                     starSize={10}
                     containerStyle={style.w40}
                   />
                   <Text style={[text.text10, style.pl10, text.lightGrey]}>
-                    Reviews(85)
+                    Reviews({data.rating}/5.0)
                   </Text>
                 </View>
-
                 <View style={[]}>
                   <Text style={[text.h1]}>Discription</Text>
                   <Text style={text.para}>

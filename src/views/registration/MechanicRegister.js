@@ -45,7 +45,7 @@ export default class MechanicRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rating: 2,
+      rating: 0,
       starCount: 5,
       TabDataStep1: 'flex',
       TabDataStep2: 'none',
@@ -101,6 +101,7 @@ export default class MechanicRegister extends Component {
         longitude: this.state.longitude,
         latitude: this.state.latitude,
         mechanicrate: this.state.mechanicrate,
+        rating:this.state.rating
       })
       .then(async (res) => {
         console.log(res);

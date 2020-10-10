@@ -58,12 +58,17 @@ export default class UserProfileDetail extends Component {
       BookNowView: 'none',
       refreshing: false,
       isModalVisible: false,
+      iscompleteModal: false,
+      Amount: 0,
+      extraAmount: 0,
     };
   }
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
-
+  completeModal = () => {
+    this.setState({iscompleteModal: !this.state.iscompleteModal});
+  };
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
@@ -82,6 +87,7 @@ export default class UserProfileDetail extends Component {
                 console.log('No data ');
               } else {
                 book.data.map((item) => {
+                  this.setState({Amount: item.totalamount});
                   const bookedUserId = item._id;
                   this.setState({bookedMechanicId: bookedUserId});
                   this.setState({
@@ -92,17 +98,23 @@ export default class UserProfileDetail extends Component {
                     .get(URL.Url + 'mechanic/' + item.mechanicid)
                     .then((mechanic) => {
                       this.setState({mechanicData: mechanic.data});
-                     
+
                       axios
                         .get(URL.Url + 'user/' + item.userid)
                         .then((response) => {
                           this.setState({data: response.data});
                           this.setState({refreshing: true});
-                          console.log(mechanic.data.mechanicrate)
-                          response.data['mechanicrate'] = mechanic.data.mechanicrate;
-                             const sendMechanicData = JSON.stringify(response.data);
-                          AsyncStorage.setItem('bookUserData', sendMechanicData);
-    
+                          console.log(mechanic.data.mechanicrate);
+                          response.data['mechanicrate'] =
+                            mechanic.data.mechanicrate;
+                          const sendMechanicData = JSON.stringify(
+                            response.data,
+                          );
+                          AsyncStorage.setItem(
+                            'bookUserData',
+                            sendMechanicData,
+                          );
+
                           const {mechanicData} = this.state;
 
                           let Lat1 = response.data.latitude / 57.29577951;
@@ -175,6 +187,35 @@ export default class UserProfileDetail extends Component {
       });
   };
 
+  completework = () => {
+    var finalamount = parseInt(this.state.Amount)+parseInt(this.state.extraAmount) ;
+    axios
+      .put(
+        URL.Url +
+          'completebooking/' +
+          this.state.bookedMechanicId +
+          '/' +
+          finalamount,
+      )
+      .then((res) => {
+        this.state.products.map((item) => {
+          axios
+            .put(
+              URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
+            )
+            .then((mod) => {
+              this.setState({refreshing: false});
+              AsyncStorage.removeItem('bookMechanicData');
+              this.props.navigation.navigate('MechanicDashboard');
+              console.log(res.data, 'data updated');
+            });
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   componentDidMount() {
     setTimeout(() => {
       this.getMechanicLocation();
@@ -210,6 +251,54 @@ export default class UserProfileDetail extends Component {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
           <StatusBar />
+          <View style={{}}>
+            <Modal
+              isVisible={this.state.iscompleteModal}
+              animationInTiming={500}
+              animationOutTiming={500}>
+              <View style={[style.flex1, appStyle.rowCenter]}>
+                <View style={[appStyle.modalBg]}>
+                <View style={[input.formInput, style.mv5,style.row,style.aiCenter]}>
+                      <Image
+                        source={images.dollar}
+                        style={[image.InputImage,style.mr5]}></Image>
+                      <TextInput
+                        style={[input.input]}
+                        placeholder="Enter extra Service Rate"
+                        onChangeText={(text) => {
+                          this.setState({
+                            extraAmount: text,
+                          });
+                        }}
+                        underlineColorAndroid="transparent"></TextInput>
+                    </View>
+
+                
+                  <Text style={[]}>Are You Sure?</Text>
+                  
+                  <View style={[style.row, style.mt10]}>
+                  
+                    <TouchableOpacity
+                      style={[style.mh10]}
+                      onPress={this.completeModal}>
+                      <View style={[button.modalButton]}>
+                        <Text style={[text.heading3, text.white]}>Cancel</Text>
+                      </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[style.mh10]}
+                      onPress={this.completework}>
+                      <View style={[button.modalButton]}>
+                        <Text style={[text.heading3, text.white]}>Submit</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          </View>
+
           <View style={{}}>
             <Modal
               isVisible={this.state.isModalVisible}
@@ -282,7 +371,7 @@ export default class UserProfileDetail extends Component {
                 </View>
 
                 <View style={[appStyle.headInner, style.ph20]}>
-                  <View style={[style.mv5]}>
+                  {/* <View style={[style.mv5]}>
                     <StarRating
                       disabled={true}
                       maxStars={5}
@@ -293,7 +382,7 @@ export default class UserProfileDetail extends Component {
                       starSize={20}
                       containerStyle={{width: 110, marginTop: 3}}
                     />
-                  </View>
+                  </View> */}
 
                   <View style={[style.mv5]}>
                     <Text style={[text.heading1, text.bold]}>
@@ -354,10 +443,10 @@ export default class UserProfileDetail extends Component {
                     style={
                       ({color: colors.Black323}, [text.text22, text.bold])
                     }>
-                    ${mechanicData.mechanicrate}
+                    ${this.state.Amount}
                   </Text>
                   <Text style={([text.text14], {color: colors.gray})}>
-                    Charge Per Day
+                    Estimated Charges
                   </Text>
                 </View>
 
@@ -448,7 +537,7 @@ export default class UserProfileDetail extends Component {
                   </View>
 
                   <TouchableOpacity
-                    onPress={this.completeBooking}
+                    onPress={this.completeModal}
                     style={style.mt30}>
                     <View
                       style={[
@@ -542,7 +631,9 @@ export default class UserProfileDetail extends Component {
               <View style={style.bgOverlay} />
               <View style={[style.rowBtw, style.ph20, style.pb10]}>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Dashboard')}>
+                  onPress={() =>
+                    this.props.navigation.navigate('MechanicDashboard')
+                  }>
                   <Image
                     source={images.backarrowh}
                     style={[
@@ -587,7 +678,9 @@ export default class UserProfileDetail extends Component {
               <View style={style.bgOverlay} />
               <View style={[style.rowBtw, style.ph20, style.pb10]}>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Dashboard')}>
+                  onPress={() =>
+                    this.props.navigation.navigate('MechanicDashboard')
+                  }>
                   <Image
                     source={images.backarrowh}
                     style={[

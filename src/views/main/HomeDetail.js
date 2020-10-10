@@ -54,6 +54,7 @@ export default class HomeDetail extends Component {
       Rating: [],
       userdata: [],
       products: [],
+      Amount:0
     };
   }
   onStarRatingPress(rating) {
@@ -91,7 +92,9 @@ export default class HomeDetail extends Component {
                 .then((prod) => {
                   this.setState({products: prod.data});
                   console.log(prod.data);
-                });
+                }).then((cal)=>{
+                  this.Rate();
+                })
             });
           })
           .catch((error) => {
@@ -121,12 +124,13 @@ export default class HomeDetail extends Component {
       this.props.navigation.navigate('BuyItems');
     } else {
       setTimeout(async () => {
+        const totalamount=this.state.Amount+this.state.mechanicdata.mechanicrate
         const userid = this.state.userdata._id;
         const mechanicid = this.state.mechanicdata.mechanicid;
         console.log(userid);
         //Add Booked Mechanic In database
         axios
-          .post(URL.Url + 'addbookedUser/' + mechanicid + '/' + userid)
+          .post(URL.Url + 'addbookedUser/' + mechanicid + '/' + userid+"/"+totalamount)
           .then((res) => {
             this.setState({BookNowView: 'none'});
             this.setState({deletebutton: 'none'});
@@ -147,9 +151,9 @@ export default class HomeDetail extends Component {
     axios
       .delete(URL.Url + 'deletebuyProduct/' + this.state.products[id]._id)
       .then((del) => {
-        console.log(del.data);
         this.delToggleModel();
-      });
+        console.log(del.data);
+      }); 
   };
 
   tabOverview = () => {
@@ -206,6 +210,19 @@ export default class HomeDetail extends Component {
     this.setState({ColorOverview: colors.inputBordercolor});
     this.setState({ColorReview: colors.darkBlue});
     this.setState({ColorProduct: colors.inputBordercolor});
+  };
+  Rate = () => {
+    const {products,Amount} = this.state;
+    var r = [];
+    products.map((item, index) => {
+      r.push(item.amount);
+    });
+    // Getting sum of numbers
+    var sum = r.reduce(function (a, b) {
+      return a + b;
+    }, 0);
+    console.log(sum); // Prints: 15
+this.setState({Amount:sum})
   };
 
   render() {
@@ -273,8 +290,8 @@ export default class HomeDetail extends Component {
                   <StarRating
                     disabled={true}
                     maxStars={5}
-                    rating={this.state.starCount}
-                    selectedStar={(rating) => this.onStarRatingPress(rating)}
+                    rating={mechanicdata.rating}
+                    // selectedStar={(rating) => this.onStarRatingPress(rating)}
                     fullStarColor={'#fff'}
                     emptyStarColor={'#fff'}
                     starSize={20}
@@ -287,7 +304,7 @@ export default class HomeDetail extends Component {
                     {mechanicdata.firstname} {mechanicdata.lastname}
                   </Text>
                 </View>
-                  </View>
+              </View>
             </ImageBackground>
           </TouchableOpacity>
         </View>
@@ -392,7 +409,22 @@ export default class HomeDetail extends Component {
                   {mechanicdata.skilltype}
                 </Text>
               </View>
-             
+
+
+              <View style={[appStyle.rowAlignCenter, style.mt10]}>
+                <Image
+                  style={[image.medium, image.Orange, style.mr5]}
+                  source={images.dollar}></Image>
+                <Text style={[text.heading2, text.bold]}>Mechanic Service Rate</Text>
+              </View>
+              <View style={[style.borderbottom, style.mv10]}>
+                <Text style={[text.heading2Gray]}>
+                  {' '}
+                  {mechanicdata.mechanicrate}.0
+                </Text>
+              </View>
+
+
               <TouchableOpacity
                 style={[style.row, style.mt10, style.aiCenter]}
                 onPress={this.Checked}>
@@ -420,10 +452,10 @@ export default class HomeDetail extends Component {
                     style={
                       ({color: colors.Black323}, [text.text22, text.bold])
                     }>
-                    ${mechanicdata.mechanicrate}
+                    $ {mechanicdata.mechanicrate+this.state.Amount}
                   </Text>
                   <Text style={([text.text14], {color: colors.gray})}>
-                    Per Day
+                   Estimated Amount
                   </Text>
                 </View>
                 <View style={[{display: this.state.BookNowView}, style.flex1]}>
@@ -450,7 +482,7 @@ export default class HomeDetail extends Component {
               <ScrollView style={{}}>
                 {products.map((item, index) => {
                   return (
-                    <TouchableOpacity key={index}>
+                    <TouchableOpacity key={index} >
                       <View style={{}}>
                         <Modal
                           isVisible={this.state.isdelModalVisible}

@@ -81,7 +81,7 @@ export default class Items extends Component {
     } else {
       if (this.state.items.quantity != 0 && this.state.items.quantity >= 0) {
         const amount =
-          this.state.price * this.state.quantity + this.state.mechanicrate;
+          this.state.price * this.state.quantity ;
 
         axios
           .post(URL.Url + 'addbuyProduct', {
@@ -270,20 +270,10 @@ export default class Items extends Component {
               </View>
 
               <View style={[style.row, style.mv10, style.aiCenter]}>
-                <Image
-                  style={image.drawerIconlarge}
-                  source={images.dollar}></Image>
-                <Text style={[text.heading2Gray]}>
-                  Mechanic Service Rate: {mechanicdata.mechanicrate} $
-                </Text>
-              </View>
-
-              <View style={[style.row, style.mv10, style.aiCenter]}>
                 <Image style={image.large} source={images.dollar}></Image>
                 <Text style={[text.heading1purple]}>
                   Total Estimated Rate :{' '}
-                  {this.state.price * this.state.quantity +
-                    this.state.mechanicrate}{' '}
+                  {this.state.price * this.state.quantity }
                   $
                 </Text>
               </View>

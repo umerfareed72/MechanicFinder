@@ -68,6 +68,7 @@ export default class HomeDetail extends Component {
       lastname: '',
       photo: '',
       refreshing: false,
+      Amount: 0,
     };
   }
   toggleModal = () => {
@@ -95,6 +96,7 @@ export default class HomeDetail extends Component {
               this.setState({
                 bookedMechanicId: item._id,
                 mechanicid: item.mechanicid,
+                Amount:item.totalamount
               });
               axios
                 .get(URL.Url + 'mechanic/' + item.mechanicid)
@@ -153,7 +155,7 @@ export default class HomeDetail extends Component {
                         )
                         .then((prod) => {
                           this.setState({products: prod.data});
-                        });
+                        })
                     });
                 });
             });
@@ -179,14 +181,14 @@ export default class HomeDetail extends Component {
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
         this.state.products.map((item) => {
+          AsyncStorage.removeItem('bookMechanicData');
+          this.props.navigation.navigate('Dashboard');
           axios
             .put(
               URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
             )
             .then((mod) => {
               this.setState({refreshing: false});
-              AsyncStorage.removeItem('bookMechanicData');
-              this.props.navigation.navigate('Dashboard');
               console.log(res.data, 'data updated');
             });
         });
@@ -256,9 +258,13 @@ export default class HomeDetail extends Component {
         rating: this.state.rating,
         description: this.state.description,
       })
-      .then((response) => {
-        console.log(response.data);
-     alert('Review Added')
+      .then(async (response) => {
+        await axios
+          .put(URL.Url + 'mechanicrating/' + mechanicid)
+          .then((res) => {
+            alert('Review Added');
+            console.log(res.data);
+          });
       })
       .catch((error) => {
         console.log(error, 'Review not added');
@@ -266,7 +272,6 @@ export default class HomeDetail extends Component {
       .catch((error) => {
         console.log(error);
       });
-    // this.CancelBooking();
   };
 
   render() {
@@ -413,8 +418,8 @@ export default class HomeDetail extends Component {
                     <StarRating
                       disabled={true}
                       maxStars={5}
-                      rating={this.state.starCount}
-                      selectedStar={(rating) => this.onStarRatingPress(rating)}
+                      rating={data.rating}
+                      // selectedStar={(rating) => this.onStarRatingPress(rating)}
                       fullStarColor={'#fff'}
                       emptyStarColor={'#fff'}
                       starSize={20}
@@ -536,9 +541,32 @@ export default class HomeDetail extends Component {
                 <View style={[style.borderbottom, style.mv10]}>
                   <Text style={[text.heading2Gray]}> {data.skilltype}</Text>
                 </View>
+                
+              <View style={[appStyle.rowAlignCenter, style.mt10]}>
+                <Image
+                  style={[image.medium, image.Orange, style.mr5]}
+                  source={images.dollar}></Image>
+                <Text style={[text.heading2, text.bold]}>Mechanic Service Rate</Text>
+              </View>
+              <View style={[style.borderbottom, style.mv10]}>
+                <Text style={[text.heading2Gray]}>
+                  {' '}
+                  {data.mechanicrate}.0
+                </Text>
+              </View>
                 <View style={[style.mv10, style.rowBtw]}>
-                  <View></View>
-                  <View></View>
+                  <View>
+                    <Text
+                      style={
+                        ({color: colors.Black323},
+                        [text.text22, text.bold])
+                      }>
+                      $ {this.state.Amount}
+                    </Text>
+                    <Text style={([text.text14], {color: colors.gray})}>
+                      Estimated Amount
+                    </Text>
+                  </View>
 
                   <TouchableOpacity
                     style={[style.row, style.aiCenter]}
@@ -552,16 +580,13 @@ export default class HomeDetail extends Component {
                   </TouchableOpacity>
                 </View>
                 <View style={[{display: this.state.BookNowView}, style.flex1]}>
-                  <View style={[style.mt20]}>
+                  <View style={[style.mt5]}>
                     <Text style={[text.text16]}>Alert !</Text>
                   </View>
-                  <View style={[style.pv10]}>
+                  <View style={[style.pv5]}>
                     <Text style={[text.paraGray]}>
-                      Avoid to click on below button before delivering of
-                      Mechanic Services.Its mandatory to provide Feedback of
-                      Mechanic Services because without providing Mechanic
-                      Feedback,You will be unable to book new Mechnaic.
-                    </Text>
+                      Be Sincere Your Review decide the future of Mechanic
+                        </Text>
                   </View>
                   <TouchableOpacity onPress={this.ratingModal}>
                     <View
@@ -575,7 +600,7 @@ export default class HomeDetail extends Component {
                           button.touchablebutton,
                           text.semibold,
                         ]}>
-                        Service Completed
+                      Give Mechanic Feedback
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -658,9 +683,9 @@ export default class HomeDetail extends Component {
                             disabled={true}
                             maxStars={5}
                             rating={item.rating}
-                            selectedStar={(rating) =>
-                              this.onStarRatingPress(rating)
-                            }
+                            // selectedStar={(rating) =>
+                            //   this.onStarRatingPress(rating)
+                            // }
                             fullStarColor={'#F59E52'}
                             emptyStarColor={'#F59E52'}
                             starSize={15}

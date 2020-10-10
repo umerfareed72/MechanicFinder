@@ -31,6 +31,7 @@ const mechanicschema = new mongoose.Schema({
   longitude: String,
   latitude: String,
   vehicletype: {type: String, required: 'Vehicle Type is required'},
+  rating:{type:Number,required:'Mechanic Rating is required'}, 
   date: {type: String, required: 'Date of Birth Required is required'},
 });
 

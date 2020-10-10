@@ -64,7 +64,7 @@ export default class Mechaniclist extends Component {
         if (res.data == '') {
           this.setState({
             slot: id,
-          }); 
+          });
           if (this.state.slot == id) {
             // console.log(this.state.dataSource[id])
             const senddata = JSON.stringify(this.state.dataSource[id]);
@@ -139,9 +139,7 @@ export default class Mechaniclist extends Component {
           <View style={style.aiCenter}>
             <Text style={[text.heading1purple, text.bold]}>Mechanics</Text>
             <Text style={[text.text14, {color: '#4A4A4A'}]}>
-             {'Search & Book Your Desire'} {this.state.skilltype} {'Mechanic'}
-              
-
+              {'Search & Book Your Desire'} {this.state.skilltype} {'Mechanic'}
             </Text>
           </View>
           <View></View>
@@ -239,10 +237,10 @@ export default class Mechaniclist extends Component {
                           <StarRating
                             disabled={true}
                             maxStars={5}
-                            rating={this.state.starCount}
-                            selectedStar={(rating) =>
-                              this.onStarRatingPress(rating)
-                            }
+                            rating={data.rating}
+                            // selectedStar={(rating) =>
+                            //   this.onStarRatingPress(rating)
+                            // }
                             fullStarColor={'#F59E52'}
                             emptyStarColor={'#F59E52'}
                             starSize={18}

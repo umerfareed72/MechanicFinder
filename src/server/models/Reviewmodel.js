@@ -5,7 +5,7 @@ const ReviewModelschema = new mongoose.Schema({
   firstname:String,
   lastname:String,
   photo:String,
-  rating:{type:String,required:'Rating is required'},
+  rating:{type:Number,required:'Rating is required'},
   description:{type:String,required:'Description is required'},
 });
 

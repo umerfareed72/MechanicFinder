@@ -234,7 +234,7 @@ export default class UserProfile extends Component {
                     {data.firstname} {data.lastname}{' '}
                   </Text>
                 </View>
-                <View style={[appStyle.overviewStarsContainer]}>
+                {/* <View style={[appStyle.overviewStarsContainer]}>
                   <StarRating
                     disabled={true}
                     maxStars={5}
@@ -248,9 +248,9 @@ export default class UserProfile extends Component {
                   <Text style={[text.text10, style.pl10, text.lightGrey]}>
                     Reviews(85)
                   </Text>
-                </View>
+                </View> */}
 
-                <View style={[]}>
+                <View style={[style.mv10]}>
                   <Text style={[text.h1]}>Discription</Text>
                   <Text style={text.para}>
                     it is a long established fact that a reader will be
@@ -260,7 +260,6 @@ export default class UserProfile extends Component {
                     its layout.
                   </Text>
                 </View>
-
                 <View style={style.mt20}>
                   <View style={[style.row, style.aiCenter]}>
                     <Image
@@ -329,7 +328,7 @@ export default class UserProfile extends Component {
               <View style={style.bgOverlay} />
               <View style={[style.rowBtw, style.ph20, style.pb10]}>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Dashboard')}>
+                  onPress={() => this.props.navigation.navigate('MechanicDashboard')}>
                   <Image
                     source={images.backarrowh}
                     style={[

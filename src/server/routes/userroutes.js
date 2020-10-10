@@ -180,35 +180,44 @@ router.get('/getuser/:id', (req, res) => {
         var word = tokenizer.tokenize(item.description);
         const r = analyzer.getSentiment(word);
         console.log(r)
-        if ((r > 1 && item.rating == 5) || (r > 1 && item.rating == 4)) {
-          data.push({
+     data.push({
             rating: item.rating,
             description: item.description,
             rating: item.rating,
             photo: item.photo,
             firstname: item.firstname,
           });
-        } else if (
-          (r >= 0 && r <= 1 && item.rating == 3) ||
-          (r >= 0 && r <= 1 && item.rating == 4) ||
-          (r >= 0 && r <= 1 && item.rating == 2)
-        ) {
-          data.push({
-            rating: item.rating,
-            description: item.description,
-            rating: item.rating,
-            photo: item.photo,
-            firstname: item.firstname,
-          });
-        } else if ((r < 0 && item.rating == 1) || (r < 0 && item.rating == 2)) {
-          data.push({
-            rating: item.rating,
-            description: item.description,
-            rating: item.rating,
-            photo: item.photo,
-            firstname: item.firstname,
-          });
-        }
+     
+      //   if (
+      //     (r > 1 && item.rating == 5) || (r > 1 && item.rating == 4)) {
+      //     data.push({
+      //       rating: item.rating,
+      //       description: item.description,
+      //       rating: item.rating,
+      //       photo: item.photo,
+      //       firstname: item.firstname,
+      //     });
+      //   } else if (
+      //     (r >= 0 && r <= 1 && item.rating == 3) ||
+      //     (r >= 0 && r <= 1 && item.rating == 4) ||
+      //     (r >= 0 && r <= 1 && item.rating == 2)
+      //   ) {
+      //     data.push({
+      //       rating: item.rating,
+      //       description: item.description,
+      //       rating: item.rating,
+      //       photo: item.photo,
+      //       firstname: item.firstname,
+      //     });
+      //   } else if ((r < 0 && item.rating == 1) || (r < 0 && item.rating == 2)) {
+      //     data.push({
+      //       rating: item.rating,
+      //       description: item.description,
+      //       rating: item.rating,
+      //       photo: item.photo,
+      //       firstname: item.firstname,
+      //     });
+      //   }
       });
       res.json(data);
     })

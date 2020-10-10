@@ -5,6 +5,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Mechanicmodel = mongoose.model('mechanicmodel');
 const Usermodel = mongoose.model('Usermodel');
+const Reviewmodel = mongoose.model('ReviewModel');
 
 router.post('/mechanicsignin', async (req, res) => {
   const {email, password} = req.body;
@@ -43,6 +44,7 @@ router.post('/mechanicregister', async (req, res) => {
     latitude: req.body.latitude,
     vehicletype: req.body.vehicletype,
     date: req.body.date,
+    rating: req.body.rating,
   });
 
   await mechanic
@@ -77,7 +79,8 @@ router.get('/me', function (req, res) {
 
 //Update Mechanic Lat and Long
 //Update User Lat & Long
-router.put('/mechaniclocation/:id', (req, res) => {
+router.put('/mechaniclocation/:id', async (req, res) => {
+  
   Mechanicmodel.findByIdAndUpdate(
     {_id: req.params.id},
     {
@@ -89,9 +92,8 @@ router.put('/mechaniclocation/:id', (req, res) => {
       if (!mechanic) {
         return res.status(404).send('Mechanic Not Found');
       } else {
-        // mechanic.update();
-        return res.status(200).json(mechanic);
-      }
+          return res.status(200).json(mechanic);
+        }
     })
     .catch((error) => {
       return res.send(error);
@@ -118,6 +120,8 @@ router.get('/mechanic/:id', (req, res) => {
       latitude: 1,
       longitude: 1,
       mechanicrate: 1,
+      rating: 1,
+    
     })
     .then((mechanic) => {
       if (!mechanic) {
@@ -151,13 +155,13 @@ router.get('/mechanics', (req, res) => {
       vehicletype: 1,
       date: 1,
       mechanicrate: 1,
+      rating: 1,
     });
     if (!mechanics) return res.status(404).send('Not Found');
     res.send(mechanics);
   }
   get();
 });
-
 router.get(
   '/nearmechanics/:skilltype/:vehicletype/:carcompany/:id',
   (req, res) => {
@@ -165,7 +169,6 @@ router.get(
     var longitude;
     var city;
     var country;
-
     var nearest = [];
     Usermodel.findById(req.params.id)
       .sort('id')
@@ -209,6 +212,7 @@ router.get(
             mechanicrate: 1,
             longitude: 1,
             latitude: 1,
+            rating:1
           })
           .then((mechanics) => {
             if (!mechanics) return res.status(404).send('Not Found');
@@ -250,6 +254,7 @@ router.get(
                   latitude: item.latitude,
                   longitude: item.longitude,
                   mechanicrate: item.mechanicrate,
+                  rating:item.rating,
                   distance: Math.trunc(result),
                 });
               }
@@ -262,5 +267,67 @@ router.get(
       });
   },
 );
+
+
+router.put('/mechanicrating/:id', async (req, res) => {
+  const totalfiverate = await Reviewmodel.find({
+    mechanicid: req.params.id,
+    rating: 5,
+  }).count();
+  const totalfourrate = await Reviewmodel.find({
+    mechanicid: req.params.id,
+    rating: 4,
+  }).count();
+  const totalthreerate = await Reviewmodel.find({
+    mechanicid: req.params.id,
+    rating: 3,
+  }).count();
+  const totaltworate = await Reviewmodel.find({
+    mechanicid: req.params.id,
+    rating: 2,
+  }).count();
+  const totalonerate = await Reviewmodel.find({
+    mechanicid: req.params.id,
+    rating: 1,
+  }).count();
+  const totalrate =
+    (5 * totalfiverate +
+      4 * totalfourrate +
+      3 * totalthreerate +
+      2 * totaltworate +
+      1 * totalonerate) /
+    (totalfiverate +
+      totalfourrate +
+      totalthreerate +
+      totaltworate +
+      totalonerate);
+      console.log(totalrate)
+  Mechanicmodel.findByIdAndUpdate(
+    {_id: req.params.id},
+    {
+       rating:1
+    },
+  )
+    .then((mechanic) => {
+      if (!mechanic) {
+        return res.status(404).send('Mechanic Not Found');
+      } else {
+        if(mechanic.rating!=0){
+          Mechanicmodel.findByIdAndUpdate(
+            {_id: req.params.id},
+            {
+            rating:totalrate
+            },
+          ).then((m)=>{
+            return res.status(200).json(m);
+          })
+        }
+      }
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
+
 
 module.exports = router;

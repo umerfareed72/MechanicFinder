@@ -49,6 +49,7 @@ export default class MechanicDashboard extends Component {
       bookedUserData: [],
       data: [],
       bookedUserid: '',
+      Amount:0
     };
   }
   getData = () => {
@@ -84,6 +85,8 @@ export default class MechanicDashboard extends Component {
                       console.log(response.data);
 
                       response.data.map((item) => {
+                        this.setState({Amount:item.totalamount})
+                    
                         axios
                           .get(URL.Url + 'user/' + item.userid)
                           .then((response) => {
@@ -120,7 +123,6 @@ export default class MechanicDashboard extends Component {
         });
     });
   };
-
   requestMechanicLocation = async () => {
     try {
       const grantedLocation = await PermissionsAndroid.request(
@@ -222,20 +224,14 @@ export default class MechanicDashboard extends Component {
                 </View>
                 <View style={style.row}>
                   <Text style={[text.text15, {color: colors.gray}]}>
-                    {bookedUserData.email}
+                    Price: {this.state.Amount}
                   </Text>
+                  <Image source={images.dollar} style={image.medium}></Image>
                 </View>
-                <View style={[style.mv5]}>
-                  <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.starCount}
-                    selectedStar={(rating) => this.onStarRatingPress(rating)}
-                    fullStarColor={'#F59E52'}
-                    emptyStarColor={'#F59E52'}
-                    starSize={18}
-                    containerStyle={{width: 110, marginTop: 3}}
-                  />
+                <View >
+                  <Text>
+                  {bookedUserData.address}{bookedUserData.city}{' '}{bookedUserData.country}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -302,14 +298,14 @@ export default class MechanicDashboard extends Component {
                   <StarRating
                     disabled={true}
                     maxStars={5}
-                    rating={this.state.starCount}
-                    selectedStar={(rating) => this.onStarRatingPress(rating)}
+                    rating={this.state.data.rating}
+                    // selectedStar={(rating) => this.onStarRatingPress(rating)}
                     fullStarColor={'#000'}
                     emptyStarColor={'#000'}
                     starSize={20}
                     containerStyle={{width: 110, marginTop: 3}}
                   />
-                  <Text style={[text.center, style.mv5]}> Reviews(4/5.0)</Text>
+                  <Text style={[text.center, style.mv5]}> Reviews({this.state.data.rating}/5.0)</Text>
                 </View>
               </View>
               <View style={[style.aiCenter, style.mv10]}>
