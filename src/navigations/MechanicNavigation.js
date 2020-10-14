@@ -19,7 +19,7 @@ import Chat from '../views/Mechanic/Chat';
 import UserProfileDetail from '../views/Mechanic/UserProfileDetail';
 import Products from '../views/Mechanic/Products'
 import AddProducts from '../views/Mechanic/AddProducts'
-
+import EditMechanicProfile from '../views/Mechanic/EditMechanicProfile'
 import {
   colors,
   screenHeight,
@@ -50,6 +50,7 @@ const  ProductsStack = createStackNavigator(
     Products: Products,
     AddProducts: AddProducts,
     EditProduct:EditProduct
+
   },
   {
     headerMode: 'none',
@@ -61,6 +62,7 @@ const  ProductsStack = createStackNavigator(
 const SettingStack = createStackNavigator(
   {
     MechanicSetting: MechanicSetting,
+  EditMechanicProfile:EditMechanicProfile
   },
   {
     headerMode: 'none',

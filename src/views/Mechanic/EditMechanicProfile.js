@@ -39,37 +39,36 @@ import Textarea from 'react-native-textarea';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import axios from 'axios';
 
-export default class EditProfile extends Component {
+export default class EditMechanicProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       rating: 2,
       starCount: 3,
       loading: false,
-      product: [],
+      mechanic: [],
       isModalVisible: false,
       refreshing: false,
-      user: '',
-      firstname: '',
-      lastname: '',
-      phone: 0,
-      address: '',
-      city: '',
-      email: '',
-      country: '',
-      photo: '',
-      // password:'',
+ firstname:'',
+ lastname:'',
+ phone:0,
+ address:'',
+ city:'',
+ email:'',
+ country:'',
+photo:'',
+password:'',
 
       edit: false,
       edit1: false,
       edit2: false,
-      edit3: false,
-      edit4: false,
-      edit5: false,
-      edit6: false,
-      edit7: false,
-      edit8: false,
-    };
+      edit3:false,
+      edit4:false,
+      edit5:false,
+      edit6:false,
+      edit7:false,
+      edit8:false,
+     };
   }
 
   handleChoosePhoto = () => {
@@ -121,50 +120,52 @@ export default class EditProfile extends Component {
   };
 
   submitdata = () => {
-    AsyncStorage.getItem('userdata').then((res) => {
-      const data = JSON.parse(res);
-      axios
-        .put(URL.Url + 'updateuser/' + this.state.user._id, {
-          firstname: this.state.firstname,
-          lastname: this.state.lastname,
-          photo: this.state.photo,
+    AsyncStorage.getItem('Mechanicdata').then((res) => {
+        const data = JSON.parse(res);
+        axios
+          .put(URL.Url + 'updatemechanic/' + this.state.mechanic._id, {
+           firstname:this.state.firstname,
+           lastname:this.state.lastname,
+           photo:this.state.photo,
           //  password:this.state.password,
-          phone: this.state.phone,
-          address: this.state.address,
-          city: this.state.city,
-          country: this.state.country,
-          email: this.state.email,
-        })
-        .then((response) => {
-          console.log(response.data);
-          alert('Data Updated');
-        });
-    });
-  };
+           phone:this.state.phone,
+           address:this.state.address,
+           city:this.state.city,
+           country:this.state.country,
+          email:this.state.email,
+          })
+          .then((response) => {
+            console.log(response.data);
+            alert('Data Updated')
+          });
+      });
+       
+};
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
     });
   }
   async componentDidMount() {
-    AsyncStorage.getItem('userdata').then((res) => {
+    AsyncStorage.getItem('Mechanicdata').then((res) => {
       const data = JSON.parse(res);
       console.log(data);
-      this.setState({user: data});
+      this.setState({mechanic: data});
       this.setState({firstname: data.firstname});
       this.setState({lastname: data.lastname});
-      this.setState({email: data.email});
+      this.setState({email:data.email });
       this.setState({photo: data.photo});
       this.setState({phone: JSON.stringify(data.phone)});
       this.setState({address: data.address});
       this.setState({city: data.city});
       this.setState({country: data.country});
       this.setState({password: data.password});
+    
     });
   }
 
   render() {
-    const {photo, user} = this.state;
+    const {photo, mechanic} = this.state;
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar barStyle={'light-content'} translucent={true} />
@@ -182,7 +183,7 @@ export default class EditProfile extends Component {
                   <Text style={[text.heading2Gray]}>{this.state.title}</Text>
                 </View>
                 <Image
-                  source={{uri: user.photo}}
+                  source={{uri: mechanic.photo}}
                   style={[
                     {
                       height: '70%',
@@ -206,7 +207,7 @@ export default class EditProfile extends Component {
         <View>
           <TouchableOpacity onPress={this.toggleModal}>
             <ImageBackground
-              source={{uri: user.photo}}
+              source={{uri: mechanic.photo}}
               style={[style.HeaderHeight3, style.jcCenter]}>
               <View style={style.bgOverlay} />
               <View style={[appStyle.Headre1]}>
@@ -260,7 +261,7 @@ export default class EditProfile extends Component {
                   value={this.state.firstname}
                   onChangeText={(text) => {
                     this.setState({
-                      firstname: text,
+                     firstname: text,
                     });
                   }}
                   underlineColorAndroid="transparent"></TextInput>
@@ -322,6 +323,8 @@ export default class EditProfile extends Component {
                   underlineColorAndroid="transparent"></TextInput>
               </View>
 
+
+
               <View
                 style={[style.mh30, style.rowBtw, style.aiCenter, style.mt20]}>
                 <Text>Password</Text>
@@ -348,6 +351,9 @@ export default class EditProfile extends Component {
                   }}
                   underlineColorAndroid="transparent"></TextInput>
               </View>
+
+
+
 
               <View
                 style={[style.mh30, style.rowBtw, style.aiCenter, style.mt20]}>

@@ -14,9 +14,11 @@ import {createDrawerNavigator} from 'react-navigation-drawer';
 
 import Dashboard from '../views/main/Dashboard';
 import HomeDetail from '../views/main/HomeDetail';
-import Discover from '../views/main/Discover';
+// import Discover from '../views/main/Discover';
 
-import Memories from '../views/main/Memories';
+// import Memories from '../views/main/Memories'
+
+;
 import MyBooking from '../views/main/MyBooking';
 import InviteFriend from '../views/main/InviteFriend';
 
@@ -49,9 +51,9 @@ const DashboardStack = createStackNavigator(
     HomeDetail: {
       screen: HomeDetail,
     },
-    Memories: {
-      screen: Memories,
-    },
+    // Memories: {
+    //   screen: Memories,
+    // },
 
     Mechaniclist: {
       screen: Mechaniclist,
@@ -79,17 +81,17 @@ const DashboardStack = createStackNavigator(
   },
 );
 
-const DiscoverStack = createStackNavigator(
-  {
-    Memories: Memories,
-  },
-  {
-    headerMode: 'none',
-    navigationOptions: {
-      headerVisible: false,
-    },
-  },
-);
+// const DiscoverStack = createStackNavigator(
+//   {
+//     Memories: Memories,
+//   },
+//   {
+//     headerMode: 'none',
+//     navigationOptions: {
+//       headerVisible: false,
+//     },
+//   },
+// );
 const TabStack = createStackNavigator(
   {
     Setting: Setting,
@@ -121,18 +123,18 @@ const Navigator = createMaterialBottomTabNavigator(
       },
     },
 
-    Discover: {
-      screen: DiscoverStack,
-      navigationOptions: {
-        tabBarLabel: 'Discover',
-        tabBarIcon: ({tintColor}) => (
-          <Image
-            style={{resizeMode: 'contain', height: 25, width: 25}}
-            source={images.saved}
-          />
-        ),
-      },
-    },
+    // Discover: {
+    //   screen: DiscoverStack,
+    //   navigationOptions: {
+    //     tabBarLabel: 'Discover',
+    //     tabBarIcon: ({tintColor}) => (
+    //       <Image
+    //         style={{resizeMode: 'contain', height: 25, width: 25}}
+    //         source={images.saved}
+    //       />
+    //     ),
+    //   },
+    // },
 
     Tab3: {
       screen: TabStack,

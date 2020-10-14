@@ -330,4 +330,30 @@ router.put('/mechanicrating/:id', async (req, res) => {
 });
 
 
+//Update User Profile
+
+
+router.put('/updatemechanic/:id', (req, res) => {
+  const User = Mechanicmodel.findByIdAndUpdate(req.params.id,{
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    email: req.body.email,
+    // password: req.body.password,
+    phone: req.body.phone,
+    address: req.body.address,
+    photo: req.body.photo,
+    city: req.body.city,
+    country: req.body.country,
+    })
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+      // const token = jwt.sign({userid: User._id}, jwtkey);
+      // res.send({token});
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
 module.exports = router;

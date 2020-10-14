@@ -166,7 +166,7 @@ export default class MechanicSetting extends Component {
             {/* body */}
             <View style={[style.mt30]}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('EditProfile')}
+                onPress={() => this.props.navigation.navigate('EditMechanicProfile')}
                 style={[style.mb20]}>
                 <View style={[style.rowBtw]}>
                   <View style={[style.row, style.aiCenter]}>

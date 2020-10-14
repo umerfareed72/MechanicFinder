@@ -39,6 +39,33 @@ router.post('/userregister', (req, res) => {
     });
 });
 
+//Update User Profile
+
+
+router.put('/updateuser/:id', (req, res) => {
+  const User = Usermodel.findByIdAndUpdate(req.params.id,{
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    email: req.body.email,
+    // password: req.body.password,
+    phone: req.body.phone,
+    address: req.body.address,
+    photo: req.body.photo,
+    city: req.body.city,
+    country: req.body.country,
+    })
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+      // const token = jwt.sign({userid: User._id}, jwtkey);
+      // res.send({token});
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+
 //User Login
 
 router.post('/usersignin', async (req, res) => {
@@ -68,6 +95,7 @@ router.get('/user/:id', (req, res) => {
       latitude: 1,
       longitude: 1,
       email: 1,
+      password:1,
       phone: 1,
       photo: 1,
       address: 1,
