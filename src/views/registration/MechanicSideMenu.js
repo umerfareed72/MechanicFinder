@@ -169,9 +169,9 @@ export default class SideMenu extends React.Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-            //   onPress={() => {
-            //     this.props.navigation.navigate('InviteFriend');
-            //   }}
+              onPress={() => {
+                this.props.navigation.navigate('IssueList');
+              }}
             >
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>
@@ -179,7 +179,7 @@ export default class SideMenu extends React.Component {
                     source={images.percent}
                     style={[image.drawerIcon]}></Image>
                   <Text style={[text.textheader4, {color: colors.white}]}>
-                    Invite a Friend
+                  Posted Issues
                   </Text>
                 </View>
               </View>

@@ -1,0 +1,14 @@
+const mongoose = require('mongoose');
+const vehicalissueschema = new mongoose.Schema({
+  city: String,
+  vehicaltype: String,
+  issuetype: String,
+  carcompany: String,
+  phone: String,
+  description: String,
+  status: String,
+  userdbid: String,
+  date: String,
+});
+
+mongoose.model('vehicalissue', vehicalissueschema);

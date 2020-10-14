@@ -42,6 +42,11 @@ import ProfileDetail from '../views/main/ProfileDetail';
 
 import Items from '../views/main/Items';
 import Login from '../views/registration/Login';
+import PostVehicleIssue from "../views/main/PostVehicleIssue"
+import Issuedetail from "../views/main/Issuedetail"
+import IssueListC from "../views/main/IssueListC"
+import EditIssue from "../views/main/EditIssue"
+
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
@@ -81,17 +86,20 @@ const DashboardStack = createStackNavigator(
   },
 );
 
-// const DiscoverStack = createStackNavigator(
-//   {
-//     Memories: Memories,
-//   },
-//   {
-//     headerMode: 'none',
-//     navigationOptions: {
-//       headerVisible: false,
-//     },
-//   },
-// );
+const PostVehicleStack = createStackNavigator(
+  {
+    IssueListC: IssueListC,
+    PostVehicleIssue:PostVehicleIssue,
+    Issuedetail:Issuedetail,
+    EditIssue:EditIssue
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
 const TabStack = createStackNavigator(
   {
     Setting: Setting,
@@ -123,18 +131,18 @@ const Navigator = createMaterialBottomTabNavigator(
       },
     },
 
-    // Discover: {
-    //   screen: DiscoverStack,
-    //   navigationOptions: {
-    //     tabBarLabel: 'Discover',
-    //     tabBarIcon: ({tintColor}) => (
-    //       <Image
-    //         style={{resizeMode: 'contain', height: 25, width: 25}}
-    //         source={images.saved}
-    //       />
-    //     ),
-    //   },
-    // },
+    IssueListC: {
+      screen: PostVehicleStack,
+      navigationOptions: {
+        tabBarLabel: 'Post Vehicle',
+        tabBarIcon: ({tintColor}) => (
+          <Image
+            style={{resizeMode: 'contain', height: 25, width: 25}}
+            source={images.saved}
+          />
+        ),
+      },
+    },
 
     Tab3: {
       screen: TabStack,

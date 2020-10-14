@@ -29,6 +29,9 @@ import {
 } from '../config/Constant';
 import LoginasMechanic from '../views/registration/LoginasMechanic';
 import EditProduct from '../views/Mechanic/EditProduct';
+import IssueList from '../views/Mechanic/IssueList';
+import Issuedetail from '../views/main/Issuedetail';
+import MIssuedetail from '../views/Mechanic/MIssueDetail';
 
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
@@ -49,8 +52,7 @@ const  ProductsStack = createStackNavigator(
   {
     Products: Products,
     AddProducts: AddProducts,
-    EditProduct:EditProduct
-
+    EditProduct:EditProduct,
   },
   {
     headerMode: 'none',
@@ -62,7 +64,9 @@ const  ProductsStack = createStackNavigator(
 const SettingStack = createStackNavigator(
   {
     MechanicSetting: MechanicSetting,
-  EditMechanicProfile:EditMechanicProfile
+    EditMechanicProfile:EditMechanicProfile,
+    IssueList:IssueList,
+    MIssuedetail:MIssuedetail
   },
   {
     headerMode: 'none',

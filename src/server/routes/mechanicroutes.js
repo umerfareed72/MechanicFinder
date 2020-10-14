@@ -6,6 +6,160 @@ const jwt = require('jsonwebtoken');
 const Mechanicmodel = mongoose.model('mechanicmodel');
 const Usermodel = mongoose.model('Usermodel');
 const Reviewmodel = mongoose.model('ReviewModel');
+const Suggestion =mongoose.model('suggestions')
+const VehicalIssuemodel =mongoose.model('vehicalissue')
+
+router.post('/issueregister', async (req, res) => {
+  console.log('in issue register');
+  const issue = new VehicalIssuemodel({
+    carcompany: req.body.carcompany,
+    issuetype: req.body.issuetype,
+    skilltype: req.body.skilltype,
+    city: req.body.city,
+    vehicaltype: req.body.vehicaltype,
+    userdbid: req.body.userdbid,
+    phone: req.body.phone,
+    description: req.body.description,
+    date: Date.now(),
+    status: req.body.status,
+  });
+  await issue.save().then(() => {
+    res.send(issue).catch((err) => {
+      res.status(404).send(err.message);
+    });
+  });
+});
+
+router.get('/vehicalissues/:issuetype/:vehicaltype/:carcompany', (req, res) => {
+  // var vehicaltype;
+  // var issuetype;
+  // var carcompany;
+  // var description;
+  // var phone;
+  VehicalIssuemodel.find({
+    issuetype: req.params.issuetype,
+    vehicaltype: req.params.vehicaltype,
+    carcompany: req.params.carcompany,
+  })
+    .sort('id')
+    .select({
+      _id:1,
+      phone: 1,
+      city: 1,
+      carcompany: 1,
+      skilltype: 1,
+      vehicaltype: 1,
+      issuetype: 1,
+      description: 1,
+      phone: 1,
+      date: 1,
+      status: 1,
+    })
+    .then((issues) => {
+      if (!issues) return res.status(404).send('Not Found');
+      else res.json(issues);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+router.get('/vehicalissuesC/:userdbid', (req, res) => {
+  VehicalIssuemodel.find({
+    userdbid: req.params.userdbid,
+  })
+    .sort('id')
+    .select({
+      phone: 1,
+      city: 1,
+      carcompany: 1,
+      skilltype: 1,
+      vehicaltype: 1,
+      issuetype: 1,
+      description: 1,
+      phone: 1,
+      date: 1,
+      status: 1,
+    })
+    .then((issues) => {
+      if (!issues) return res.status(404).send('Not Found');
+      else res.json(issues);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+
+router.post('/postsuggestion', async (req, res) => {
+  console.log('in suggestion');
+  const suggestion = new Suggestion({
+    firstname:req.body.firstname,
+    suggestion:req.body.suggestion,
+    issueid:req.body.issueid
+  });
+  await suggestion.save().then(() => {
+    res.send(suggestion).catch((err) => {
+      res.status(404).send(err.message);
+    });
+  });
+});
+
+
+
+router.get('/issuessuggestion/:issueid', (req, res) => {
+  Suggestion.find({
+    issueid: req.params.issueid,
+  })
+    .sort('id')
+    .select({
+      suggestion:1,
+      firstname:1
+    })
+    .then((suggestion) => {
+      if (!suggestion) return res.status(404).send('Not Found');
+      else res.json(suggestion);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+
+router.put('/updateissue/:issueid', (req, res) => {
+  VehicalIssuemodel.findByIdAndUpdate(
+    {_id: req.params.issueid},
+    {
+      issuetype: req.body.issuetype,
+        phone: req.body.Phone,
+        photo: req.body.photo,
+        carcompany: req.body.carcompany,
+        city: req.body.city,
+        description: req.body.description,
+        vehicaltype:req.body.vehicaltype,
+    },
+  )
+    .then((issue) => {
+      if (!issue) {
+        return res.status(404).send('Issue Not Found');
+      } else {
+        // mechanic.update();
+        return res.status(200).json(issue);
+      }
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
+
+
+
+router.delete('/deleteissue/:id',async(req,res)=>{
+  VehicalIssuemodel.findByIdAndDelete(req.params.id)
+  .then((data) =>{res.json(data)})
+.catch((err) =>{
+  res.status(404).send(err.message);
+})})
 
 router.post('/mechanicsignin', async (req, res) => {
   const {email, password} = req.body;
