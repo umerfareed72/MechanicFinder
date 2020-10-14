@@ -316,7 +316,7 @@ router.put('/mechanicrating/:id', async (req, res) => {
           Mechanicmodel.findByIdAndUpdate(
             {_id: req.params.id},
             {
-            rating:totalrate
+            rating:Math.trunc(totalrate)
             },
           ).then((m)=>{
             return res.status(200).json(m);

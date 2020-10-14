@@ -259,6 +259,7 @@ export default class MechanicDashboard extends Component {
   };
 
   render() {
+    console.log(this.state.data)
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar
