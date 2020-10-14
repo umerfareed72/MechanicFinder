@@ -187,7 +187,7 @@ export default class SideMenu extends React.Component {
                     source={images.percent}
                     style={[image.drawerIcon]}></Image>
                   <Text style={[text.textheader4, {color: colors.white}]}>
-                 Posted Issues
+                   Posted Issues
                     </Text>
                 </View>
               </View>
