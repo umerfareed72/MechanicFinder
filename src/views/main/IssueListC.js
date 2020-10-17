@@ -149,7 +149,7 @@ export default class Mechaniclist extends Component {
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
         <View style={{marginTop: 40}} />
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
-          <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Dashboard')}>
             <Image source={images.backarrowh} style={image.backArrow2}></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.showIssues()}>

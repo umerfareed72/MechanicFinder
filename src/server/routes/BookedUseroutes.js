@@ -93,6 +93,18 @@ router.put('/cancelbookeduser/:id', (req, res) => {
       return res.send(error);
     });
 });
+//Earning Calculation
+router.get('/bookedmid/:id', async (req, res) => {
+  BookedUsermodel.find({mechanicid:req.params.id})
+    .then((data) => {
+      res.json(data);
+    })
+    //  res.send(userdata)
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
 
 //////////////////////////// Complete Booking From Mechanic///////////////////
 

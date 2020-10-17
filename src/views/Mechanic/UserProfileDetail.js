@@ -186,8 +186,7 @@ export default class UserProfileDetail extends Component {
         console.log(error);
       });
   };
-
-  completework = () => {
+completework = () => {
     var finalamount = parseInt(this.state.Amount)+parseInt(this.state.extraAmount) ;
     axios
       .put(
@@ -198,18 +197,20 @@ export default class UserProfileDetail extends Component {
           finalamount,
       )
       .then((res) => {
-        this.state.products.map((item) => {
-          axios
-            .put(
-              URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
-            )
-            .then((mod) => {
-              this.setState({refreshing: false});
-              AsyncStorage.removeItem('bookMechanicData');
-              this.props.navigation.navigate('MechanicDashboard');
-              console.log(res.data, 'data updated');
-            });
-        });
+        // AsyncStorage.removeItem('bookMechanicData');
+        console.log(res.data, 'data updated');
+        this.setState({refreshing: false});
+        // this.props.navigation.navigate('MechanicDashboard');
+        alert('Your Work is Completed:'
+       +"\n"+' Collect Your Cash from User Please.')
+        // this.state.products.map((item) => {
+        // // axios.put(
+        // //   URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
+        // //     )
+        // //     .then((mod) => {
+        // //      alert('Good Bye')
+        // //     });
+        // });
       })
       .catch((error) => {
         console.log(error);
@@ -258,6 +259,7 @@ export default class UserProfileDetail extends Component {
               animationOutTiming={500}>
               <View style={[style.flex1, appStyle.rowCenter]}>
                 <View style={[appStyle.modalBg]}>
+      <Text style={text.h1}>{ parseInt(this.state.Amount)+parseInt(this.state.extraAmount)}</Text>
                 <View style={[input.formInput, style.mv5,style.row,style.aiCenter]}>
                       <Image
                         source={images.dollar}

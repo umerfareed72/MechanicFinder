@@ -62,6 +62,8 @@ router.delete('/deletebuyProduct/:id', (req, res) => {
   get();
 });
 
+
+
 router.put('/bookedbuyProduct/:id/:pid', (req, res) => {
   BookProductmodel.findByIdAndUpdate(
     {_id: req.params.id},
