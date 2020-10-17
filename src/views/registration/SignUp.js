@@ -39,7 +39,7 @@ import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
-import Login from "./Login"
+import Login from './Login';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
@@ -77,8 +77,8 @@ export default class MechanicRegister extends Component {
   _Signout = async () => {
     const login = new Login();
     login._signOut();
-    await AsyncStorage.removeItem('googleData')
-     };
+    await AsyncStorage.removeItem('googleData');
+  };
 
   check = () => {
     if (this.state.Password == this.state.CPassword) {
@@ -87,8 +87,8 @@ export default class MechanicRegister extends Component {
       alert('Confirm Password Not Matched');
     }
   };
-  componentDidMount(){
-this._Signout()
+  componentDidMount() {
+    this._Signout();
   }
   submitData = () => {
     axios
@@ -117,7 +117,6 @@ this._Signout()
       })
       .catch((error) => {
         Alert.alert('something went Wrong!!');
-
         console.log(error);
       });
   };
@@ -152,7 +151,7 @@ this._Signout()
           .then((res) => res.json())
           .then((data) => {
             console.log(data.secure_url);
-         this.setState({photo:data.secure_url})
+            this.setState({photo: data.secure_url});
           })
           .catch((err) => {
             Alert.alert('An Error Occured While Uploading');

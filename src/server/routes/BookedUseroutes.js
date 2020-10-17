@@ -79,6 +79,7 @@ router.put('/cancelbookeduser/:id', (req, res) => {
     {_id: req.params.id},
     {
       Status: 'Offline',
+      totalamount:0
     },
   )
     .then((canceluser) => {
@@ -113,7 +114,7 @@ router.put('/completebooking/:id/:totalamount', (req, res) => {
     {_id: req.params.id},
     {
       totalamount:req.params.totalamount,
-      Status: 'Offline',
+      // Status: 'Offline',
     },
   )
     .then((canceluser) => {
@@ -121,7 +122,7 @@ router.put('/completebooking/:id/:totalamount', (req, res) => {
         return res.status(404).send('Mechanic Not Found');
       } else {
         return res.status(200).json(canceluser);
-        canceluser.save();
+    
       }
     })
     .catch((error) => {

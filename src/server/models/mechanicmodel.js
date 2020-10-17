@@ -19,7 +19,7 @@ const mechanicschema = new mongoose.Schema({
       'Please fill a valid email address',
     ],
   },
-  password: {type: String, required: 'Password is required', min: 6, max: 18},
+  password: {type: String, required: 'Password is required'},
   phone: {type: Number, required: 'Phone Number is required'},
   address: {type: String, required: 'Address is required'},
   photo: String,

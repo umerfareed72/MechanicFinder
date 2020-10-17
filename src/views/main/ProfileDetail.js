@@ -69,6 +69,7 @@ export default class HomeDetail extends Component {
       photo: '',
       refreshing: false,
       Amount: 0,
+      productprice: 0,
     };
   }
   toggleModal = () => {
@@ -96,7 +97,7 @@ export default class HomeDetail extends Component {
               this.setState({
                 bookedMechanicId: item._id,
                 mechanicid: item.mechanicid,
-                Amount:item.totalamount
+                Amount: item.totalamount,
               });
               axios
                 .get(URL.Url + 'mechanic/' + item.mechanicid)
@@ -155,7 +156,7 @@ export default class HomeDetail extends Component {
                         )
                         .then((prod) => {
                           this.setState({products: prod.data});
-                        })
+                        });
                     });
                 });
             });
@@ -250,6 +251,7 @@ export default class HomeDetail extends Component {
   submitReview = () => {
     const userId = this.state.userid;
     const mechanicid = this.state.mechanicid;
+
     axios
       .post(URL.Url + 'add/' + userId + '/' + mechanicid, {
         firstname: this.state.firstname,
@@ -263,7 +265,9 @@ export default class HomeDetail extends Component {
           .put(URL.Url + 'mechanicrating/' + mechanicid)
           .then((res) => {
             alert('Review Added');
+            this.CancelBooking();
             console.log(res.data);
+            this.setState({refreshing: false});
           });
       })
       .catch((error) => {
@@ -325,36 +329,55 @@ export default class HomeDetail extends Component {
               isVisible={this.state.ratingModal}
               animationInTiming={500}
               animationOutTiming={500}>
-              <View style={[appStyle.bodyHeight50, appStyle.rowEven]}>
+              <View style={[style.h100, appStyle.rowEven]}>
                 <View style={[appStyle.DashboardslotCard, style.w100]}>
                   <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={style.aiFlexEnd}>
                       <TouchableOpacity onPress={this.ratingModal}>
                         <Image
-                          style={[image.medium, image.Orange]}
+                          style={[image.large, image.Orange]}
                           source={images.cancel}></Image>
                       </TouchableOpacity>
                     </View>
                     <View style={[style.aiCenter]}>
-                      <Text style={[text.h1]}>Feedback</Text>
+                      <Text style={[text.h1]}>Receipt</Text>
                       <Text style={[text.heading2Gray]}>
                         {data.firstname} {data.lastname}{' '}
                       </Text>
                     </View>
-                    <TouchableOpacity style={[style.mb10, style.aiCenter]}>
-                      <StarRating
-                        disabled={false}
-                        maxStars={5}
-                        rating={this.state.rating}
-                        selectedStar={(rating) =>
-                          this.onStarRatingPress(rating)
-                        }
-                        fullStarColor={this.state.fullStar}
-                        emptyStarColor={this.state.emptyStar}
-                        starSize={40}
-                        containerStyle={{marginTop: 3}}
-                      />
-                    </TouchableOpacity>
+                    <View style={[style.mt5]}>
+                      <Text style={[text.text16]}>Description:</Text>
+                    </View>
+                    <View style={[style.pv5]}>
+                      <Text style={[text.paraGray]}>
+                        Be Sincere Your Review decide the future of Mechanic
+                      </Text>
+                    </View>
+                    <View style={[style.rowBtw, style.mh10, style.mt30]}>
+                      <Text style={text.heading3}> Mechanic Service Rate:</Text>
+                      <Text style={text.heading3}>{data.mechanicrate} $</Text>
+                    </View>
+
+                    {products.map((item) => {
+                      return (
+                        <View>
+                          <View style={[style.rowBtw, style.mh10, style.mt10]}>
+                            <Text style={text.heading2}> Product Name</Text>
+                            <Text style={text.heading2}>Price </Text>
+                          </View>
+                          <View style={[style.rowBtw, style.mh10, style.mt10]}>
+                            <Text style={text.heading3}> {item.title}</Text>
+                            <Text style={text.heading3}>{item.amount} </Text>
+                          </View>
+                        </View>
+                      );
+                    })}
+
+                    <View style={[style.rowBtw, style.mh10, style.mv10]}>
+                      <Text style={text.heading2}> Your Total Bill:</Text>
+                      <Text style={text.heading2}>{this.state.Amount} $</Text>
+                    </View>
+
                     <View style={[style.aiCenter]}>
                       <View style={[appStyle.textareaBorder]}>
                         <Textarea
@@ -368,6 +391,26 @@ export default class HomeDetail extends Component {
                           underlineColorAndroid={'transparent'}
                         />
                       </View>
+                      <TouchableOpacity style={[style.mv10, style.aiCenter]}>
+                        <StarRating
+                          disabled={false}
+                          maxStars={5}
+                          rating={this.state.rating}
+                          selectedStar={(rating) =>
+                            this.onStarRatingPress(rating)
+                          }
+                          fullStarColor={this.state.fullStar}
+                          emptyStarColor={this.state.emptyStar}
+                          starSize={40}
+                          containerStyle={{marginTop: 3}}
+                        />
+                        <View style={[style.aiCenter, style.mv10]}>
+                          <Text style={text.heading2Gray}>
+                            Provide Star Rating
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
                       <TouchableOpacity
                         onPress={this.submitReview}
                         style={[button.Profilebutton, {marginTop: 20}]}>
@@ -541,25 +584,26 @@ export default class HomeDetail extends Component {
                 <View style={[style.borderbottom, style.mv10]}>
                   <Text style={[text.heading2Gray]}> {data.skilltype}</Text>
                 </View>
-                
-              <View style={[appStyle.rowAlignCenter, style.mt10]}>
-                <Image
-                  style={[image.medium, image.Orange, style.mr5]}
-                  source={images.dollar}></Image>
-                <Text style={[text.heading2, text.bold]}>Mechanic Service Rate</Text>
-              </View>
-              <View style={[style.borderbottom, style.mv10]}>
-                <Text style={[text.heading2Gray]}>
-                  {' '}
-                  {data.mechanicrate}.0
-                </Text>
-              </View>
+
+                <View style={[appStyle.rowAlignCenter, style.mt10]}>
+                  <Image
+                    style={[image.medium, image.Orange, style.mr5]}
+                    source={images.dollar}></Image>
+                  <Text style={[text.heading2, text.bold]}>
+                    Mechanic Service Rate
+                  </Text>
+                </View>
+                <View style={[style.borderbottom, style.mv10]}>
+                  <Text style={[text.heading2Gray]}>
+                    {' '}
+                    {data.mechanicrate}.0
+                  </Text>
+                </View>
                 <View style={[style.mv10, style.rowBtw]}>
                   <View>
                     <Text
                       style={
-                        ({color: colors.Black323},
-                        [text.text22, text.bold])
+                        ({color: colors.Black323}, [text.text22, text.bold])
                       }>
                       $ {this.state.Amount}
                     </Text>
@@ -580,14 +624,14 @@ export default class HomeDetail extends Component {
                   </TouchableOpacity>
                 </View>
                 <View style={[{display: this.state.BookNowView}, style.flex1]}>
-                  <View style={[style.mt5]}>
+                  {/* <View style={[style.mt5]}>
                     <Text style={[text.text16]}>Alert !</Text>
                   </View>
                   <View style={[style.pv5]}>
                     <Text style={[text.paraGray]}>
                       Be Sincere Your Review decide the future of Mechanic
                         </Text>
-                  </View>
+                  </View> */}
                   <TouchableOpacity onPress={this.ratingModal}>
                     <View
                       style={[
@@ -600,7 +644,7 @@ export default class HomeDetail extends Component {
                           button.touchablebutton,
                           text.semibold,
                         ]}>
-                      Give Mechanic Feedback
+                        Print Your Receipt
                       </Text>
                     </View>
                   </TouchableOpacity>
