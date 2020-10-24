@@ -17,6 +17,7 @@ import {
   Permission,
   KeyboardAvoidingView,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 // import RNPickerSelect from 'react-native-picker-select';
@@ -84,13 +85,55 @@ export default class MechanicRegister extends Component {
     if (this.state.Password == this.state.CPassword) {
       this.submitData();
     } else {
-      alert('Confirm Password Not Matched');
+  ToastAndroid.show('Password Not Matched',ToastAndroid.BOTTOM,ToastAndroid.LONG)
     }
   };
   componentDidMount() {
     this._Signout();
   }
+
+validatefield=()=>{
+  if(this.state.FirstName==""){
+    ToastAndroid.show('First Name Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }else if(this.state.LastName==""){
+    ToastAndroid.show('Last Name Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }else if(this.state.Email==""){
+    ToastAndroid.show('Email Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }else if(this.state.Password==""){
+    ToastAndroid.show('Password Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }else if(this.state.CPassword==""){
+    ToastAndroid.show('Confirm Password Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }else if(this.state.date==""){
+    ToastAndroid.show('Date Of Birth Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }else if(this.state.Phone==""){
+    ToastAndroid.show('Phone Number Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+  }else if(this.state.address==""){
+    ToastAndroid.show('Address Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }
+  else if(this.state.City==""){
+    ToastAndroid.show('City Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }
+  else if(this.state.Country==""){
+    ToastAndroid.show('Country Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }
+  else if(this.state.photo==""){
+    ToastAndroid.show('Picture Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }
+return true
+}
+
   submitData = () => {
+  if(this.validatefield()){
     axios
       .post(URL.Url + 'userregister', {
         firstname: this.state.FirstName,
@@ -119,6 +162,7 @@ export default class MechanicRegister extends Component {
         Alert.alert('something went Wrong!!');
         console.log(error);
       });
+    }
   };
 
   handleChoosePhoto = () => {

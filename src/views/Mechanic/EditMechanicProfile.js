@@ -323,7 +323,7 @@ password:'',
                   underlineColorAndroid="transparent"></TextInput>
               </View>
 
-
+{/* 
 
               <View
                 style={[style.mh30, style.rowBtw, style.aiCenter, style.mt20]}>
@@ -351,7 +351,7 @@ password:'',
                   }}
                   underlineColorAndroid="transparent"></TextInput>
               </View>
-
+ */}
 
 
 

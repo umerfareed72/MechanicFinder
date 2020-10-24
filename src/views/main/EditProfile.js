@@ -321,7 +321,7 @@ export default class EditProfile extends Component {
                   }}
                   underlineColorAndroid="transparent"></TextInput>
               </View>
-
+{/* 
               <View
                 style={[style.mh30, style.rowBtw, style.aiCenter, style.mt20]}>
                 <Text>Password</Text>
@@ -347,7 +347,7 @@ export default class EditProfile extends Component {
                     });
                   }}
                   underlineColorAndroid="transparent"></TextInput>
-              </View>
+              </View> */}
 
               <View
                 style={[style.mh30, style.rowBtw, style.aiCenter, style.mt20]}>
