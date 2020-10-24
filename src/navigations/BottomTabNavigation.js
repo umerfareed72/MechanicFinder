@@ -46,7 +46,7 @@ import PostVehicleIssue from "../views/main/PostVehicleIssue"
 import Issuedetail from "../views/main/Issuedetail"
 import IssueListC from "../views/main/IssueListC"
 import EditIssue from "../views/main/EditIssue"
-
+import Rates from '../views/Mechanic/Rates'
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
@@ -235,6 +235,9 @@ const TabNavigator = createDrawerNavigator(
     Navigators: {
       screen: Navigators,
     },
+    Rates:{
+      screen:Rates
+    }
 
   },
   {

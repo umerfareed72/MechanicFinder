@@ -20,6 +20,8 @@ import UserProfileDetail from '../views/Mechanic/UserProfileDetail';
 import Products from '../views/Mechanic/Products'
 import AddProducts from '../views/Mechanic/AddProducts'
 import EditMechanicProfile from '../views/Mechanic/EditMechanicProfile'
+import Rates from '../views/Mechanic/Rates'
+
 import {
   colors,
   screenHeight,
@@ -53,6 +55,7 @@ const  ProductsStack = createStackNavigator(
     Products: Products,
     AddProducts: AddProducts,
     EditProduct:EditProduct,
+ 
   },
   {
     headerMode: 'none',
@@ -183,6 +186,9 @@ const MechanicTabNavigator = createDrawerNavigator(
     Navigators: {
       screen: Navigators,
     },
+    Rates:{
+      screen:Rates
+    }
   },
   {
     contentComponent: MechanicSideMenu,

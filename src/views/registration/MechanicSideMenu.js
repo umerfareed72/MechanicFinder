@@ -167,6 +167,21 @@ export default class SideMenu extends React.Component {
                 </View>
               </View>
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('Rates');
+              }}>
+              <View style={style.mh20}>
+                <View style={[image.attachtextimageleft]}>
+                  <Image
+                    source={images.dollar}
+                    style={[image.drawerIcon]}></Image>
+                  <Text style={[text.textheader4, {color: colors.white}]}>
+                 Service Rates
+                    </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => {

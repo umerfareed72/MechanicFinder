@@ -19,6 +19,7 @@ const userroutes1 = require('./routes/Userroutes');
 const bookedroutes = require('./routes/BookedUseroutes');
 const Productroutes = require('./routes/Productroute');
 const BookProductroutes = require('./routes/BookProductroutes');
+const Serviceroutes = require('./routes/ServiceRateroute');
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(mechanicroutes1);
@@ -26,6 +27,7 @@ app.use(userroutes1);
 app.use(bookedroutes);
 app.use(Productroutes);
 app.use(BookProductroutes);
+app.use(Serviceroutes);
 const mongouri =
   // 'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';
   'mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/SmartAutoMechanicFinder?retryWrites=true&w=majority';
