@@ -191,25 +191,36 @@ export default class Postvehicalissue extends Component {
               <View
                 style={[
                   appStyle.rowBtw,
+                  style.aiCenter,
                   appStyle.bodyLayout,
                   appStyle.bodyShadowTop,
-                  {backgroundColor: '#fff'},
+                  style.mh40,
+                  {
+                    backgroundColor: colors.lightgray,
+                    borderBottomLeftRadius: 10,
+                    borderBottomRightRadius: 10,
+                  },
                 ]}>
-                <TouchableOpacity onPress={() => this.tabStep1()}>
+                <TouchableOpacity
+                  onPress={() => this.tabStep1()}
+                  style={style.mh20}>
                   <Text
                     style={[
-                      text.tab,
+                      text.heading2,
                       text.semibold,
+
                       {color: this.state.ColorStep1},
                     ]}>
                     Step 1
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.tabStep2()}>
+                <TouchableOpacity
+                  onPress={() => this.tabStep2()}
+                  style={style.mh20}>
                   <Text
                     style={[
-                      text.tab,
+                      text.heading2,
                       text.semibold,
                       {color: this.state.ColorStep2},
                     ]}>
@@ -237,17 +248,15 @@ export default class Postvehicalissue extends Component {
 
                     <Picker
                       selectedValue={this.state.vehicaltype}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({vehicaltype: itemValue})
                       }>
                       <Picker.Item label="Select Vehicle Type" value="" />
-                <Picker.Item label="Heavy Truck" value="Heavy Truck" />
-                <Picker.Item label="Car" value="Car" />
-                <Picker.Item label="Jeep" value="Jeep" />
-                <Picker.Item label="Bus" value="Bus" />
+                      <Picker.Item label="Heavy Truck" value="Heavy Truck" />
+                      <Picker.Item label="Car" value="Car" />
+                      <Picker.Item label="Jeep" value="Jeep" />
+                      <Picker.Item label="Bus" value="Bus" />
                     </Picker>
                   </View>
 
@@ -258,9 +267,7 @@ export default class Postvehicalissue extends Component {
 
                     <Picker
                       selectedValue={this.state.city}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({city: itemValue})
                       }>
@@ -274,38 +281,37 @@ export default class Postvehicalissue extends Component {
 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
-                      source={images.help}
+                      source={images.Company}
                       style={image.InputImage}></Image>
 
                     <Picker
                       selectedValue={this.state.carcompany}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({carcompany: itemValue})
                       }>
-                      <Picker.Item label="Select Vehicle Company" value="Vehicle" />
-                <Picker.Item label="Honda" value="Honda" />
-                <Picker.Item label="Toyota" value="Toyota" />
-                <Picker.Item label="Suzuki" value="Suzuki" />
-                <Picker.Item label="KIA" value="KIA" />
-                <Picker.Item label="Hundai" value="Hundai" />
-                <Picker.Item label="AUDI" value="AUDI" />
-                <Picker.Item label="Mercedese" value="Mercedese" />
-                <Picker.Item label="Range Rover" value="Range Rover" />
+                      <Picker.Item
+                        label="Select Vehicle Company"
+                        value="Vehicle"
+                      />
+                      <Picker.Item label="Honda" value="Honda" />
+                      <Picker.Item label="Toyota" value="Toyota" />
+                      <Picker.Item label="Suzuki" value="Suzuki" />
+                      <Picker.Item label="KIA" value="KIA" />
+                      <Picker.Item label="Hundai" value="Hundai" />
+                      <Picker.Item label="AUDI" value="AUDI" />
+                      <Picker.Item label="Mercedese" value="Mercedese" />
+                      <Picker.Item label="Range Rover" value="Range Rover" />
                     </Picker>
                   </View>
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
-                      source={images.electric}
+                      source={images.cartype}
                       style={image.InputImage}></Image>
 
                     <Picker
                       selectedValue={this.state.issuetype}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({issuetype: itemValue})
                       }>

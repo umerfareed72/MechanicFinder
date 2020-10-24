@@ -109,7 +109,8 @@ export default class Mechaniclist extends Component {
         <View style={{marginTop: 40}} />
 
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('MechanicDashboard')}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('MechanicDashboard')}>
             <Image source={images.backarrowh} style={image.backArrow2}></Image>
           </TouchableOpacity>
 
@@ -191,69 +192,48 @@ export default class Mechaniclist extends Component {
                 </Text>
               </View>
             </TouchableOpacity>
-
             {this.state.dataSource.map((data, index) => {
               return (
+
                 <TouchableOpacity
-                  key={index}
-                  // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
-                  onPress={() => this.movetodetail(index)}
-                  style={[
-                    appStyle.slotCard,
-                    appStyle.rowJustify,
-                    style.aiCenter,
-                  ]}>
-                  <View style={[style.row, style.aiCenter]}>
-                    <View style={style.mr10}>
-                      <Image style={image.userImg} source={images.dummy1} />
+                style={[
+                  style.w100,
+                  appStyle.slotCard,
+                  
+                ]}
+                key={index}
+                onPress={()=>{this.movetodetail(index)}}
+                >
+                <View style={[style.w100,style.row,style.aiCenter]}>
+            <View style={[style.w10]}>
+                 <Image style={image.large} source={images.userImg}></Image>
+                 </View>
+                <View style={[style.w80,style.ml10]}>
+                  
+                 <Text style={[text.text10, text.greyVLight]}>
+                      Edited on July 2020
+                    </Text>
+                    <View style={[style.pt5]}>
+                      <Text style={[text.text18, text.bold]}>John Smith</Text>
                     </View>
-
-                    <View style={[style.rowBtw, style.aiCenter]}>
-                      <View style={[style.mr15]}>
-                        <Image
-                          source={images.imagep}
-                          style={[image.image50]}></Image>
-                      </View>
-                      <View>
-                        <View>
-                          <Text style={[text.text16, text.bold]}>
-                            {data.issuetype} in {data.vehicaltype}s
-                          </Text>
-                        </View>
-                        <View style={style.row}>
-                          <Text style={[text.text15, {color: colors.gray}]}>
-                            {data.date} {data.phone}
-                          </Text>
-                        </View>
-                        <View style={[style.mv5]}>
-                          <StarRating
-                            disabled={true}
-                            maxStars={5}
-                            rating={this.state.starCount}
-                            // selectedStar={(rating) =>
-                            //   this.onStarRatingPress(rating)
-                            // }
-                            fullStarColor={'#F59E52'}
-                            emptyStarColor={'#F59E52'}
-                            starSize={18}
-                            containerStyle={{width: 110, marginTop: 3}}
-                          />
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      // this.changebuttoncolor(index);
-                    }}>
-                    <Image
-                      style={[image.forward]}
-                      source={images.arrowLong}></Image>
-                  </TouchableOpacity>
+                    <Text style={[text.text10, text.greyVLight]} numberOfLines={1} ellipsizeMode={'tail'}>
+                 {data.description}
+                    </Text>
+            
+                 </View>
+                 <TouchableOpacity style={style.w10}
+                   key={index}
+                   onPress={()=>{this.movetodetail(index)}}>
+                  <Image
+                    style={[image.forward]}
+                    source={images.arrowLong}></Image>
                 </TouchableOpacity>
-              );
+                 </View>
+                 
+              
+              </TouchableOpacity>
+  
+                );
             })}
             {/* row end
 

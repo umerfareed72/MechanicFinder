@@ -91,7 +91,7 @@ export default class HomeDetail extends Component {
           this.setState({suggestiondata: response.data});
           console.log(this.state.suggestiondata);
         }
-        if (this.state.suggestiondata == '') Alert.alert('Sorry no issue available!');
+        // if (this.state.suggestiondata == '') Alert.alert('Sorry no issue available!');
       })
       .catch((error) => {
         console.log(error);
@@ -208,14 +208,18 @@ console.log(this.state.firstname)
           <View
             style={[
               appStyle.rowBtw,
+              style.aiCenter,
               appStyle.bodyLayout,
               appStyle.bodyShadowTop,
-              {backgroundColor: '#fff'},
+              style.mh40,
+                {backgroundColor: colors.lightgray,
+                       borderBottomLeftRadius: 10,
+                  borderBottomRightRadius: 10,},
             ]}>
             <TouchableOpacity onPress={() => this.tabOverview()}>
               <Text
                 style={[
-                  text.tab1,
+                  text.heading2,
                   text.semibold,
                   {color: this.state.ColorOverview},
                 ]}>
@@ -237,7 +241,7 @@ console.log(this.state.firstname)
             <TouchableOpacity onPress={() => this.tabReview()}>
               <Text
                 style={[
-                  text.tab1,
+                  text.heading2,
                   text.semibold,
                   {color: this.state.ColorReview},
                 ]}>

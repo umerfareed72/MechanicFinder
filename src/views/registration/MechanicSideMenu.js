@@ -135,9 +135,9 @@ export default class SideMenu extends React.Component {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-            //   onPress={() => {
-            //     this.props.navigation.navigate('MyBooking');
-            //   }}
+              onPress={() => {
+                this.props.navigation.navigate('BookedUser');
+              }}
             >
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>
@@ -152,9 +152,9 @@ export default class SideMenu extends React.Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-            //   onPress={() => {
-            //     this.props.navigation.navigate('Setting');
-            //   }}
+              onPress={() => {
+                this.props.navigation.navigate('MechanicSetting');
+              }}
             >
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>

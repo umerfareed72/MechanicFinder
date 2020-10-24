@@ -21,6 +21,7 @@ import Products from '../views/Mechanic/Products'
 import AddProducts from '../views/Mechanic/AddProducts'
 import EditMechanicProfile from '../views/Mechanic/EditMechanicProfile'
 import Rates from '../views/Mechanic/Rates'
+import BookedUser from '../views/Mechanic/BookedUser'
 
 import {
   colors,
@@ -41,6 +42,9 @@ const DashboardStack = createStackNavigator(
     MechanicDashboard: {
       screen: MechanicDashboard,
     },
+    BookedUser:{
+      screen:BookedUser
+    }
   },
   {
     headerMode: 'none',
