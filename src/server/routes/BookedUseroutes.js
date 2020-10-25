@@ -117,12 +117,12 @@ router.get('/bookedmid/:id', async (req, res) => {
 
 //////////////////////////// Complete Booking From Mechanic///////////////////
 
-router.put('/completebooking/:id/:totalamount', (req, res) => {
+router.put('/completebooking/:id/:totalamount/:status', (req, res) => {
   BookedUsermodel.findByIdAndUpdate(
     {_id: req.params.id},
     {
       totalamount:req.params.totalamount,
-      Status: 'Offline',
+      Status: req.params.status,
     },
   )
     .then((canceluser) => {

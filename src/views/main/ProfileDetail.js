@@ -183,8 +183,8 @@ export default class HomeDetail extends Component {
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
         AsyncStorage.removeItem('bookMechanicData');
-        this.props.navigation.navigate('Dashboard');
         this.setState({refreshing: false});
+        this.props.navigation.navigate('Dashboard');
         ToastAndroid.show(
           'Booking Cancelled',
           ToastAndroid.BOTTOM,
@@ -274,14 +274,13 @@ export default class HomeDetail extends Component {
     return true;
   };
 
-
   CompleteBooking = async () => {
     axios
       .put( URL.Url +
         'completebooking/' +
         this.state.bookedMechanicId +
         '/' +
-        this.state.Amount)
+        this.state.Amount+'/'+'Offline')
       .then((res) => {
         AsyncStorage.removeItem('bookMechanicData');
         this.props.navigation.navigate('Dashboard');

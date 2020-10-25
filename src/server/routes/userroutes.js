@@ -194,7 +194,7 @@ router.get('/getuser/:id', (req, res) => {
       photo: 1,
       rating: 1,
       description: 1,
-    })
+    }).sort({'_id':-1})
     .then((user) => {
       if (!user) {
         return res.status(404).send('User Not Found');
