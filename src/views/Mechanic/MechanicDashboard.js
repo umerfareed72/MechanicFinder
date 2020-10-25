@@ -256,7 +256,7 @@ export default class MechanicDashboard extends Component {
                 </View>
                 <View >
                   <Text>
-                  {bookedUserData.address}{bookedUserData.city}{' '}{bookedUserData.country}
+        {bookedUserData.address}{' '}{bookedUserData.city}{' '}{bookedUserData.country}
                   </Text>
                 </View>
               </View>

@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   ImageBackground,
   Dimensions,
+  ToastAndroid,
   Keyboard,
   Platform,
 } from 'react-native';
@@ -169,6 +170,14 @@ export default class UserProfileDetail extends Component {
     axios
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
+        this.setState({refreshing: false});
+        AsyncStorage.removeItem('bookMechanicData');
+        this.props.navigation.navigate('MechanicDashboard');
+        ToastAndroid.show(
+          'Booking Cancelled',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         this.state.products.map((item) => {
           axios
             .put(
@@ -178,7 +187,11 @@ export default class UserProfileDetail extends Component {
               this.setState({refreshing: false});
               AsyncStorage.removeItem('bookMechanicData');
               this.props.navigation.navigate('MechanicDashboard');
-              console.log(res.data, 'data updated');
+              ToastAndroid.show(
+                'Booking Cancelled',
+                ToastAndroid.BOTTOM,
+                ToastAndroid.LONG,
+              );
             });
         });
       })
@@ -186,6 +199,8 @@ export default class UserProfileDetail extends Component {
         console.log(error);
       });
   };
+
+  
 completework = () => {
     var finalamount = parseInt(this.state.Amount)+parseInt(this.state.extraAmount) ;
     axios
@@ -197,20 +212,24 @@ completework = () => {
           finalamount,
       )
       .then((res) => {
-        // AsyncStorage.removeItem('bookMechanicData');
+        AsyncStorage.removeItem('bookMechanicData');
         console.log(res.data, 'data updated');
         this.setState({refreshing: false});
-        // this.props.navigation.navigate('MechanicDashboard');
+        this.props.navigation.navigate('MechanicDashboard');
         alert('Your Work is Completed:'
        +"\n"+' Collect Your Cash from User Please.')
-        // this.state.products.map((item) => {
-        // // axios.put(
-        // //   URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
-        // //     )
-        // //     .then((mod) => {
-        // //      alert('Good Bye')
-        // //     });
-        // });
+        this.state.products.map((item) => {
+        axios.put(
+          URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
+            )
+            .then((mod) => {
+              ToastAndroid.show(
+                'All Services Done',
+                ToastAndroid.BOTTOM,
+                ToastAndroid.LONG,
+              );
+            });
+        });
       })
       .catch((error) => {
         console.log(error);

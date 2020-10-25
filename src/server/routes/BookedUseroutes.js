@@ -122,7 +122,7 @@ router.put('/completebooking/:id/:totalamount', (req, res) => {
     {_id: req.params.id},
     {
       totalamount:req.params.totalamount,
-      // Status: 'Offline',
+      Status: 'Offline',
     },
   )
     .then((canceluser) => {
