@@ -12,6 +12,7 @@ import {
   ImageBackground,
   Dimensions,
   Keyboard,
+  ToastAndroid,
   Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
@@ -120,7 +121,42 @@ export default class EditProfile extends Component {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
 
+  
+validatefield=()=>{
+  if(this.state.firstname==""){
+    ToastAndroid.show('First Name Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }else if(this.state.lastname==""){
+    ToastAndroid.show('Last Name Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }else if(this.state.email==""){
+    ToastAndroid.show('Email Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }else if(this.state.phone==0){
+    ToastAndroid.show('Phone Number Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+  }else if(this.state.address==""){
+    ToastAndroid.show('Address Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }
+  else if(this.state.city==""){
+    ToastAndroid.show('City Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }
+  else if(this.state.country==""){
+    ToastAndroid.show('Country Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }
+  else if(this.state.photo==""){
+    ToastAndroid.show('Picture Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    return false;
+  }
+return true
+}
+
+
   submitdata = () => {
+    if(this.validatefield()){
+      
     AsyncStorage.getItem('userdata').then((res) => {
       const data = JSON.parse(res);
       axios
@@ -139,7 +175,8 @@ export default class EditProfile extends Component {
           console.log(response.data);
           alert('Data Updated');
         });
-    });
+    }); 
+  }
   };
   onStarRatingPress(rating) {
     this.setState({

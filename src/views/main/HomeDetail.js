@@ -11,6 +11,7 @@ import {
   Image,
   ImageBackground,
   Dimensions,
+  ToastAndroid,
   Keyboard,
   Platform,
 } from 'react-native';
@@ -135,7 +136,11 @@ export default class HomeDetail extends Component {
             this.setState({BookNowView: 'none'});
             this.setState({deletebutton: 'none'});
             this.props.navigation.navigate('ProfileDetail');
-            console.log('Mechanic Booked Successfully');
+            ToastAndroid.show(
+              'Mechanic Booked Successfully',
+              ToastAndroid.BOTTOM,
+              ToastAndroid.LONG,
+            );  
           });
       }, 3000);
     }

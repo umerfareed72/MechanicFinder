@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   ImageBackground,
   Dimensions,
+  ToastAndroid,
   Keyboard,
   Platform,
 } from 'react-native';
@@ -181,9 +182,15 @@ export default class HomeDetail extends Component {
     axios
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
+        AsyncStorage.removeItem('bookMechanicData');
+        this.props.navigation.navigate('Dashboard');
+        this.setState({refreshing: false});
+        ToastAndroid.show(
+          'Booking Cancelled',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         this.state.products.map((item) => {
-          AsyncStorage.removeItem('bookMechanicData');
-          this.props.navigation.navigate('Dashboard');
           axios
             .put(
               URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
@@ -248,34 +255,89 @@ export default class HomeDetail extends Component {
     this.setState({ColorReview: colors.darkBlue});
     this.setState({ColorProduct: colors.inputBordercolor});
   };
-  submitReview = () => {
-    const userId = this.state.userid;
-    const mechanicid = this.state.mechanicid;
+  validateReview = () => {
+    if (this.state.rating == 0) {
+      ToastAndroid.show(
+        'Rating is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.description == '') {
+      ToastAndroid.show(
+        'Description is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }
+    return true;
+  };
 
+
+  CompleteBooking = async () => {
     axios
-      .post(URL.Url + 'add/' + userId + '/' + mechanicid, {
-        firstname: this.state.firstname,
-        lastname: this.state.lastname,
-        photo: this.state.photo,
-        rating: this.state.rating,
-        description: this.state.description,
-      })
-      .then(async (response) => {
-        await axios
-          .put(URL.Url + 'mechanicrating/' + mechanicid)
-          .then((res) => {
-            alert('Review Added');
-            this.CancelBooking();
-            console.log(res.data);
-            this.setState({refreshing: false});
-          });
-      })
-      .catch((error) => {
-        console.log(error, 'Review not added');
+      .put( URL.Url +
+        'completebooking/' +
+        this.state.bookedMechanicId +
+        '/' +
+        this.state.Amount)
+      .then((res) => {
+        AsyncStorage.removeItem('bookMechanicData');
+        this.props.navigation.navigate('Dashboard');
+        this.setState({refreshing: false});
+        this.state.products.map((item) => {
+          axios
+            .put(
+              URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
+            )
+            .then((mod) => {
+              this.setState({refreshing: false});
+              console.log(res.data, 'data updated');
+            });
+        });
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+
+
+  submitReview = () => {
+    if (this.validateReview()) {
+      const userId = this.state.userid;
+      const mechanicid = this.state.mechanicid;
+
+      axios
+        .post(URL.Url + 'add/' + userId + '/' + mechanicid, {
+          firstname: this.state.firstname,
+          lastname: this.state.lastname,
+          photo: this.state.photo,
+          rating: this.state.rating,
+          description: this.state.description,
+        })
+        .then(async (response) => {
+          await axios
+            .put(URL.Url + 'mechanicrating/' + mechanicid)
+            .then((res) => {
+              ToastAndroid.show(
+                'Your Review Added Thanks & Good Bye',
+                ToastAndroid.BOTTOM,
+                ToastAndroid.LONG,
+              );
+              this.CompleteBooking();
+              console.log(res.data);
+              this.setState({refreshing: false});
+            });
+        })
+        .catch((error) => {
+          console.log(error, 'Review not added');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   render() {

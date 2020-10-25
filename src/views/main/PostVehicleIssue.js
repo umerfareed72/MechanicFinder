@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   CheckBox,
+  ToastAndroid,
   Image,
   ImageBackground,
   Dimensions,
@@ -89,35 +90,84 @@ export default class Postvehicalissue extends Component {
         });
     });
   };
-  submitData = () => {
-    axios
-      .post(URL.Url + 'issueregister', {
-        issuetype: this.state.issuetype,
-        phone: this.state.Phone,
-        photo: this.state.photo,
-        carcompany: this.state.carcompany,
-        city: this.state.city,
-        status: this.state.status,
-        description: this.state.description,
-        vehicaltype: this.state.vehicaltype,
-        userdbid: this.state.userdbid,
-        date: new Date().getDate(),
-      })
-      .then(async (res) => {
-        console.log(res.data);
-        console.log(this.state.userdbid);
-        Alert.alert('Posted issue Successfully we will help U soon!');
-        try {
-          this.props.navigation.navigate('Dashboard');
-        } catch (e) {
-          console.log('error hai', e);
-        }
-      })
-      .catch((error) => {
-        Alert.alert('something went Wrong try again!!');
 
-        console.log(error);
-      });
+  validatefield = () => {
+    if (this.state.vehicaltype == '') {
+      ToastAndroid.show(
+        'Vehicle Type Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.city == '') {
+      ToastAndroid.show(
+        'City Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.carcompany == '') {
+      ToastAndroid.show(
+        'Car Company Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.phone == '') {
+      ToastAndroid.show(
+        'Phone Number Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+    } else if (this.state.issuetype == '') {
+      ToastAndroid.show(
+        'Issue Type Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.description == '') {
+      ToastAndroid.show(
+        'Description Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }
+    return true;
+  };
+
+  submitData = () => {
+    if (this.validatefield()) {
+      axios
+        .post(URL.Url + 'issueregister', {
+          issuetype: this.state.issuetype,
+          phone: this.state.Phone,
+          photo: this.state.photo,
+          carcompany: this.state.carcompany,
+          city: this.state.city,
+          status: this.state.status,
+          description: this.state.description,
+          vehicaltype: this.state.vehicaltype,
+          userdbid: this.state.userdbid,
+          date: new Date().getDate(),
+        })
+        .then(async (res) => {
+          console.log(res.data);
+          console.log(this.state.userdbid);
+          Alert.alert('Posted issue Successfully we will help U soon!');
+          try {
+            this.props.navigation.navigate('Dashboard');
+          } catch (e) {
+            console.log('error hai', e);
+          }
+        })
+        .catch((error) => {
+          Alert.alert('something went Wrong try again!!');
+
+          console.log(error);
+        });
+    }
   };
 
   tabStep1 = () => {

@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   CheckBox,
+  ToastAndroid,
   Image,
   ImageBackground,
   Dimensions,
@@ -92,6 +93,11 @@ export default class Products extends Component {
       .delete(URL.Url + 'deleteProduct/' + this.state.products[id]._id)
       .then((del) => {
         console.log(del.data);
+        ToastAndroid.show(
+          'Product Deleted Successfully',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         this.toggleModal();
       });
   };

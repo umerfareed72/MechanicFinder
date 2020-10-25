@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   CheckBox,
+  ToastAndroid,
   Image,
   ImageBackground,
   Dimensions,
@@ -58,12 +59,40 @@ export default class Mechaniclist extends Component {
       vehicaltype: 'Select Vehicle Type',
     };
   }
+
+
+  validate = () => {
+    if (this.state.vehicaltype == 'Select Vehicle Type') {
+      ToastAndroid.show(
+        'Vehicle Type is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.carcompany == 'Select Vehicle Name') {
+      ToastAndroid.show(
+        'Vehile Name is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }else if (this.state.issuetype == 'Select issue Type') {
+      ToastAndroid.show(
+        'Vehile Name is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }
+    return true;
+  };
+
+
+
+
   showIssues = () => {
-    // AsyncStorage.getItem('userId')
-    //   .then((res) => {
-    //     const id = JSON.parse(res);
-    //     this.setState({userId: id});
-    console.log('in showissues');
+    if(this.validate()){
+      
     axios
       .get(
         URL.Url +
@@ -79,18 +108,31 @@ export default class Mechaniclist extends Component {
         if (response.data) {
           console.log(response.data);
           this.setState({dataSource: response.data});
-          console.log(this.state.dataSource);
+   
         }
         if (this.state.dataSource == '')
-          Alert.alert('Sorry no issue available!');
+        ToastAndroid.show(
+          'No Issue Is Found',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+     
       })
       .catch((error) => {
         console.log(error);
+        ToastAndroid.show(
+          'Something Went Wrong',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+     
       });
     // })
     // .catch((error) => {
     //   console.log(error);
     // });
+  
+  }
   };
 
   movetodetail = (id) => {

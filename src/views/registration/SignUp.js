@@ -67,7 +67,7 @@ export default class MechanicRegister extends Component {
       CPassword: '',
       address: '',
       photo: '',
-      Phone: '',
+      Phone: 0,
       date: 'Date Of Birth',
       longitude: '',
       latitude: '',
@@ -111,7 +111,7 @@ validatefield=()=>{
   }else if(this.state.date==""){
     ToastAndroid.show('Date Of Birth Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
     return false;
-  }else if(this.state.Phone==""){
+  }else if(this.state.Phone==0){
     ToastAndroid.show('Phone Number Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
   }else if(this.state.address==""){
     ToastAndroid.show('Address Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
