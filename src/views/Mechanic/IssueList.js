@@ -286,10 +286,11 @@ export default class Mechaniclist extends Component {
                     style={[image.forward]}
                     source={images.arrowLong}></Image>
                 </TouchableOpacity>
-                 </View>
+                //</TouchableOpacity> 
+                //</View>
                  
               
-              </TouchableOpacity>
+            //  </TouchableOpacity>
   
                 );
             })}

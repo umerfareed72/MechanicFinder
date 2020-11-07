@@ -51,7 +51,7 @@ export default class MechanicDashboard extends Component {
       data: [],
       bookedUserid: '',
       Amount:0,
-      wid:''
+      wid:'',
       earning:0
     
     };

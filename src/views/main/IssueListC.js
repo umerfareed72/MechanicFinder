@@ -116,7 +116,7 @@ export default class Mechaniclist extends Component {
       .catch((error) => {
         console.log('ye lo 1', error);
       });
-    });
+   
   };
 
   
