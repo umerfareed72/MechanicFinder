@@ -8,7 +8,6 @@ import {
   TextInput,
   TouchableOpacity,
   CheckBox,
-  ToastAndroid,
   Image,
   ImageBackground,
   Dimensions,
@@ -66,11 +65,8 @@ export default class Products extends Component {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
   getProduct = () => {
-    AsyncStorage.getItem('Mechanicdata').then((res) => {
-      const data = JSON.parse(res);
-      axios.get(URL.Url + 'getProduct/' + data._id).then((response) => {
+      axios.get(URL.Url + 'getServices' ).then((response) => {
         this.setState({products: response.data});
-      });
     });
   };
   componentDidMount() {
@@ -83,21 +79,16 @@ export default class Products extends Component {
 
   selectProduct = (id) => {
     const senddata = JSON.stringify(this.state.products[id]);
-    AsyncStorage.setItem('productdata', senddata);
-      this.props.navigation.navigate('EditProduct');
+    AsyncStorage.setItem('ServiceRatedata', senddata);
+      this.props.navigation.navigate('UpdateServiceRate');
      
     };
 
   deleteProduct = (id) => {
     axios
-      .delete(URL.Url + 'deleteProduct/' + this.state.products[id]._id)
+      .delete(URL.Url + 'deleteServices/' + this.state.products[id]._id)
       .then((del) => {
         console.log(del.data);
-        ToastAndroid.show(
-          'Product Deleted Successfully',
-          ToastAndroid.BOTTOM,
-          ToastAndroid.LONG,
-        );
         this.toggleModal();
       });
   };
@@ -118,15 +109,15 @@ export default class Products extends Component {
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
           <View>
             <Text style={[text.heading1purple, text.bold]}>
-              Product Management
+           Service Rates Management
             </Text>
             <Text style={[text.text14, {color: '#4A4A4A'}]}>
-              Manage Vehicle Products
+              Manage Maintenence Service Rates
             </Text>
           </View>
           <View></View>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('AddProducts')}>
+            onPress={() => this.props.navigation.navigate('AddServiceRates')}>
             <Image style={image.iconAdd} source={images.add}></Image>
           </TouchableOpacity>
         </View>
@@ -179,16 +170,10 @@ export default class Products extends Component {
                       style.aiCenter,
                     ]}>
                     <View style={[style.row, style.aiCenter]}>
-                      <View style={style.mr15}>
-                        <Image
-                          style={image.userImg}
-                          source={{uri: item.photo}}
-                        />
-                      </View>
-
+                     
                       <View>
                         <Text style={[text.text18, text.bold]}>
-                          {item.title}
+                          {item.servicename}
                         </Text>
 
                         <View style={[style.pt5, style.row]}>
@@ -197,13 +182,10 @@ export default class Products extends Component {
                           </Text>
 
                           <Text style={[text.text12, text.darkYellow]}>
-                            {item.price} $
+                            {item.serviceamount} $
                           </Text>
                         </View>
-                        <View style={style.row}>
-                          <Text style={[text.text11]}>Quantity : </Text>
-                          <Text style={[text.text11]}>{item.quantity}</Text>
-                        </View>
+                     
                       </View>
                     </View>
                     <TouchableOpacity onPress={this.toggleModal}>
@@ -215,6 +197,7 @@ export default class Products extends Component {
                 </TouchableOpacity>
               );
             })}
+
             {/* row start */}
             {/* row end */}
 

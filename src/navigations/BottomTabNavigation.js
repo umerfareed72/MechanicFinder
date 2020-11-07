@@ -47,7 +47,7 @@ import Issuedetail from "../views/main/Issuedetail"
 import mdetail from '../views/main/mdetail'
 import IssueListC from "../views/main/IssueListC"
 import EditIssue from "../views/main/EditIssue"
-
+import Rates from '../views/Mechanic/Rates'
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
@@ -235,9 +235,15 @@ const TabNavigator = createDrawerNavigator(
     // Dashboard: {
     //   screen: DashboardStack,
     // },
+      Login: {
+      screen: Login,
+    },
     Navigators: {
       screen: Navigators,
     },
+    Rates:{
+      screen:Rates
+    }
 
   },
   {

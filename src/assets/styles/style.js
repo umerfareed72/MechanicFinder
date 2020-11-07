@@ -347,6 +347,18 @@ marginHorizontal:15
   w100: {
     width: '100%',
   },
+  w20:{
+    width: '20%',
+  },
+  w10:{
+    width: '10%',
+  },
+  w15:{
+    width: '15%',
+  },
+  w25:{
+    width: '25%',
+  },
   w30:{
     width:'30%'
  

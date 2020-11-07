@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   CheckBox,
+  ToastAndroid,
   Image,
   ImageBackground,
   Dimensions,
@@ -69,8 +70,27 @@ export default class Login extends Component {
     this.setState({textMechanic: colors.white, Mregister: colors.orange});
     this.props.navigation.navigate('MechanicRegister');
   };
+  validateuser = () => {
+    if (this.state.Email == '') {
+      ToastAndroid.show(
+        'Email is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.Password == '') {
+      ToastAndroid.show(
+        'Password is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }
+    return true;
+  };
 
   submitData = () => {
+  if(this.validateuser()){
     axios
       .post(URL.Url + 'mechanicsignin', {
         email: this.state.Email,
@@ -80,6 +100,8 @@ export default class Login extends Component {
         console.log(res);
 
         try {
+          
+        ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
           await AsyncStorage.setItem('token', res.data.token);
          
           console.log(res.data.token);
@@ -88,7 +110,11 @@ export default class Login extends Component {
           console.log('error hai', e);
           Alert.alert('Invalid email password');
         }
+      })
+      .catch((error) => {
+        ToastAndroid.show('Invalid Mechanic', ToastAndroid.BOTTOM);
       });
+    }
   };
 
   render() {

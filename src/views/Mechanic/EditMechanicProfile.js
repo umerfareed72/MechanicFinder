@@ -13,6 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
+  ToastAndroid,
 } from 'react-native';
 import Modal from 'react-native-modal';
 
@@ -119,7 +120,43 @@ password:'',
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
 
+  
+  validatefield=()=>{
+    if(this.state.firstname==""){
+      ToastAndroid.show('First Name Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }else if(this.state.lastname==""){
+      ToastAndroid.show('Last Name Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }else if(this.state.email==""){
+      ToastAndroid.show('Email Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }else if(this.state.phone==0){
+      ToastAndroid.show('Phone Number Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    }else if(this.state.address==""){
+      ToastAndroid.show('Address Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+    else if(this.state.city==""){
+      ToastAndroid.show('City Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+    else if(this.state.country==""){
+      ToastAndroid.show('Country Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+    else if(this.state.photo==""){
+      ToastAndroid.show('Picture Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+  return true
+  }
+  
+
+
   submitdata = () => {
+    if(this.validatefield()){
+      
     AsyncStorage.getItem('Mechanicdata').then((res) => {
         const data = JSON.parse(res);
         axios
@@ -136,10 +173,11 @@ password:'',
           })
           .then((response) => {
             console.log(response.data);
-            alert('Data Updated')
+          ToastAndroid.show('Data Updated',ToastAndroid.BOTTOM,ToastAndroid.LONG) 
           });
       });
-       
+      
+    } 
 };
   onStarRatingPress(rating) {
     this.setState({
@@ -323,7 +361,7 @@ password:'',
                   underlineColorAndroid="transparent"></TextInput>
               </View>
 
-
+{/* 
 
               <View
                 style={[style.mh30, style.rowBtw, style.aiCenter, style.mt20]}>
@@ -351,7 +389,7 @@ password:'',
                   }}
                   underlineColorAndroid="transparent"></TextInput>
               </View>
-
+ */}
 
 
 

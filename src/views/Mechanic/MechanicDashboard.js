@@ -52,6 +52,8 @@ export default class MechanicDashboard extends Component {
       bookedUserid: '',
       Amount:0,
       wid:''
+      earning:0
+    
     };
   }
   getData = () => {
@@ -68,6 +70,7 @@ export default class MechanicDashboard extends Component {
         .then((response) => {
           this.setState({mechanicid: response.data.mechanicid});
 
+          this.Rate();
           axios
             .put(URL.Url + 'mechaniclocation/' + this.state.mechanicid, {
               latitude: this.state.latitude,
@@ -235,11 +238,33 @@ export default class MechanicDashboard extends Component {
     this.requestMechanicLocation()
    
     this.focusListener = navigation.addListener('didFocus', () => {
-      this.requestMechanicLocation()
-    
+      this.requestMechanicLocation();
+ 
     });
     // this.removeBooking();
   }
+
+  Rate = () => {
+    console.log(this.state.mechanicid)
+    axios.get(URL.Url+'bookedmid/'+this.state.mechanicid).then((data)=>{
+      console.log(data.data)
+    var r = [];
+    data.data.map((item, index) => {
+      r.push(item.totalamount);
+    });
+    // Getting sum of numbers
+    var sum = r.reduce(function (a, b) {
+      return a + b;
+    }, 0);
+    console.log(sum); // Prints: 15
+
+    this.setState({earning:sum})
+
+
+    })
+  };
+
+
   bookedUser = () => {
     const {bookedUserData, refreshing} = this.state;
     if (refreshing != false) {
@@ -275,7 +300,7 @@ export default class MechanicDashboard extends Component {
                 </View>
                 <View >
                   <Text>
-                  {bookedUserData.address}{bookedUserData.city}{' '}{bookedUserData.country}
+        {bookedUserData.address}{' '}{bookedUserData.city}{' '}{bookedUserData.country}
                   </Text>
                 </View>
               </View>
@@ -358,7 +383,7 @@ export default class MechanicDashboard extends Component {
               </View>
               <View style={[style.aiCenter, style.mv10]}>
                 <View style={image.boxContainer}>
-                  <Text style={[text.text30]}> 5$</Text>
+                  <Text style={[text.text30]}> {this.state.earning} $</Text>
                 </View>
                 <View style={style.mv10}>
                   <Text style={[text.text20, text.goodfishbd, text.darkBlue]}>

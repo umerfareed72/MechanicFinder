@@ -42,6 +42,14 @@ router.post('/addbookedUser/:mid/:uid/:totalamount', async (req, res) => {
           userid: req.params.uid,
           mechanicid: req.params.mid,
           totalamount:req.params.totalamount,
+          mechanicname:data.firstname+" "+data.lastname,
+          username:user.firstname+' '+user.lastname,
+          mechanicphoto:data.photo,
+          userphoto:user.photo,
+          city:data.city,
+          country:data.country,
+          useremail:user.email,
+          mechanicemail:data.email,
           Status: 'Online',
         });
         bookeduser.save();
@@ -79,6 +87,7 @@ router.put('/cancelbookeduser/:id', (req, res) => {
     {_id: req.params.id},
     {
       Status: 'Offline',
+      totalamount:0
     },
   )
     .then((canceluser) => {
@@ -93,15 +102,27 @@ router.put('/cancelbookeduser/:id', (req, res) => {
       return res.send(error);
     });
 });
+//Earning Calculation
+router.get('/bookedmid/:id', async (req, res) => {
+  BookedUsermodel.find({mechanicid:req.params.id})
+    .then((data) => {
+      res.json(data);
+    })
+    //  res.send(userdata)
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
 
 //////////////////////////// Complete Booking From Mechanic///////////////////
 
-router.put('/completebooking/:id/:totalamount', (req, res) => {
+router.put('/completebooking/:id/:totalamount/:status', (req, res) => {
   BookedUsermodel.findByIdAndUpdate(
     {_id: req.params.id},
     {
       totalamount:req.params.totalamount,
-      Status: 'Offline',
+      Status: req.params.status,
     },
   )
     .then((canceluser) => {
@@ -109,7 +130,7 @@ router.put('/completebooking/:id/:totalamount', (req, res) => {
         return res.status(404).send('Mechanic Not Found');
       } else {
         return res.status(200).json(canceluser);
-        canceluser.save();
+    
       }
     })
     .catch((error) => {
@@ -147,69 +168,31 @@ router.get('/getbookedMechanic/:uid', async (req, res) => {
 });
 
 
-
 router.get(
-  '/mechanics/:id',
+  '/users/:mid',
   (req, res) => {
     var nearest = [];
-    BookedUsermodel.find({userid:req.params.uid})
-      .sort('id')
+    BookedUsermodel.find({mechanicid:req.params.mid})
+      .sort({'_id':-1})
         .then((user) => {
         if (!user) {
           return res.status(404).send('User Not Found');
         }
-        // return res.status(200).json(user);
+        return res.status(200).send(user);
         })
-      .then((near) => {
-        Mechanicmodel.find()
-          .sort('id')
-          .select({
-            firstname: 1,
-            lastname: 1,
-            email: 1,
-            phone: 1,
-            photo: 1,
-            city: 1,
-            address: 1,
-            country: 1,
-            carcompany: 1,
-            skilltype: 1,
-            vehicletype: 1,
-            mechanicrate: 1,
-            longitude: 1,
-            latitude: 1,
-            rating:1
-          })
-          .then((mechanics) => {
-            if (!mechanics) return res.status(404).send('Not Found');
-            mechanics.map((item) => {
-        
-                //Distance get
-                nearest.push({
-                  mechanicid: item.id,
-                  firstname: item.firstname,
-                  lastname: item.lastname,
-                  email: item.email,
-                  photo: item.photo,
-                  phone: item.phone,
-                  carcompany: item.carcompany,
-                  vehicletype: item.vehicletype,
-                  skilltype: item.skilltype,
-                  address: item.address,
-                  country: item.country,
-                  city: item.city,
-                  address: item.address,
-                  latitude: item.latitude,
-                  longitude: item.longitude,
-                  mechanicrate: item.mechanicrate,
-                  rating:item.rating,
-                });
-            });
-            return res.json(nearest);
-          })
-          .catch((error) => {
-            return res.send(error);
-          });
+       },
+);
+router.get(
+  '/mechanics/:uid',
+  (req, res) => {
+    var nearest = [];
+    BookedUsermodel.find({userid:req.params.uid})
+      .sort({'_id':-1})
+        .then((user) => {
+        if (!user) {
+          return res.status(404).send('User Not Found');
+        }
+        return res.send(user)
       });
   },
 );

@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   CheckBox,
+  ToastAndroid,
   Image,
   ImageBackground,
   Dimensions,
@@ -108,36 +109,84 @@ export default class Postvehicalissue extends Component {
         });
     });
   };
-  submitData = () => {
-    axios
-      .post(URL.Url + 'issueregister', {  
-        issuetype: this.state.issuetype,
-        phone: this.state.Phone,
-        photo: this.state.photo,
-        carcompany: this.state.carcompany,
-        city: this.state.city,
-        status: this.state.status,
-        description: this.state.description,
-        vehicaltype: this.state.vehicaltype,
-        userdbid: this.state.userdbid,
-        userphoto:this.state.userdata.photo,
-        date: new Date().getDate(),
-      })
-      .then(async (res) => {
-        console.log(res.data);
-        console.log(this.state.userdbid);
-        Alert.alert('Posted issue Successfully we will help U soon!');
-        try {
-          this.props.navigation.navigate('Dashboard');
-        } catch (e) {
-          console.log('error hai', e);
-        }
-      })
-      .catch((error) => {
-        Alert.alert('something went Wrong try again!!');
 
-        console.log(error);
-      });
+  validatefield = () => {
+    if (this.state.vehicaltype == '') {
+      ToastAndroid.show(
+        'Vehicle Type Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.city == '') {
+      ToastAndroid.show(
+        'City Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.carcompany == '') {
+      ToastAndroid.show(
+        'Car Company Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.phone == '') {
+      ToastAndroid.show(
+        'Phone Number Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+    } else if (this.state.issuetype == '') {
+      ToastAndroid.show(
+        'Issue Type Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.description == '') {
+      ToastAndroid.show(
+        'Description Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }
+    return true;
+  };
+
+  submitData = () => {
+    if (this.validatefield()) {
+      axios
+        .post(URL.Url + 'issueregister', {
+          issuetype: this.state.issuetype,
+          phone: this.state.Phone,
+          photo: this.state.photo,
+          carcompany: this.state.carcompany,
+          city: this.state.city,
+          status: this.state.status,
+          description: this.state.description,
+          vehicaltype: this.state.vehicaltype,
+          userdbid: this.state.userdbid,
+          date: new Date().getDate(),
+        })
+        .then(async (res) => {
+          console.log(res.data);
+          console.log(this.state.userdbid);
+          Alert.alert('Posted issue Successfully we will help U soon!');
+          try {
+            this.props.navigation.navigate('Dashboard');
+          } catch (e) {
+            console.log('error hai', e);
+          }
+        })
+        .catch((error) => {
+          Alert.alert('something went Wrong try again!!');
+
+          console.log(error);
+        });
+    }
   };
 
   tabStep1 = () => {
@@ -211,25 +260,36 @@ export default class Postvehicalissue extends Component {
               <View
                 style={[
                   appStyle.rowBtw,
+                  style.aiCenter,
                   appStyle.bodyLayout,
                   appStyle.bodyShadowTop,
-                  {backgroundColor: '#fff'},
+                  style.mh40,
+                  {
+                    backgroundColor: colors.lightgray,
+                    borderBottomLeftRadius: 10,
+                    borderBottomRightRadius: 10,
+                  },
                 ]}>
-                <TouchableOpacity onPress={() => this.tabStep1()}>
+                <TouchableOpacity
+                  onPress={() => this.tabStep1()}
+                  style={style.mh20}>
                   <Text
                     style={[
-                      text.tab,
+                      text.heading2,
                       text.semibold,
+
                       {color: this.state.ColorStep1},
                     ]}>
                     Step 1
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.tabStep2()}>
+                <TouchableOpacity
+                  onPress={() => this.tabStep2()}
+                  style={style.mh20}>
                   <Text
                     style={[
-                      text.tab,
+                      text.heading2,
                       text.semibold,
                       {color: this.state.ColorStep2},
                     ]}>
@@ -257,17 +317,15 @@ export default class Postvehicalissue extends Component {
 
                     <Picker
                       selectedValue={this.state.vehicaltype}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({vehicaltype: itemValue})
                       }>
                       <Picker.Item label="Select Vehicle Type" value="" />
-                <Picker.Item label="Heavy Truck" value="Heavy Truck" />
-                <Picker.Item label="Car" value="Car" />
-                <Picker.Item label="Jeep" value="Jeep" />
-                <Picker.Item label="Bus" value="Bus" />
+                      <Picker.Item label="Heavy Truck" value="Heavy Truck" />
+                      <Picker.Item label="Car" value="Car" />
+                      <Picker.Item label="Jeep" value="Jeep" />
+                      <Picker.Item label="Bus" value="Bus" />
                     </Picker>
                   </View>
 
@@ -278,9 +336,7 @@ export default class Postvehicalissue extends Component {
 
                     <Picker
                       selectedValue={this.state.city}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({city: itemValue})
                       }>
@@ -294,38 +350,37 @@ export default class Postvehicalissue extends Component {
 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
-                      source={images.help}
+                      source={images.Company}
                       style={image.InputImage}></Image>
 
                     <Picker
                       selectedValue={this.state.carcompany}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({carcompany: itemValue})
                       }>
-                      <Picker.Item label="Select Vehicle Company" value="Vehicle" />
-                <Picker.Item label="Honda" value="Honda" />
-                <Picker.Item label="Toyota" value="Toyota" />
-                <Picker.Item label="Suzuki" value="Suzuki" />
-                <Picker.Item label="KIA" value="KIA" />
-                <Picker.Item label="Hundai" value="Hundai" />
-                <Picker.Item label="AUDI" value="AUDI" />
-                <Picker.Item label="Mercedese" value="Mercedese" />
-                <Picker.Item label="Range Rover" value="Range Rover" />
+                      <Picker.Item
+                        label="Select Vehicle Company"
+                        value="Vehicle"
+                      />
+                      <Picker.Item label="Honda" value="Honda" />
+                      <Picker.Item label="Toyota" value="Toyota" />
+                      <Picker.Item label="Suzuki" value="Suzuki" />
+                      <Picker.Item label="KIA" value="KIA" />
+                      <Picker.Item label="Hundai" value="Hundai" />
+                      <Picker.Item label="AUDI" value="AUDI" />
+                      <Picker.Item label="Mercedese" value="Mercedese" />
+                      <Picker.Item label="Range Rover" value="Range Rover" />
                     </Picker>
                   </View>
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
-                      source={images.electric}
+                      source={images.cartype}
                       style={image.InputImage}></Image>
 
                     <Picker
                       selectedValue={this.state.issuetype}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({issuetype: itemValue})
                       }>

@@ -20,6 +20,9 @@ import UserProfileDetail from '../views/Mechanic/UserProfileDetail';
 import Products from '../views/Mechanic/Products'
 import AddProducts from '../views/Mechanic/AddProducts'
 import EditMechanicProfile from '../views/Mechanic/EditMechanicProfile'
+import Rates from '../views/Mechanic/Rates'
+import BookedUser from '../views/Mechanic/BookedUser'
+
 import {
   colors,
   screenHeight,
@@ -39,6 +42,9 @@ const DashboardStack = createStackNavigator(
     MechanicDashboard: {
       screen: MechanicDashboard,
     },
+    BookedUser:{
+      screen:BookedUser
+    }
   },
   {
     headerMode: 'none',
@@ -53,6 +59,7 @@ const  ProductsStack = createStackNavigator(
     Products: Products,
     AddProducts: AddProducts,
     EditProduct:EditProduct,
+ 
   },
   {
     headerMode: 'none',
@@ -180,9 +187,15 @@ const MechanicTabNavigator = createDrawerNavigator(
     // MechanicDashboard: {
     //   screen: DashboardStack,
     // },
+        LoginasMechanic: {
+      screen: LoginasMechanic,
+    },
     Navigators: {
       screen: Navigators,
     },
+    Rates:{
+      screen:Rates
+    }
   },
   {
     contentComponent: MechanicSideMenu,

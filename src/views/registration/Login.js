@@ -16,6 +16,7 @@ import {
   Platform,
   Button,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
@@ -233,26 +234,47 @@ export default class Login extends Component {
       console.error(error);
     }
   };
+  validateuser = () => {
+    if (this.state.Email == '') {
+      ToastAndroid.show(
+        'Email is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.Password == '') {
+      ToastAndroid.show(
+        'Password is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }
+    return true;
+  };
 
   submitData = () => {
-    axios
-      .post(URL.Url + 'usersignin', {
-        email: this.state.Email,
-        password: this.state.Password,
-      })
-      .then(async (res) => {
-        // console.log(res.data);
-
-        try {
-          await AsyncStorage.setItem('usersignintoken', res.data.token);
-          console.log(res.data.token);
-          
-          this.props.navigation.navigate('userStack');
-        } catch (e) {
-          console.log('error hai', e);
-          Alert.alert('Invalid email password');
-        }
-      });
+    if (this.validateuser()) {
+      axios
+        .post(URL.Url + 'usersignin', {
+          email: this.state.Email,
+          password: this.state.Password,
+        })
+        .then(async (res) => {
+          try {
+            ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
+            await AsyncStorage.setItem('usersignintoken', res.data.token);
+            console.log(res.data.token);
+            this.props.navigation.navigate('userStack');
+          } catch (e) {
+            console.log('error hai', e);
+            Alert.alert('Invalid email password');
+          }
+        })
+        .catch((error) => {
+          ToastAndroid.show('Invalid User', ToastAndroid.BOTTOM);
+        });
+    }
   };
 
   render() {

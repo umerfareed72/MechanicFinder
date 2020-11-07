@@ -7,7 +7,7 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
-  CheckBox,
+ToastAndroid,
   Image,
   ImageBackground,
   Dimensions,
@@ -65,7 +65,7 @@ export default class MechanicRegister extends Component {
       CPassword: '',
       address: '',
       photo: '',
-      Phone: '',
+      Phone: 0,
       carcompany: '',
       skilltype: '',
       vehicletype: '',
@@ -79,10 +79,11 @@ export default class MechanicRegister extends Component {
     if (this.state.Password == this.state.CPassword) {
       this.submitData();
     } else {
-      alert('Confirm Password Not Matched');
+  ToastAndroid.show('Password Not Mathed')
     }
   };
   submitData = () => {
+  if(this.validatefield()){
     axios
       .post(URL.Url + 'mechanicregister', {
         firstname: this.state.FirstName,
@@ -113,10 +114,10 @@ export default class MechanicRegister extends Component {
         }
       })
       .catch((error) => {
-        Alert.alert('something went Wrong!!');
-
+        ToastAndroid.show('You are Not Registered', ToastAndroid.BOTTOM);
         console.log(error);
       });
+  }
   };
   handleChoosePhoto = () => {
     const options = {
@@ -258,6 +259,65 @@ export default class MechanicRegister extends Component {
     this.setState({ColorStep2: colors.inputBordercolor});
   };
 
+  validatefield=()=>{
+    if(this.state.FirstName==""){
+      ToastAndroid.show('First Name Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }else if(this.state.LastName==""){
+      ToastAndroid.show('Last Name Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }else if(this.state.Email==""){
+      ToastAndroid.show('Email Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }else if(this.state.Password==""){
+      ToastAndroid.show('Password Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }else if(this.state.CPassword==""){
+      ToastAndroid.show('Confirm Password Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }else if(this.state.date==""){
+      ToastAndroid.show('Date Of Birth Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }else if(this.state.Phone==0){
+      ToastAndroid.show('Phone Number Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    }else if(this.state.address==""){
+      ToastAndroid.show('Address Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+    else if(this.state.City==""){
+      ToastAndroid.show('City Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+    else if(this.state.Country==""){
+      ToastAndroid.show('Country Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+    
+    else if(this.state.skilltype==""){
+      ToastAndroid.show('Skill Type Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+
+    else if(this.state.carcompany==""){
+      ToastAndroid.show('Car Company Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+
+    else if(this.state.vehicletype==""){
+      ToastAndroid.show('Vehicle Type Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+    else if(this.state.mechanicrate==0){
+      ToastAndroid.show('Mechanic Rate Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+    else if(this.state.photo==""){
+      ToastAndroid.show('Picture Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+      return false;
+    }
+  return true
+  }
+  
   render() {
     const {photo} = this.state;
     return (
@@ -614,7 +674,20 @@ export default class MechanicRegister extends Component {
                     <Image
                       source={images.dollar}
                       style={[image.InputImage]}></Image>
-                    <TextInput
+                 <Picker
+                      selectedValue={this.state.mechanicrate}
+                      style={[text.pickerstyle]}
+                      onValueChange={(itemValue, itemIndex) =>
+                        this.setState({mechanicrate: itemValue})
+                      }>
+                      <Picker.Item label="Select Service Rate" value="" />
+                      <Picker.Item label="5" value="5" />
+                      <Picker.Item label="10" value="10" />
+                      <Picker.Item label="15" value="15" />
+                      <Picker.Item label="20" value="20" />
+                    </Picker>
+                 
+                    {/* <TextInput
                       style={input.textinputstyle}
                       placeholder="Enter Your Service Rate"
                       onChangeText={(text) => {
@@ -622,7 +695,8 @@ export default class MechanicRegister extends Component {
                           mechanicrate: text,
                         });
                       }}
-                      underlineColorAndroid="transparent"></TextInput>
+                      underlineColorAndroid="transparent"></TextInput> */}
+                 
                   </View>
 
                   <View style={[input.textinputcontainer, style.mv10]}>

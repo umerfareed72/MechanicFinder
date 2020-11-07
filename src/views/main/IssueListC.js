@@ -55,7 +55,6 @@ export default class Mechaniclist extends Component {
       userId: '',
       userdbid: '',
       token: '',
-     
     };
   }
 
@@ -117,9 +116,10 @@ export default class Mechaniclist extends Component {
       .catch((error) => {
         console.log('ye lo 1', error);
       });
-   
+    });
   };
 
+  
   movetodetail = (id) => {
     const issuedata = JSON.stringify(this.state.dataSource[id]);
     AsyncStorage.setItem('issuedata', issuedata);
@@ -137,21 +137,21 @@ export default class Mechaniclist extends Component {
 
   deleteissue = (id) => {
     const issuedata = this.state.dataSource[id];
-    console.log(issuedata)
+    console.log(issuedata);
     axios
       .delete(URL.Url + 'deleteissue/' + issuedata._id)
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          Alert.alert('Issue deleted successfully!')
+          Alert.alert('Issue deleted successfully!');
           this.showIssues();
         }
       })
       .catch((error) => {
         console.log('ye lo 2', error);
-        Alert.alert('something is wrong')
+        Alert.alert('something is wrong');
       });
-  }
+  };
   render() {
     return (
       <SafeAreaView style={appStyle.safeContainer}>
@@ -205,29 +205,20 @@ export default class Mechaniclist extends Component {
                           </Text>
                         </View>
                         <View style={style.row}>
+                          <Image
+                            style={[image.xsmall, image.Orange]}
+                            source={images.Company}></Image>
                           <Text style={[text.text15, {color: colors.gray}]}>
-                            {data.carcompany} City:{data.city}
+                            {data.carcompany}
                           </Text>
                         </View>
-                        <View style={[style.mv5]}>
-                        <TouchableOpacity
-                        onPress={() => {
-                          this.movetoedit(index)
-                       }}>
-                          <View style={[text.text15, {color: colors.gray}]}>
-                            <Text>Edit       </Text>
-                            </View>
-                            </TouchableOpacity>
-                             
-                            <TouchableOpacity
-                            onPress={() => {
-                              this.deleteissue(index)
-                           }}
-                             >
-                              <View style={[text.text15, {color: colors.gray}]}>
-                            <Text>Delete </Text>
-                            </View>
-                            </TouchableOpacity> 
+                        <View style={style.row}>
+                          <Image
+                            style={image.xsmall}
+                            source={images.location}></Image>
+                          <Text style={[text.text15, {color: colors.gray}]}>
+                            {data.city}
+                          </Text>
                         </View>
                       </View>
                     </View>
@@ -236,11 +227,11 @@ export default class Mechaniclist extends Component {
                   <TouchableOpacity
                     key={index}
                     onPress={() => {
-                      // this.changebuttoncolor(index);
+                      this.deleteissue(index);
                     }}>
                     <Image
                       style={[image.forward]}
-                      source={images.arrowLong}></Image>
+                      source={images.delete}></Image>
                   </TouchableOpacity>
                 </TouchableOpacity>
               );

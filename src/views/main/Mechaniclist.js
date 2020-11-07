@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {
   Text,
   View,
+  ToastAndroid,
   ScrollView,
   SafeAreaView,
   StatusBar,
@@ -74,42 +75,92 @@ export default class Mechaniclist extends Component {
             }, 2000);
           }
         } else {
-          alert('User Already book a mechanic');
+          ToastAndroid.show(
+            'User Already Book a Mechanic',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
+
           console.log(res.data);
         }
       })
       .catch((error) => {
         console.log(error);
+        ToastAndroid.show(
+          'Something Went Wrong',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
       });
   };
+
+  validate = () => {
+    if (this.state.vehicletype == 'Select Vehicle Type') {
+      ToastAndroid.show(
+        'Vehicle Type is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.carcompany == 'Select Vehicle Name') {
+      ToastAndroid.show(
+        'Vehile Name is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }
+    return true;
+  };
+
   showMechanics = () => {
-    AsyncStorage.getItem('userId')
-      .then((res) => {
-        const id = JSON.parse(res);
-        this.setState({userId: id});
-        axios
-          .get(
-            URL.Url +
-              'nearmechanics/' +
-              this.state.skilltype +
-              '/' +
-              this.state.vehicletype +
-              '/' +
-              this.state.carcompany +
-              '/' +
-              id,
-          )
-          .then((response) => {
-            console.log(response.data);
-            this.setState({dataSource: response.data});
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (this.validate()) {
+      AsyncStorage.getItem('userId')
+        .then((res) => {
+          const id = JSON.parse(res);
+          this.setState({userId: id});
+          axios
+            .get(
+              URL.Url +
+                'nearmechanics/' +
+                this.state.skilltype +
+                '/' +
+                this.state.vehicletype +
+                '/' +
+                this.state.carcompany +
+                '/' +
+                id,
+            )
+            .then((response) => {
+              console.log(response.data);
+              this.setState({dataSource: response.data});
+              if (response.data.length == 0) {
+                ToastAndroid.show(
+                  'No Mechanic Available',
+                  ToastAndroid.BOTTOM,
+                  ToastAndroid.LONG,
+                );
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              ToastAndroid.show(
+                'Something went wrong',
+                ToastAndroid.BOTTOM,
+                ToastAndroid.LONG,
+              );
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+
+          ToastAndroid.show(
+            'Something went wrong',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
+        });
+    }
   };
   componentDidMount() {
     AsyncStorage.getItem('skilltype').then((res) => {

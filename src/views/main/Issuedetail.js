@@ -225,14 +225,18 @@ console.log(this.state.firstname)
           <View
             style={[
               appStyle.rowBtw,
+              style.aiCenter,
               appStyle.bodyLayout,
               appStyle.bodyShadowTop,
-              {backgroundColor: '#fff'},
+              style.mh40,
+                {backgroundColor: colors.lightgray,
+                       borderBottomLeftRadius: 10,
+                  borderBottomRightRadius: 10,},
             ]}>
             <TouchableOpacity onPress={() => this.tabOverview()}>
               <Text
                 style={[
-                  text.tab1,
+                  text.heading2,
                   text.semibold,
                   {color: this.state.ColorOverview},
                 ]}>
@@ -254,7 +258,7 @@ console.log(this.state.firstname)
             <TouchableOpacity onPress={() => this.tabReview()}>
               <Text
                 style={[
-                  text.tab1,
+                  text.heading2,
                   text.semibold,
                   {color: this.state.ColorReview},
                 ]}>

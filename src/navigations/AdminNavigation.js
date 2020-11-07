@@ -30,13 +30,28 @@ import {
   URL,
 } from '../config/Constant';
 import LoginasMechanic from '../views/registration/LoginasMechanic';
-
+import AddServiceRates from '../views/Admin/AddServiceRates'
+import ServiceRates from '../views/Admin/ServiceRates'
+import UpdateServiceRate from '../views/Admin/UpdateServiceRate'
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
     AdminDashboard: {
       screen: AdminDashboard,
     },
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+const RatesStack = createStackNavigator(
+  {
+    ServiceRates:ServiceRates,
+  AddServiceRates:AddServiceRates, 
+  UpdateServiceRate:UpdateServiceRate
   },
   {
     headerMode: 'none',
@@ -92,7 +107,20 @@ const Navigator = createMaterialBottomTabNavigator(
         ),
       },
     },
-      
+  
+   Rates: {
+      screen: RatesStack,
+      navigationOptions: {
+        tabBarLabel: 'Service Rates',
+        tabBarIcon: ({tintColor}) => (
+          <Image
+            style={{resizeMode: 'contain', height: 25, width: 25,tintColor:colors.gray}}
+            source={images.dollar}
+          />
+        ),
+      },
+    },
+    
       Settings: {
         screen: SettingStack,
         navigationOptions: {

@@ -87,9 +87,9 @@ export default class BookedUser extends Component {
   };
 
   MyBooking = () => {
-    AsyncStorage.getItem('userId').then((res) => {
-      const userid = JSON.parse(res);
-      axios.get(URL.Url + 'mechanics/' +userid).then((data) => {
+    AsyncStorage.getItem('mechanicid').then((res) => {
+      const mechanicid = JSON.parse(res);
+      axios.get(URL.Url + 'users/' +mechanicid.mechanicid).then((data) => {
         this.setState({bookedMechanics: data.data});
       });
     });
@@ -153,7 +153,7 @@ export default class BookedUser extends Component {
                         <ImageBackground
                           imageStyle={{borderRadius: 4}}
                           style={[style.mv5, {height: 80, width: '100%'}]}
-                          source={{uri: item.mechanicphoto}}>
+                          source={{uri: item.userphoto}}>
                           <View style={[appStyle.popularInnerContent]}>
                             <Text
                               style={[
@@ -161,7 +161,7 @@ export default class BookedUser extends Component {
                                 text.bold,
                                 text.center,
                               ]}>
-                              {item.mechanicname}
+                              {item.username}
                             </Text>
                           </View>
                         </ImageBackground>
@@ -170,7 +170,7 @@ export default class BookedUser extends Component {
                       <View style={[style.jcCenter, style.w80]}>
                         <View style={[style.rowBtw]}>
                           <Text style={[text.heading2, text.semibold]}>
-                            {item.mechanicname} 
+                            {item.username} 
                           </Text>
                           <Text style={[text.heading3, text.semibold]}>
                             {item.totalamount} $
@@ -178,7 +178,7 @@ export default class BookedUser extends Component {
                        
                         </View>
                        <View style={[style.mv5]}>
-                            <Text>Contact Me: {item.mechanicemail}</Text>
+                            <Text>Contact Me: {item.useremail}</Text>
                            </View>
                         <View style={[appStyle.rowBtw]}>
                           <View style={[appStyle.BookingsmallWidth]}>

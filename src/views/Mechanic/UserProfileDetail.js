@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   ImageBackground,
   Dimensions,
+  ToastAndroid,
   Keyboard,
   Platform,
 } from 'react-native';
@@ -169,6 +170,14 @@ export default class UserProfileDetail extends Component {
     axios
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
+        this.setState({refreshing: false});
+        AsyncStorage.removeItem('bookMechanicData');
+        this.props.navigation.navigate('MechanicDashboard');
+        ToastAndroid.show(
+          'Booking Cancelled',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         this.state.products.map((item) => {
           axios
             .put(
@@ -178,7 +187,11 @@ export default class UserProfileDetail extends Component {
               this.setState({refreshing: false});
               AsyncStorage.removeItem('bookMechanicData');
               this.props.navigation.navigate('MechanicDashboard');
-              console.log(res.data, 'data updated');
+              ToastAndroid.show(
+                'Booking Cancelled',
+                ToastAndroid.BOTTOM,
+                ToastAndroid.LONG,
+              );
             });
         });
       })
@@ -188,28 +201,43 @@ export default class UserProfileDetail extends Component {
   };
 
   completework = () => {
-    var finalamount = parseInt(this.state.Amount)+parseInt(this.state.extraAmount) ;
+    var finalamount =
+      parseInt(this.state.Amount) + parseInt(this.state.extraAmount);
     axios
       .put(
         URL.Url +
           'completebooking/' +
           this.state.bookedMechanicId +
           '/' +
-          finalamount,
+          finalamount +
+          '/' +
+          'Online',
       )
       .then((res) => {
-        this.state.products.map((item) => {
-          axios
-            .put(
-              URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
-            )
-            .then((mod) => {
-              this.setState({refreshing: false});
-              AsyncStorage.removeItem('bookMechanicData');
-              this.props.navigation.navigate('MechanicDashboard');
-              console.log(res.data, 'data updated');
-            });
-        });
+        // AsyncStorage.removeItem('bookMechanicData');
+        // console.log(res.data, 'data updated');
+        // this.setState({refreshing: false});
+        //   alert('Your Work is Completed:'
+        //  +"\n"+' Collect Your Cash from User Please.')
+        ToastAndroid.show(
+          'Collect Your Cash from User Please.',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+        this.props.navigation.navigate('MechanicDashboard');
+        this.completeModal();
+        // this.state.products.map((item) => {
+        // axios.put(
+        //   URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
+        //     )
+        //     .then((mod) => {
+        //       ToastAndroid.show(
+        //         'All Services Done',
+        //         ToastAndroid.BOTTOM,
+        //         ToastAndroid.LONG,
+        //       );
+        //     });
+        // });
       })
       .catch((error) => {
         console.log(error);
@@ -258,26 +286,34 @@ export default class UserProfileDetail extends Component {
               animationOutTiming={500}>
               <View style={[style.flex1, appStyle.rowCenter]}>
                 <View style={[appStyle.modalBg]}>
-                <View style={[input.formInput, style.mv5,style.row,style.aiCenter]}>
-                      <Image
-                        source={images.dollar}
-                        style={[image.InputImage,style.mr5]}></Image>
-                      <TextInput
-                        style={[input.input]}
-                        placeholder="Enter extra Service Rate"
-                        onChangeText={(text) => {
-                          this.setState({
-                            extraAmount: text,
-                          });
-                        }}
-                        underlineColorAndroid="transparent"></TextInput>
-                    </View>
+                  <Text style={text.h1}>
+                    {parseInt(this.state.Amount) +
+                      parseInt(this.state.extraAmount)}
+                  </Text>
+                  <View
+                    style={[
+                      input.formInput,
+                      style.mv5,
+                      style.row,
+                      style.aiCenter,
+                    ]}>
+                    <Image
+                      source={images.dollar}
+                      style={[image.InputImage, style.mr5]}></Image>
+                    <TextInput
+                      style={[input.input]}
+                      placeholder="Enter extra Service Rate"
+                      onChangeText={(text) => {
+                        this.setState({
+                          extraAmount: text,
+                        });
+                      }}
+                      underlineColorAndroid="transparent"></TextInput>
+                  </View>
 
-                
                   <Text style={[]}>Are You Sure?</Text>
-                  
+
                   <View style={[style.row, style.mt10]}>
-                  
                     <TouchableOpacity
                       style={[style.mh10]}
                       onPress={this.completeModal}>

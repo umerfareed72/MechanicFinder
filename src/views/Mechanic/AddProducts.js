@@ -13,6 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
+  ToastAndroid
 } from 'react-native';
 import Modal from 'react-native-modal';
 
@@ -105,8 +106,58 @@ export default class AddProducts extends Component {
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
+  validatefield = () => {
+    if (this.state.photo == '') {
+      ToastAndroid.show(
+        'Photo is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.title == '') {
+      ToastAndroid.show(
+        'Title is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }else if (this.state.price == 0) {
+      ToastAndroid.show(
+        'Price is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }else if (this.state.quantity == 0) {
+      ToastAndroid.show(
+        'Quantity is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }else if (this.state.paymentMethod == '') {
+      ToastAndroid.show(
+        'Payment Method is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }
+    else if (this.state.description == '') {
+      ToastAndroid.show(
+        'Description is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }
+    return true;
+  };
 
+  
   submitdata = () => {
+    if(this.validatefield()){
+      
     AsyncStorage.getItem('Mechanicdata').then((res) => {
       const data = JSON.parse(res);
       axios
@@ -121,9 +172,14 @@ export default class AddProducts extends Component {
         })
         .then((response) => {
           console.log(response.data);
-          alert('Item Successfully Added')
+          ToastAndroid.show(
+            'Product Added Successfully',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
         });
-    });
+    }); 
+  }
   };
   onStarRatingPress(rating) {
     this.setState({
