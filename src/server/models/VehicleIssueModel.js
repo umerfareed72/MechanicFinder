@@ -8,6 +8,7 @@ const vehicalissueschema = new mongoose.Schema({
   description: String,
   status: String,
   userdbid: String,
+  userphoto:String,
   date: String,
 });
 

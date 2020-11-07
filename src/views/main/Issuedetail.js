@@ -55,21 +55,27 @@ export default class HomeDetail extends Component {
       suggestiondata: [],
       firstname:'',
       issueid: '',
+      mid:'',
+      placeholder:'Enter text here'
     };
   }
 
   getData = async () => {
+    console.log('in get data');
     try {
       await AsyncStorage.getItem('issuedata').then((res) => {
         res = JSON.parse(res);
         this.setState({issuedata: res});
         this.setState({issueid: res._id});
+       
       });
-      await AsyncStorage.getItem('Mechanicdata').then((res) => {
-        res = JSON.parse(res);
-        this.setState({firstname: res.firstname});
+      console.log('in usersignin');
+      // await AsyncStorage.getItem('usersignintoken').then((res) => {
+      //   // res = JSON.parse(res);
+      //   console.log('response firstname',res)
+        this.setState({firstname: 'Issue Holder'});
         
-      });
+      // });
     } catch (error) {}
   };
   async componentDidMount() {
@@ -91,7 +97,7 @@ export default class HomeDetail extends Component {
           this.setState({suggestiondata: response.data});
           console.log(this.state.suggestiondata);
         }
-        if (this.state.suggestiondata == '') Alert.alert('Sorry no issue available!');
+        
       })
       .catch((error) => {
         console.log(error);
@@ -100,6 +106,16 @@ export default class HomeDetail extends Component {
     // .catch((error) => {
     //   console.log(error);
     // });
+  };
+
+
+  movetomdetail = (id) => {
+    const mid1 = JSON.stringify(this.state.suggestiondata[id].mid);
+    console.log('mid',mid1)
+    AsyncStorage.setItem('Mechanicidfromsuggestion', mid1);
+    setTimeout(() => {
+      this.props.navigation.navigate('mdetail');
+    }, 2000);
   };
 
   submitsuggestion = () => {
@@ -113,6 +129,8 @@ export default class HomeDetail extends Component {
         console.log(res.data);
         Alert.alert('Your Suggestion is posted successfully Thanks for your response <3 ');
         this.getsuggestions();
+        this.setState
+        ({suggestion:''});
       })
       .catch((error) => {
         Alert.alert('something went Wrong!!');
@@ -197,8 +215,7 @@ console.log(this.state.firstname)
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.paraWhite, text.regular]}>
-                  Give your point of View about this issue share your
-                  suggestions.....
+                  You can contact mechanic or report this mechanic
                 </Text>
               </View>
             </View>
@@ -349,7 +366,7 @@ console.log(this.state.firstname)
               return (
                 <TouchableOpacity
                   key={index}
-                  // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
+                  onPress={()=>{this.movetomdetail(index)}}
 
                   style={[
                     appStyle.slotCard,
@@ -394,7 +411,7 @@ console.log(this.state.firstname)
               ]}>
               <TextInput
                 style={input.textinputstyle}
-                placeholder="Type Suggestion about issue"
+                placeholder={this.state.placeholder}
                 secureTextEntry={true}
                 secureTextEntry={false}
                 onChangeText={(text) => {

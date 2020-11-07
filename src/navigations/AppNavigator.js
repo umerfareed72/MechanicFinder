@@ -20,8 +20,10 @@ import LoginasMechanic from '../views/registration/LoginasMechanic';
 import GoogleUserSignUp from '../views/registration/GoogleUserSignUp';
 
 import ForgotPassword from '../views/registration/ForgotPassword';
+import Mforget from '../views/registration/Mforgetpassword';
 import MechanicNavigation from './MechanicNavigation';
 import LoginAsAdmin from "../views/registration/LoginAsAdmin"
+
 import AdminNavigation from './AdminNavigation'
 const SplashStack = createStackNavigator(
   {
@@ -44,6 +46,7 @@ const AuthStack = createStackNavigator(
     LoginasMechanic: LoginasMechanic,
     MechanicRegister: MechanicRegister,
     Forgot: ForgotPassword,
+    Mforget: Mforget,
     LoginAsAdmin:LoginAsAdmin
   },
   {

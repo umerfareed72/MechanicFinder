@@ -41,7 +41,7 @@ import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Picker} from '@react-native-community/picker';
 import {color} from 'react-native-reanimated';
-export default class Mechaniclist extends Component {
+export default class Reportedmechanics extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,24 +59,25 @@ export default class Mechaniclist extends Component {
     };
   }
 
-  componentDidMount = () => {     this.getid()
-     //this.showIssues();
-     this.focusListener = this.props.navigation.addListener('didFocus', () => {
-     this.showIssues();
+  componentDidMount = () => {  
+      
+    this.showreports();
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+     this.showreports();
     });
     ;
   };
 
-  getid = () => {
-    AsyncStorage.getItem('userdata').then((res) => {
-    const  response=JSON.parse(res)
-     this.setState({userdbid: response._id})
-  })
-  };
+//   getid = () => {
+//     AsyncStorage.getItem('userdata').then((res) => {
+//     const  response=JSON.parse(res)
+//      this.setState({userdbid: response._id})
+//   })
+//   };
 
  
 
-  showIssues = async() => {
+  showreports = async() => {
     // AsyncStorage.getItem('userId')
     //   .then((res) => {
     //     const id = JSON.parse(res);
@@ -98,21 +99,18 @@ export default class Mechaniclist extends Component {
     //     });
     // });
 
-    console.log(this.state.userdbid);
-    console.log('in showissuesC');
+    
+    console.log('in showreports');
     await axios
-      .get(URL.Url + 'vehicalissuesC/' + this.state.userdbid)
+      .get(URL.Url + 'Cgetreport')
       .then((response) => {
         if (response.data) {
           console.log(response.data);
         }
            this.setState({dataSource: response.data});
           console.log(this.state.dataSource);
-       
-      })
-      .then(()=>{
-        if (this.state.dataSource === '')
-        Alert.alert('No issue is posted by you!');
+        if (this.state.dataSource == '')
+          Alert.alert('No Report is posted!');
       })
       .catch((error) => {
         console.log('ye lo 1', error);
@@ -120,31 +118,26 @@ export default class Mechaniclist extends Component {
    
   };
 
-  movetodetail = (id) => {
-    const issuedata = JSON.stringify(this.state.dataSource[id]);
-    AsyncStorage.setItem('issuedata', issuedata);
-    setTimeout(() => {
-      this.props.navigation.navigate('Issuedetail');
-    }, 2000);
-  };
-  movetoedit = (id) => {
-    const issuedata = JSON.stringify(this.state.dataSource[id]);
-    AsyncStorage.setItem('issuedata', issuedata);
-    setTimeout(() => {
-      this.props.navigation.navigate('EditIssue');
-    }, 2000);
-  };
 
-  deleteissue = (id) => {
-    const issuedata = this.state.dataSource[id];
-    console.log(issuedata)
+  movetodetail = (id) => {
+    const reportdata = JSON.stringify(this.state.dataSource[id]);
+    AsyncStorage.setItem('reportdata', reportdata);
+    setTimeout(() => {
+      this.props.navigation.navigate('Reportmechanicdetail');
+    }, 2000);
+  };
+ 
+
+  deletereport = (id) => {
+    const reportdata = this.state.dataSource[id];
+    console.log(reportdata)
     axios
-      .delete(URL.Url + 'deleteissue/' + issuedata._id)
+      .delete(URL.Url + 'Cdeletereport/' + reportdata._id)
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          Alert.alert('Issue deleted successfully!')
-          this.showIssues();
+          Alert.alert('Report deleted successfully!')
+          this.showreports();
         }
       })
       .catch((error) => {
@@ -158,25 +151,21 @@ export default class Mechaniclist extends Component {
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
         <View style={{marginTop: 40}} />
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Dashboard')}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Complaints')}>
             <Image source={images.backarrowh} style={image.backArrow2}></Image>
           </TouchableOpacity>
          
           <View>
             <Text style={[text.heading1purple, text.bold]}>
-              Posted New Issue :
+              Roported Mechanics 
             </Text>
-            <Text style={[text.text14, {color: '#4A4A4A'}]}>Currently Active Issues</Text>
+            <Text style={[text.text14, {color: '#4A4A4A'}]}>Currently Added Reports</Text>
           </View>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('PostVehicleIssue')}>
-            <Image style={image.iconAdd} source={images.add}></Image>
-          </TouchableOpacity>
+         <View></View>
         </View>
         <ScrollView style={{}}>
           <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
             {this.state.dataSource.map((data, index) => {
-              
               return (
                 <TouchableOpacity
                   key={index}
@@ -189,7 +178,7 @@ export default class Mechaniclist extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri:data.userphoto}} />
+                      <Image style={image.userImg} source={images.dummy1} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
@@ -201,27 +190,20 @@ export default class Mechaniclist extends Component {
                       <View>
                         <View>
                           <Text style={[text.text16, text.bold]}>
-                            {data.issuetype} issue in {data.vehicaltype}
+                            {data.reporttype} issue in {data.date}
                           </Text>
                         </View>
                         <View style={style.row}>
                           <Text style={[text.text15, {color: colors.gray}]}>
-                            {data.carcompany} City:{data.city}
+                           
                           </Text>
                         </View>
                         <View style={[style.mv5]}>
-                        <TouchableOpacity
-                        onPress={() => {
-                          this.movetoedit(index)
-                       }}>
-                          <View style={[text.text15, {color: colors.gray}]}>
-                            <Text>Edit       </Text>
-                            </View>
-                            </TouchableOpacity>
+                       
                              
                             <TouchableOpacity
                             onPress={() => {
-                              this.deleteissue(index)
+                              this.deletereport(index)
                            }}
                              >
                               <View style={[text.text15, {color: colors.gray}]}>
@@ -238,9 +220,7 @@ export default class Mechaniclist extends Component {
                     onPress={() => {
                       // this.changebuttoncolor(index);
                     }}>
-                    <Image
-                      style={[image.forward]}
-                      source={images.arrowLong}></Image>
+                    
                   </TouchableOpacity>
                 </TouchableOpacity>
               );

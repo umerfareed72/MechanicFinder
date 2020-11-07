@@ -77,10 +77,11 @@ export default class Login extends Component {
         password: this.state.Password,
       })
       .then(async (res) => {
-        console.log(res.data);
+        console.log(res);
 
         try {
           await AsyncStorage.setItem('token', res.data.token);
+         
           console.log(res.data.token);
           this.props.navigation.navigate('mechanicStack');
         } catch (e) {
@@ -156,7 +157,7 @@ export default class Login extends Component {
                 <View style={[style.pv10, style.ph30]}>
                   <Text
                     onPress={() => {
-                      this.props.navigation.navigate('Forgot');
+                      this.props.navigation.navigate('Mforget');
                     }}
                     style={[text.right, text.text14, {color: colors.link}]}>
                     Forgot Password

@@ -21,13 +21,16 @@ import StarRating from 'react-native-star-rating';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import { TouchableOpacity } from 'react-native';
-class UserManagement extends Component {
+
+class Reportedcustomers extends Component {
     state = {  }
     render() { 
-        return (  <View>
-            <Text>Hello</Text>
+        return (  <View><TouchableOpacity><Text>Reported......... customers</Text></TouchableOpacity>
+        <TouchableOpacity><Text>Reported mechanics</Text></TouchableOpacity>
+        <TouchableOpacity><Text>Reported posts</Text></TouchableOpacity>
+            
         </View>);
     }
 }
  
-export default UserManagement;
+export default Reportedcustomers;

@@ -64,7 +64,7 @@ export default class Mechaniclist extends Component {
     //     const id = JSON.parse(res);
     //     this.setState({userId: id});
     console.log('in showissues');
-    axios
+  axios
       .get(
         URL.Url +
           'vehicalissues/' +
@@ -81,12 +81,16 @@ export default class Mechaniclist extends Component {
           this.setState({dataSource: response.data});
           console.log(this.state.dataSource);
         }
+
         if (this.state.dataSource == '')
-          Alert.alert('Sorry no issue available!');
+        Alert.alert('Sorry no issue available!');
+        
+          
       })
       .catch((error) => {
         console.log(error);
       });
+     
     // })
     // .catch((error) => {
     //   console.log(error);
@@ -205,7 +209,7 @@ export default class Mechaniclist extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={images.dummy1} />
+                      <Image style={image.userImg} source={{uri:data.userphoto}} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
@@ -217,27 +221,16 @@ export default class Mechaniclist extends Component {
                       <View>
                         <View>
                           <Text style={[text.text16, text.bold]}>
-                            {data.issuetype} in {data.vehicaltype}s
+                            {data.issuetype} issue in {data.vehicaltype}
                           </Text>
                         </View>
                         <View style={style.row}>
                           <Text style={[text.text15, {color: colors.gray}]}>
-                            {data.date} {data.phone}
+                            Contact: {data.phone}
                           </Text>
                         </View>
                         <View style={[style.mv5]}>
-                          <StarRating
-                            disabled={true}
-                            maxStars={5}
-                            rating={this.state.starCount}
-                            // selectedStar={(rating) =>
-                            //   this.onStarRatingPress(rating)
-                            // }
-                            fullStarColor={'#F59E52'}
-                            emptyStarColor={'#F59E52'}
-                            starSize={18}
-                            containerStyle={{width: 110, marginTop: 3}}
-                          />
+                          
                         </View>
                       </View>
                     </View>

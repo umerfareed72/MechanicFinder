@@ -11,14 +11,20 @@ import {
   Image,
   ImageBackground,
   Dimensions,
-  KeyboardAvoidingView,
   Keyboard,
-  Platform,
-  AsyncStorage,
   Button,
-  TouchableNativeFeedbackBase,
+  Platform,
+  Alert,
 } from 'react-native';
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+const axios = require('axios');
+import {
+  URL,
+  colors,
+  screenHeight,
+  screenWidth,
+  images,
+} from '../../config/Constant';
+import {Animated} from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
 import style from '../../assets/styles/style';
@@ -37,7 +43,65 @@ export default class Terms extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
+    this.state = {
+
+
+      dataSource:'',
+
+
   }
+  }
+
+  componentDidMount() {
+   
+    this.showterms();
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+    this.showterms();
+    });
+    // this.removeBooking();
+  }
+
+  showterms = async() => {
+    // AsyncStorage.getItem('userId')
+    //   .then((res) => {
+    //     const id = JSON.parse(res);
+    //     this.setState({userId: id});
+
+    // AsyncStorage.getItem('usersignintoken').then((res) => {
+    //   this.setState({token: res});
+    //   console.log(this.state.token);
+    //   axios
+    //     .get(URL.Url + 'me', {
+    //       headers: {
+    //         'x-access-token': this.state.token,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       this.setState({userdbid: response.data.userid}).catch((error) => {
+    //         console.log(error);
+    //       });
+    //     });
+    // });
+
+    console.log(this.state.userdbid);
+    console.log('in showissuesC');
+    await axios
+      .get(URL.Url + 'Cterms')
+      .then((response) => {
+        if (response.data) {
+          console.log(response.data);
+        }
+           this.setState({dataSource: response.data});
+          console.log(this.state.dataSource);
+       
+      })
+     
+      .catch((error) => {
+        console.log('ye lo 1', error);
+      });
+   
+  };
+
 
   render() {
     return (
@@ -62,7 +126,7 @@ export default class Terms extends Component {
               </TouchableOpacity>
               <View style={[appStyle.headInner]}>
                 <View style={[]}>
-                  <Text style={[text.heading1, text.bold]}>Terms</Text>
+                  <Text style={[text.heading1, text.bold]}>Terms of Services</Text>
                 </View>
               </View>
             </LinearGradient>
@@ -73,7 +137,7 @@ export default class Terms extends Component {
               <ScrollView style={style.mb50}>
                 <View style={style.mh15}>
                   <View style={style.mv10}>
-                    <Text style={text.heading2}>Terms of Service</Text>
+                    <Text style={text.heading2}></Text>
                   </View>
                   <View>
                     <Text
@@ -82,7 +146,7 @@ export default class Terms extends Component {
                         style.asCenter,
                       text.greyRegular
                       ]}>
-                      Some heading Here
+                      Important points
                     </Text>
                   </View>
                   <View>

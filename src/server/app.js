@@ -14,6 +14,12 @@ require('./models/ProductModel');
 require('./models/VehicleIssueModel');
 require('./models/ServicerateModel');
 require('./models/SuggestionModel');
+require('./models/mechanicreport');
+require('./models/Mwarning');
+require('./models/Admin');
+require('./models/uhelp');
+require('./models/upolicy');
+require('./models/uterms');
 const mechanicroutes1 = require('./routes/mechanicroutes');
 const userroutes1 = require('./routes/Userroutes');
 const bookedroutes = require('./routes/BookedUseroutes');
@@ -27,8 +33,8 @@ app.use(bookedroutes);
 app.use(Productroutes);
 app.use(BookProductroutes);
 const mongouri =
-  // 'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';
-  'mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/SmartAutoMechanicFinder?retryWrites=true&w=majority';
+   'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';
+ // 'mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/SmartAutoMechanicFinder?retryWrites=true&w=majority';
 // "mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/test"
 mongoose.connect(mongouri, {
   useNewUrlParser: true,

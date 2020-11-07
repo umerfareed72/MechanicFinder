@@ -14,13 +14,13 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-
+Alert,
   Button,
   TouchableNativeFeedbackBase,
 } from 'react-native';
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+import {colors, URL, screenHeight, screenWidth, images} from '../../config/Constant';
 import Textarea from 'react-native-textarea';
-
+const axios = require('axios');
 import LinearGradient from 'react-native-linear-gradient';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -37,7 +37,33 @@ export default class Help extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
+    this.state={
+      message:'',
+      question:'',
+    }
   }
+
+  submithelp = () => {
+    axios
+      .post(URL.Url + 'uhelp', {
+        question: this.state.question,
+        message: this.state.message,
+      })
+      .then(async (res) => {
+        console.log(res);
+        console.log(res.data);
+        try {
+          this.props.navigation.navigate('Dashboard');
+        } catch (e) {
+          console.log('error hai', e);
+        }
+      })
+      .catch((error) => {
+        Alert.alert('something went Wrong!!');
+
+        console.log(error);
+      });
+  };
 
   render() {
     return (
@@ -78,6 +104,11 @@ export default class Help extends Component {
                 <Image source={images.Question} style={[image.drawerIcon,{tintColor:colors.gray}]}></Image>
                 <TextInput
                   onFocus={this.changeheight}
+                  onChangeText={(text) => {
+                    this.setState({
+                      question: text,
+                    });
+                  }}
                   style={input.textinputstyle}
                   placeholder="Question"
                   underlineColorAndroid="transparent"></TextInput>
@@ -97,10 +128,15 @@ export default class Help extends Component {
                   <Textarea
                     placeholderTextColor={'#c7c7c7'}
                     underlineColorAndroid={'transparent'}
+                    onChangeText={(text) => {
+                      this.setState({
+                        message: text,
+                      });
+                    }}
                   />
                 </View>
               </View>
-              <TouchableOpacity onPress={()=>{this.props.navigation.navigate("Mechanics")}}>
+              <TouchableOpacity onPress={this.submithelp}>
                 <View style={[button.buttoncontainer, style.mv30]}>
                   <Text
                     style={[button.touchablebutton, {color: colors.darkBlue}]}>

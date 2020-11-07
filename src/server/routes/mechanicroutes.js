@@ -6,9 +6,12 @@ const jwt = require('jsonwebtoken');
 const Mechanicmodel = mongoose.model('mechanicmodel');
 const Usermodel = mongoose.model('Usermodel');
 const Reviewmodel = mongoose.model('ReviewModel');
-const Suggestion =mongoose.model('suggestions')
-const VehicalIssuemodel =mongoose.model('vehicalissue')
-
+const Suggestion =mongoose.model('suggestions');
+const VehicalIssuemodel =mongoose.model('vehicalissue');
+const Mechanicreport = mongoose.model('mechanicreport');
+const Mwarning = mongoose.model('Mwarning');
+const Admin = mongoose.model('Adminschema')
+const BookedUsermodel = mongoose.model('BookedUsermodel');
 router.post('/issueregister', async (req, res) => {
   console.log('in issue register');
   const issue = new VehicalIssuemodel({
@@ -19,6 +22,7 @@ router.post('/issueregister', async (req, res) => {
     vehicaltype: req.body.vehicaltype,
     userdbid: req.body.userdbid,
     phone: req.body.phone,
+    userphoto:req.body.userphoto,
     description: req.body.description,
     date: Date.now(),
     status: req.body.status,
@@ -29,6 +33,202 @@ router.post('/issueregister', async (req, res) => {
     });
   });
 });
+
+
+router.post('/registeradmin', async (req, res) => {
+  console.log('in admin register');
+  const admin = new Admin({
+    email: req.body.email,
+    password: req.body.password,
+    
+  });
+  await admin.save().then(() => {
+    res.send(admin).catch((err) => {
+      res.status(404).send(err.message);
+    });
+  });
+});
+
+router.post('/sendwarning', async (req, res) => {
+  console.log('in suggestion');
+  const Mwarning1 = new Mwarning({
+    warning:req.body.warning,
+    mdbid:req.body.mdbid
+  });
+  await Mwarning1.save().then(() => {
+    res.send(Mwarning1).catch((err) => {
+      res.status(404).send(err.message);
+    });
+  });
+});
+
+
+
+
+
+router.get('/getMwarning/:mdbid', (req, res) => {
+  Mwarning.find({
+    mdbid: req.params.mdbid,
+  })
+    .sort('id')
+    .select({
+      warning: 1,
+      
+    })
+    .then((warning) => {
+      if (!warning) return res.send('');
+      else res.json(warning);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+router.delete('/Wdelete/:id',async(req,res)=>{
+  Mwarning.findByIdAndDelete(req.params.id)
+  .then((data) =>{res.json(data)})
+.catch((err) =>{
+  res.status(404).send(err.message);
+})})
+
+
+
+
+
+router.post('/Creportregister', async (req, res) => {
+  console.log('in Creport register');
+  const report = new Mechanicreport({
+    reportdescription: req.body.reportdescription,
+    reporttype: req.body.reporttype,
+    userdbid: req.body.userdbid,
+    mdbid:req.body.mdbid,
+    date: req.body.date
+  });
+  await report.save().then(() => {
+    res.send(report).catch((err) => {
+      res.status(404).send(err.message);
+    });
+  });
+});
+
+router.get('/Cgetreport', (req, res) => {
+  Mechanicreport.find().sort('id')
+    .select({
+      reportdescription:1,
+      reporttype:1,
+      userdbid:1,
+      mdbid:1,
+      date:1
+    })
+    .then((reports) => {
+      if (!reports) return res.status(404).send('Not Found');
+      else res.json(reports);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+  
+router.delete('/Cdeletereport/:id',async(req,res)=>{
+  Mechanicreport.findByIdAndDelete(req.params.id)
+  .then((data) =>{res.json(data)})
+.catch((err) =>{
+  res.status(404).send(err.message);
+})});
+
+router.delete('/deletemechanic/:id',async(req,res)=>{
+  Mechanicmodel.findByIdAndDelete(req.params.id)
+  .then((data) =>{res.json(data)})
+.catch((err) =>{
+  res.status(404).send(err.message);
+})})
+
+
+
+router.route("/paintercount").get(function(req, res) {
+  Mechanicmodel.count({skilltype:"Painter"}, function(err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+
+
+router.route("/bookedmcount").get(function(req, res) {
+  BookedUsermodel.count({Status: 'Online'}, function(err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+
+
+router.route("/enginecount").get(function(req, res) {
+  Mechanicmodel.count({skilltype:"Engine"}, function(err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+router.route("/bodycount").get(function(req, res) {
+  Mechanicmodel.count({skilltype:"Body"}, function(err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+router.route("/electriccount").get(function(req, res) {
+  Mechanicmodel.count({skilltype:"Electric"}, function(err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+router.route("/electricissuecount").get(function(req, res) {
+  VehicalIssuemodel.count({issuetype:"Electric"}, function(err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+router.route("/bodyissuecount").get(function(req, res) {
+  VehicalIssuemodel.count({issuetype:"Body"}, function(err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+router.route("/engineissuecount").get(function(req, res) {
+  VehicalIssuemodel.count({issuetype:"Engine"}, function(err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+
 
 router.get('/vehicalissues/:issuetype/:vehicaltype/:carcompany', (req, res) => {
   // var vehicaltype;
@@ -51,6 +251,7 @@ router.get('/vehicalissues/:issuetype/:vehicaltype/:carcompany', (req, res) => {
       vehicaltype: 1,
       issuetype: 1,
       description: 1,
+      userphoto:1,
       phone: 1,
       date: 1,
       status: 1,
@@ -79,6 +280,7 @@ router.get('/vehicalissuesC/:userdbid', (req, res) => {
       description: 1,
       phone: 1,
       date: 1,
+      userphoto:1,
       status: 1,
     })
     .then((issues) => {
@@ -96,7 +298,9 @@ router.post('/postsuggestion', async (req, res) => {
   const suggestion = new Suggestion({
     firstname:req.body.firstname,
     suggestion:req.body.suggestion,
-    issueid:req.body.issueid
+    issueid:req.body.issueid,
+    mid:req.body.mid,
+    mphoto:req.body.mphoto
   });
   await suggestion.save().then(() => {
     res.send(suggestion).catch((err) => {
@@ -114,7 +318,9 @@ router.get('/issuessuggestion/:issueid', (req, res) => {
     .sort('id')
     .select({
       suggestion:1,
-      firstname:1
+      firstname:1,
+      mid:1,
+      mphoto:1
     })
     .then((suggestion) => {
       if (!suggestion) return res.status(404).send('Not Found');
@@ -160,6 +366,27 @@ router.delete('/deleteissue/:id',async(req,res)=>{
 .catch((err) =>{
   res.status(404).send(err.message);
 })})
+
+router.post('/adminsignin', async (req, res) => {
+  const {email, password} = req.body;
+  if (!email || !password) {
+    return res.status(422).send({error: 'Provide Email and Password Both!!'});
+  }
+  const admn1 = await Admin.findOne({email});
+  console.log(admn1);
+  if (!admn1) {
+    return res.status(422).send({error: 'Email not exist!!'});
+  }
+  try {
+    if(admn1.password==password)
+    {const atoken = jwt.sign({adminid: admn1._id},jwtkey);
+    res.send({atoken});}
+    
+  } catch (err) {
+    return res.status(422).send({error: 'Password not exist!!'});
+  }
+});
+
 
 router.post('/mechanicsignin', async (req, res) => {
   const {email, password} = req.body;
@@ -255,7 +482,7 @@ router.put('/mechaniclocation/:id', async (req, res) => {
 });
 
 //Get Mechanic By Id
-router.get('/mechanic/:id', (req, res) => {
+router.get('/mechanic/:id', (req, res) => { 
   Mechanicmodel.findById(req.params.id)
     .sort('id')
     .select({

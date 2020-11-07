@@ -36,7 +36,7 @@ import StarRating from 'react-native-star-rating';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 
-export default class HomeDetail extends Component {
+export default class Mdetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,52 +51,34 @@ export default class HomeDetail extends Component {
       BookNowView: 'none',
       CheckBox: images.checkBoxEmpty,
       suggestion: '',
-      issuedata: [],
-      suggestiondata: [],
+     
+      suggestiondata:[],
+      mechanicdata: [],
       firstname:'',
       issueid: '',
-      mid:'',
-      mphoto:'',
+      mid:''
     };
   }
 
-  getData = async () => {
-    try {
-      await AsyncStorage.getItem('issuedata').then((res) => {
-        res = JSON.parse(res);
-        this.setState({issuedata: res});
-        this.setState({issueid: res._id});
-      });
-      await AsyncStorage.getItem('Mechanicdata').then((res) => {
-        res = JSON.parse(res);
-        this.setState({firstname: res.firstname});
-        this.setState({mphoto: res.photo});
-        this.setState({mid:res._id})
-        console.log('mid',this.state.mid);
-        console.log('mphoto',this.state.mphoto);
-      });
-    } catch (error) {}
-  };
+  
   async componentDidMount() {
     const {navigation} = this.props;
     this.getData();
     this.focusListener = navigation.addListener('didFocus', () => {
-      this.getData();  
+      this.getData();
     });
   }
 
-  getsuggestions = () => {
+  getmechanicdata = () => {
     axios
-      .get(URL.Url + 'issuessuggestion/' + this.state.issueid)
+      .get(URL.Url + 'mechanic/' + this.state.mid)
       .then((response) => {
         if (response.data) {
-          console.log(response.data);
-          this.setState({suggestiondata: response.data});
-          console.log(this.state.suggestiondata);
-          
-          
+          console.log('mechanic ye rha',response.data);
+          this.setState({mechanicdata: response.data});
+          console.log('mechanicdata',this.state.mechanicdata)
         }
-        if (this.state.suggestiondata == '') Alert.alert('No Suggestion available!');
+        
       })
       .catch((error) => {
         console.log(error);
@@ -107,28 +89,26 @@ export default class HomeDetail extends Component {
     // });
   };
 
-  submitsuggestion = () => {
-    axios
-      .post(URL.Url + 'postsuggestion', {
-        suggestion: this.state.suggestion,
-        issueid: this.state.issueid,
-        firstname:this.state.firstname,
-        mid:this.state.mid,
-        mphoto:this.state.mphoto
-      })
-      .then((res) => {
-        console.log(res.data);
-        Alert.alert('Your Suggestion is posted successfully!');
-        this.getsuggestions();
-        this.props.navigation.navigate('IssueList')
-      })
-      .catch((error) => {
-        Alert.alert('something went Wrong!!');
 
-        console.log(error);
+  getData = async () => {
+    console.log('in get data');
+    try {
+      await AsyncStorage.getItem('Mechanicidfromsuggestion').then((res) => {
+        res = JSON.parse(res);
+        this.setState({mid: res});
+       this.getmechanicdata();
+       
       });
+      console.log('in usersignin');
+      // await AsyncStorage.getItem('usersignintoken').then((res) => {
+      //   // res = JSON.parse(res);
+      //   console.log('response firstname',res)
+        // this.setState({firstname: 'Issue Holder'});
+        
+      // });
+    } catch (error) {}
   };
-
+  
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
       this.setState({TabDataGallery: 'none'}),
@@ -163,10 +143,9 @@ export default class HomeDetail extends Component {
     this.setState({ColorOverview: colors.inputBordercolor});
     this.setState({ColorReview: colors.darkBlue});
     this.setState({ColorGallery: colors.inputBordercolor});
-    this.getsuggestions();
   };
   render() {
-    const {issuedata} = this.state;
+    const {mechanicdata} = this.state;
 console.log(this.state.firstname)
     console.log(this.state.issueid);
 
@@ -200,14 +179,13 @@ console.log(this.state.firstname)
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.heading1, text.bold]}>
-                  {issuedata.carcompany} {issuedata.vehicaltype} Issue in{' '}
-                  {issuedata.city}
+Mechanic Detail{' '}
+                 
                 </Text>
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.paraWhite, text.regular]}>
-                  Give your point of View about this issue share your
-                  suggestions.....
+                  You can view detail of mechanic who commented on your post 
                 </Text>
               </View>
             </View>
@@ -262,54 +240,60 @@ console.log(this.state.firstname)
                 {display: this.state.TabDataOverview},
               ]}>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
-                <Image
+                {/* <Image
                   style={[image.medium, style.mr5]}
-                  source={images.location}></Image>
-                <Text style={[text.heading2, text.bold]}>Address</Text>
+                  source={images.location}></Image> */}
+                <Text style={[text.heading2, text.bold]}>Mechanic id (Copy this id if you want to report this Mechanic)</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}>
+                <Text style={[text.heading2Gray]} selectable>
                   {' '}
-                  {issuedata.address} {issuedata.city} {issuedata.country}
+
+                 {this.state.mid}
                 </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, style.mr5, image.Orange]}
                   source={images.cartype}></Image>
-                <Text style={[text.heading2, text.bold]}>Vehicle Type</Text>
+                <Text style={[text.heading2, text.bold]}>Contact Number</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
                 <Text style={[text.heading2Gray]}>
                   {' '}
-                  {issuedata.vehicaltype}
+                  {mechanicdata.phone}
                 </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, style.mr5, image.Orange]}
                   source={images.Company}></Image>
-                <Text style={[text.heading2, text.bold]}>Car Brand</Text>
+                <Text style={[text.heading2, text.bold]}>Mechanic Type</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}> {issuedata.carcompany}</Text>
+                <Text style={[text.heading2Gray]}> {mechanicdata.vehicletype}</Text>
               </View>
 
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, image.Orange, style.mr5]}
                   source={images.carservice}></Image>
-                <Text style={[text.heading2, text.bold]}>Issue Type</Text>
+                <Text style={[text.heading2, text.bold]}>Specialist in </Text>
               </View>
               <View style={[style.borderbottom, style.mv10]}>
-                <Text style={[text.heading2Gray]}> {issuedata.issuetype}</Text>
+                <Text style={[text.heading2Gray]}> {mechanicdata.skilltype}</Text>
               </View>
-              <View style={[style.mt20]}>
-                <Text style={[text.text16]}>Description about issue</Text>
+              <View style={[appStyle.rowAlignCenter, style.mt10]}>
+                <Image
+                  style={[image.medium, image.Orange, style.mr5]}
+                  source={images.location}></Image>
+                <Text style={[text.heading2, text.bold]}>Mechanic City</Text>
               </View>
-              <View style={[style.pv10]}>
-                <Text style={[text.paraGray]}>{issuedata.description}</Text>
-              </View><View
+              <View style={[style.borderbottom, style.mv10]}>
+                <Text style={[text.heading2Gray]}> {mechanicdata.city}</Text>
+              </View>
+              {/* <TouchableOpacity > */}
+              <View
               style={[
                 style.mb50,
                 appStyle.bodyLayout,
@@ -319,20 +303,26 @@ console.log(this.state.firstname)
                   
                 },
               ]}>
-              <View style={[appStyle.rowCenter]}>
-                <View>
+             
+          
+            {/* </TouchableOpacity> */}
+            <View style={[appStyle.rowCenter]}>
+                <View><TouchableOpacity onPress={
+                  ()=>
+                {this.props.navigation.navigate("reportmechanic",
+                {mdbid:this.state.mid})}}>
                   <Text
                     style={
                       ({color: colors.Black323}, [text.text22, text.bold])
                     }>
-                    Issue Video
+                    Report This Mechanic
                   </Text>
                   <Text style={([text.text14], {color: colors.gray})}>
-                    (Optional)
-                  </Text>
+                    (This will take 1 hour to proceed)
+                  </Text></TouchableOpacity>
                 </View>
                 <View style={[{display: this.state.tabOverview}, style.flex1]}>
-                  <TouchableOpacity onPress={this.buyItems}>
+                  {/* <TouchableOpacity onPress={this.buyItems}>
                     <View
                       style={[
                         button.buttoncontainer,
@@ -347,16 +337,16 @@ console.log(this.state.firstname)
                         Play Video
                       </Text>
                     </View>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
               </View>
-            </View>
+              </View>
             </View>
             
-            {this.state.suggestiondata.map((data, index) => {
+            {
+            this.state.suggestiondata.map((data, index) => 
+            {
               console.log('YE LO',data.firstname)
-              console.log('YE LO pp',data)
-
               return (
                 <TouchableOpacity
                   key={index}
@@ -370,7 +360,7 @@ console.log(this.state.firstname)
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri :data.mphoto}} />
+                      <Image style={image.userImg} source={images.dummy1} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
@@ -412,7 +402,6 @@ console.log(this.state.firstname)
                   this.setState({
                     suggestion: text,
                   });
-                  
                 }}
                 underlineColorAndroid="transparent"></TextInput>
 

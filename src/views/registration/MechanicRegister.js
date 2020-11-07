@@ -641,7 +641,7 @@ export default class MechanicRegister extends Component {
                       <Picker.Item label="Body" value="Body" />
                       <Picker.Item label="Painter" value="Painter" />
                       <Picker.Item label="Electric" value="Electric" />
-                    </Picker>
+                    </Picker>  
                   </View>
 
                   <View style={[input.textinputcontainer, style.mv10]}>

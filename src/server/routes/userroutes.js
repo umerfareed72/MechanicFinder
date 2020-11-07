@@ -4,9 +4,12 @@ const {jwtkey} = require('../keys');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Usermodel = mongoose.model('Usermodel');
+const uhelp = mongoose.model('uhelp');
+const upolicy = mongoose.model('upolicy');
+const uterms = mongoose.model('uterms');
 const BookedUsermodel = mongoose.model('BookedUsermodel');
 const Reviewmodel = mongoose.model('ReviewModel');
-
+const bcrypt = require('bcrypt');
 const natural = require('natural');
 
 //User Register
@@ -15,6 +18,7 @@ router.post('/userregister', (req, res) => {
   const User = new Usermodel({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
+    nickname:req.body.nickname,
     email: req.body.email,
     password: req.body.password,
     phone: req.body.phone,
@@ -39,7 +43,114 @@ router.post('/userregister', (req, res) => {
     });
 });
 
+router.post('./addupolicy', async(req,res)=>{
+  const policy = new upolicy({
+    policy:req.body.policy,
+  });
+
+  policy.save()
+    .then((data) => {
+       console.log(data);
+       res.send(data);
+      
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+})
+router.post('./adduterms', async(req,res)=>{
+  const terms = new uterms({
+    terms:req.body.terms,
+  });
+
+  terms.save()
+    .then((data) => {
+       console.log(data);
+       res.send(data);
+      
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+})
+
+router.post('./uhelp', async(req,res)=>{
+  const uhelp1 = new uhelp({
+    question:req.body.question,
+    message:req.body.message,
+    contact:req.body.contact
+  });
+
+  uhelp1.save()
+    .then((data) => {
+       console.log(data);
+       res.send(data);
+      
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+})
+
+
 //Update User Profile
+router.put('/forgetpass', async(req, res) => {
+  let {nickname, npassword,email} = req.body;
+  bcrypt.genSalt(10, (err, salt) => {
+    console.log('IN GENRATE SALT')
+    if (err) {
+      return next(err);
+    }
+    bcrypt.hash(npassword, salt, (err, hash) => {
+      console.log('in hash')
+      if (err) {
+        return (err);
+      }
+      npassword = hash;
+console.log(npassword);
+    
+    });
+  });
+  const user = await Usermodel.findOne({email})
+  if (!user) {
+    return res.status(422).send({error: 'Email not exist!!'});
+  }
+  console.log('user',user);
+  try {
+    if(user.nickname==nickname)
+   {
+
+    const User = Usermodel.findByIdAndUpdate(user._id,{
+      firstname: user.firstname,
+    lastname: user.lastname,
+    nickname:user.nickname,
+    email: user.email,
+    password: npassword,
+    phone: user.phone,
+    address: user.address,
+    photo: user.photo,
+    longitude: user.longitude,
+    latitude: user.latitude,
+    city: user.city,
+    country: user.country,
+    date: user.date,
+      })
+      .then((data) => {
+        console.log('afterupdate',data);
+        res.send(data);
+        // const token = jwt.sign({userid: User._id}, jwtkey);
+        // res.send({token});
+      })
+      .catch((err) => {
+        res.status(404).send(err.message);
+      });
+   }
+   else{res.status(422).send({error: 'nickname not exist!!'});}
+    
+  } catch (err) {
+    return res.status(422).send({error: 'Password not exist!!'});
+  }
+});
 
 
 router.put('/updateuser/:id', (req, res) => {
@@ -65,7 +176,15 @@ router.put('/updateuser/:id', (req, res) => {
     });
 });
 
-
+router.route("/usercount").get(function(req, res) {
+  Usermodel.count(function(err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
 //User Login
 
 router.post('/usersignin', async (req, res) => {
@@ -79,7 +198,7 @@ router.post('/usersignin', async (req, res) => {
   }
   try {
     await user.comparePassword(password);
-    const token = jwt.sign({userid: user._id}, jwtkey);
+    const token = jwt.sign({userid: user._id,firstname:user.firstname}, jwtkey);
     res.send({token});
   } catch (err) {
     return res.status(422).send({error: 'Password not exist!!'});

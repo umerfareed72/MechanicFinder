@@ -63,8 +63,9 @@ export default class LoginAsAdmin extends Component {
   }
   
   submitData = () => {
+    console.log('in admin submit');
     axios
-      .post(URL.Url + 'mechanicsignin', {
+      .post(URL.Url + 'adminsignin', {
         email: this.state.Email,
         password: this.state.Password,
       })
@@ -72,9 +73,9 @@ export default class LoginAsAdmin extends Component {
         console.log(res.data);
 
         try {
-          await AsyncStorage.setItem('token', res.data.token);
+          
           console.log(res.data.token);
-          this.props.navigation.navigate('mechanicStack');
+          this.props.navigation.navigate('AdminStack');
         } catch (e) {
           console.log('error hai', e);
           Alert.alert('Invalid email password');
@@ -106,7 +107,7 @@ export default class LoginAsAdmin extends Component {
                       text.CinzelDecorativeBold,
                       text.white,
                     ]}>
-                    (Mechanic)
+                    (Admin)
                   </Text>
                 </View>
               </LinearGradient>
@@ -156,7 +157,7 @@ export default class LoginAsAdmin extends Component {
                 </View>
 
                 <TouchableOpacity
-                  onPress={()=>{this.props.navigation.navigate('AdminDashboard')}}>
+                  onPress={this.submitData}>
                   <View style={[button.buttoncontainer, style.mt40]}>
                     <Text
                       style={[

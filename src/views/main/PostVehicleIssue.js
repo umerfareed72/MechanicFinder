@@ -65,12 +65,31 @@ export default class Postvehicalissue extends Component {
       status: '',
       description: '',
       token: '',
+      userdata:{},
+      userphoto:''
     };
   }
 
   componentDidMount = () => {
     this.getid();
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      this.getid();
+      this.getdata();
+     });
   };
+
+  getdata = () => {
+    AsyncStorage.getItem('userdata').then((res) => {
+      
+      this.setState({userdata: JSON.parse(res)});
+      this.setState({userphoto:this.state.userdata.photo})
+      console.log('userphoto12',this.state.userphoto)
+     
+      console.log('firstname',this.state.userdata.photo)
+      
+    })
+     
+    }
 
   getid = () => {
     AsyncStorage.getItem('usersignintoken').then((res) => {
@@ -91,7 +110,7 @@ export default class Postvehicalissue extends Component {
   };
   submitData = () => {
     axios
-      .post(URL.Url + 'issueregister', {
+      .post(URL.Url + 'issueregister', {  
         issuetype: this.state.issuetype,
         phone: this.state.Phone,
         photo: this.state.photo,
@@ -101,6 +120,7 @@ export default class Postvehicalissue extends Component {
         description: this.state.description,
         vehicaltype: this.state.vehicaltype,
         userdbid: this.state.userdbid,
+        userphoto:this.state.userdata.photo,
         date: new Date().getDate(),
       })
       .then(async (res) => {
@@ -310,7 +330,7 @@ export default class Postvehicalissue extends Component {
                         this.setState({issuetype: itemValue})
                       }>
                       <Picker.Item label="Issue Type" value="" />
-                      <Picker.Item label="Electric" value="Electric" />
+                      <Picker.Item label="Electric" value="Electric" />  
                       <Picker.Item label="Engine" value="Engine" />
                       <Picker.Item label="Body" value="Body" />
                     </Picker>

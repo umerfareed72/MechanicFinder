@@ -14,11 +14,11 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-Alert,
+
   Button,
 } from 'react-native';
-import {colors, screenHeight, screenWidth,URL, images} from '../../config/Constant';
-const axios = require('axios');
+import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+
 import LinearGradient from 'react-native-linear-gradient';
 
 import style from '../../assets/styles/style';
@@ -35,36 +35,9 @@ export default class Login extends Component {
     this.state = {
       // params: params,
       nickname:'',
-      newpassword:'',
-      email:''
+      newpassword:''
     };
   }
-
-  updatepass = () => {
-    console.log('in updatepass')
-    axios
-      .put(URL.Url + 'forgetpass/', {
-        nickname:this.state.nickname,
-        npassword: this.state.newpassword,
-        email:this.state.email
-      })
-      .then(async (res) => {
-        console.log(res.data);
-       
-        Alert.alert('password updated Successfully!');
-        try {
-          this.props.navigation.navigate('Login');
-        } catch (e) {
-          console.log('error hai', e);
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Wrong Email or Nickname !!');
-
-        console.log(error);
-      });
-  };
-
 
   render() {
     return (
@@ -145,9 +118,7 @@ export default class Login extends Component {
                     />
                 </View>
               </View>
-              <TouchableOpacity onPress={
-                this.updatepass
-                }>
+              <TouchableOpacity>
                 <View style={[button.buttoncontainer, style.mv10]}>
                   <Text
                     style={[button.touchablebutton, {color: colors.darkBlue}]}>
@@ -157,7 +128,9 @@ export default class Login extends Component {
               </TouchableOpacity>
 
               <TouchableOpacity
-                >
+                onPress={() => {
+                  this.props.navigation.navigate('Login');
+                }}>
                 <View
                   style={[
                     button.buttoncontainer,

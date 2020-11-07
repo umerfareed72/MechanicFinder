@@ -15,6 +15,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
+  Alert,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 
@@ -49,13 +50,15 @@ export default class MechanicDashboard extends Component {
       bookedUserData: [],
       data: [],
       bookedUserid: '',
-      Amount:0
+      Amount:0,
+      wid:''
     };
   }
   getData = () => {
     AsyncStorage.getItem('token').then((res) => {
+      
       this.setState({token: res});
-      console.log(res);
+      console.log('token1',res);
       axios
         .get(URL.Url + 'me', {
           headers: {
@@ -64,6 +67,7 @@ export default class MechanicDashboard extends Component {
         })
         .then((response) => {
           this.setState({mechanicid: response.data.mechanicid});
+
           axios
             .put(URL.Url + 'mechaniclocation/' + this.state.mechanicid, {
               latitude: this.state.latitude,
@@ -73,7 +77,7 @@ export default class MechanicDashboard extends Component {
               axios
                 .get(URL.Url + 'mechanic/' + this.state.mechanicid)
                 .then((mechanic) => {
-                  console.log(mechanic.data);
+                 // console.log(mechanic.data);
                   this.setState({data: mechanic.data});
                   const send = JSON.stringify(mechanic.data);
                   AsyncStorage.setItem('Mechanicdata', send);
@@ -82,7 +86,7 @@ export default class MechanicDashboard extends Component {
                   axios
                     .get(URL.Url + 'getbookedUser/' + this.state.mechanicid)
                     .then((response) => {
-                      console.log(response.data);
+                    //  console.log(response.data);
 
                       response.data.map((item) => {
                         this.setState({Amount:item.totalamount})
@@ -105,10 +109,12 @@ export default class MechanicDashboard extends Component {
                             ids['mechanicid'] = item.mechanicid;
                             const sendids = JSON.stringify(ids);
                             AsyncStorage.setItem('mechanicid', sendids);
-                            console.log(ids);
+                         //   console.log(ids);
+                        
                           });
                       });
                     })
+                    .then(()=>{ this.getwarning();})
                     .catch((error) => {
                       console.log(error, 'Booked User Not Accesible');
                     });
@@ -122,6 +128,7 @@ export default class MechanicDashboard extends Component {
           console.log('Mechanic Data Not Accessible', error);
         });
     });
+   
   };
   requestMechanicLocation = async () => {
     try {
@@ -150,12 +157,13 @@ export default class MechanicDashboard extends Component {
       ) {
         Geolocation.getCurrentPosition(
           (position) => {
-            console.log(position);
+         //   console.log(position);
             this.setState({
               longitude: position.coords.longitude,
               latitude: position.coords.latitude,
             });
             this.getData();
+           
           },
           (error) => {
             // See error code charts below.
@@ -168,6 +176,40 @@ export default class MechanicDashboard extends Component {
       console.warn(err);
     }
   };
+  getwarning = () => {
+    console.log('in get.....warning')
+    axios.get(URL.Url + 'getMwarning/' + this.state.mechanicid)
+    .then((response) => {
+     console.log(response.data[0].warning);
+     this.setState({ wid : response.data[0]._id})
+     
+      if(response.data[0].warning!=='')
+      {Alert.alert('Warning from Admin',response.data[0].warning)}
+
+      
+    })
+    .then(()=> {this.deletewarning();})
+    .catch((error) => {
+      console.log(error);
+    });
+  
+  }
+
+  deletewarning=() => {
+    axios
+    .delete(URL.Url + 'Wdelete/' + this.state.wid)
+    .then((response) => {
+      if (response.data) {
+        console.log(response.data);
+       // Alert.alert('W deleted successfully!')
+       
+      }
+    })
+    .catch((error) => {
+      console.log('ye lo 2', error);
+      Alert.alert('something is wrong')
+    });
+  }
 
   onStarRatingPress(rating) {
     this.setState({
@@ -189,9 +231,12 @@ export default class MechanicDashboard extends Component {
   // };
   componentDidMount() {
     const {navigation} = this.props;
-    this.requestMechanicLocation();
+    
+    this.requestMechanicLocation()
+   
     this.focusListener = navigation.addListener('didFocus', () => {
-      this.requestMechanicLocation();
+      this.requestMechanicLocation()
+    
     });
     // this.removeBooking();
   }
@@ -259,7 +304,9 @@ export default class MechanicDashboard extends Component {
   };
 
   render() {
-    console.log(this.state.data)
+   // console.log(this.state.data)
+    console.log('mechanic idddd',this.state.mechanicid);
+   
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar

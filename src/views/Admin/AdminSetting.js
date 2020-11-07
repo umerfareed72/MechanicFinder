@@ -14,10 +14,10 @@ import {
   Keyboard,
   Button,
   Platform,
-  AsyncStorage,
+ 
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -51,16 +51,16 @@ export default class AdminSetting extends Component {
     //     refreshing: false,
     // };
   }
-//   onSignout = () => {
-//     const {navigation}=this.props;
-    
-//     AsyncStorage.removeItem('token').then(() => {
-//       setTimeout(() => {
-//         navigation.navigate('LoginasMechanic') 
-//       }, 2000);
-//     });
+  onSignout = () => {
+    const {navigation}=this.props;
+  
+    AsyncStorage.removeItem('atoken').then(() => {
+      setTimeout(() => {
+        navigation.navigate('LoginasAdmin') 
+      }, 1000);
+    });
    
-//   };
+  };
 //   LoginUserData = () => {
 //     try {
 //       AsyncStorage.getItem('Mechanicdata').then((res) => {
@@ -121,7 +121,7 @@ export default class AdminSetting extends Component {
                   <TouchableOpacity
                     style={[style.mh10]}
                     onPress={() => {
-                      this.props.navigation.navigate('LoginasAdmin');
+                      this.props.navigation.navigate('LoginAsAdmin');
                     }}>
                     <View style={[button.modalButton]}>
                       <Text style={[text.heading5white]}>Yes</Text>
@@ -156,7 +156,7 @@ export default class AdminSetting extends Component {
             </View>
             <View style={[style.asCenter, style.pt5]}>
               <Text style={[text.text18, text.orange, text.semibold]}>
-                {this.state.firstname} {this.state.lastname}
+                Admin
               </Text>
             </View>
             {/* header end */}
@@ -209,7 +209,7 @@ export default class AdminSetting extends Component {
                 <View style={style.borderBottomNav} />
               </TouchableOpacity>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Complaints')}
                 style={[style.mb20]}>
                 <View style={[style.rowBtw]}>
@@ -230,7 +230,7 @@ export default class AdminSetting extends Component {
                 </View>
 
                 <View style={style.borderBottomNav} />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
               <TouchableOpacity
                 // onPress={() => this.props.navigation.navigate('Privacy')}
@@ -255,7 +255,7 @@ export default class AdminSetting extends Component {
                 <View style={style.borderBottomNav} />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={()=>{this.props.navigation.navigate('LoginAsAdmin')}} style={[style.mb20]}>
+              <TouchableOpacity onPress={()=>{this.onSignout}} style={[style.mb20]}>
                 <View style={[style.rowBtw]}>
                   <View style={[style.row, style.aiCenter]}>
                     <Image

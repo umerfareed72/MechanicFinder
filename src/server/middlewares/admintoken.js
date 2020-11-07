@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const Usermodel = mongoose.model('Usermodel');
+const Adminschema = mongoose.model('Adminschema');
 const {jwtkey} = require('../keys');
 module.exports = (req, res, next) => {
   const {authorization} = req.headers;
@@ -13,8 +13,8 @@ module.exports = (req, res, next) => {
     if (err) {
       return res.status(401).send({error: 'You must be logged in!'});
     }
-    const {userid} = payload;
-    const user = await Usermodel.findById(userid);
+    const {adminid} = payload;
+    const user = await Adminschema.findById(adminid);
     req.user = user;
     next(); 
   });

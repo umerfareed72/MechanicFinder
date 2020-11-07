@@ -24,6 +24,7 @@ import {
 } from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 const axios = require('axios');
+
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -36,7 +37,7 @@ import StarRating from 'react-native-star-rating';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 
-export default class HomeDetail extends Component {
+export default class Customerprofile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,52 +52,35 @@ export default class HomeDetail extends Component {
       BookNowView: 'none',
       CheckBox: images.checkBoxEmpty,
       suggestion: '',
-      issuedata: [],
-      suggestiondata: [],
+     
+      suggestiondata:[],
+      customerdata: [],
       firstname:'',
       issueid: '',
-      mid:'',
-      mphoto:'',
+      userid:this.props.navigation.getParam('userid','nothing sent'),
+warning:''
     };
   }
 
-  getData = async () => {
-    try {
-      await AsyncStorage.getItem('issuedata').then((res) => {
-        res = JSON.parse(res);
-        this.setState({issuedata: res});
-        this.setState({issueid: res._id});
-      });
-      await AsyncStorage.getItem('Mechanicdata').then((res) => {
-        res = JSON.parse(res);
-        this.setState({firstname: res.firstname});
-        this.setState({mphoto: res.photo});
-        this.setState({mid:res._id})
-        console.log('mid',this.state.mid);
-        console.log('mphoto',this.state.mphoto);
-      });
-    } catch (error) {}
-  };
+  
   async componentDidMount() {
-    const {navigation} = this.props;
-    this.getData();
+   
+    this.getcustomerdata();
     this.focusListener = navigation.addListener('didFocus', () => {
-      this.getData();  
+        this.getcustomerdata();
     });
   }
 
-  getsuggestions = () => {
+  getcustomerdata = () => {
     axios
-      .get(URL.Url + 'issuessuggestion/' + this.state.issueid)
+      .get(URL.Url + 'user/' + this.state.userid)
       .then((response) => {
         if (response.data) {
-          console.log(response.data);
-          this.setState({suggestiondata: response.data});
-          console.log(this.state.suggestiondata);
-          
-          
+          console.log('customer ye rha',response.data);
+          this.setState({customerdata: response.data});
+          console.log('customerdata',this.state.customerdata)
         }
-        if (this.state.suggestiondata == '') Alert.alert('No Suggestion available!');
+        
       })
       .catch((error) => {
         console.log(error);
@@ -107,28 +91,9 @@ export default class HomeDetail extends Component {
     // });
   };
 
-  submitsuggestion = () => {
-    axios
-      .post(URL.Url + 'postsuggestion', {
-        suggestion: this.state.suggestion,
-        issueid: this.state.issueid,
-        firstname:this.state.firstname,
-        mid:this.state.mid,
-        mphoto:this.state.mphoto
-      })
-      .then((res) => {
-        console.log(res.data);
-        Alert.alert('Your Suggestion is posted successfully!');
-        this.getsuggestions();
-        this.props.navigation.navigate('IssueList')
-      })
-      .catch((error) => {
-        Alert.alert('something went Wrong!!');
 
-        console.log(error);
-      });
-  };
-
+  
+  
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
       this.setState({TabDataGallery: 'none'}),
@@ -146,30 +111,12 @@ export default class HomeDetail extends Component {
     this.setState({ColorReview: colors.inputBordercolor});
     this.setState({ColorGallery: colors.inputBordercolor});
   };
-  tabReview = () => {
-    if (this.state.TabDataReview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataOverview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({color: 'none'});
-      this.setState({ColorOverview: colors.inputBordercolor}),
-        this.setState({ColorReview: colors.darkBlue}),
-        this.setState({ColorGallery: colors.inputBordercolor});
-    } else
-      this.setState({TabDataReview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({TabDataOverview: 'none'});
-    this.setState({ColorOverview: colors.inputBordercolor});
-    this.setState({ColorReview: colors.darkBlue});
-    this.setState({ColorGallery: colors.inputBordercolor});
-    this.getsuggestions();
-  };
+  
   render() {
-    const {issuedata} = this.state;
+    const {customerdata} = this.state;
 console.log(this.state.firstname)
     console.log(this.state.issueid);
-
+console.log('ye ai id profile pa',this.state.userid)
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
@@ -200,14 +147,13 @@ console.log(this.state.firstname)
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.heading1, text.bold]}>
-                  {issuedata.carcompany} {issuedata.vehicaltype} Issue in{' '}
-                  {issuedata.city}
+Customer Detail{' '}
+                 
                 </Text>
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.paraWhite, text.regular]}>
-                  Give your point of View about this issue share your
-                  suggestions.....
+                 
                 </Text>
               </View>
             </View>
@@ -243,16 +189,7 @@ console.log(this.state.firstname)
               </Text>
             </TouchableOpacity> */}
 
-            <TouchableOpacity onPress={() => this.tabReview()}>
-              <Text
-                style={[
-                  text.tab1,
-                  text.semibold,
-                  {color: this.state.ColorReview},
-                ]}>
-                Reviews
-              </Text>
-            </TouchableOpacity>
+           
           </View>
           <ScrollView style={style.mv5}>
             {/* OverView Tab */}
@@ -262,54 +199,61 @@ console.log(this.state.firstname)
                 {display: this.state.TabDataOverview},
               ]}>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
-                <Image
+                {/* <Image
                   style={[image.medium, style.mr5]}
-                  source={images.location}></Image>
-                <Text style={[text.heading2, text.bold]}>Address</Text>
+                  source={images.location}></Image> */}
+                <Text style={[text.heading2, text.bold]}>Customer Name</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}>
+                <Text style={[text.heading2Gray]} selectable>
                   {' '}
-                  {issuedata.address} {issuedata.city} {issuedata.country}
+
+                 {this.state.customerdata.firstname}
                 </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, style.mr5, image.Orange]}
                   source={images.cartype}></Image>
-                <Text style={[text.heading2, text.bold]}>Vehicle Type</Text>
+                <Text style={[text.heading2, text.bold]}>Contact Number</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
                 <Text style={[text.heading2Gray]}>
                   {' '}
-                  {issuedata.vehicaltype}
+                  {customerdata.phone}
                 </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, style.mr5, image.Orange]}
                   source={images.Company}></Image>
-                <Text style={[text.heading2, text.bold]}>Car Brand</Text>
+                <Text style={[text.heading2, text.bold]}>Email</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}> {issuedata.carcompany}</Text>
+                <Text style={[text.heading2Gray]}> {customerdata.email}</Text>
               </View>
 
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, image.Orange, style.mr5]}
                   source={images.carservice}></Image>
-                <Text style={[text.heading2, text.bold]}>Issue Type</Text>
+                <Text style={[text.heading2, text.bold]}>City </Text>
               </View>
               <View style={[style.borderbottom, style.mv10]}>
-                <Text style={[text.heading2Gray]}> {issuedata.issuetype}</Text>
+                <Text style={[text.heading2Gray]}> {customerdata.city}</Text>
               </View>
-              <View style={[style.mt20]}>
-                <Text style={[text.text16]}>Description about issue</Text>
+              <View style={[appStyle.rowAlignCenter, style.mt10]}>
+                <Image
+                  style={[image.medium, image.Orange, style.mr5]}
+                  source={images.location}></Image>
+                <Text style={[text.heading2, text.bold]}>Country</Text>
               </View>
-              <View style={[style.pv10]}>
-                <Text style={[text.paraGray]}>{issuedata.description}</Text>
-              </View><View
+              <View style={[style.borderbottom, style.mv10]}>
+                <Text style={[text.heading2Gray]}> {customerdata.country}</Text>
+              </View>
+              {/* <TouchableOpacity > */}
+             
+              <View
               style={[
                 style.mb50,
                 appStyle.bodyLayout,
@@ -318,21 +262,14 @@ console.log(this.state.firstname)
                   backgroundColor: colors.white,
                   
                 },
-              ]}>
-              <View style={[appStyle.rowCenter]}>
-                <View>
-                  <Text
-                    style={
-                      ({color: colors.Black323}, [text.text22, text.bold])
-                    }>
-                    Issue Video
-                  </Text>
-                  <Text style={([text.text14], {color: colors.gray})}>
-                    (Optional)
-                  </Text>
-                </View>
+              ],{marginTop:20}}>
+             
+          
+            {/* </TouchableOpacity> */}
+            <View style={[appStyle.rowCenter] }>
+               
                 <View style={[{display: this.state.tabOverview}, style.flex1]}>
-                  <TouchableOpacity onPress={this.buyItems}>
+                  {/* <TouchableOpacity onPress={this.buyItems}>
                     <View
                       style={[
                         button.buttoncontainer,
@@ -347,16 +284,16 @@ console.log(this.state.firstname)
                         Play Video
                       </Text>
                     </View>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
               </View>
-            </View>
+              </View>
             </View>
             
-            {this.state.suggestiondata.map((data, index) => {
+            {
+            this.state.suggestiondata.map((data, index) => 
+            {
               console.log('YE LO',data.firstname)
-              console.log('YE LO pp',data)
-
               return (
                 <TouchableOpacity
                   key={index}
@@ -370,7 +307,7 @@ console.log(this.state.firstname)
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri :data.mphoto}} />
+                      <Image style={image.userImg} source={images.dummy1} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
@@ -412,7 +349,6 @@ console.log(this.state.firstname)
                   this.setState({
                     suggestion: text,
                   });
-                  
                 }}
                 underlineColorAndroid="transparent"></TextInput>
 

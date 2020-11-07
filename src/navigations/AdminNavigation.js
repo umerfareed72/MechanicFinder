@@ -16,6 +16,12 @@ import UserManagement from '../views/Admin/UserManagement'
 import MechanicManagement from '../views/Admin/MechanicManagement'
 import AdminSetting from '../views/Admin/AdminSetting'
 import Complaints from '../views/Admin/Complaints'
+import Reportedmechanics from '../views/Admin/Reportedmechanics'
+import Reportedcustomers from '../views/Admin/Reportedcustomers'
+import Reportedposts from '../views/Admin/Reportedposts'
+import Reportmechanicdetail from '../views/Admin/Reportmechanicdetail';
+import RMechanicprofile from '../views/Admin/RMechanicprofile';
+import Customerprofile from '../views/Admin/Customerprofile';
 import {
   colors,
   screenHeight,
@@ -44,7 +50,24 @@ const SettingStack = createStackNavigator(
     AdminSetting:AdminSetting,
     UserManagement: UserManagement,
     MechanicManagement: MechanicManagement,
-  Complaints:Complaints 
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+
+const Complaintstack = createStackNavigator(
+  {
+    Complaints:Complaints,
+    Reportedcustomers:Reportedcustomers,
+    Reportedmechanics:Reportedmechanics,
+    Reportedposts:Reportedposts,
+    Reportmechanicdetail:Reportmechanicdetail,
+    RMechanicprofile:RMechanicprofile,
+    Customerprofile:Customerprofile
   },
   {
     headerMode: 'none',
@@ -78,6 +101,19 @@ const Navigator = createMaterialBottomTabNavigator(
             <Image
               style={{resizeMode: 'contain', height: 25, width: 25}}
               source={images.setting}
+            />
+          ),
+        },
+      },
+
+      Complaints: {
+        screen: Complaintstack,
+        navigationOptions: {
+          tabBarLabel: 'Complaints',
+          tabBarIcon: ({tintColor}) => (
+            <Image
+              style={{resizeMode: 'contain', height: 25, width: 25}}
+              source={images.help}
             />
           ),
         },

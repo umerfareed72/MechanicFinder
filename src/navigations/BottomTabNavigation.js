@@ -34,7 +34,7 @@ import SideMenu from '../views/registration/SideMenu';
 import Privacy from '../views/main/Privacy';
 import Terms from '../views/main/Terms';
 import Help from '../views/main/Help';
-
+import reportmechanic from '../views/main/reportmechanic';
 import Mechaniclist from '../views/main/Mechaniclist';
 import ChatBox from '../views/main/ChatBox';
 import BuyItems from '../views/main/BuyItems';
@@ -44,6 +44,7 @@ import Items from '../views/main/Items';
 import Login from '../views/registration/Login';
 import PostVehicleIssue from "../views/main/PostVehicleIssue"
 import Issuedetail from "../views/main/Issuedetail"
+import mdetail from '../views/main/mdetail'
 import IssueListC from "../views/main/IssueListC"
 import EditIssue from "../views/main/EditIssue"
 
@@ -90,8 +91,10 @@ const PostVehicleStack = createStackNavigator(
   {
     IssueListC: IssueListC,
     PostVehicleIssue:PostVehicleIssue,
-    Issuedetail:Issuedetail,
-    EditIssue:EditIssue
+    Issuedetail:Issuedetail, 
+    EditIssue:EditIssue,
+    mdetail:mdetail,
+    reportmechanic:reportmechanic
   },
   {
     headerMode: 'none',

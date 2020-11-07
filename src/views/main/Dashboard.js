@@ -133,7 +133,7 @@ export default class Dashboard extends Component {
                     .then((response) => {
                       console.log(response.data);
                       const send = JSON.stringify(response.data);
-                      AsyncStorage.setItem('userdata', send);
+                      AsyncStorage.setItem('userdata', send);  
                     })
                     .catch((error) => {
                       console.log(error);

@@ -246,6 +246,7 @@ export default class Login extends Component {
         try {
           await AsyncStorage.setItem('usersignintoken', res.data.token);
           console.log(res.data.token);
+          
           this.props.navigation.navigate('userStack');
         } catch (e) {
           console.log('error hai', e);

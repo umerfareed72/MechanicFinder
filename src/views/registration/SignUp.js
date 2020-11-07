@@ -71,6 +71,7 @@ export default class MechanicRegister extends Component {
       longitude: '',
       latitude: '',
       filePath: {},
+      nickname:''
     };
   }
 
@@ -95,6 +96,7 @@ this._Signout()
       .post(URL.Url + 'userregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
+        nickname:this.state.nickname,
         email: this.state.Email,
         password: this.state.Password,
         phone: this.state.Phone,
@@ -341,6 +343,23 @@ this._Signout()
                       onChangeText={(text) => {
                         this.setState({
                           LastName: text,
+                        });
+                      }}
+                      editable={this.state.editable}
+                      underlineColorAndroid="transparent"></TextInput>
+                  </View>
+
+
+                  <View style={[input.textinputcontainer, style.mv5]}>
+                    <Image
+                      source={images.username}
+                      style={image.username}></Image>
+                    <TextInput
+                      style={input.textinputstyle}
+                      placeholder={'Nickname'}
+                      onChangeText={(text) => {
+                        this.setState({
+                          nickname: text,
                         });
                       }}
                       editable={this.state.editable}
