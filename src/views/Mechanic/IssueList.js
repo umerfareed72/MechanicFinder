@@ -60,7 +60,6 @@ export default class Mechaniclist extends Component {
     };
   }
 
-
   validate = () => {
     if (this.state.vehicaltype == 'Select Vehicle Type') {
       ToastAndroid.show(
@@ -76,7 +75,7 @@ export default class Mechaniclist extends Component {
         ToastAndroid.LONG,
       );
       return false;
-    }else if (this.state.issuetype == 'Select issue Type') {
+    } else if (this.state.issuetype == 'Select issue Type') {
       ToastAndroid.show(
         'Vehile Name is Required',
         ToastAndroid.BOTTOM,
@@ -87,54 +86,46 @@ export default class Mechaniclist extends Component {
     return true;
   };
 
-
-
-
   showIssues = () => {
-    if(this.validate()){
-      
-    axios
-      .get(
-        URL.Url +
-          'vehicalissues/' +
-          this.state.issuetype +
-          '/' +
-          this.state.vehicaltype +
-          '/' +
-          this.state.carcompany +
-          '/',
-      )
-      .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-          this.setState({dataSource: response.data});
-   
-        }
+    if (this.validate()) {
+      axios
+        .get(
+          URL.Url +
+            'vehicalissues/' +
+            this.state.issuetype +
+            '/' +
+            this.state.vehicaltype +
+            '/' +
+            this.state.carcompany +
+            '/',
+        )
+        .then((response) => {
+          if (response.data) {
+            console.log(response.data);
+            this.setState({dataSource: response.data});
+          }
 
-        if (this.state.dataSource == '')
-        ToastAndroid.show(
-          'No Issue Is Found',
-          ToastAndroid.BOTTOM,
-          ToastAndroid.LONG,
-        );
-     
-      })
-      .catch((error) => {
-        console.log(error);
-        ToastAndroid.show(
-          'Something Went Wrong',
-          ToastAndroid.BOTTOM,
-          ToastAndroid.LONG,
-        );
-     
-      });
-     
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    // });
-  
-  }
+          if (this.state.dataSource == '')
+            ToastAndroid.show(
+              'No Issue Is Found',
+              ToastAndroid.BOTTOM,
+              ToastAndroid.LONG,
+            );
+        })
+        .catch((error) => {
+          console.log(error);
+          ToastAndroid.show(
+            'Something Went Wrong',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
+        });
+
+      // })
+      // .catch((error) => {
+      //   console.log(error);
+      // });
+    }
   };
 
   movetodetail = (id) => {
@@ -146,6 +137,7 @@ export default class Mechaniclist extends Component {
   };
 
   render() {
+    
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
@@ -237,7 +229,8 @@ export default class Mechaniclist extends Component {
               </View>
             </TouchableOpacity>
             {this.state.dataSource.map((data, index) => {
-              return (
+             console.log(data)
+             return (
                 <TouchableOpacity
                   key={index}
                   // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
@@ -249,50 +242,42 @@ export default class Mechaniclist extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri:data.userphoto}} />
+                      <Image
+                        style={image.userImg}
+                        source={{uri: data.userphoto}}
+                        
+                      />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
-                      {/* <View style={[style.mr15]}>
-                        <Image
-                          source={images.imagep}
-                          style={[image.image50]}></Image>
-                      </View> */}
                       <View>
-                        <View>
-                          <Text style={[text.text16, text.bold]}>
-                            {data.issuetype} issue in {data.vehicaltype}
-                          </Text>
-                        </View>
-                        <View style={style.row}>
-                          <Text style={[text.text15, {color: colors.gray}]}>
-                            Contact: {data.phone}
-                          </Text>
-                        </View>
-                        <View style={[style.mv5]}>
-                          
-                        </View>
+                        <Text style={[text.text16, text.bold]}>
+                          {data.issuetype} issue in {data.vehicaltype}
+                        </Text>
+                        <Text
+                          style={[text.text10, text.greyVLight, {width: '40%'}]}
+                          numberOfLines={1}
+                          ellipsizeMode={'tail'}>
+                          {data.description}
+                        </Text>
                       </View>
                     </View>
-                    <Text style={[text.text10, text.greyVLight]} numberOfLines={3} ellipsizeMode={'tail'}>
-                 {data.description}
-                    </Text>
-            
-                 </View>
-                 <TouchableOpacity style={style.w10}
-                   key={index}
-                   onPress={()=>{this.movetodetail(index)}}>
-                  <Image
-                    style={[image.forward]}
-                    source={images.arrowLong}></Image>
+                  </View>
+                  <TouchableOpacity
+                    style={style.w10}
+                    key={index}
+                    onPress={() => {
+                      this.movetodetail(index);
+                    }}>
+                    <Image
+                      style={[image.forward]}
+                      source={images.arrowLong}></Image>
+                  </TouchableOpacity>
                 </TouchableOpacity>
-                </TouchableOpacity> 
-                //</View>
-                 
-              
-            //  </TouchableOpacity>
-  
-                );
+              //  </View>
+
+                //  </TouchableOpacity>
+              );
             })}
             {/* row end
 

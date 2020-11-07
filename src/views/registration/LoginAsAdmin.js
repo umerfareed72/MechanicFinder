@@ -146,15 +146,7 @@ export default class LoginAsAdmin extends Component {
                     secureTextEntry={true}
                     underlineColorAndroid="transparent"></TextInput>
                 </View>
-                <View style={[style.pv10, style.ph30]}>
-                  <Text
-                    onPress={() => {
-                      this.props.navigation.navigate('Forgot');
-                    }}
-                    style={[text.right, text.text14, {color: colors.link}]}>
-                    Forgot Password
-                  </Text>
-                </View>
+             
 
                 <TouchableOpacity
                   onPress={this.submitData}>

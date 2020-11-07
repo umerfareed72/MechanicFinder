@@ -52,7 +52,7 @@ export default class Login extends Component {
                 colors={colors.orablu}
                 start={{x: -0.9, y: 1}}
                 end={{x: 1, y: 0}}
-                style={[style.headerHeight1]}>
+                style={[style.headerHeight2]}>
                 <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
                   <Image source={images.help} style={[image.splashImg]} />
                 </View>
@@ -68,7 +68,7 @@ export default class Login extends Component {
                 </Text>
               </View>
               <View>
-                <View style={[input.textinputcontainer, style.mv30]}>
+                <View style={[input.textinputcontainer, style.mv10]}>
                   <Image source={images.email} style={image.InputImage}></Image>
                   <TextInput
                     style={input.textinputstyle}
@@ -84,9 +84,8 @@ export default class Login extends Component {
                     />
                 </View>
               </View>
-              <View>
-                <View style={[input.textinputcontainer, style.mv30]}>
-                  <Image source={images.username} style={image.InputImage}></Image>
+                <View style={[input.textinputcontainer, style.mv10]}>
+                  <Image source={images.user} style={image.InputImage}></Image>
                   <TextInput
                     style={input.textinputstyle}
                     placeholder="Nick Name"
@@ -100,24 +99,20 @@ export default class Login extends Component {
                       
                     />
                 </View>
-              </View>
-              <View>
-                <View style={[input.textinputcontainer, style.mv30]}>
-                  <Image source={images.refer} style={image.InputImage}></Image>
-                  <TextInput
-                    style={input.textinputstyle}
-                    placeholder="New Password"
-                    underlineColorAndroid="transparent"
+                <View style={[input.textinputcontainer, style.mv5]}>
+                    <Image source={images.key} style={image.InputImage}></Image>
+                    <TextInput
+                      style={input.textinputstyle}
+                      placeholder="Enter Your Password"
+                      secureTextEntry={true}
                       onChangeText={(text) => {
-                          this.setState({
-                            newpassword: text,
-                          });
-                        }}
-                        multiline={true}
-                      
-                    />
-                </View>
-              </View>
+                        this.setState({
+                          newpassword: text,
+                        });
+                      }}
+                      underlineColorAndroid="transparent"></TextInput>
+                  </View>
+                  
               <TouchableOpacity>
                 <View style={[button.buttoncontainer, style.mv10]}>
                   <Text
