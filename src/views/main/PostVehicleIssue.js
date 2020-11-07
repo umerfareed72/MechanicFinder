@@ -162,7 +162,7 @@ export default class Postvehicalissue extends Component {
         .post(URL.Url + 'issueregister', {
           issuetype: this.state.issuetype,
           phone: this.state.Phone,
-          photo: this.state.photo,
+          userphoto: this.state.userphoto,
           carcompany: this.state.carcompany,
           city: this.state.city,
           status: this.state.status,

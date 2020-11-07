@@ -45,57 +45,17 @@ export default class AdminSetting extends Component {
       isModalVisible: false,
       isLogin: null,
     };
-    // this.state = {
-    //     loading: false,
-    //     items: [],
-    //     refreshing: false,
-    // };
   }
   onSignout = () => {
     const {navigation}=this.props;
   
     AsyncStorage.removeItem('atoken').then(() => {
       setTimeout(() => {
-        navigation.navigate('LoginasAdmin') 
+       navigation.navigate('LoginA sAdmin') 
       }, 1000);
     });
    
   };
-//   LoginUserData = () => {
-//     try {
-//       AsyncStorage.getItem('Mechanicdata').then((res) => {
-//         res = JSON.parse(res);
-//         console.log(this.state.data, 'User data');
-//         this.setState({data: res});
-//         this.setState({
-//           firstname: this.state.data.firstname,
-//         });
-//         this.setState({
-//           lastname: this.state.data.lastname,
-//         });
-//         this.setState({
-//           email: this.state.data.email,
-//         });
-//         this.setState({
-//           photo: this.state.data.photo,
-//         });
-//       });
-//     } catch (error) {
-//       console.log('error');
-//     }
-//   };
-
-//   toggleModal = () => {
-//     this.setState({isModalVisible: !this.state.isModalVisible});
-//   };
-
-//   componentDidMount() {
-//     const {navigation} = this.props;
-//     this.LoginUserData();
-//     this.focusListener = navigation.addListener('didFocus', () => {
-//       this.LoginUserData();
-//     });
-//   }
   render() {
     return (
       <SafeAreaView style={appStyle.safeContainer}>
@@ -255,7 +215,7 @@ export default class AdminSetting extends Component {
                 <View style={style.borderBottomNav} />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={()=>{this.onSignout}} style={[style.mb20]}>
+              <TouchableOpacity onPress={this.onSignout} style={[style.mb20]}>
                 <View style={[style.rowBtw]}>
                   <View style={[style.row, style.aiCenter]}>
                     <Image
