@@ -253,11 +253,11 @@ export default class Mechaniclist extends Component {
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
-                      <View style={[style.mr15]}>
+                      {/* <View style={[style.mr15]}>
                         <Image
                           source={images.imagep}
                           style={[image.image50]}></Image>
-                      </View>
+                      </View> */}
                       <View>
                         <View>
                           <Text style={[text.text16, text.bold]}>
@@ -274,7 +274,7 @@ export default class Mechaniclist extends Component {
                         </View>
                       </View>
                     </View>
-                    <Text style={[text.text10, text.greyVLight]} numberOfLines={1} ellipsizeMode={'tail'}>
+                    <Text style={[text.text10, text.greyVLight]} numberOfLines={3} ellipsizeMode={'tail'}>
                  {data.description}
                     </Text>
             
@@ -286,7 +286,7 @@ export default class Mechaniclist extends Component {
                     style={[image.forward]}
                     source={images.arrowLong}></Image>
                 </TouchableOpacity>
-                //</TouchableOpacity> 
+                </TouchableOpacity> 
                 //</View>
                  
               

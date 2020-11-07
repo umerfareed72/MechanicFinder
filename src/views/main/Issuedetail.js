@@ -129,8 +129,6 @@ export default class HomeDetail extends Component {
         console.log(res.data);
         Alert.alert('Your Suggestion is posted successfully Thanks for your response <3 ');
         this.getsuggestions();
-        this.setState
-        ({suggestion:''});
       })
       .catch((error) => {
         Alert.alert('something went Wrong!!');
@@ -225,18 +223,14 @@ console.log(this.state.firstname)
           <View
             style={[
               appStyle.rowBtw,
-              style.aiCenter,
               appStyle.bodyLayout,
               appStyle.bodyShadowTop,
-              style.mh40,
-                {backgroundColor: colors.lightgray,
-                       borderBottomLeftRadius: 10,
-                  borderBottomRightRadius: 10,},
+              {backgroundColor: '#fff'},
             ]}>
             <TouchableOpacity onPress={() => this.tabOverview()}>
               <Text
                 style={[
-                  text.heading2,
+                  text.tab1,
                   text.semibold,
                   {color: this.state.ColorOverview},
                 ]}>
@@ -258,7 +252,7 @@ console.log(this.state.firstname)
             <TouchableOpacity onPress={() => this.tabReview()}>
               <Text
                 style={[
-                  text.heading2,
+                  text.tab1,
                   text.semibold,
                   {color: this.state.ColorReview},
                 ]}>
@@ -423,6 +417,7 @@ console.log(this.state.firstname)
                     suggestion: text,
                   });
                 }}
+                
                 underlineColorAndroid="transparent"></TextInput>
 
               <TouchableOpacity onPress={this.submitsuggestion}>
