@@ -183,15 +183,6 @@ const BookNowStack = createStackNavigator(
   },
 );
 
-const LoginStack = createStackNavigator(
-  {
-    Login: Login,
-  },
-  {
-    headerMode: 'none',
-  },
-);
-
 const Navigators = createMaterialBottomTabNavigator(
   {
     BookNow: {
@@ -234,12 +225,12 @@ const TabNavigator = createDrawerNavigator(
     Navigator: {
       screen: Navigator,
     },
-    // Dashboard: {
-    //   screen: DashboardStack,
-    // },
-      Login: {
-      screen: Login,
+    Dashboard: {
+      screen: DashboardStack,
     },
+    //   Login: {
+    //   screen: Login,
+    // },
     Navigators: {
       screen: Navigators,
     },

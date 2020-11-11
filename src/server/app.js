@@ -2,6 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
+const Pusher = require('pusher');
+const pusherConfig = require('../../src/config/pusher.json'); // (1)
+const pusherClient = new Pusher(pusherConfig);
+
 const cors = require('cors');
 require('./models/mechanicmodel');
 const requiretoken = require('./middlewares/requiretoken');
@@ -56,6 +60,17 @@ app.get('/', requiretoken, (req, res) => {
 app.get('/', usertoken, (req, res) => {
   res.send('your email is ' + req.user.email);
 });
+
+app.post('/users/:name/messages', function(req, res) { // (5)
+  console.log('User ' + req.params.name + ' sent message: ' + req.body.message);
+  pusherClient.trigger('chat_channel', 'message', {
+      name: req.params.name,
+      message: req.body.message
+  });
+  res.sendStatus(204);
+});
+
+//set cors middleware
 app.listen(5000, () => {
   console.log('listening on 5000');
 });

@@ -6,11 +6,11 @@ const jwt = require('jsonwebtoken');
 const Mechanicmodel = mongoose.model('mechanicmodel');
 const Usermodel = mongoose.model('Usermodel');
 const Reviewmodel = mongoose.model('ReviewModel');
-const Suggestion =mongoose.model('suggestions');
-const VehicalIssuemodel =mongoose.model('vehicalissue');
+const Suggestion = mongoose.model('suggestions');
+const VehicalIssuemodel = mongoose.model('vehicalissue');
 const Mechanicreport = mongoose.model('mechanicreport');
 const Mwarning = mongoose.model('Mwarning');
-const Admin = mongoose.model('Adminschema')
+const Admin = mongoose.model('Adminschema');
 const BookedUsermodel = mongoose.model('BookedUsermodel');
 router.post('/issueregister', async (req, res) => {
   console.log('in issue register');
@@ -22,7 +22,7 @@ router.post('/issueregister', async (req, res) => {
     vehicaltype: req.body.vehicaltype,
     userdbid: req.body.userdbid,
     phone: req.body.phone,
-    userphoto:req.body.userphoto,
+    userphoto: req.body.userphoto,
     description: req.body.description,
     date: Date.now(),
     status: req.body.status,
@@ -35,13 +35,11 @@ router.post('/issueregister', async (req, res) => {
   });
 });
 
-
 router.post('/registeradmin', async (req, res) => {
   console.log('in admin register');
   const admin = new Admin({
     email: req.body.email,
     password: req.body.password,
-    
   });
   await admin.save().then(() => {
     res.send(admin).catch((err) => {
@@ -53,8 +51,8 @@ router.post('/registeradmin', async (req, res) => {
 router.post('/sendwarning', async (req, res) => {
   console.log('in suggestion');
   const Mwarning1 = new Mwarning({
-    warning:req.body.warning,
-    mdbid:req.body.mdbid
+    warning: req.body.warning,
+    mdbid: req.body.mdbid,
   });
   await Mwarning1.save().then(() => {
     res.send(Mwarning1).catch((err) => {
@@ -63,10 +61,6 @@ router.post('/sendwarning', async (req, res) => {
   });
 });
 
-
-
-
-
 router.get('/getMwarning/:mdbid', (req, res) => {
   Mwarning.find({
     mdbid: req.params.mdbid,
@@ -74,7 +68,6 @@ router.get('/getMwarning/:mdbid', (req, res) => {
     .sort('id')
     .select({
       warning: 1,
-      
     })
     .then((warning) => {
       if (!warning) return res.send('');
@@ -85,16 +78,15 @@ router.get('/getMwarning/:mdbid', (req, res) => {
     });
 });
 
-router.delete('/Wdelete/:id',async(req,res)=>{
+router.delete('/Wdelete/:id', async (req, res) => {
   Mwarning.findByIdAndDelete(req.params.id)
-  .then((data) =>{res.json(data)})
-.catch((err) =>{
-  res.status(404).send(err.message);
-})})
-
-
-
-
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
 
 router.post('/Creportregister', async (req, res) => {
   console.log('in Creport register');
@@ -114,7 +106,8 @@ router.post('/Creportregister', async (req, res) => {
 });
 
 router.get('/Cgetreport', (req, res) => {
-  Mechanicreport.find().sort('id')
+  Mechanicreport.find()
+    .sort('id')
     .select({
       reportdescription:1,
       reporttype:1,
@@ -132,25 +125,28 @@ router.get('/Cgetreport', (req, res) => {
     });
 });
 
-  
-router.delete('/Cdeletereport/:id',async(req,res)=>{
+router.delete('/Cdeletereport/:id', async (req, res) => {
   Mechanicreport.findByIdAndDelete(req.params.id)
-  .then((data) =>{res.json(data)})
-.catch((err) =>{
-  res.status(404).send(err.message);
-})});
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
 
-router.delete('/deletemechanic/:id',async(req,res)=>{
+router.delete('/deletemechanic/:id', async (req, res) => {
   Mechanicmodel.findByIdAndDelete(req.params.id)
-  .then((data) =>{res.json(data)})
-.catch((err) =>{
-  res.status(404).send(err.message);
-})})
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
 
-
-
-router.route("/paintercount").get(function(req, res) {
-  Mechanicmodel.count({skilltype:"Painter"}, function(err, result) {
+router.route('/paintercount').get(function (req, res) {
+  Mechanicmodel.count({skilltype: 'Painter'}, function (err, result) {
     if (err) {
       console.log(err);
     } else {
@@ -159,10 +155,8 @@ router.route("/paintercount").get(function(req, res) {
   });
 });
 
-
-
-router.route("/bookedmcount").get(function(req, res) {
-  BookedUsermodel.count({Status: 'Online'}, function(err, result) {
+router.route('/bookedmcount').get(function (req, res) {
+  BookedUsermodel.count({Status: 'Online'}, function (err, result) {
     if (err) {
       console.log(err);
     } else {
@@ -171,10 +165,8 @@ router.route("/bookedmcount").get(function(req, res) {
   });
 });
 
-
-
-router.route("/enginecount").get(function(req, res) {
-  Mechanicmodel.count({skilltype:"Engine"}, function(err, result) {
+router.route('/enginecount').get(function (req, res) {
+  Mechanicmodel.count({skilltype: 'Engine'}, function (err, result) {
     if (err) {
       console.log(err);
     } else {
@@ -182,8 +174,8 @@ router.route("/enginecount").get(function(req, res) {
     }
   });
 });
-router.route("/bodycount").get(function(req, res) {
-  Mechanicmodel.count({skilltype:"Body"}, function(err, result) {
+router.route('/bodycount').get(function (req, res) {
+  Mechanicmodel.count({skilltype: 'Body'}, function (err, result) {
     if (err) {
       console.log(err);
     } else {
@@ -191,18 +183,8 @@ router.route("/bodycount").get(function(req, res) {
     }
   });
 });
-router.route("/electriccount").get(function(req, res) {
-  Mechanicmodel.count({skilltype:"Electric"}, function(err, result) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json(result);
-    }
-  });
-});
-
-router.route("/electricissuecount").get(function(req, res) {
-  VehicalIssuemodel.count({issuetype:"Electric"}, function(err, result) {
+router.route('/electriccount').get(function (req, res) {
+  Mechanicmodel.count({skilltype: 'Electric'}, function (err, result) {
     if (err) {
       console.log(err);
     } else {
@@ -211,8 +193,8 @@ router.route("/electricissuecount").get(function(req, res) {
   });
 });
 
-router.route("/bodyissuecount").get(function(req, res) {
-  VehicalIssuemodel.count({issuetype:"Body"}, function(err, result) {
+router.route('/electricissuecount').get(function (req, res) {
+  VehicalIssuemodel.count({issuetype: 'Electric'}, function (err, result) {
     if (err) {
       console.log(err);
     } else {
@@ -221,8 +203,8 @@ router.route("/bodyissuecount").get(function(req, res) {
   });
 });
 
-router.route("/engineissuecount").get(function(req, res) {
-  VehicalIssuemodel.count({issuetype:"Engine"}, function(err, result) {
+router.route('/bodyissuecount').get(function (req, res) {
+  VehicalIssuemodel.count({issuetype: 'Body'}, function (err, result) {
     if (err) {
       console.log(err);
     } else {
@@ -231,7 +213,15 @@ router.route("/engineissuecount").get(function(req, res) {
   });
 });
 
-
+router.route('/engineissuecount').get(function (req, res) {
+  VehicalIssuemodel.count({issuetype: 'Engine'}, function (err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
 
 router.get('/vehicalissues/:issuetype/:vehicaltype/:carcompany', (req, res) => {
   // var vehicaltype;
@@ -246,7 +236,7 @@ router.get('/vehicalissues/:issuetype/:vehicaltype/:carcompany', (req, res) => {
   })
     .sort('id')
     .select({
-      _id:1,
+      _id: 1,
       phone: 1,
       city: 1,
       carcompany: 1,
@@ -254,7 +244,7 @@ router.get('/vehicalissues/:issuetype/:vehicaltype/:carcompany', (req, res) => {
       vehicaltype: 1,
       issuetype: 1,
       description: 1,
-      userphoto:1,
+      userphoto: 1,
       phone: 1,
       date: 1,
       status: 1,
@@ -284,7 +274,7 @@ router.get('/vehicalissuesC/:userdbid', (req, res) => {
       description: 1,
       phone: 1,
       date: 1,
-      userphoto:1,
+      userphoto: 1,
       status: 1,
       issuevideo:1
     })
@@ -297,15 +287,14 @@ router.get('/vehicalissuesC/:userdbid', (req, res) => {
     });
 });
 
-
 router.post('/postsuggestion', async (req, res) => {
   console.log('in suggestion');
   const suggestion = new Suggestion({
-    firstname:req.body.firstname,
-    suggestion:req.body.suggestion,
-    issueid:req.body.issueid,
-    mid:req.body.mid,
-    mphoto:req.body.mphoto
+    firstname: req.body.firstname,
+    suggestion: req.body.suggestion,
+    issueid: req.body.issueid,
+    mid: req.body.mid,
+    mphoto: req.body.mphoto,
   });
   await suggestion.save().then(() => {
     res.send(suggestion).catch((err) => {
@@ -314,18 +303,16 @@ router.post('/postsuggestion', async (req, res) => {
   });
 });
 
-
-
 router.get('/issuessuggestion/:issueid', (req, res) => {
   Suggestion.find({
     issueid: req.params.issueid,
   })
     .sort('id')
     .select({
-      suggestion:1,
-      firstname:1,
-      mid:1,
-      mphoto:1
+      suggestion: 1,
+      firstname: 1,
+      mid: 1,
+      mphoto: 1,
     })
     .then((suggestion) => {
       if (!suggestion) return res.status(404).send('Not Found');
@@ -336,18 +323,17 @@ router.get('/issuessuggestion/:issueid', (req, res) => {
     });
 });
 
-
 router.put('/updateissue/:issueid', (req, res) => {
   VehicalIssuemodel.findByIdAndUpdate(
     {_id: req.params.issueid},
     {
       issuetype: req.body.issuetype,
-        phone: req.body.Phone,
-        photo: req.body.photo,
-        carcompany: req.body.carcompany,
-        city: req.body.city,
-        description: req.body.description,
-        vehicaltype:req.body.vehicaltype,
+      phone: req.body.Phone,
+      photo: req.body.photo,
+      carcompany: req.body.carcompany,
+      city: req.body.city,
+      description: req.body.description,
+      vehicaltype: req.body.vehicaltype,
     },
   )
     .then((issue) => {
@@ -363,14 +349,15 @@ router.put('/updateissue/:issueid', (req, res) => {
     });
 });
 
-
-
-router.delete('/deleteissue/:id',async(req,res)=>{
+router.delete('/deleteissue/:id', async (req, res) => {
   VehicalIssuemodel.findByIdAndDelete(req.params.id)
-  .then((data) =>{res.json(data)})
-.catch((err) =>{
-  res.status(404).send(err.message);
-})})
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
 
 router.post('/adminsignin', async (req, res) => {
   const {email, password} = req.body;
@@ -383,15 +370,14 @@ router.post('/adminsignin', async (req, res) => {
     return res.status(422).send({error: 'Email not exist!!'});
   }
   try {
-    if(admn1.password==password)
-    {const atoken = jwt.sign({adminid: admn1._id},jwtkey);
-    res.send({atoken});}
-    
+    if (admn1.password == password) {
+      const atoken = jwt.sign({adminid: admn1._id}, jwtkey);
+      res.send({atoken});
+    }
   } catch (err) {
     return res.status(422).send({error: 'Password not exist!!'});
   }
 });
-
 
 router.post('/mechanicsignin', async (req, res) => {
   const {email, password} = req.body;
@@ -404,7 +390,26 @@ router.post('/mechanicsignin', async (req, res) => {
   }
   try {
     await mechanic.comparePassword(password);
-    const token = jwt.sign({mechanicid: mechanic._id}, jwtkey);
+    const token = jwt.sign(
+      {
+        mechanicid: mechanic._id,
+        firstname: mechanic.firstname,
+        lastname: mechanic.lastname,
+        email: mechanic.email,
+        skilltype: mechanic.skilltype,
+        vehicletype: mechanic.vehicletype,
+        carcompany: mechanic.carcompany,
+        city: mechanic.city,
+        country: mechanic.country,
+        phone: mechanic.phone,
+        photo: mechanic.photo,
+        address:mechanic.address,
+        date:mechanic.date,
+        mechanicrate:mechanic.mechanicrate,
+        rating:mechanic.rating
+      },
+      jwtkey,
+    );
     res.send({token});
   } catch (err) {
     return res.status(422).send({error: 'Password not exist!!'});
@@ -458,7 +463,6 @@ router.get('/me', function (req, res) {
       return res
         .status(500)
         .send({auth: false, message: 'Failed to authenticate token.'});
-
     res.status(200).send(decoded);
   });
 });
@@ -466,7 +470,6 @@ router.get('/me', function (req, res) {
 //Update Mechanic Lat and Long
 //Update User Lat & Long
 router.put('/mechaniclocation/:id', async (req, res) => {
-  
   Mechanicmodel.findByIdAndUpdate(
     {_id: req.params.id},
     {
@@ -478,8 +481,8 @@ router.put('/mechaniclocation/:id', async (req, res) => {
       if (!mechanic) {
         return res.status(404).send('Mechanic Not Found');
       } else {
-          return res.status(200).json(mechanic);
-        }
+        return res.status(200).json(mechanic);
+      }
     })
     .catch((error) => {
       return res.send(error);
@@ -487,7 +490,7 @@ router.put('/mechaniclocation/:id', async (req, res) => {
 });
 
 //Get Mechanic By Id
-router.get('/mechanic/:id', (req, res) => { 
+router.get('/mechanic/:id', (req, res) => {
   Mechanicmodel.findById(req.params.id)
     .sort('id')
     .select({
@@ -507,7 +510,6 @@ router.get('/mechanic/:id', (req, res) => {
       longitude: 1,
       mechanicrate: 1,
       rating: 1,
-    
     })
     .then((mechanic) => {
       if (!mechanic) {
@@ -598,7 +600,7 @@ router.get(
             mechanicrate: 1,
             longitude: 1,
             latitude: 1,
-            rating:1
+            rating: 1,
           })
           .then((mechanics) => {
             if (!mechanics) return res.status(404).send('Not Found');
@@ -640,7 +642,7 @@ router.get(
                   latitude: item.latitude,
                   longitude: item.longitude,
                   mechanicrate: item.mechanicrate,
-                  rating:item.rating,
+                  rating: item.rating,
                   distance: Math.trunc(result),
                 });
               }
@@ -653,7 +655,6 @@ router.get(
       });
   },
 );
-
 
 router.put('/mechanicrating/:id', async (req, res) => {
   const totalfiverate = await Reviewmodel.find({
@@ -687,26 +688,26 @@ router.put('/mechanicrating/:id', async (req, res) => {
       totalthreerate +
       totaltworate +
       totalonerate);
-      console.log(totalrate)
+  console.log(totalrate);
   Mechanicmodel.findByIdAndUpdate(
     {_id: req.params.id},
     {
-       rating:1
+      rating: 1,
     },
   )
     .then((mechanic) => {
       if (!mechanic) {
         return res.status(404).send('Mechanic Not Found');
       } else {
-        if(mechanic.rating!=0){
+        if (mechanic.rating != 0) {
           Mechanicmodel.findByIdAndUpdate(
             {_id: req.params.id},
             {
-            rating:Math.trunc(totalrate)
+              rating: Math.trunc(totalrate),
             },
-          ).then((m)=>{
+          ).then((m) => {
             return res.status(200).json(m);
-          })
+          });
         }
       }
     })
@@ -715,22 +716,23 @@ router.put('/mechanicrating/:id', async (req, res) => {
     });
 });
 
-
 //Update User Profile
 
-
 router.put('/updatemechanic/:id', (req, res) => {
-  const User = Mechanicmodel.findByIdAndUpdate(req.params.id,{
+  const User = Mechanicmodel.findByIdAndUpdate(req.params.id, {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
-    // password: req.body.password,
     phone: req.body.phone,
     address: req.body.address,
     photo: req.body.photo,
     city: req.body.city,
     country: req.body.country,
-    })
+  vehicaltype:req.body.vehicaltype,
+  skilltype:req.body.skilltype,
+  carcompany:req.body.carcompany,
+  mechanicrate:req.body.mechanicrate
+  })
     .then((data) => {
       console.log(data);
       res.send(data);

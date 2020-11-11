@@ -67,6 +67,10 @@
 		119A3B3DE06D41A4B1EE38B0 /* Vanity-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2554B46EE8E24DDB93AFBA6E /* Vanity-LightItalic.ttf */; };
 		BF51A6FFAFCA4CAEB63C9FFC /* Vanity-LightWide.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D17B8D4DA8A483D9CE7666D /* Vanity-LightWide.ttf */; };
 		FEC16FF9059C4AE1BD7D1513 /* Vanity-LightWideItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 65FB9846AEE548B7ADB6242F /* Vanity-LightWideItalic.ttf */; };
+		F621051336E2487B9C634B33 /* CinzelDecorative-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37F9B69FFE8B4834B3E585DA /* CinzelDecorative-Black.ttf */; };
+		D073865E10654FDA9754DA38 /* CinzelDecorative-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0FB824413B3048FA82E5E7E2 /* CinzelDecorative-Bold.ttf */; };
+		BC7FAD788937467CBAF5D16E /* CinzelDecorative-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7F843E0389AF4B218810DEF7 /* CinzelDecorative-Regular.ttf */; };
+		1DC989A8D3EA4F3A82CF2E20 /* Lobster-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 650956C9B75F4CAEBFABFED7 /* Lobster-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,6 +157,10 @@
 		2554B46EE8E24DDB93AFBA6E /* Vanity-LightItalic.ttf */ = {isa = PBXFileReference; name = "Vanity-LightItalic.ttf"; path = "../src/assets/fonts/Vanity-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		0D17B8D4DA8A483D9CE7666D /* Vanity-LightWide.ttf */ = {isa = PBXFileReference; name = "Vanity-LightWide.ttf"; path = "../src/assets/fonts/Vanity-LightWide.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		65FB9846AEE548B7ADB6242F /* Vanity-LightWideItalic.ttf */ = {isa = PBXFileReference; name = "Vanity-LightWideItalic.ttf"; path = "../src/assets/fonts/Vanity-LightWideItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		37F9B69FFE8B4834B3E585DA /* CinzelDecorative-Black.ttf */ = {isa = PBXFileReference; name = "CinzelDecorative-Black.ttf"; path = "../src/assets/fonts/CinzelDecorative-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0FB824413B3048FA82E5E7E2 /* CinzelDecorative-Bold.ttf */ = {isa = PBXFileReference; name = "CinzelDecorative-Bold.ttf"; path = "../src/assets/fonts/CinzelDecorative-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7F843E0389AF4B218810DEF7 /* CinzelDecorative-Regular.ttf */ = {isa = PBXFileReference; name = "CinzelDecorative-Regular.ttf"; path = "../src/assets/fonts/CinzelDecorative-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		650956C9B75F4CAEBFABFED7 /* Lobster-Regular.ttf */ = {isa = PBXFileReference; name = "Lobster-Regular.ttf"; path = "../src/assets/fonts/Lobster-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,6 +322,10 @@
 				2554B46EE8E24DDB93AFBA6E /* Vanity-LightItalic.ttf */,
 				0D17B8D4DA8A483D9CE7666D /* Vanity-LightWide.ttf */,
 				65FB9846AEE548B7ADB6242F /* Vanity-LightWideItalic.ttf */,
+				37F9B69FFE8B4834B3E585DA /* CinzelDecorative-Black.ttf */,
+				0FB824413B3048FA82E5E7E2 /* CinzelDecorative-Bold.ttf */,
+				7F843E0389AF4B218810DEF7 /* CinzelDecorative-Regular.ttf */,
+				650956C9B75F4CAEBFABFED7 /* Lobster-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -508,6 +520,10 @@
 				119A3B3DE06D41A4B1EE38B0 /* Vanity-LightItalic.ttf in Resources */,
 				BF51A6FFAFCA4CAEB63C9FFC /* Vanity-LightWide.ttf in Resources */,
 				FEC16FF9059C4AE1BD7D1513 /* Vanity-LightWideItalic.ttf in Resources */,
+				F621051336E2487B9C634B33 /* CinzelDecorative-Black.ttf in Resources */,
+				D073865E10654FDA9754DA38 /* CinzelDecorative-Bold.ttf in Resources */,
+				BC7FAD788937467CBAF5D16E /* CinzelDecorative-Regular.ttf in Resources */,
+				1DC989A8D3EA4F3A82CF2E20 /* Lobster-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
