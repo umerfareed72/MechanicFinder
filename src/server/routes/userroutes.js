@@ -18,7 +18,7 @@ router.post('/userregister', (req, res) => {
   const User = new Usermodel({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
-    nickname:req.body.nickname,
+    nickname: req.body.nickname,
     email: req.body.email,
     password: req.body.password,
     phone: req.body.phone,
@@ -33,9 +33,8 @@ router.post('/userregister', (req, res) => {
 
   User.save()
     .then((data) => {
-   
       const token = jwt.sign({userid: User._id}, jwtkey);
-   
+
       res.send({token});
     })
     .catch((err) => {
@@ -43,118 +42,113 @@ router.post('/userregister', (req, res) => {
     });
 });
 
-router.post('./addupolicy', async(req,res)=>{
+router.post('./addupolicy', async (req, res) => {
   const policy = new upolicy({
-    policy:req.body.policy,
+    policy: req.body.policy,
   });
 
-  policy.save()
+  policy
+    .save()
     .then((data) => {
-       console.log(data);
-       res.send(data);
-      
+      console.log(data);
+      res.send(data);
     })
     .catch((err) => {
       res.status(404).send(err.message);
     });
-})
-router.post('./adduterms', async(req,res)=>{
+});
+router.post('./adduterms', async (req, res) => {
   const terms = new uterms({
-    terms:req.body.terms,
+    terms: req.body.terms,
   });
 
-  terms.save()
+  terms
+    .save()
     .then((data) => {
-       console.log(data);
-       res.send(data);
-      
+      console.log(data);
+      res.send(data);
     })
     .catch((err) => {
       res.status(404).send(err.message);
     });
-})
+});
 
-router.post('./uhelp', async(req,res)=>{
+router.post('./uhelp', async (req, res) => {
   const uhelp1 = new uhelp({
-    question:req.body.question,
-    message:req.body.message,
-    contact:req.body.contact
+    question: req.body.question,
+    message: req.body.message,
+    contact: req.body.contact,
   });
 
-  uhelp1.save()
+  uhelp1
+    .save()
     .then((data) => {
-       console.log(data);
-       res.send(data);
-      
+      console.log(data);
+      res.send(data);
     })
     .catch((err) => {
       res.status(404).send(err.message);
     });
-})
-
+});
 
 //Update User Profile
-router.put('/forgetpass', async(req, res) => {
-  let {nickname, npassword,email} = req.body;
+router.put('/forgetpass', async (req, res) => {
+  let {nickname, npassword, email} = req.body;
   bcrypt.genSalt(10, (err, salt) => {
-    console.log('IN GENRATE SALT')
+    console.log('IN GENRATE SALT');
     if (err) {
       return next(err);
     }
     bcrypt.hash(npassword, salt, (err, hash) => {
-      console.log('in hash')
+      console.log('in hash');
       if (err) {
-        return (err);
+        return err;
       }
       npassword = hash;
-console.log(npassword);
-    
+      console.log(npassword);
     });
   });
-  const user = await Usermodel.findOne({email})
+  const user = await Usermodel.findOne({email});
   if (!user) {
     return res.status(422).send({error: 'Email not exist!!'});
   }
-  console.log('user',user);
+  console.log('user', user);
   try {
-    if(user.nickname==nickname)
-   {
-
-    const User = Usermodel.findByIdAndUpdate(user._id,{
-      firstname: user.firstname,
-    lastname: user.lastname,
-    nickname:user.nickname,
-    email: user.email,
-    password: npassword,
-    phone: user.phone,
-    address: user.address,
-    photo: user.photo,
-    longitude: user.longitude,
-    latitude: user.latitude,
-    city: user.city,
-    country: user.country,
-    date: user.date,
+    if (user.nickname == nickname) {
+      const User = Usermodel.findByIdAndUpdate(user._id, {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        nickname: user.nickname,
+        email: user.email,
+        password: npassword,
+        phone: user.phone,
+        address: user.address,
+        photo: user.photo,
+        longitude: user.longitude,
+        latitude: user.latitude,
+        city: user.city,
+        country: user.country,
+        date: user.date,
       })
-      .then((data) => {
-        console.log('afterupdate',data);
-        res.send(data);
-        // const token = jwt.sign({userid: User._id}, jwtkey);
-        // res.send({token});
-      })
-      .catch((err) => {
-        res.status(404).send(err.message);
-      });
-   }
-   else{res.status(422).send({error: 'nickname not exist!!'});}
-    
+        .then((data) => {
+          console.log('afterupdate', data);
+          res.send(data);
+          // const token = jwt.sign({userid: User._id}, jwtkey);
+          // res.send({token});
+        })
+        .catch((err) => {
+          res.status(404).send(err.message);
+        });
+    } else {
+      res.status(422).send({error: 'nickname not exist!!'});
+    }
   } catch (err) {
     return res.status(422).send({error: 'Password not exist!!'});
   }
 });
 
-
 router.put('/updateuser/:id', (req, res) => {
-  const User = Usermodel.findByIdAndUpdate(req.params.id,{
+  const User = Usermodel.findByIdAndUpdate(req.params.id, {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
@@ -164,7 +158,7 @@ router.put('/updateuser/:id', (req, res) => {
     photo: req.body.photo,
     city: req.body.city,
     country: req.body.country,
-    })
+  })
     .then((data) => {
       console.log(data);
       res.send(data);
@@ -176,8 +170,21 @@ router.put('/updateuser/:id', (req, res) => {
     });
 });
 
-router.route("/usercount").get(function(req, res) {
-  Usermodel.count(function(err, result) {
+
+router.delete('/deleteuser/:id', (req, res) => {
+  const User = Usermodel.findByIdAndDelete(req.params.id)
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+
+router.route('/usercount').get(function (req, res) {
+  Usermodel.count(function (err, result) {
     if (err) {
       console.log(err);
     } else {
@@ -198,7 +205,21 @@ router.post('/usersignin', async (req, res) => {
   }
   try {
     await user.comparePassword(password);
-    const token = jwt.sign({userid: user._id,firstname:user.firstname}, jwtkey);
+    const token = jwt.sign(
+      {
+        userid: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        photo: user.photo,
+        phone: user.phone,
+        city: user.city,
+        country: user.country,
+        date:user.date,
+        address:user.address
+      },
+      jwtkey,
+    );
     res.send({token});
   } catch (err) {
     return res.status(422).send({error: 'Password not exist!!'});
@@ -214,7 +235,7 @@ router.get('/user/:id', (req, res) => {
       latitude: 1,
       longitude: 1,
       email: 1,
-      password:1,
+      password: 1,
       phone: 1,
       photo: 1,
       address: 1,
@@ -312,7 +333,8 @@ router.get('/getuser/:id', (req, res) => {
       photo: 1,
       rating: 1,
       description: 1,
-    }).sort({'_id':-1})
+    })
+    .sort({_id: -1})
     .then((user) => {
       if (!user) {
         return res.status(404).send('User Not Found');
@@ -326,45 +348,45 @@ router.get('/getuser/:id', (req, res) => {
         // getSentiment expects an array of strings
         var word = tokenizer.tokenize(item.description);
         const r = analyzer.getSentiment(word);
-        console.log(r)
-     data.push({
-            rating: item.rating,
-            description: item.description,
-            rating: item.rating,
-            photo: item.photo,
-            firstname: item.firstname,
-          });
-     
-      //   if (
-      //     (r > 1 && item.rating == 5) || (r > 1 && item.rating == 4)) {
-      //     data.push({
-      //       rating: item.rating,
-      //       description: item.description,
-      //       rating: item.rating,
-      //       photo: item.photo,
-      //       firstname: item.firstname,
-      //     });
-      //   } else if (
-      //     (r >= 0 && r <= 1 && item.rating == 3) ||
-      //     (r >= 0 && r <= 1 && item.rating == 4) ||
-      //     (r >= 0 && r <= 1 && item.rating == 2)
-      //   ) {
-      //     data.push({
-      //       rating: item.rating,
-      //       description: item.description,
-      //       rating: item.rating,
-      //       photo: item.photo,
-      //       firstname: item.firstname,
-      //     });
-      //   } else if ((r < 0 && item.rating == 1) || (r < 0 && item.rating == 2)) {
-      //     data.push({
-      //       rating: item.rating,
-      //       description: item.description,
-      //       rating: item.rating,
-      //       photo: item.photo,
-      //       firstname: item.firstname,
-      //     });
-      //   }
+        console.log(r);
+        data.push({
+          rating: item.rating,
+          description: item.description,
+          rating: item.rating,
+          photo: item.photo,
+          firstname: item.firstname,
+        });
+
+        //   if (
+        //     (r > 1 && item.rating == 5) || (r > 1 && item.rating == 4)) {
+        //     data.push({
+        //       rating: item.rating,
+        //       description: item.description,
+        //       rating: item.rating,
+        //       photo: item.photo,
+        //       firstname: item.firstname,
+        //     });
+        //   } else if (
+        //     (r >= 0 && r <= 1 && item.rating == 3) ||
+        //     (r >= 0 && r <= 1 && item.rating == 4) ||
+        //     (r >= 0 && r <= 1 && item.rating == 2)
+        //   ) {
+        //     data.push({
+        //       rating: item.rating,
+        //       description: item.description,
+        //       rating: item.rating,
+        //       photo: item.photo,
+        //       firstname: item.firstname,
+        //     });
+        //   } else if ((r < 0 && item.rating == 1) || (r < 0 && item.rating == 2)) {
+        //     data.push({
+        //       rating: item.rating,
+        //       description: item.description,
+        //       rating: item.rating,
+        //       photo: item.photo,
+        //       firstname: item.firstname,
+        //     });
+        //   }
       });
       res.json(data);
     })

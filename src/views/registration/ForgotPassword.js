@@ -48,9 +48,8 @@ export default class Login extends Component {
         npassword: this.state.newpassword,
         email:this.state.email
       })
-      .then(async (res) => {
+      .then(async (res) => { 
         console.log(res.data);
-       
         Alert.alert('password updated Successfully!');
         try {
           this.props.navigation.navigate('Login');

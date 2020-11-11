@@ -45,7 +45,7 @@ export default class MechanicRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rating: 0,
+      rating: 5,
       starCount: 5,
       TabDataStep1: 'flex',
       TabDataStep2: 'none',

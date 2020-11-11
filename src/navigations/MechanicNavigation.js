@@ -184,12 +184,12 @@ const MechanicTabNavigator = createDrawerNavigator(
     Navigator: {
       screen: Navigator,
     },
-    // MechanicDashboard: {
-    //   screen: DashboardStack,
-    // },
-        LoginasMechanic: {
-      screen: LoginasMechanic,
+    MechanicDashboard: {
+      screen: DashboardStack,
     },
+    //     LoginasMechanic: {
+    //   screen: LoginasMechanic,
+    // },
     Navigators: {
       screen: Navigators,
     },
