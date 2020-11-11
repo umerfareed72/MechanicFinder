@@ -328,7 +328,7 @@ console.log(this.state.firstname)
                   </Text>
                 </View>
                 <View style={[{display: this.state.tabOverview}, style.flex1]}>
-                  <TouchableOpacity onPress={this.buyItems}>
+                  <TouchableOpacity onPress={()=>{this.props.navigation.navigate('playvideo',{videourl:this.state.issuedata.issuevideo})}}>
                     <View
                       style={[
                         button.buttoncontainer,

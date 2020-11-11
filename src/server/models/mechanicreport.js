@@ -4,7 +4,8 @@ const mechanicreport = new mongoose.Schema({
   reporttype: String,
   userdbid:String,
   mdbid:String,
-  date:String
+  date:String,
+  userphoto:String
 });
 
 mongoose.model('mechanicreport', mechanicreport);

@@ -51,7 +51,7 @@ export default class AdminSetting extends Component {
   
     AsyncStorage.removeItem('atoken').then(() => {
       setTimeout(() => {
-       navigation.navigate('LoginA sAdmin') 
+       navigation.navigate('LoginAsAdmin') 
       }, 1000);
     });
    

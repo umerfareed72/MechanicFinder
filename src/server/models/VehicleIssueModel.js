@@ -10,6 +10,7 @@ const vehicalissueschema = new mongoose.Schema({
   userdbid: String,
   userphoto:String,
   date: String,
+  issuevideo:String
 });
 
 mongoose.model('vehicalissue', vehicalissueschema);

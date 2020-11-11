@@ -56,7 +56,9 @@ export default class HomeDetail extends Component {
       firstname:'',
       issueid: '',
       mid:'',
-      placeholder:'Enter text here'
+      placeholder:'Enter text here',
+     
+      userdata:''
     };
   }
 
@@ -67,15 +69,20 @@ export default class HomeDetail extends Component {
         res = JSON.parse(res);
         this.setState({issuedata: res});
         this.setState({issueid: res._id});
+        console.log('issuedata',this.state.issuedata)
+       // this.setState({videourl: res._id});
        
       });
-      console.log('in usersignin');
-      // await AsyncStorage.getItem('usersignintoken').then((res) => {
-      //   // res = JSON.parse(res);
-      //   console.log('response firstname',res)
+
+      await AsyncStorage.getItem('userdata').then((res) => {
+       this.setState({userdata: JSON.parse(res)});
+       console.log('photoou',this.state.userdata.photo)
+        
+      })
+     
         this.setState({firstname: 'Issue Holder'});
         
-      // });
+     
     } catch (error) {}
   };
   async componentDidMount() {
@@ -99,6 +106,7 @@ export default class HomeDetail extends Component {
         }
         
       })
+
       .catch((error) => {
         console.log(error);
       });
@@ -124,6 +132,7 @@ export default class HomeDetail extends Component {
         suggestion: this.state.suggestion,
         issueid: this.state.issueid,
         firstname:this.state.firstname,
+          mphoto:this.state.userdata.photo
       })
       .then((res) => {
         console.log(res.data);
@@ -344,14 +353,17 @@ console.log(this.state.firstname)
                         button.buttoncontainer,
                         {backgroundColor: colors.purple},
                       ]}>
-                      <Text
-                        style={[
+                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('playvideo',{videourl:this.state.issuedata.issuevideo})}}><Text
+                      
+                       
+                       style={[
                           {color: colors.white},
                           button.touchablebutton,
                           text.semibold,
                         ]}>
                         Play Video
-                      </Text>
+                      </Text></TouchableOpacity>
+                      
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -374,15 +386,15 @@ console.log(this.state.firstname)
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={images.dummy1} />
+                      <Image style={image.userImg} source={{uri:data.mphoto}} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
-                      <View style={[style.mr15]}>
+                      {/* <View style={[style.mr15]}>
                         <Image
                           source={images.imagep}
                           style={[image.image50]}></Image>
-                      </View>
+                      </View> */}
                       <View>
                         <View>
                           <Text style={[text.text16, text.bold]}>

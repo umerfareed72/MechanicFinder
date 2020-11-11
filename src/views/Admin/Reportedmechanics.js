@@ -101,7 +101,7 @@ export default class Reportedmechanics extends Component {
 
     
     console.log('in showreports');
-    await axios
+    await axios  
       .get(URL.Url + 'Cgetreport')
       .then((response) => {
         if (response.data) {
@@ -178,7 +178,7 @@ export default class Reportedmechanics extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={images.dummy1} />
+                      <Image style={image.userImg} source={{uri:data.userphoto}} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>

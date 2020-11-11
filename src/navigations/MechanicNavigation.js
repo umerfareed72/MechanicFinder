@@ -22,7 +22,7 @@ import AddProducts from '../views/Mechanic/AddProducts'
 import EditMechanicProfile from '../views/Mechanic/EditMechanicProfile'
 import Rates from '../views/Mechanic/Rates'
 import BookedUser from '../views/Mechanic/BookedUser'
-
+import playvideo1 from '../views/main/playvideo'
 import {
   colors,
   screenHeight,
@@ -73,7 +73,8 @@ const SettingStack = createStackNavigator(
     MechanicSetting: MechanicSetting,
     EditMechanicProfile:EditMechanicProfile,
     IssueList:IssueList,
-    MIssuedetail:MIssuedetail
+    MIssuedetail:MIssuedetail,
+    playvideo:playvideo1
   },
   {
     headerMode: 'none',

@@ -48,6 +48,7 @@ import mdetail from '../views/main/mdetail'
 import IssueListC from "../views/main/IssueListC"
 import EditIssue from "../views/main/EditIssue"
 import Rates from '../views/Mechanic/Rates'
+import playvideo1 from '../views/main/playvideo'
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
@@ -94,7 +95,8 @@ const PostVehicleStack = createStackNavigator(
     Issuedetail:Issuedetail, 
     EditIssue:EditIssue,
     mdetail:mdetail,
-    reportmechanic:reportmechanic
+    reportmechanic:reportmechanic,
+    playvideo:playvideo1
   },
   {
     headerMode: 'none',

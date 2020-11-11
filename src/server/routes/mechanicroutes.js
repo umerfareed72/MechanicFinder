@@ -26,6 +26,7 @@ router.post('/issueregister', async (req, res) => {
     description: req.body.description,
     date: Date.now(),
     status: req.body.status,
+    issuevideo:req.body.issuevideo
   });
   await issue.save().then(() => {
     res.send(issue).catch((err) => {
@@ -102,7 +103,8 @@ router.post('/Creportregister', async (req, res) => {
     reporttype: req.body.reporttype,
     userdbid: req.body.userdbid,
     mdbid:req.body.mdbid,
-    date: req.body.date
+    date: req.body.date,
+    userphoto:req.body.userphoto
   });
   await report.save().then(() => {
     res.send(report).catch((err) => {
@@ -118,7 +120,8 @@ router.get('/Cgetreport', (req, res) => {
       reporttype:1,
       userdbid:1,
       mdbid:1,
-      date:1
+      date:1,
+      userphoto:1
     })
     .then((reports) => {
       if (!reports) return res.status(404).send('Not Found');
@@ -255,6 +258,7 @@ router.get('/vehicalissues/:issuetype/:vehicaltype/:carcompany', (req, res) => {
       phone: 1,
       date: 1,
       status: 1,
+      issuevideo:1
     })
     .then((issues) => {
       if (!issues) return res.status(404).send('Not Found');
@@ -282,6 +286,7 @@ router.get('/vehicalissuesC/:userdbid', (req, res) => {
       date: 1,
       userphoto:1,
       status: 1,
+      issuevideo:1
     })
     .then((issues) => {
       if (!issues) return res.status(404).send('Not Found');
@@ -372,7 +377,7 @@ router.post('/adminsignin', async (req, res) => {
   if (!email || !password) {
     return res.status(422).send({error: 'Provide Email and Password Both!!'});
   }
-  const admn1 = await Admin.findOne({email});
+  const admn1 = await Admin.findOne({email}); 
   console.log(admn1);
   if (!admn1) {
     return res.status(422).send({error: 'Email not exist!!'});
