@@ -60,6 +60,7 @@ export default class MechanicRegister extends Component {
       Country: 'Select Country',
       FirstName: '',
       LastName: '',
+      nickname:'',
       Email: '',
       Password: '',
       CPassword: '',
@@ -88,6 +89,7 @@ export default class MechanicRegister extends Component {
       .post(URL.Url + 'mechanicregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
+        nickname:this.state.nickname,
         email: this.state.Email,
         password: this.state.Password,
         phone: this.state.Phone,
@@ -449,6 +451,21 @@ export default class MechanicRegister extends Component {
 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
+                      source={images.username}
+                      style={image.username}></Image>
+                    <TextInput
+                      style={input.textinputstyle}
+                      placeholder="Nickname"
+                      onChangeText={(text) => {
+                        this.setState({
+                          nickname: text,
+                        });
+                      }}
+                      underlineColorAndroid="transparent"></TextInput>
+                  </View>
+
+                  <View style={[input.textinputcontainer, style.mv5]}>
+                    <Image
                       source={images.email}
                       style={image.InputImage}></Image>
                     <TextInput
@@ -561,6 +578,7 @@ export default class MechanicRegister extends Component {
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image source={images.phone} style={image.username}></Image>
                     <TextInput
+                    keyboardType='numeric'
                       style={input.textinputstyle}
                       placeholder="Phone Number"
                       onChangeText={(text) => {

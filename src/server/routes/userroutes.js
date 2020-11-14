@@ -42,7 +42,7 @@ router.post('/userregister', (req, res) => {
     });
 });
 
-router.post('./addupolicy', async (req, res) => {
+router.post('/addupolicy', async (req, res) => {
   const policy = new upolicy({
     policy: req.body.policy,
   });
@@ -57,27 +57,14 @@ router.post('./addupolicy', async (req, res) => {
       res.status(404).send(err.message);
     });
 });
-router.post('./adduterms', async (req, res) => {
-  const terms = new uterms({
-    terms: req.body.terms,
-  });
 
-  terms
-    .save()
-    .then((data) => {
-      console.log(data);
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(404).send(err.message);
-    });
-});
 
-router.post('./uhelp', async (req, res) => {
+router.post('/uhelp', async (req, res) => {
   const uhelp1 = new uhelp({
     question: req.body.question,
     message: req.body.message,
-    contact: req.body.contact,
+    userid: req.body.userid,
+    userimage:req.body.userimage
   });
 
   uhelp1
@@ -91,7 +78,7 @@ router.post('./uhelp', async (req, res) => {
     });
 });
 
-//Update User Profile
+//Update User password
 router.put('/forgetpass', async (req, res) => {
   let {nickname, npassword, email} = req.body;
   bcrypt.genSalt(10, (err, salt) => {
@@ -171,7 +158,7 @@ router.put('/updateuser/:id', (req, res) => {
 });
 
 
-router.delete('/deleteuser/:id', (req, res) => {
+router.delete('/deleteuser/:id', (req, res) => {  
   const User = Usermodel.findByIdAndDelete(req.params.id)
     .then((data) => {
       console.log(data);
@@ -241,6 +228,7 @@ router.get('/user/:id', (req, res) => {
       address: 1,
       city: 1,
       country: 1,
+      date:1
     })
     .then((user) => {
       if (!user) {

@@ -91,7 +91,7 @@ export default class Mechaniclist extends Component {
       axios
         .get(
           URL.Url +
-            'vehicalissues/' +
+            'vehicalissues/' +  
             this.state.issuetype +
             '/' +
             this.state.vehicaltype +
@@ -99,7 +99,7 @@ export default class Mechaniclist extends Component {
             this.state.carcompany +
             '/',
         )
-        .then((response) => {
+        .then((response) => {  
           if (response.data) {
             console.log(response.data);
             this.setState({dataSource: response.data});

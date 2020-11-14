@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  Alert,StyleSheet
+  Alert,StyleSheet,ToastAndroid
 } from 'react-native';
 import {Container} from 'native-base'
 import Video from 'react-native-video';
@@ -24,6 +24,16 @@ export default class Postvehicalissue extends Component {
         videourl:this.props.navigation.getParam('videourl','nothing sent')
       }}
     render(){
+      console.log('video url',this.state.videourl)
+      if(this.state.videourl=='')
+      {
+        ToastAndroid.show(
+          'Sorry Video not available',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+        
+      }
       console.log(this.state.videourl)
       return(<Container>
         <Video source={{uri:this.state.videourl}} 
@@ -32,7 +42,7 @@ export default class Postvehicalissue extends Component {
        resizeMode={'contain'}
        //style={{flex:1}}
        style={styles.backgroundVideo}
-        fullscreen={true}  />
+        fullscreen={false}  />
       </Container>)
 
     }

@@ -177,9 +177,14 @@ export default class Postvehicalissue extends Component {
         .then(async (res) => {
           console.log(res.data);
           console.log(this.state.userdbid);
-          Alert.alert('Posted issue Successfully we will help U soon!');
+          ToastAndroid.show(
+            'Posted issue Successfully we will help U soon!',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
+          
           try {
-            this.props.navigation.navigate('Dashboard');
+            this.props.navigation.navigate('IssueListC');
           } catch (e) {
             console.log('error hai', e);  
           }
@@ -194,7 +199,7 @@ export default class Postvehicalissue extends Component {
 
   handleChoosePhoto = () => {
     const options = {
-      title: 'Take Image From',
+      title: 'Take Video From',
       StorageOptions: {
         skipBackup: true,
         path: 'images',

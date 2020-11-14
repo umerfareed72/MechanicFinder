@@ -18,10 +18,16 @@ import AdminSetting from '../views/Admin/AdminSetting'
 import Complaints from '../views/Admin/Complaints'
 import Reportedmechanics from '../views/Admin/Reportedmechanics'
 import Reportedcustomers from '../views/Admin/Reportedcustomers'
-import Reportedposts from '../views/Admin/Reportedposts'
+import Userdetail from '../views/Admin/Userdetail'
 import Reportmechanicdetail from '../views/Admin/Reportmechanicdetail';
 import RMechanicprofile from '../views/Admin/RMechanicprofile';
 import Customerprofile from '../views/Admin/Customerprofile';
+import Chelp from '../views/Admin/chelp';
+import Mhelp from '../views/Admin/mhelp';
+import Electricmechanic from '../views/Admin/Electricmechanic';
+import Enginemechanic from '../views/Admin/Enginemechanic';
+import Bodymechanic from '../views/Admin/Bodymechanic';
+import Paintermechanic from '../views/Admin/Paintermechanic';
 import {
   colors,
   screenHeight,
@@ -33,6 +39,8 @@ import LoginasMechanic from '../views/registration/LoginasMechanic';
 import AddServiceRates from '../views/Admin/AddServiceRates'
 import ServiceRates from '../views/Admin/ServiceRates'
 import UpdateServiceRate from '../views/Admin/UpdateServiceRate'
+import Mechanicprofile from '../views/Admin/Mechanicprofile';
+import Mechanicdetail from '../views/Admin/Mechanicdetail'
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
@@ -65,6 +73,12 @@ const SettingStack = createStackNavigator(
     AdminSetting:AdminSetting,
     UserManagement: UserManagement,
     MechanicManagement: MechanicManagement,
+    Electricmechanic:Electricmechanic,
+    Enginemechanic:Enginemechanic,
+    Paintermechanic:Paintermechanic,
+    Bodymechanic:Bodymechanic,
+    Mechanicdetail:Mechanicdetail,
+    Userdetail:Userdetail
   },
   {
     headerMode: 'none',
@@ -79,10 +93,13 @@ const Complaintstack = createStackNavigator(
     Complaints:Complaints,
     Reportedcustomers:Reportedcustomers,
     Reportedmechanics:Reportedmechanics,
-    Reportedposts:Reportedposts,
     Reportmechanicdetail:Reportmechanicdetail,
     RMechanicprofile:RMechanicprofile,
-    Customerprofile:Customerprofile
+    Customerprofile:Customerprofile,
+    Mechanicprofile:Mechanicprofile,
+    Mhelp:Mhelp,
+    Chelp:Chelp,
+    
   },
   {
     headerMode: 'none',
@@ -120,7 +137,30 @@ const Navigator = createMaterialBottomTabNavigator(
         ),
       },
     },
-    
+    Complaints: {
+      screen: Complaintstack,
+      navigationOptions: {
+        tabBarLabel: 'Complaints',
+        tabBarIcon: ({tintColor}) => (
+          <Image
+            style={{resizeMode: 'contain', height: 25, width: 25,tintColor:colors.gray}}
+            source={images.help}
+          />
+        ),
+      },
+    },
+    // Help: {
+    //   screen: Helpstack,
+    //   navigationOptions: {
+    //     tabBarLabel: 'Help',
+    //     tabBarIcon: ({tintColor}) => (
+    //       <Image
+    //         style={{resizeMode: 'contain', height: 25, width: 25,tintColor:colors.gray}}
+    //         source={images.Question}
+    //       />
+    //     ),
+    //   },
+    // },
       Settings: {
         screen: SettingStack,
         navigationOptions: {
@@ -133,20 +173,6 @@ const Navigator = createMaterialBottomTabNavigator(
           ),
         },
       },
-
-      Complaints: {
-        screen: Complaintstack,
-        navigationOptions: {
-          tabBarLabel: 'Complaints',
-          tabBarIcon: ({tintColor}) => (
-            <Image
-              style={{resizeMode: 'contain', height: 25, width: 25}}
-              source={images.help}
-            />
-          ),
-        },
-      },
-  
     },
   
 

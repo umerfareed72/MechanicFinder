@@ -459,7 +459,7 @@ export default class HomeDetail extends Component {
                           rating={this.state.rating}
                           selectedStar={(rating) =>
                             this.onStarRatingPress(rating)
-                          }
+                          }   
                           fullStarColor={this.state.fullStar}
                           emptyStarColor={this.state.emptyStar}
                           starSize={40}
@@ -471,6 +471,15 @@ export default class HomeDetail extends Component {
                           </Text>
                         </View>
                       </TouchableOpacity>
+                      <View style={[style.pv10, style.ph30]}>
+                  <Text
+                    onPress={() => {
+                      this.props.navigation.navigate('reportmechanic',{mdbid:data._id});
+                    }}
+                    style={[text.right, text.text14, {color: colors.link}]}>
+                    Report this Mechanic
+                  </Text>
+                </View>
 
                       <TouchableOpacity
                         onPress={this.submitReview}

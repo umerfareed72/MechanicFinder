@@ -134,7 +134,7 @@ export default class Login extends Component {
                       style={input.textinputstyle}
                       placeholder="Enter Your Password"
                       secureTextEntry={true}
-                      onChangeText={(text) => {
+                      onChangeText={(text) => {  
                         this.setState({
                           newpassword: text,
                         });

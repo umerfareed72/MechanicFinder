@@ -52,7 +52,7 @@ import playvideo1 from '../views/main/playvideo'
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
-    Dashboard: {
+   Dashboard: {
       screen: Dashboard,
     },
     HomeDetail: {

@@ -36,7 +36,7 @@ import StarRating from 'react-native-star-rating';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import { TouchableOpacity } from 'react-native';
-import {VictoryBar,VictoryChart,VictoryGroup} from 'victory-native';
+import {VictoryBar,VictoryChart,VictoryPie,VictoryGroup,VictoryTheme,VictoryLabel} from 'victory-native';
 class AdminDashboard extends Component {
     constructor(props) {
         super(props);
@@ -196,7 +196,7 @@ class AdminDashboard extends Component {
                 {x:'Electric issue' , y:this.state.electricissue}
             ],
             engineissue:[
-                {x:'Engine issue' , y:this.state.engineissue}
+                {x:'Engineissue' , y:this.state.engineissue}
             ],
             bodyissue:[
                 {x:'Body issue' , y:this.state.bodyissue}
@@ -204,7 +204,7 @@ class AdminDashboard extends Component {
            
         }
         return (  <View>
-<ScrollView>
+<ScrollView>  
 
 <View style={{}}>
           <LinearGradient
@@ -218,7 +218,7 @@ class AdminDashboard extends Component {
             <StatusBar backgroundColor={'transparent'} />
             <View style={[appStyle.headInner]}>
               <View style={[]}>
-                <Text style={[text.heading1]}>Dashboard</Text>
+                <Text style={[text.heading1]}>Admin Dashboard</Text>
               </View>
             </View>
           </LinearGradient>
@@ -230,7 +230,7 @@ class AdminDashboard extends Component {
                 Registered Mechanic Graph
               </Text>
             </View>
-            <VictoryChart>
+            <VictoryChart domainPadding={40} width={350} theme={VictoryTheme.material}>
                 <VictoryGroup offset={10}>
                     <VictoryBar data={data.electric}/>
                     <VictoryBar data={data.body}/>
@@ -243,13 +243,22 @@ class AdminDashboard extends Component {
                 Registered Issues Graph
               </Text>
             </View>
-            <VictoryChart>
+            <VictoryChart domainPadding={40}>
                 <VictoryGroup offset={25}>
                     <VictoryBar data={data1.electricissue}/>
                     <VictoryBar data={data1.bodyissue}/>
                     <VictoryBar data={data1.engineissue}/>
                 </VictoryGroup>
             </VictoryChart>
+            <VictoryPie  labelComponent={<VictoryLabel angle={45}/>}  
+  colorScale={["#008f68", "#6DB65B", "#4AAE9B", "#EFBB35"]}
+  data={[
+    {x:'Electric issue' , y:this.state.electricissue },
+    {x:'Engine issue' , y:this.state.engineissue },
+    {x:'Body issue' , y:this.state.bodyissue },
+    
+  ]}
+/>
         </View>
         <View
               style={[
@@ -258,7 +267,7 @@ class AdminDashboard extends Component {
                 appStyle.bodyShadowBottom,
                 {
                   backgroundColor: colors.white,
-                  
+                  marginVertical:20
                 },
               ]}>
               <View style={[appStyle.rowCenter]}>

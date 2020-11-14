@@ -15,7 +15,7 @@ import {
   Platform,
   Alert,
   StyleSheet,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,ToastAndroid
 } from 'react-native';
 import {
   colors,
@@ -64,7 +64,7 @@ export default class Reportmechanic extends Component {
       date: 'Select date of Incident',
       mdbid:this.props.navigation.getParam('mdbid','nothing sent'),
       userdata:'',
-      userphoto:''
+      userphoto:''  
     };
   }
 
@@ -112,7 +112,11 @@ export default class Reportmechanic extends Component {
       .then(async (res) => {
         console.log(res.data);
         console.log(this.state.userdbid);
-        Alert.alert('Posted Report Successfully we will help U soon!');
+        ToastAndroid.show(
+          'Mechanic Reported Successfully!!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         try {
           this.props.navigation.navigate('Dashboard');
         } catch (e) {

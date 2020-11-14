@@ -41,7 +41,7 @@ import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Picker} from '@react-native-community/picker';
 import {color} from 'react-native-reanimated';
-export default class Reportedcustomers extends Component {
+export default class Mhelp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -101,8 +101,8 @@ export default class Reportedcustomers extends Component {
 
     
     console.log('in showreports');
-    await axios  
-      .get(URL.Url + 'Cgetreport')
+    await axios    
+      .get(URL.Url + 'mgethelp')  
       .then((response) => {
         if (response.data) {
           console.log(response.data);
@@ -119,24 +119,18 @@ export default class Reportedcustomers extends Component {
   };
 
 
-  movetodetail = (id) => {
-    const reportdata = JSON.stringify(this.state.dataSource[id]);
-    AsyncStorage.setItem('reportdata', reportdata);
-    setTimeout(() => {
-      this.props.navigation.navigate('Reportmechanicdetail');
-    }, 2000);
-  };
+  
  
 
   deletereport = (id) => {
     const reportdata = this.state.dataSource[id];
     console.log(reportdata)
     axios
-      .delete(URL.Url + 'Cdeletereport/' + reportdata._id)
+      .delete(URL.Url + 'deletemhelp/' + reportdata._id)
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          Alert.alert('Report deleted successfully!')
+          Alert.alert('Question deleted successfully!')
           this.showreports();
         }
       })
@@ -157,9 +151,9 @@ export default class Reportedcustomers extends Component {
          
           <View>
             <Text style={[text.heading1purple, text.bold]}>
-              Roported Mechanics 
+              Mechanics Help Questions 
             </Text>
-            <Text style={[text.text14, {color: '#4A4A4A'}]}>Currently Added Reports</Text>
+            <Text style={[text.text14, {color: '#4A4A4A'}]}>Currently Added Questions</Text>
           </View>
          <View></View>
         </View>
@@ -170,7 +164,7 @@ export default class Reportedcustomers extends Component {
                 <TouchableOpacity
                   key={index}
                   // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
-                  onPress={() => this.movetodetail(index)}
+                //  onPress={() => this.movetodetail(index)}
                   style={[
                     appStyle.slotCard,
                     appStyle.rowJustify,
@@ -178,7 +172,7 @@ export default class Reportedcustomers extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri:data.userphoto}} />
+                      <Image style={image.userImg} source={{uri:data.userimage}} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
@@ -190,26 +184,34 @@ export default class Reportedcustomers extends Component {
                       <View>
                         <View>
                           <Text style={[text.text16, text.bold]}>
-                            {data.reporttype} issue in {data.date}
+                            Subject: {data.question}
                           </Text>
                         </View>
-                        <View style={style.row}>
-                          <Text style={[text.text15, {color: colors.gray}]}>
-                           
+                        <View style={{flexDirection:'row'}}>
+                          <Text style={[text.text15, {color: colors.gray}]} style={{flex: 1, flexWrap: 'wrap'}} numberOfLines={5}>
+                           {data.message}  
                           </Text>
                         </View>
+                       
                         <View style={[style.mv5]}>
                        
                              
                             <TouchableOpacity
                             onPress={() => {
-                              this.deletereport(index)
+                              this.deletereport(index) 
                            }}
                              >
                               <View style={[text.text15, {color: colors.gray}]}>
-                            <Text>Delete </Text>
+                            <Text style={{color:'red'}}>Delete </Text>
                             </View>
                             </TouchableOpacity> 
+                            <TouchableOpacity
+                             onPress={()=>this.props.navigation.navigate('Mechanicprofile',{userid:data.userid})}
+                             >
+                              <View style={[text.text15, {color: colors.gray}]}>
+                            <Text style={{color:'blue'}}>View Profile </Text>
+                            </View>
+                            </TouchableOpacity>
                         </View>
                       </View>
                     </View>

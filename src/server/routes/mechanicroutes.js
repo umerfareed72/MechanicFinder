@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const {jwtkey} = require('../keys');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+
+const bcrypt = require('bcrypt');
 const Mechanicmodel = mongoose.model('mechanicmodel');
 const Usermodel = mongoose.model('Usermodel');
 const Reviewmodel = mongoose.model('ReviewModel');
@@ -11,7 +13,9 @@ const VehicalIssuemodel = mongoose.model('vehicalissue');
 const Mechanicreport = mongoose.model('mechanicreport');
 const Mwarning = mongoose.model('Mwarning');
 const Admin = mongoose.model('Adminschema');
+const uhelp = mongoose.model('uhelp')
 const BookedUsermodel = mongoose.model('BookedUsermodel');
+const mhelp = mongoose.model('mhelp');
 router.post('/issueregister', async (req, res) => {
   console.log('in issue register');
   const issue = new VehicalIssuemodel({
@@ -119,6 +123,79 @@ router.get('/Cgetreport', (req, res) => {
     .then((reports) => {
       if (!reports) return res.status(404).send('Not Found');
       else res.json(reports);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+router.post('/mhelp', async (req, res) => {
+  const mhelp1 = new mhelp({
+    question: req.body.question,
+    message: req.body.message,
+    userid: req.body.userid,
+    userimage:req.body.userimage
+  });
+
+  mhelp1
+    .save()
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+router.get('/mgethelp', (req, res) => {
+  mhelp.find()
+    .sort('id')
+    .select({  
+      question:1,
+      message:1,
+      userid:1, 
+      userimage:1 
+    })
+    .then((reports) => {
+      if (!reports) return res.status(404).send('Not Found');
+      else res.json(reports);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+router.get('/cgethelp', (req, res) => {
+  uhelp.find()
+    .sort('id')
+    .select({  
+      question:1,
+      message:1,
+      userid:1, 
+      userimge:1 
+    })
+    .then((reports) => {
+      if (!reports) return res.status(404).send('Not Found');
+      else res.json(reports);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+router.delete('/deletemhelp/:id', async (req, res) => {  
+  mhelp.findByIdAndDelete(req.params.id)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+router.delete('/deletechelp/:id', async (req, res) => {
+  uhelp.findByIdAndDelete(req.params.id)
+    .then((data) => {
+      res.json(data);
     })
     .catch((err) => {
       res.status(404).send(err.message);
@@ -259,7 +336,7 @@ router.get('/vehicalissues/:issuetype/:vehicaltype/:carcompany', (req, res) => {
     });
 });
 
-router.get('/vehicalissuesC/:userdbid', (req, res) => {
+router.get('/vehicalissuesC/:userdbid', (req, res) => { 
   VehicalIssuemodel.find({
     userdbid: req.params.userdbid,
   })
@@ -421,6 +498,7 @@ router.post('/mechanicregister', async (req, res) => {
   const mechanic = new Mechanicmodel({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
+    nickname:req.body.nickname,
     email: req.body.email,
     password: req.body.password,
     phone: req.body.phone,
@@ -483,6 +561,198 @@ router.put('/mechaniclocation/:id', async (req, res) => {
       } else {
         return res.status(200).json(mechanic);
       }
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
+
+
+//Update User Profile
+router.put('/mforgetpass', async (req, res) => {
+  console.log('in m forget api')
+  let {nickname, npassword, email} = req.body;
+  bcrypt.genSalt(10, (err, salt) => {
+    console.log('IN GENRATE SALT');
+    if (err) {
+      return next(err);
+    }
+    bcrypt.hash(npassword, salt, (err, hash) => {
+      console.log('in hash');
+      if (err) {
+        return err;
+      }
+      npassword = hash;
+      console.log(npassword);
+    });
+  });
+  const user = await Mechanicmodel.findOne({email});
+  if (!user) {
+    return res.status(422).send({error: 'Email not exist!!'});
+  }
+  console.log('user', user);
+  try {
+    if (user.nickname == nickname) {
+      const User = Mechanicmodel.findByIdAndUpdate(user._id, {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        nickname: user.nickname,
+        email: user.email,
+        password: npassword,
+        phone: user.phone,
+        address: user.address,
+        photo: user.photo,
+        longitude: user.longitude,
+        latitude: user.latitude,
+        city: user.city,
+        country: user.country,
+        date: user.date,
+      })
+        .then((data) => {
+          console.log('afterupdate', data);
+          res.send(data);
+          // const token = jwt.sign({userid: User._id}, jwtkey);
+          // res.send({token});
+        })
+        .catch((err) => {
+          res.status(404).send(err.message);
+        });
+    } else {
+      res.status(422).send({error: 'nickname not exist!!'});
+    }
+  } catch (err) {
+    return res.status(422).send({error: 'Password not exist!!'});
+  }
+});
+
+
+router.get('/bodymechanic', (req, res) => {
+  Mechanicmodel.find({skilltype:'Body'})
+    .sort('id')
+    .select({
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      phone: 1,
+      address: 1,
+      photo: 1,
+      carcompany: 1,
+      city: 1,
+      country: 1,
+      skilltype: 1,
+      vehicletype: 1,
+      date: 1,
+      latitude: 1,
+      longitude: 1,
+      mechanicrate: 1,
+      rating: 1,
+    })
+    .then((mechanic) => {
+      if (!mechanic) {
+        return res.status(404).send('Mechanic Not Found');
+      }
+      return res.status(200).json(mechanic);
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
+
+
+
+router.get('/enginemechanic', (req, res) => {
+  Mechanicmodel.find({skilltype:'Engine'})
+    .sort('id')
+    .select({
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      phone: 1,
+      address: 1,
+      photo: 1,
+      carcompany: 1,
+      city: 1,
+      country: 1,
+      skilltype: 1,
+      vehicletype: 1,
+      date: 1,
+      latitude: 1,
+      longitude: 1,
+      mechanicrate: 1,
+      rating: 1,
+    })
+    .then((mechanic) => {
+      if (!mechanic) {
+        return res.status(404).send('Mechanic Not Found');
+      }
+      return res.status(200).json(mechanic);
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
+
+
+router.get('/electricmechanic', (req, res) => {
+  Mechanicmodel.find({skilltype:'Electric'})
+    .sort('id')
+    .select({
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      phone: 1,
+      address: 1,
+      photo: 1,
+      carcompany: 1,
+      city: 1,
+      country: 1,
+      skilltype: 1,
+      vehicletype: 1,
+      date: 1,
+      latitude: 1,
+      longitude: 1,
+      mechanicrate: 1,
+      rating: 1,
+    })
+    .then((mechanic) => {
+      if (!mechanic) {
+        return res.status(404).send('Mechanic Not Found');
+      }
+      return res.status(200).json(mechanic);
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
+
+
+
+router.get('/paintermechanic', (req, res) => {
+  Mechanicmodel.find({skilltype:'Painter'})
+    .sort('id')
+    .select({
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      phone: 1,
+      address: 1,
+      photo: 1,
+      carcompany: 1,
+      city: 1,
+      country: 1,
+      skilltype: 1,
+      vehicletype: 1,
+      date: 1,
+      latitude: 1,
+      longitude: 1,
+      mechanicrate: 1,
+      rating: 1,
+    })
+    .then((mechanic) => {
+      if (!mechanic) {
+        return res.status(404).send('Mechanic Not Found');
+      }
+      return res.status(200).json(mechanic);
     })
     .catch((error) => {
       return res.send(error);
