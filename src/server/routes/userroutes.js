@@ -111,8 +111,6 @@ router.put('/forgetpass', async (req, res) => {
         phone: user.phone,
         address: user.address,
         photo: user.photo,
-        longitude: user.longitude,
-        latitude: user.latitude,
         city: user.city,
         country: user.country,
         date: user.date,

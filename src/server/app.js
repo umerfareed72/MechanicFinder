@@ -39,7 +39,6 @@ app.use(bookedroutes);
 app.use(Productroutes);
 app.use(BookProductroutes);
 app.use(Serviceroutes);
-
 const mongouri =
      'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';
  //'mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/SmartAutoMechanicFinder?retryWrites=true&w=majority';
@@ -48,7 +47,6 @@ mongoose.connect(mongouri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
 mongoose.connection.on('connected', () => {
   console.log('connected to mongo');
 });
@@ -70,7 +68,6 @@ app.post('/users/:name/messages', function(req, res) { // (5)
   });
   res.sendStatus(204);
 });
-
 //set cors middleware
 app.listen(5000, () => {
   console.log('listening on 5000');
