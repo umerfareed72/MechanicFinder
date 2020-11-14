@@ -51,9 +51,9 @@ import Rates from '../views/Mechanic/Rates'
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
-    Dashboard: {
-      screen: Dashboard,
-    },
+    // Dashboard: {
+    //   screen: Dashboard,
+    // },
     HomeDetail: {
       screen: HomeDetail,
     },

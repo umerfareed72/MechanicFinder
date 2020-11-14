@@ -388,6 +388,7 @@ export default class Postvehicalissue extends Component {
                       <Picker.Item label="Electric" value="Electric" />  
                       <Picker.Item label="Engine" value="Engine" />
                       <Picker.Item label="Body" value="Body" />
+                      <Picker.Item label="Painter" value="Painter" />
                     </Picker>
                   </View>
                   <View style={[input.textinputcontainer, style.mv5]}>
