@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const uhelp = new mongoose.Schema({
+const mhelp = new mongoose.Schema({
     question:String,
     message:String,
     userid:String,
     userimage:String
 });
 
-mongoose.model('uhelp', uhelp);
+mongoose.model('mhelp', mhelp);

@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  Alert
+  Alert,ToastAndroid
 } from 'react-native';
 import {
   colors,
@@ -96,7 +96,11 @@ export default class HomeDetail extends Component {
           
           
         }
-        if (this.state.suggestiondata == '') Alert.alert('No Suggestion available!');
+        if (this.state.suggestiondata == '') ToastAndroid.show(
+          'No Suggestion available',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         // if (this.state.suggestiondata == '') Alert.alert('Sorry no issue available!');
       })
       .catch((error) => {
@@ -328,7 +332,21 @@ console.log(this.state.firstname)
                   </Text>
                 </View>
                 <View style={[{display: this.state.tabOverview}, style.flex1]}>
-                  <TouchableOpacity onPress={this.buyItems}>
+                  <TouchableOpacity onPress={()=>{
+                          if(this.state.issuedata.issuevideo=='')
+                          {
+                            ToastAndroid.show(
+                              'Sorry Video not available',
+                              ToastAndroid.BOTTOM,
+                              ToastAndroid.LONG,
+                            );
+                            
+                          }
+                          else
+                          {this.props.navigation.navigate('playvideo',{videourl:this.state.issuedata.issuevideo})
+                        }
+                      }
+                    }>
                     <View
                       style={[
                         button.buttoncontainer,
@@ -403,6 +421,7 @@ console.log(this.state.firstname)
                 style={input.textinputstyle}
                 placeholder="Type Suggestion about issue"
                 secureTextEntry={true}
+                multiline={true}
                 secureTextEntry={false}
                 onChangeText={(text) => {
                   this.setState({

@@ -8,6 +8,7 @@ var validateEmail = function (email) {
 const mechanicschema = new mongoose.Schema({
   firstname: {type: String, required: 'FirstName is required'},
   lastname: {type: String, required: 'LastName is required'},
+  nickname: {type: String, required: 'nickname is required'},
   email: {
     type: String,
     trim: true,

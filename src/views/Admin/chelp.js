@@ -41,7 +41,7 @@ import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Picker} from '@react-native-community/picker';
 import {color} from 'react-native-reanimated';
-export default class Reportedcustomers extends Component {
+export default class Chelp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -76,63 +76,81 @@ export default class Reportedcustomers extends Component {
 //   };
 
  
+showreports = async() => {
+  // AsyncStorage.getItem('userId')
+  //   .then((res) => {
+  //     const id = JSON.parse(res);
+  //     this.setState({userId: id});
 
-  showreports = async() => {
-    // AsyncStorage.getItem('userId')
-    //   .then((res) => {
-    //     const id = JSON.parse(res);
-    //     this.setState({userId: id});
+  // AsyncStorage.getItem('usersignintoken').then((res) => {
+  //   this.setState({token: res});
+  //   console.log(this.state.token);
+  //   axios
+  //     .get(URL.Url + 'me', {
+  //       headers: {
+  //         'x-access-token': this.state.token,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       this.setState({userdbid: response.data.userid}).catch((error) => {
+  //         console.log(error);
+  //       });
+  //     });
+  // });
 
-    // AsyncStorage.getItem('usersignintoken').then((res) => {
-    //   this.setState({token: res});
-    //   console.log(this.state.token);
-    //   axios
-    //     .get(URL.Url + 'me', {
-    //       headers: {
-    //         'x-access-token': this.state.token,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       this.setState({userdbid: response.data.userid}).catch((error) => {
-    //         console.log(error);
-    //       });
-    //     });
-    // });
-
-    
-    console.log('in showreports');
-    await axios  
-      .get(URL.Url + 'Cgetreport')
-      .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
-           this.setState({dataSource: response.data});
-          console.log(this.state.dataSource);
-        if (this.state.dataSource == '')
-          Alert.alert('No Report is posted!');
-      })
-      .catch((error) => {
-        console.log('ye lo 1', error);
-      });
-   
-  };
+  
+  console.log('in showreports');
+  await axios    
+    .get(URL.Url + 'cgethelp')  
+    .then((response) => {
+      if (response.data) {  
+        console.log(response.data);
+      }
+         this.setState({dataSource: response.data});
+        console.log(this.state.dataSource);
+      if (this.state.dataSource == '')
+        Alert.alert('No Report is posted!');
+    })
+    .catch((error) => {
+      console.log('ye lo 1', error);
+    });
+ 
+};
 
 
-  movetodetail = (id) => {
-    const reportdata = JSON.stringify(this.state.dataSource[id]);
-    AsyncStorage.setItem('reportdata', reportdata);
-    setTimeout(() => {
-      this.props.navigation.navigate('Reportmechanicdetail');
-    }, 2000);
-  };
+
+  
  
 
+  gettingdatamechanicuser = () => {
+    axios
+          .get(URL.Url + 'user/' + this.state.userid)
+          .then((response) => {
+            if (response) {
+              console.log(response.data);
+            
+            }   
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        //   axios
+        //   .get(URL.Url + 'mechanic/' + this.state.mdbid)
+        //   .then((response) => {
+        //     if (response) {
+        //       console.log(response.data);
+        //      this.setState({mphone:response.data.phone})
+        //     }   
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   });
+}
   deletereport = (id) => {
     const reportdata = this.state.dataSource[id];
     console.log(reportdata)
     axios
-      .delete(URL.Url + 'Cdeletereport/' + reportdata._id)
+      .delete(URL.Url + 'deletechelp/' + reportdata._id)
       .then((response) => {
         if (response.data) {
           console.log(response.data);
@@ -157,7 +175,7 @@ export default class Reportedcustomers extends Component {
          
           <View>
             <Text style={[text.heading1purple, text.bold]}>
-              Roported Mechanics 
+               Customers Help Questions 
             </Text>
             <Text style={[text.text14, {color: '#4A4A4A'}]}>Currently Added Reports</Text>
           </View>
@@ -170,7 +188,7 @@ export default class Reportedcustomers extends Component {
                 <TouchableOpacity
                   key={index}
                   // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
-                  onPress={() => this.movetodetail(index)}
+                 // onPress={() => this.movetodetail(index)}
                   style={[
                     appStyle.slotCard,
                     appStyle.rowJustify,
@@ -178,7 +196,7 @@ export default class Reportedcustomers extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri:data.userphoto}} />
+                      <Image style={image.userImg} source={{uri:data.userimage}} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
@@ -190,12 +208,12 @@ export default class Reportedcustomers extends Component {
                       <View>
                         <View>
                           <Text style={[text.text16, text.bold]}>
-                            {data.reporttype} issue in {data.date}
+                             Subject: {data.question}
                           </Text>
                         </View>
-                        <View style={style.row}>
-                          <Text style={[text.text15, {color: colors.gray}]}>
-                           
+                        <View style={{flexDirection:'row'}}>
+                          <Text style={[text.text15, {color: colors.gray}]} style={{flex: 1, flexWrap: 'wrap'}} numberOfLines={5}>
+                           {data.message}  
                           </Text>
                         </View>
                         <View style={[style.mv5]}>
@@ -207,9 +225,16 @@ export default class Reportedcustomers extends Component {
                            }}
                              >
                               <View style={[text.text15, {color: colors.gray}]}>
-                            <Text>Delete </Text>
+                            <Text style={{color:'red'}}>Delete </Text>
                             </View>
                             </TouchableOpacity> 
+                            <TouchableOpacity
+                            onPress={()=>this.props.navigation.navigate('Customerprofile',{userid:data.userid})}
+                             >
+                              <View style={[text.text15, {color: colors.gray}]}>
+                            <Text style={{color:'blue'}}>View Profile </Text>
+                            </View>
+                            </TouchableOpacity>
                         </View>
                       </View>
                     </View>

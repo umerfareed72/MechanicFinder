@@ -15,7 +15,7 @@ import {
   Platform,
   Alert,
   StyleSheet,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,ToastAndroid
 } from 'react-native';
 import {
   colors,
@@ -62,8 +62,9 @@ export default class Reportmechanic extends Component {
       reportdescription: '',
       token: '',
       date: 'Select date of Incident',
-      mdbid:this.props.navigation.getParam('mdbid','nothing sent')
-      
+      mdbid:this.props.navigation.getParam('mdbid','nothing sent'),
+      userdata:'',
+      userphoto:''  
     };
   }
 
@@ -87,6 +88,15 @@ export default class Reportmechanic extends Component {
           });
         });
     });
+    AsyncStorage.getItem('userdata').then((res) => {
+      
+      this.setState({userdata: JSON.parse(res)});
+      this.setState({userphoto:this.state.userdata.photo})
+      console.log('userphoto12',this.state.userphoto)
+     
+      console.log('firstname',this.state.userdata.photo)
+      
+    })
   };
   
   submitReport = () => {
@@ -96,12 +106,17 @@ export default class Reportmechanic extends Component {
         reporttype: this.state.reporttype,
         userdbid: this.state.userdbid,
         mdbid:this.state.mdbid,
-        date: this.state.date
+        date: this.state.date,
+        userphoto:this.state.userdata.photo
       })
       .then(async (res) => {
         console.log(res.data);
         console.log(this.state.userdbid);
-        Alert.alert('Posted Report Successfully we will help U soon!');
+        ToastAndroid.show(
+          'Mechanic Reported Successfully!!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         try {
           this.props.navigation.navigate('Dashboard');
         } catch (e) {

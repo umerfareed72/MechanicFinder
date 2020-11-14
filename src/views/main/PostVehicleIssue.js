@@ -67,7 +67,9 @@ export default class Postvehicalissue extends Component {
       description: '',
       token: '',
       userdata:{},
-      userphoto:''
+      userphoto:'',
+      issuevideo:"",
+      issueuri:'',
     };
   }
 
@@ -170,15 +172,21 @@ export default class Postvehicalissue extends Component {
           vehicaltype: this.state.vehicaltype,
           userdbid: this.state.userdbid,
           date: new Date().getDate(),
+          issuevideo:this.state.issuevideo
         })
         .then(async (res) => {
           console.log(res.data);
           console.log(this.state.userdbid);
-          Alert.alert('Posted issue Successfully we will help U soon!');
+          ToastAndroid.show(
+            'Posted issue Successfully we will help U soon!',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
+          
           try {
-            this.props.navigation.navigate('Dashboard');
+            this.props.navigation.navigate('IssueListC');
           } catch (e) {
-            console.log('error hai', e);
+            console.log('error hai', e);  
           }
         })
         .catch((error) => {
@@ -188,6 +196,63 @@ export default class Postvehicalissue extends Component {
         });
     }
   };
+
+  handleChoosePhoto = () => {
+    const options = {
+      title: 'Take Video From',
+      StorageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    const options2 = {
+      title: 'Select video',
+       mediaType: 'video',
+      path:'video',
+      quality: 1
+    };
+    
+    
+  ImagePicker.showImagePicker(options2, (response) => {
+    if (response) {
+      console.log('video',response);
+      this.setState({issueuri:response.uri})
+      this.setState({issuevideo:response.path})
+      // var data = new FormData();
+      // const source = {
+      //   uri: response.uri,
+      //   type: response.type,
+      //   name: response.fileName,
+      // };
+      // data.append('file', source);
+      // data.append('upload_preset', 'rjrthtdu');
+      // data.append('cloud_name', 'dbkmbaxmk');
+      // fetch('https://api.cloudinary.com/v1_1/dbkmbaxmk/image/upload', {
+      //   method: 'post',
+      //   body: data,
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // })
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     console.log(data.secure_url);
+      //     this.setState({photo: data.secure_url});
+      //   })
+      //   .catch((err) => {
+      //     Alert.alert('An Error Occured While Uploading');
+      //     console.log(err);
+      //   });
+    } else if (response.didCancel) {
+      console.log('User Cancelled Image Picker');
+    } else if (response.error) {
+      console.log('Image Picker Error', response.error);
+    }
+  });
+};
+
+
 
   tabStep1 = () => {
     if (this.state.TabDataStep1 == 'flex') {
@@ -234,6 +299,7 @@ export default class Postvehicalissue extends Component {
     this.setState({ColorStep4: colors.inputBordercolor});
   };
   render() {
+    const {issuevideo} = this.state;
     return (
       <SafeAreaView style={style.flex1}>
         <StatusBar />
@@ -410,6 +476,58 @@ export default class Postvehicalissue extends Component {
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
                 </View>
+                <View
+                style={[
+                  {
+                    backgroundColor: colors.white,
+                   
+                  },
+                ]}>
+                <View style={appStyle.headingLayout}>
+                  <Text style={[style.headerStyle, style.bottomborder],{textAlign:'center'}}>
+                    Upload Issue Video
+                  </Text>
+                </View>
+                <View style={[style.flex1, style.jcCenter]}>
+                  <View style={[style.aiCenter, style.mv20]}>
+                    <View style={[image.largeovalcontainer]}>
+                      {
+                        <Image
+                          source={{uri: this.state.issueuri}}
+                          style={[image.largeovalcontainerupload]}
+                        />
+                      }
+                      <TouchableOpacity
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                        onPress={this.handleChoosePhoto}>
+                        <Image
+                          style={[image.largeimagestyle]}
+                          source={images.camerdark}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={style.mv10}>
+                      <Text
+                        style={[
+                          text.textheader5,
+                          style.asCenter,
+                          {textAlign: 'center'},
+                        ]}>
+                        Wait for image of your video which will visible here in 3 seconds
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                
+              </View>
                 <TouchableOpacity onPress={this.tabStep2}>
                   <View
                     style={[

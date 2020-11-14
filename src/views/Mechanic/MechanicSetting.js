@@ -189,7 +189,7 @@ export default class MechanicSetting extends Component {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Help')}
+                onPress={() => this.props.navigation.navigate('MechanicHelp')}
                 style={[style.mb20]}>
                 <View style={[style.rowBtw]}>
                   <View style={[style.row, style.aiCenter]}>
@@ -212,7 +212,7 @@ export default class MechanicSetting extends Component {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Terms')}
+                onPress={() => this.props.navigation.navigate('MechanicTerms')}
                 style={[style.mb20]}>
                 <View style={[style.rowBtw]}>
                   <View style={[style.row, style.aiCenter]}>
@@ -234,28 +234,7 @@ export default class MechanicSetting extends Component {
                 <View style={style.borderBottomNav} />
               </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Privacy')}
-                style={[style.mb20]}>
-                <View style={[style.rowBtw]}>
-                  <View style={[style.row, style.aiCenter]}>
-                    <Image
-                      style={image.drawerIconmedium}
-                      source={images.legalIcon}
-                    />
-                    <Text style={[text.text18, text.purple, style.pl15]}>
-                      Privacy Policy
-                    </Text>
-                  </View>
-
-                  <Image
-                    style={image.drawerIconmedium}
-                    source={images.arrowRightPurple}
-                  />
-                </View>
-
-                <View style={style.borderBottomNav} />
-              </TouchableOpacity>
+              
 
               <TouchableOpacity onPress={this.onSignout} style={[style.mb20]}>
                 <View style={[style.rowBtw]}>

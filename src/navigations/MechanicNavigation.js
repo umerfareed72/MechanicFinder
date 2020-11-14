@@ -22,7 +22,8 @@ import AddProducts from '../views/Mechanic/AddProducts'
 import EditMechanicProfile from '../views/Mechanic/EditMechanicProfile'
 import Rates from '../views/Mechanic/Rates'
 import BookedUser from '../views/Mechanic/BookedUser'
-
+import playvideo1 from '../views/main/playvideo'
+import MechanicHelp from '../views/Mechanic/MechanicHelp'
 import {
   colors,
   screenHeight,
@@ -35,7 +36,7 @@ import EditProduct from '../views/Mechanic/EditProduct';
 import IssueList from '../views/Mechanic/IssueList';
 import Issuedetail from '../views/main/Issuedetail';
 import MIssuedetail from '../views/Mechanic/MIssueDetail';
-
+import MechanicTerms from '../views/Mechanic/MechanicTerms'
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
@@ -72,8 +73,11 @@ const SettingStack = createStackNavigator(
   {
     MechanicSetting: MechanicSetting,
     EditMechanicProfile:EditMechanicProfile,
+    MechanicHelp:MechanicHelp,
+    MechanicTerms:MechanicTerms,
     IssueList:IssueList,
-    MIssuedetail:MIssuedetail
+    MIssuedetail:MIssuedetail,
+    playvideo:playvideo1
   },
   {
     headerMode: 'none',

@@ -14,13 +14,12 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-
+Alert,
   Button,
 } from 'react-native';
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
-
+import {colors, screenHeight, screenWidth,URL, images} from '../../config/Constant';
 import LinearGradient from 'react-native-linear-gradient';
-
+const axios = require('axios');
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -35,10 +34,33 @@ export default class Login extends Component {
     this.state = {
       // params: params,
       nickname:'',
-      newpassword:''
+      newpassword:'',
+      email:''
     };
   }
+  updatepass = () => {
+    console.log('in m updatepass')
+    axios
+      .put(URL.Url + 'mforgetpass', {  
+        nickname:this.state.nickname,
+        npassword: this.state.newpassword,
+        email:this.state.email
+      })
+      .then(async (res) => { 
+        console.log(res.data);
+        Alert.alert('password updated Successfully!');
+        try {
+          this.props.navigation.navigate('Login');
+        } catch (e) {
+          console.log('error hai', e);
+        }
+      })
+      .catch((error) => {
+        Alert.alert('Wrong Email or Nickname !!');
 
+        console.log(error);
+      });
+  };
   render() {
     return (
       <SafeAreaView style={style.flex1}>
@@ -103,7 +125,7 @@ export default class Login extends Component {
                     <Image source={images.key} style={image.InputImage}></Image>
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Enter Your Password"
+                      placeholder="Enter New Password"
                       secureTextEntry={true}
                       onChangeText={(text) => {
                         this.setState({
@@ -113,7 +135,9 @@ export default class Login extends Component {
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
                   
-              <TouchableOpacity>
+              <TouchableOpacity onPress={
+                this.updatepass
+                }>
                 <View style={[button.buttoncontainer, style.mv10]}>
                   <Text
                     style={[button.touchablebutton, {color: colors.darkBlue}]}>

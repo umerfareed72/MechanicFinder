@@ -123,95 +123,72 @@ axios.get(URL.Url+'mechanics').then((res)=>{
         </View>
 
         <ScrollView style={{}}>
-          <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
-            {products.map((item, index) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => this.selectProduct(index)}>
-                  <View style={{}}>
-                    <Modal
-                      isVisible={this.state.isModalVisible}
-                      animationInTiming={500}
-                      animationOutTiming={500}>
-                      <View style={[style.flex1, appStyle.rowCenter]}>
-                        <View style={[appStyle.modalBg]}>
-                          <Text style={[]}>Are You Sure?</Text>
-                          <View style={[style.row, style.mt10]}>
-                            <TouchableOpacity
-                              style={[style.mh10]}
-                              onPress={this.toggleModal}>
-                              <View style={[button.modalButton]}>
-                                <Text style={[text.heading3, text.white]}>
-                                  No
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                              style={[style.mh10]}
-                              onPress={() => this.deleteProduct(index)}>
-                              <View style={[button.modalButton]}>
-                                <Text style={[text.heading3, text.white]}>
-                                  Yes
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </View>
-                    </Modal>
+        <TouchableOpacity
+                style={[style.pv10]}
+                onPress={() => {
+                  
+                  this.props.navigation.navigate('Electricmechanic');
+                }}>
+                <ImageBackground
+                  imageStyle={{borderRadius: 8}}
+                  style={image.homeCategoryImg}
+                  source={images.electric}>
+                  {/* <View style={style.bgOverlay}></View> */}
+                  <View style={[appStyle.categoryLayer]}>
+                    <Text style={[text.heading4Bold, text.bold]}>Electrition</Text>
                   </View>
-
-                  <View
-                    style={[
-                      appStyle.slotCard,
-                      appStyle.rowJustify,
-                      style.aiCenter,
-                    ]}>
-                    <View style={[style.row, style.aiCenter]}>
-                      <View style={style.mr15}>
-                        <Image
-                          style={image.userImg}
-                          source={{uri: item.photo}}
-                        />
-                      </View>
-
-                      <View>
-                        <Text style={[text.text18, text.bold]}>
-                          {item.title}
-                        </Text>
-
-                        <View style={[style.pt5, style.row]}>
-                          <Text style={[text.text12, text.greyVLight]}>
-                            Price :{' '}
-                          </Text>
-
-                          <Text style={[text.text12, text.darkYellow]}>
-                            {item.price} $
-                          </Text>
-                        </View>
-                        <View style={style.row}>
-                          <Text style={[text.text11]}>Quantity : </Text>
-                          <Text style={[text.text11]}>{item.quantity}</Text>
-                        </View>
-                      </View>
-                    </View>
-                    <TouchableOpacity onPress={this.toggleModal}>
-                      <Image
-                        style={[image.forward]}
-                        source={images.delete}></Image>
-                    </TouchableOpacity>
+                </ImageBackground>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[style.pv10]}
+                onPress={() => {
+                 
+                  this.props.navigation.navigate('Enginemechanic');
+                }}>
+                <ImageBackground
+                  imageStyle={{borderRadius: 8}}
+                  style={image.homeCategoryImg}
+                  source={images.engine}>
+                  {/* <View style={style.bgOverlay}></View> */}
+                  <View style={[appStyle.categoryLayer]}>
+                    <Text style={[text.heading4Bold, text.bold]}>Engine</Text>
                   </View>
-                </TouchableOpacity>
-              );
-            })}
-            {/* row start */}
-            {/* row end */}
+                </ImageBackground>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[style.pv10]}
+                onPress={() => {
+                 
+                  this.props.navigation.navigate('Paintermechanic');
+                }}>
+                <ImageBackground
+                  imageStyle={{borderRadius: 8}}
+                  style={image.homeCategoryImg}
+                  source={images.carPaint}>
+                  {/* <View style={style.bgOverlay}></View> */}
+                  <View style={[appStyle.categoryLayer]}>
+                    <Text style={[text.heading4Bold, text.bold]}>Painter</Text>
+                  </View>
+                </ImageBackground>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[style.pv10]}
+                onPress={() => {
+                 
+                  this.props.navigation.navigate('Bodymechanic');
+                }}>
+                <ImageBackground
+                  imageStyle={{borderRadius: 8}}
+                  style={image.homeCategoryImg}
+                  source={images.body}>
+                  {/* <View style={style.bgOverlay}></View> */}
+                  <View style={[appStyle.categoryLayer]}>
+                    <Text style={[text.heading4Bold, text.bold]}>Body</Text>
+                  </View>
+                </ImageBackground>
+              </TouchableOpacity>
 
-            {/* row start */}
-            {/* row end */}
-          </View>
+
         </ScrollView>
       </SafeAreaView>
     );

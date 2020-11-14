@@ -16,7 +16,7 @@ import {
   Platform,
   Button,
   Alert,
-  ToastAndroid,
+  ToastAndroid,  
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
@@ -265,7 +265,7 @@ export default class Login extends Component {
             ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
             await AsyncStorage.setItem('usersignintoken', res.data.token);
             console.log(res.data.token);
-            this.props.navigation.navigate('userStack');
+            this.props.navigation.navigate('userStack'); 
           } catch (e) {
             console.log('error hai', e);
             Alert.alert('Invalid email password');

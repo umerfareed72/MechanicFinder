@@ -14,7 +14,7 @@ import {
   Keyboard,
   Button,
   Platform,
-  Alert,
+  Alert,ToastAndroid
 } from 'react-native';
 const axios = require('axios');
 import {
@@ -41,7 +41,7 @@ import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Picker} from '@react-native-community/picker';
 import {color} from 'react-native-reanimated';
-export default class Reportedcustomers extends Component {
+export default class Electricmechanic extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,29 +55,19 @@ export default class Reportedcustomers extends Component {
       userId: '',
       userdbid: '',
       token: '',
-     
     };
   }
 
-  componentDidMount = () => {  
-      
-    this.showreports();
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
-     this.showreports();
+  componentDidMount = () => {    // this.getid()
+    // this.showIssues();
+     this.focusListener = this.props.navigation.addListener('didFocus', () => {
+     this.showIssues();
     });
     ;
   };
 
-//   getid = () => {
-//     AsyncStorage.getItem('userdata').then((res) => {
-//     const  response=JSON.parse(res)
-//      this.setState({userdbid: response._id})
-//   })
-//   };
-
  
-
-  showreports = async() => {
+  showIssues = async() => {
     // AsyncStorage.getItem('userId')
     //   .then((res) => {
     //     const id = JSON.parse(res);
@@ -100,17 +90,24 @@ export default class Reportedcustomers extends Component {
     // });
 
     
-    console.log('in showreports');
-    await axios  
-      .get(URL.Url + 'Cgetreport')
+    console.log('in showissuesC');
+    await axios
+      .get(URL.Url + 'enginemechanic')
       .then((response) => {
         if (response.data) {
           console.log(response.data);
         }
-           this.setState({dataSource: response.data});
+          this.setState({dataSource: response.data});
           console.log(this.state.dataSource);
-        if (this.state.dataSource == '')
-          Alert.alert('No Report is posted!');
+       
+      })
+      .then(()=>{
+        if (this.state.dataSource === '')
+        ToastAndroid.show(
+          'No User Registered!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
       })
       .catch((error) => {
         console.log('ye lo 1', error);
@@ -118,54 +115,68 @@ export default class Reportedcustomers extends Component {
    
   };
 
-
+  
   movetodetail = (id) => {
-    const reportdata = JSON.stringify(this.state.dataSource[id]);
-    AsyncStorage.setItem('reportdata', reportdata);
+    const issuedata = JSON.stringify(this.state.dataSource[id]);
+ //   AsyncStorage.setItem('mechanicdata', issuedata);
+ console.log('idid',this.state.dataSource[id]._id)
     setTimeout(() => {
-      this.props.navigation.navigate('Reportmechanicdetail');
+      this.props.navigation.navigate('Mechanicdetail',{mechanicid:this.state.dataSource[id]._id});
     }, 2000);
   };
- 
+  movetoedit = (id) => {
+    const issuedata = JSON.stringify(this.state.dataSource[id]);
+    AsyncStorage.setItem('mechanicddata', issuedata);
+    setTimeout(() => {
+      this.props.navigation.navigate('Mechanicdetail');
+    }, 2000);
+  };
 
-  deletereport = (id) => {
-    const reportdata = this.state.dataSource[id];
-    console.log(reportdata)
+  deleteissue = (id) => {
+    const issuedata = this.state.dataSource[id];
+    console.log(issuedata);
     axios
-      .delete(URL.Url + 'Cdeletereport/' + reportdata._id)
+      .delete(URL.Url + 'deletemechanic/' + issuedata._id)
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          Alert.alert('Report deleted successfully!')
-          this.showreports();
+          ToastAndroid.show(
+            'User Account Deleted !',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
+          this.showIssues();
         }
       })
       .catch((error) => {
         console.log('ye lo 2', error);
-        Alert.alert('something is wrong')
+        Alert.alert('something is wrong');
       });
-  }
+  };
   render() {
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
         <View style={{marginTop: 40}} />
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Complaints')}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('MechanicManagement')}>
             <Image source={images.backarrowh} style={image.backArrow2}></Image>
           </TouchableOpacity>
          
           <View>
             <Text style={[text.heading1purple, text.bold]}>
-              Roported Mechanics 
+              Engine Mechanics :
             </Text>
-            <Text style={[text.text14, {color: '#4A4A4A'}]}>Currently Added Reports</Text>
+            <Text style={[text.text14, {color: '#4A4A4A'}]}>Currently Registered</Text>
           </View>
-         <View></View>
+          <TouchableOpacity>
+           
+          </TouchableOpacity>
         </View>
-        <ScrollView style={{}}>
+        <ScrollView >
           <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
             {this.state.dataSource.map((data, index) => {
+              
               return (
                 <TouchableOpacity
                   key={index}
@@ -178,7 +189,7 @@ export default class Reportedcustomers extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri:data.userphoto}} />
+                      <Image style={image.userImg} source={{uri:data.photo}} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
@@ -188,28 +199,35 @@ export default class Reportedcustomers extends Component {
                           style={[image.image50]}></Image>
                       </View>
                       <View>
+                      
                         <View>
                           <Text style={[text.text16, text.bold]}>
-                            {data.reporttype} issue in {data.date}
+                             {data.firstname}
                           </Text>
                         </View>
                         <View style={style.row}>
+                          <Image
+                            style={[image.xsmall, image.Orange]}
+                            source={images.Company}></Image>
                           <Text style={[text.text15, {color: colors.gray}]}>
-                           
+                           {data.skilltype} Mechanic of {data.vehicletype}
                           </Text>
                         </View>
-                        <View style={[style.mv5]}>
-                       
-                             
-                            <TouchableOpacity
-                            onPress={() => {
-                              this.deletereport(index)
-                           }}
-                             >
-                              <View style={[text.text15, {color: colors.gray}]}>
-                            <Text>Delete </Text>
-                            </View>
-                            </TouchableOpacity> 
+                        <View style={style.row}>
+                          <Image
+                            style={[image.xsmall, image.Orange]}
+                            source={images.Company}></Image>
+                          <Text style={[text.text15, {color: colors.gray}]}>
+                            {data.carcompany}
+                          </Text>
+                        </View>
+                        <View style={style.row}>
+                          <Image
+                            style={image.xsmall}
+                            source={images.location}></Image>
+                          <Text style={[text.text15, {color: colors.gray}]}>
+                            {data.city}
+                          </Text>
                         </View>
                       </View>
                     </View>
@@ -218,9 +236,11 @@ export default class Reportedcustomers extends Component {
                   <TouchableOpacity
                     key={index}
                     onPress={() => {
-                      // this.changebuttoncolor(index);
+                      this.deleteissue(index);
                     }}>
-                    
+                    <Image
+                      style={[image.forward]}
+                      source={images.delete}></Image>
                   </TouchableOpacity>
                 </TouchableOpacity>
               );

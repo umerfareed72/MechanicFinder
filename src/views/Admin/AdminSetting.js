@@ -51,7 +51,7 @@ export default class AdminSetting extends Component {
   
     AsyncStorage.removeItem('atoken').then(() => {
       setTimeout(() => {
-       navigation.navigate('LoginA sAdmin') 
+       navigation.navigate('LoginAsAdmin') 
       }, 1000);
     });
    
@@ -110,7 +110,7 @@ export default class AdminSetting extends Component {
             <View style={style.asCenter}>
               <Image
                 style={[image.ovalcontainerupload, style.shadow]}
-                source={{uri: this.state.photo}}
+                source={images.username}
               />
               {/* <Text style={[text.text18,text.orange,text.semibold]}>Sam Adams</Text> */}
             </View>
@@ -202,7 +202,7 @@ export default class AdminSetting extends Component {
                       source={images.legalIcon}
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
-                      Edit Policies
+                       Policies
                     </Text>
                   </View>
 

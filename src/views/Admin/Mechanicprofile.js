@@ -24,6 +24,7 @@ import {
 } from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 const axios = require('axios');
+
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -36,7 +37,7 @@ import StarRating from 'react-native-star-rating';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 
-export default class Mdetail extends Component {
+export default class Mechanicprofile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,30 +54,32 @@ export default class Mdetail extends Component {
       suggestion: '',
      
       suggestiondata:[],
-      mechanicdata: [],
+      customerdata: [],
       firstname:'',
       issueid: '',
-      mid:''
+      userid:this.props.navigation.getParam('userid','nothing sent'),
+warning:''
     };
   }
 
   
   async componentDidMount() {
-    const {navigation} = this.props;
-    this.getData();
+   
+    this.getcustomerdata();
     this.focusListener = navigation.addListener('didFocus', () => {
-      this.getData();
+        this.getcustomerdata();
     });
   }
 
-  getmechanicdata = () => {
+  getcustomerdata = () => {
+      console.log(this.state.userid)
     axios
-      .get(URL.Url + 'mechanic/' + this.state.mid)
+      .get(URL.Url + 'mechanic/' + this.state.userid)
       .then((response) => {
         if (response.data) {
-          console.log('mechanic ye rha',response.data);
-          this.setState({mechanicdata: response.data});
-          console.log('mechanicdata',this.state.mechanicdata)
+          console.log('customer ye rha',response.data);
+          this.setState({customerdata: response.data});
+          console.log('customerdata',this.state.customerdata)
         }
         
       })
@@ -90,24 +93,7 @@ export default class Mdetail extends Component {
   };
 
 
-  getData = async () => {
-    console.log('in get data');
-    try {
-      await AsyncStorage.getItem('Mechanicidfromsuggestion').then((res) => {
-        res = JSON.parse(res);
-        this.setState({mid: res});
-       this.getmechanicdata();
-       
-      });
-      console.log('in usersignin');
-      // await AsyncStorage.getItem('usersignintoken').then((res) => {
-      //   // res = JSON.parse(res);
-      //   console.log('response firstname',res)
-        // this.setState({firstname: 'Issue Holder'});
-        
-      // });
-    } catch (error) {}
-  };
+  
   
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
@@ -126,29 +112,12 @@ export default class Mdetail extends Component {
     this.setState({ColorReview: colors.inputBordercolor});
     this.setState({ColorGallery: colors.inputBordercolor});
   };
-  tabReview = () => {
-    if (this.state.TabDataReview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataOverview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({color: 'none'});
-      this.setState({ColorOverview: colors.inputBordercolor}),
-        this.setState({ColorReview: colors.darkBlue}),
-        this.setState({ColorGallery: colors.inputBordercolor});
-    } else
-      this.setState({TabDataReview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({TabDataOverview: 'none'});
-    this.setState({ColorOverview: colors.inputBordercolor});
-    this.setState({ColorReview: colors.darkBlue});
-    this.setState({ColorGallery: colors.inputBordercolor});
-  };
+  
   render() {
-    const {mechanicdata} = this.state;
+    const {customerdata} = this.state;
 console.log(this.state.firstname)
     console.log(this.state.issueid);
-
+console.log('ye ai id profile pa',this.state.userid)
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
@@ -185,7 +154,7 @@ Mechanic Detail{' '}
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.paraWhite, text.regular]}>
-                  You can view detail of mechanic who commented on your post 
+                 
                 </Text>
               </View>
             </View>
@@ -221,7 +190,7 @@ Mechanic Detail{' '}
               </Text>
             </TouchableOpacity> */}
 
-            
+           
           </View>
           <ScrollView style={style.mv5}>
             {/* OverView Tab */}
@@ -234,13 +203,13 @@ Mechanic Detail{' '}
                 {/* <Image
                   style={[image.medium, style.mr5]}
                   source={images.location}></Image> */}
-                <Text style={[text.heading2, text.bold]}>Mechanic id (Copy this id if you want to report this Mechanic)</Text>
+                <Text style={[text.heading2, text.bold]}>Mechanic Name</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
                 <Text style={[text.heading2Gray]} selectable>
                   {' '}
 
-                 {this.state.mid}
+                 {this.state.customerdata.firstname}
                 </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
@@ -252,38 +221,39 @@ Mechanic Detail{' '}
               <View style={[style.borderbottom, style.mt10]}>
                 <Text style={[text.heading2Gray]}>
                   {' '}
-                  {mechanicdata.phone}
+                  {customerdata.phone}
                 </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, style.mr5, image.Orange]}
                   source={images.Company}></Image>
-                <Text style={[text.heading2, text.bold]}>Mechanic Type</Text>
+                <Text style={[text.heading2, text.bold]}>Email</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}> {mechanicdata.vehicletype}</Text>
+                <Text style={[text.heading2Gray]}> {customerdata.email}</Text>
               </View>
 
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, image.Orange, style.mr5]}
                   source={images.carservice}></Image>
-                <Text style={[text.heading2, text.bold]}>Specialist in </Text>
+                <Text style={[text.heading2, text.bold]}>City </Text>
               </View>
               <View style={[style.borderbottom, style.mv10]}>
-                <Text style={[text.heading2Gray]}> {mechanicdata.skilltype}</Text>
+                <Text style={[text.heading2Gray]}> {customerdata.city}</Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, image.Orange, style.mr5]}
                   source={images.location}></Image>
-                <Text style={[text.heading2, text.bold]}>Mechanic City</Text>
+                <Text style={[text.heading2, text.bold]}>Country</Text>
               </View>
               <View style={[style.borderbottom, style.mv10]}>
-                <Text style={[text.heading2Gray]}> {mechanicdata.city}</Text>
+                <Text style={[text.heading2Gray]}> {customerdata.country}</Text>
               </View>
               {/* <TouchableOpacity > */}
+             
               <View
               style={[
                 style.mb50,
@@ -293,25 +263,12 @@ Mechanic Detail{' '}
                   backgroundColor: colors.white,
                   
                 },
-              ]}>
+              ],{marginTop:20}}>
              
           
             {/* </TouchableOpacity> */}
-            <View style={[appStyle.rowCenter]}>
-                <View><TouchableOpacity onPress={
-                  ()=>
-                {this.props.navigation.navigate("reportmechanic",
-                {mdbid:this.state.mid})}}>
-                  <Text
-                    style={
-                      ({color: colors.Black323}, [text.text22, text.bold])
-                    }>
-                    Report This Mechanic
-                  </Text>
-                  <Text style={([text.text14], {color: colors.gray})}>
-                    (This will take 1 hour to proceed)
-                  </Text></TouchableOpacity>
-                </View>
+            <View style={[appStyle.rowCenter] }>
+               
                 <View style={[{display: this.state.tabOverview}, style.flex1]}>
                   {/* <TouchableOpacity onPress={this.buyItems}>
                     <View
@@ -334,7 +291,52 @@ Mechanic Detail{' '}
               </View>
             </View>
             
+            {
+            this.state.suggestiondata.map((data, index) => 
+            {
+              console.log('YE LO',data.firstname)
+              return (
+                <TouchableOpacity
+                  key={index}
+                  // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
+
+                  style={[
+                    appStyle.slotCard,
+                    appStyle.rowJustify,
+                    style.aiCenter,
+                    {display: this.state.TabDataReview},
+                  ]}>
+                  <View style={[style.row, style.aiCenter]}>
+                    <View style={style.mr10}>
+                      <Image style={image.userImg} source={images.dummy1} />
+                    </View>
+
+                    <View style={[style.rowBtw, style.aiCenter]}>
+                      <View style={[style.mr15]}>
+                        <Image
+                          source={images.imagep}
+                          style={[image.image50]}></Image>
+                      </View>
+                      <View>
+                        <View>
+                          <Text style={[text.text16, text.bold]}>
+                            {data.firstname}
+                          </Text>
+                        </View>
+                        <View style={style.row}>
+                          <Text style={[text.text15, {color: colors.gray}]}>
+                            {data.suggestion}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
             
+
+          
 
             {/* Reviews Tab End  */}
           </ScrollView>

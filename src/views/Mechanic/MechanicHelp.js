@@ -34,7 +34,7 @@ import {Calendar} from 'react-native-calendars';
 import QRCode from 'react-native-qrcode-svg';
 import AsyncStorage from '@react-native-community/async-storage';
 
-export default class Help extends Component {
+export default class MechanicHelp extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
@@ -55,7 +55,7 @@ export default class Help extends Component {
   };
 
   getdata = () => {
-    AsyncStorage.getItem('userdata').then((res) => {
+    AsyncStorage.getItem('Mechanicdata').then((res) => {
       
       this.setState({userdata: JSON.parse(res)});
       this.setState({userid:this.state.userdata._id})
@@ -70,7 +70,7 @@ export default class Help extends Component {
 
   submithelp = () => {
     axios
-      .post(URL.Url + 'uhelp', {
+      .post(URL.Url + 'mhelp', {  
         question: this.state.question,
         message: this.state.message,
         userid:this.state.userid,
@@ -81,7 +81,7 @@ export default class Help extends Component {
         console.log(res.data);
         try {
           ToastAndroid.show('Question sent successfully!', ToastAndroid.BOTTOM);
-          this.props.navigation.navigate('Dashboard');
+          this.props.navigation.navigate('MechanicDashboard');
         } catch (e) {
           console.log('error hai', e);
         }
@@ -168,7 +168,7 @@ export default class Help extends Component {
                 <View style={[button.buttoncontainer, style.mv30]}>
                   <Text
                     style={[button.touchablebutton, {color: colors.darkBlue}]}>
-                   Submit
+                   Submit mechanics
                   </Text>
                 </View>
               </TouchableOpacity>

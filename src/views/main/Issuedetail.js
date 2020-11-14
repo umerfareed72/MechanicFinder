@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  Alert
+  Alert,ToastAndroid
 } from 'react-native';
 import {
   colors,
@@ -56,7 +56,9 @@ export default class HomeDetail extends Component {
       firstname:'',
       issueid: '',
       mid:'',
-      placeholder:'Enter text here'
+      placeholder:'Enter text here',
+     
+      userdata:''
     };
   }
 
@@ -67,15 +69,20 @@ export default class HomeDetail extends Component {
         res = JSON.parse(res);
         this.setState({issuedata: res});
         this.setState({issueid: res._id});
+        console.log('issuedata',this.state.issuedata)
+       // this.setState({videourl: res._id});
        
       });
-      console.log('in usersignin');
-      // await AsyncStorage.getItem('usersignintoken').then((res) => {
-      //   // res = JSON.parse(res);
-      //   console.log('response firstname',res)
+
+      await AsyncStorage.getItem('userdata').then((res) => {
+       this.setState({userdata: JSON.parse(res)});
+       console.log('photoou',this.state.userdata.photo)
+        
+      })
+     
         this.setState({firstname: 'Issue Holder'});
         
-      // });
+     
     } catch (error) {}
   };
   async componentDidMount() {
@@ -97,8 +104,14 @@ export default class HomeDetail extends Component {
           this.setState({suggestiondata: response.data});
           console.log(this.state.suggestiondata);
         }
+        if (this.state.suggestiondata == '') ToastAndroid.show(
+          'No Suggestion available',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         
       })
+
       .catch((error) => {
         console.log(error);
       });
@@ -124,13 +137,16 @@ export default class HomeDetail extends Component {
         suggestion: this.state.suggestion,
         issueid: this.state.issueid,
         firstname:this.state.firstname,
+          mphoto:this.state.userdata.photo
       })
       .then((res) => {
         console.log(res.data);
-        Alert.alert('Your Suggestion is posted successfully Thanks for your response <3 ');
+        ToastAndroid.show(
+          'Your Suggestion is posted successfully Thanks for your response <3',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         this.getsuggestions();
-        this.setState
-        ({suggestion:''});
       })
       .catch((error) => {
         Alert.alert('something went Wrong!!');
@@ -196,7 +212,7 @@ console.log(this.state.firstname)
             </TouchableOpacity>
             <View style={[appStyle.headInner, style.ph20]}>
               <View style={[style.mv5]}>
-                <StarRating
+                {/* <StarRating
                   disabled={true}
                   maxStars={5}
                   rating={this.state.starCount}
@@ -205,7 +221,7 @@ console.log(this.state.firstname)
                   emptyStarColor={'#fff'}
                   starSize={20}
                   containerStyle={{width: 110, marginTop: 3}}
-                />
+                /> */}
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.heading1, text.bold]}>
@@ -222,7 +238,7 @@ console.log(this.state.firstname)
           </ImageBackground>
         </View>
         <View style={[appStyle.bodyBg, style.flex1]}>
-          <View
+        <View
             style={[
               appStyle.rowBtw,
               style.aiCenter,
@@ -232,7 +248,8 @@ console.log(this.state.firstname)
                 {backgroundColor: colors.lightgray,
                        borderBottomLeftRadius: 10,
                   borderBottomRightRadius: 10,},
-            ]}>
+            ]}
+         >
             <TouchableOpacity onPress={() => this.tabOverview()}>
               <Text
                 style={[
@@ -243,17 +260,7 @@ console.log(this.state.firstname)
                 Overview
               </Text>
             </TouchableOpacity>
-            {/* 
-            <TouchableOpacity onPress={() => this.tabGallery()}>
-              <Text
-                style={[
-                  text.tab1,
-                  text.semibold,
-                  {color: this.state.ColorGallery},
-                ]}>
-                Gallery
-              </Text>
-            </TouchableOpacity> */}
+            
 
             <TouchableOpacity onPress={() => this.tabReview()}>
               <Text
@@ -350,14 +357,31 @@ console.log(this.state.firstname)
                         button.buttoncontainer,
                         {backgroundColor: colors.purple},
                       ]}>
-                      <Text
-                        style={[
+                        <TouchableOpacity onPress={()=>{
+                          if(this.state.issuedata.issuevideo=='')
+                          {
+                            ToastAndroid.show(
+                              'Sorry Video not available',
+                              ToastAndroid.BOTTOM,
+                              ToastAndroid.LONG,
+                            );
+                            
+                          }
+                          else
+                          {this.props.navigation.navigate('playvideo',{videourl:this.state.issuedata.issuevideo})
+                        }
+                      }
+                    }><Text
+                      
+                       
+                       style={[
                           {color: colors.white},
                           button.touchablebutton,
                           text.semibold,
                         ]}>
                         Play Video
-                      </Text>
+                      </Text></TouchableOpacity>
+                      
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -380,23 +404,23 @@ console.log(this.state.firstname)
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={images.dummy1} />
+                      <Image style={image.userImg} source={{uri:data.mphoto}} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
-                      <View style={[style.mr15]}>
+                      {/* <View style={[style.mr15]}>
                         <Image
                           source={images.imagep}
                           style={[image.image50]}></Image>
-                      </View>
+                      </View> */}
                       <View>
                         <View>
-                          <Text style={[text.text16, text.bold]}>
+                          <Text style={[text.text16, text.bold,colors.gray]}>
                             {data.firstname}
                           </Text>
                         </View>
                         <View style={style.row}>
-                          <Text style={[text.text15, {color: colors.gray}]}>
+                          <Text style={[text.text15, {color: colors.black,}] } >
                             {data.suggestion}
                           </Text>
                         </View>
@@ -423,6 +447,7 @@ console.log(this.state.firstname)
                     suggestion: text,
                   });
                 }}
+                
                 underlineColorAndroid="transparent"></TextInput>
 
               <TouchableOpacity onPress={this.submitsuggestion}>
