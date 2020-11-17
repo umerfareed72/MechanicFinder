@@ -53,10 +53,10 @@ router.post('/registeradmin', async (req, res) => {
 });
 
 router.post('/sendwarning', async (req, res) => {
-  console.log('in suggestion');
   const Mwarning1 = new Mwarning({
     warning: req.body.warning,
     mdbid: req.body.mdbid,
+    date:Date.now()
   });
   await Mwarning1.save().then(() => {
     res.send(Mwarning1).catch((err) => {
@@ -70,9 +70,6 @@ router.get('/getMwarning/:mdbid', (req, res) => {
     mdbid: req.params.mdbid,
   })
     .sort('id')
-    .select({
-      warning: 1,
-    })
     .then((warning) => {
       if (!warning) return res.send('');
       else res.json(warning);
@@ -299,6 +296,15 @@ router.route('/engineissuecount').get(function (req, res) {
     }
   });
 });
+router.route('/painterissuecount').get(function (req, res) {
+  VehicalIssuemodel.count({issuetype: 'Painter'}, function (err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
 
 router.get('/vehicalissues/:issuetype/:vehicaltype/:carcompany', (req, res) => {
   // var vehicaltype;
@@ -480,10 +486,10 @@ router.post('/mechanicsignin', async (req, res) => {
         country: mechanic.country,
         phone: mechanic.phone,
         photo: mechanic.photo,
-        address:mechanic.address,
-        date:mechanic.date,
-        mechanicrate:mechanic.mechanicrate,
-        rating:mechanic.rating
+        address: mechanic.address,
+        date: mechanic.date,
+        mechanicrate: mechanic.mechanicrate,
+        rating: mechanic.rating,
       },
       jwtkey,
     );
@@ -658,6 +664,19 @@ router.get('/bodymechanic', (req, res) => {
     });
 });
 
+router.get('/topmechanics', (req, res) => {
+  Mechanicmodel.find({rating:{$gte:3}})
+    .sort('id')
+    .then((mechanic) => {
+      if (!mechanic) {
+        return res.status(404).send('Mechanic Not Found');
+      }
+      return res.status(200).json(mechanic);
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
 
 
 router.get('/enginemechanic', (req, res) => {
@@ -998,10 +1017,10 @@ router.put('/updatemechanic/:id', (req, res) => {
     photo: req.body.photo,
     city: req.body.city,
     country: req.body.country,
-  vehicaltype:req.body.vehicaltype,
-  skilltype:req.body.skilltype,
-  carcompany:req.body.carcompany,
-  mechanicrate:req.body.mechanicrate
+    vehicaltype: req.body.vehicaltype,
+    skilltype: req.body.skilltype,
+    carcompany: req.body.carcompany,
+    mechanicrate: req.body.mechanicrate,
   })
     .then((data) => {
       console.log(data);
@@ -1014,4 +1033,13 @@ router.put('/updatemechanic/:id', (req, res) => {
     });
 });
 
+router.route('/mechaniccount').get(function (req, res) {
+  Mechanicmodel.count(function (err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
 module.exports = router;

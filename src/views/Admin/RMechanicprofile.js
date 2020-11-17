@@ -13,8 +13,11 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  Alert
+  Alert,
+  ToastAndroid,
 } from 'react-native';
+import Modal from 'react-native-modal';
+import moment from "moment"
 import {
   colors,
   screenHeight,
@@ -36,6 +39,7 @@ import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import Textarea from 'react-native-textarea';
 
 export default class RMechanicprofile extends Component {
   constructor(props) {
@@ -44,43 +48,57 @@ export default class RMechanicprofile extends Component {
       rating: 2,
       starCount: 5,
       TabDataOverview: 'flex',
-      TabDataGallery: 'none',
       TabDataReview: 'none',
-      ColorOverview: colors.darkBlue,
-      ColorGallery: colors.inputBordercolor,
-      ColorReview: colors.inputBordercolor,
+      ColorOverview: colors.white,
+      ColorReview: colors.gray,
       BookNowView: 'none',
       CheckBox: images.checkBoxEmpty,
       suggestion: '',
-     
-      suggestiondata:[],
+      suggestiondata: [],
       mechanicdata: [],
-      firstname:'',
+      warnings:[],
+      firstname: '',
       issueid: '',
-      mdbid:this.props.navigation.getParam('mid','nothing sent'),
-warning:''
+      mdbid: this.props.navigation.getParam('mid', 'nothing sent'),
+      warning: '',
+      isModalVisible: false,
     };
   }
 
-  
+  toggleModal = () => {
+    this.setState({isModalVisible: !this.state.isModalVisible});
+  };
+
   async componentDidMount() {
-   
+  
     this.getmechanicdata();
     this.focusListener = navigation.addListener('didFocus', () => {
-        this.getmechanicdata();
+      this.getmechanicdata();
     });
   }
+
+  getwarning = () => {
+    axios
+      .get(URL.Url + 'getMwarning/' + this.state.mechanicdata._id)
+      .then((response) => {
+        this.setState({warnings: response.data});
+    
+        })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   getmechanicdata = () => {
     axios
       .get(URL.Url + 'mechanic/' + this.state.mdbid)
       .then((response) => {
         if (response.data) {
-          console.log('mechanic ye rha',response.data);
           this.setState({mechanicdata: response.data});
-          console.log('mechanicdata',this.state.mechanicdata)
+          console.log('mechanicdata', this.state.mechanicdata);
         }
-        
+      }) .then(() => {
+        this.getwarning();
       })
       .catch((error) => {
         console.log(error);
@@ -92,84 +110,149 @@ warning:''
   };
 
   deletemechanic = () => {
-    
     axios
       .delete(URL.Url + 'deletemechanic/' + this.state.mdbid)
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          Alert.alert('Account deleted successfully!')
-          this.props.navigation.navigate('Reportedmechanics')
+          ToastAndroid.show(
+            'Mechanic Account Deleted Successfully',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
+          this.props.navigation.navigate('Reportedmechanics');
         }
       })
       .catch((error) => {
         console.log('ye lo 2', error);
-        Alert.alert('something is wrong')
+        Alert.alert('something is wrong');
       });
-  }
-
-sendwarning = () => {
-    axios.post(URL.Url + "sendwarning",{
-        warning:this.state.warning,
-        mdbid:this.state.mdbid,
-    })
-    .then(async (res) => {
+  };
+  sendwarning = () => {
+    axios
+      .post(URL.Url + 'sendwarning', {
+        warning: this.state.warning,
+        mdbid: this.state.mdbid,
+      })
+      .then(async (res) => {
         console.log(res.data);
         //console.log(this.state.mdbid);
-        Alert.alert('Posted warning Successfully  !');
-       
+        ToastAndroid.show(
+          'Send Warning Successfully',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+        this.toggleModal();
       })
       .catch((error) => {
-        Alert.alert('Warning not posted try again!!');
+        ToastAndroid.show(
+          'Warning not posted try again!!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
 
         console.log(error);
       });
-}
-  
-  
+  };
+
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
         this.setState({TabDataReview: 'none'}),
         this.setState({BookNowView: 'none'}),
-        this.setState({ColorOverview: colors.darkBlue}),
-        this.setState({ColorReview: colors.inputBordercolor}),
-        this.setState({ColorGallery: colors.inputBordercolor});
-    } else
+        this.setState({ColorOverview: colors.white}),
+        this.setState({ColorReview: colors.gray})  } else
       this.setState({TabDataOverview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
         this.setState({TabDataReview: 'none'});
     this.setState({BookNowView: 'none'});
-    this.setState({ColorOverview: colors.darkBlue});
-    this.setState({ColorReview: colors.inputBordercolor});
-    this.setState({ColorGallery: colors.inputBordercolor});
-  };
+    this.setState({ColorOverview: colors.white});
+    this.setState({ColorReview: colors.gray});
+   };
   tabReview = () => {
     if (this.state.TabDataReview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
         this.setState({TabDataOverview: 'none'}),
         this.setState({BookNowView: 'none'}),
         this.setState({color: 'none'});
-      this.setState({ColorOverview: colors.inputBordercolor}),
-        this.setState({ColorReview: colors.darkBlue}),
-        this.setState({ColorGallery: colors.inputBordercolor});
+      this.setState({ColorOverview: colors.gray}),
+        this.setState({ColorReview: colors.white}) 
     } else
       this.setState({TabDataReview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
         this.setState({BookNowView: 'none'}),
         this.setState({TabDataOverview: 'none'});
-    this.setState({ColorOverview: colors.inputBordercolor});
-    this.setState({ColorReview: colors.darkBlue});
-    this.setState({ColorGallery: colors.inputBordercolor});
-  };
+    this.setState({ColorOverview: colors.gray});
+    this.setState({ColorReview: colors.white});
+    };
   render() {
-    const {mechanicdata} = this.state;
-console.log(this.state.firstname)
+    const {mechanicdata,warnings} = this.state;
+    console.log(this.state.firstname);
     console.log(this.state.issueid);
-console.log('ye ai id profile pa',this.state.mdbid)
+    console.log('ye ai id profile pa', this.state.mdbid);
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
+
+        <View style={{}}>
+          <Modal
+            isVisible={this.state.isModalVisible}
+            animationInTiming={500}
+            animationOutTiming={500}>
+            <View style={[style.h100, appStyle.rowEven]}>
+              <View
+                style={[
+                  appStyle.DashboardslotCard,
+                  {height: screenHeight.height60},
+                  style.w100,
+                ]}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  <View style={style.aiFlexEnd}>
+                    <TouchableOpacity onPress={this.toggleModal}>
+                      <Image
+                        style={[image.large, image.Orange]}
+                        source={images.cancel}></Image>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={[style.aiCenter, style.mb10]}>
+                    <Text style={[text.h1]}>Manage Mechanic</Text>
+                  </View>
+                  <View style={[style.mb5]}>
+                    <Text style={[text.heading3]}>Add Description</Text>
+                  </View>
+
+                  <View style={[style.aiCenter]}>
+                    <View style={[appStyle.textareaBorder]}>
+                      <Textarea
+                        onChangeText={(text) => {
+                          this.setState({warning: text});
+                        }}
+                        placeholder={
+                          'Please tell me something about your booked Mechanic'
+                        }
+                        placeholderTextColor={'#c7c7c7'}
+                        underlineColorAndroid={'transparent'}
+                      />
+                    </View>
+                  </View>
+                  <View style={[style.rowBtw, style.mt40]}>
+                    <TouchableOpacity
+                      onPress={this.sendwarning}
+                      style={[button.Profilebutton, {marginTop: 20}]}>
+                      <Text style={[button.bookbutton, text.center]}>
+                        Send Warning
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={this.deletemechanic}
+                      style={[button.Profilebutton, {marginTop: 20}]}>
+                      <Text style={[button.bookbutton, text.center]}>
+                        Delete
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </ScrollView>
+              </View>
+            </View>
+          </Modal>
+        </View>
+
         <View style={{}}>
           <ImageBackground
             source={images.carPaint}
@@ -196,51 +279,53 @@ console.log('ye ai id profile pa',this.state.mdbid)
                 />
               </View>
               <View style={[style.mv5]}>
-                <Text style={[text.heading1, text.bold]}>
-Mechanic Detail{' '}
-                 
-                </Text>
+                <Text style={[text.heading1, text.bold]}>Mechanic Detail </Text>
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.paraWhite, text.regular]}>
-                  You can delete mechanic account or generate warning message for mechanic(According to issue)
+                  You can delete mechanic account or generate warning message
+                  for mechanic(According to issue)
                 </Text>
               </View>
             </View>
           </ImageBackground>
         </View>
         <View style={[appStyle.bodyBg, style.flex1]}>
-          <View
-            style={[
-              appStyle.rowBtw,
-              appStyle.bodyLayout,
-              appStyle.bodyShadowTop,
-              {backgroundColor: '#fff'},
-            ]}>
-            <TouchableOpacity onPress={() => this.tabOverview()}>
-              <Text
-                style={[
-                  text.tab1,
-                  text.semibold,
-                  {color: this.state.ColorOverview},
-                ]}>
-                Overview
-              </Text>
-            </TouchableOpacity>
-            {/* 
-            <TouchableOpacity onPress={() => this.tabGallery()}>
-              <Text
-                style={[
-                  text.tab1,
-                  text.semibold,
-                  {color: this.state.ColorGallery},
-                ]}>
-                Gallery
-              </Text>
-            </TouchableOpacity> */}
-
-           
-          </View>
+            <View
+              style={[
+                appStyle.rowBtw,
+                style.aiCenter,
+                appStyle.bodyLayout,
+                appStyle.bodyShadowTop,
+                style.mh40,
+                {
+                  backgroundColor: colors.lightblue,
+                  borderBottomLeftRadius: 10,
+                  borderBottomRightRadius: 10,
+                },
+              ]}>
+              <TouchableOpacity onPress={() => this.tabOverview()}>
+                <Text
+                  style={[
+                    text.heading2,
+                    text.semibold,
+                    {color: this.state.ColorOverview},
+                  ]}>
+                  Overview
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.tabReview()}>
+                <Text
+                  style={[
+                    text.heading2,
+                    text.semibold,
+                    {color: this.state.ColorReview},
+                  ]}>
+                 Warnings
+                </Text>
+              </TouchableOpacity>
+            </View>
+         
           <ScrollView style={style.mv5}>
             {/* OverView Tab */}
             <View
@@ -257,8 +342,7 @@ Mechanic Detail{' '}
               <View style={[style.borderbottom, style.mt10]}>
                 <Text style={[text.heading2Gray]} selectable>
                   {' '}
-
-                 {this.state.mechanicdata.firstname}
+                  {this.state.mechanicdata.firstname}
                 </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
@@ -268,10 +352,7 @@ Mechanic Detail{' '}
                 <Text style={[text.heading2, text.bold]}>Contact Number</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}>
-                  {' '}
-                  {mechanicdata.phone}
-                </Text>
+                <Text style={[text.heading2Gray]}> {mechanicdata.phone}</Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
@@ -280,7 +361,10 @@ Mechanic Detail{' '}
                 <Text style={[text.heading2, text.bold]}>Mechanic Type</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}> {mechanicdata.vehicletype}</Text>
+                <Text style={[text.heading2Gray]}>
+                  {' '}
+                  {mechanicdata.vehicletype}
+                </Text>
               </View>
 
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
@@ -290,7 +374,10 @@ Mechanic Detail{' '}
                 <Text style={[text.heading2, text.bold]}>Specialist in </Text>
               </View>
               <View style={[style.borderbottom, style.mv10]}>
-                <Text style={[text.heading2Gray]}> {mechanicdata.skilltype}</Text>
+                <Text style={[text.heading2Gray]}>
+                  {' '}
+                  {mechanicdata.skilltype}
+                </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
@@ -301,116 +388,46 @@ Mechanic Detail{' '}
               <View style={[style.borderbottom, style.mv10]}>
                 <Text style={[text.heading2Gray]}> {mechanicdata.city}</Text>
               </View>
-              {/* <TouchableOpacity > */}
-              <View
-              style={[
-                style.mb50,
-                appStyle.bodyLayout,
-                appStyle.bodyShadowBottom,
-                {
-                  backgroundColor: colors.white,
-                  
-                },
-              ],{marginTop:20}}>
-             
-          
-            {/* </TouchableOpacity> */}
-            <View style={[appStyle.rowCenter] }>
-                <View>
-                    
-                  <TextInput
-                    style={
-                      ({color: colors.Black323}, [text.text18, text.bold])
-                    }
-                    underlineColorAndroid="transparent"
-                        placeholder="Type warning here"
-                        onChangeText={(text) => {
-                            this.setState({
-                              warning: text,
-                            });}}
-                   
-                  />
-                  <TouchableOpacity onPress={this.sendwarning}>
-                  <Text style={[text.heading2, text.bold]}>Send Warning </Text>
-                  </TouchableOpacity>
-                 
-                </View>
-                <View style={[{display: this.state.tabOverview}, style.flex1]}>
-                  {/* <TouchableOpacity onPress={this.buyItems}>
-                    <View
-                      style={[
-                        button.buttoncontainer,
-                        {backgroundColor: colors.purple},
-                      ]}>
-                      <Text
-                        style={[
-                          {color: colors.white},
-                          button.touchablebutton,
-                          text.semibold,
-                        ]}>
-                        Play Video
-                      </Text>
-                    </View>
-                  </TouchableOpacity> */}
-                </View>
-              </View>
-              </View>
-              <View
-              style={[
-                style.mb50,
-                appStyle.bodyLayout,
-                appStyle.bodyShadowBottom,
-                {
-                  backgroundColor: colors.white,
-                  
-                },
-              ],{marginTop:20}}>
-             
-          
-            {/* </TouchableOpacity> */}
-            <View style={[appStyle.rowCenter] }>
-                <View>
-                
-                  <TouchableOpacity onPress={this.deletemechanic} >
-                 <Text style={
-                      ({color: colors.Black323}, [text.text18, text.bold])
-                    }>
-                        Delete Mechanic Account
-                    </Text>
-                  </TouchableOpacity>
-                 
-                </View>
-                <View style={[{display: this.state.tabOverview}, style.flex1]}>
-                  {/* <TouchableOpacity onPress={this.buyItems}>
-                    <View
-                      style={[
-                        button.buttoncontainer,
-                        {backgroundColor: colors.purple},
-                      ]}>
-                      <Text
-                        style={[
-                          {color: colors.white},
-                          button.touchablebutton,
-                          text.semibold,
-                        ]}>
-                        Play Video
-                      </Text>
-                    </View>
-                  </TouchableOpacity> */}
-                </View>
-              </View>
-              </View>
+              <TouchableOpacity
+                style={[button.buttonTheme]}
+                onPress={this.toggleModal}>
+                <Text style={[text.btntext]}>Manage Mechanic</Text>
+              </TouchableOpacity>
             </View>
-            
-
-            
-
-          
 
             {/* Reviews Tab End  */}
+            <View style={[{display:this.state.TabDataReview},style.mh10]}>
+            {warnings.map((warn) => {
+              return (
+                <TouchableOpacity style={[appStyle.slotCard,style.w100,style.row]}>
+                  <View style={[style.w10, style.aiCenter]}>
+                    <Image
+                      style={[image.Image30, style.mh10]}
+                      source={{uri: mechanicdata.photo}}
+                    />
+                  
+                  </View>
+                  <View style={[style.mh10]}>
+                  <Text style={[text.text16, text.bold]}>
+                      {mechanicdata.firstname} {mechanicdata.lastname}
+                    </Text>
+             <View style={[style.row]}>
+              <Text style={[text.paraGray,text.text10]} >Last Updated
+              </Text>
+              <Text style={[style.mh5,text.text10]}>{moment(warn.date).format('DD-MM-YYYY')}</Text>
+              </View>
+                    <Text style={[text.heading3, style.mv5]}>
+                      {warn.warning}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          
+            </View>
           </ScrollView>
         </View>
       </SafeAreaView>
     );
   }
-}  
+}

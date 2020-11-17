@@ -14,10 +14,10 @@ import {
   Keyboard,
   Button,
   Platform,
-  AsyncStorage,
+
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';

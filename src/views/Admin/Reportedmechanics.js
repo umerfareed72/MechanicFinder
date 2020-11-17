@@ -55,29 +55,24 @@ export default class Reportedmechanics extends Component {
       userId: '',
       userdbid: '',
       token: '',
-     
     };
   }
 
-  componentDidMount = () => {  
-      
+  componentDidMount = () => {
     this.showreports();
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
-     this.showreports();
+      this.showreports();
     });
-    ;
   };
 
-//   getid = () => {
-//     AsyncStorage.getItem('userdata').then((res) => {
-//     const  response=JSON.parse(res)
-//      this.setState({userdbid: response._id})
-//   })
-//   };
+  //   getid = () => {
+  //     AsyncStorage.getItem('userdata').then((res) => {
+  //     const  response=JSON.parse(res)
+  //      this.setState({userdbid: response._id})
+  //   })
+  //   };
 
- 
-
-  showreports = async() => {
+  showreports = async () => {
     // AsyncStorage.getItem('userId')
     //   .then((res) => {
     //     const id = JSON.parse(res);
@@ -99,25 +94,21 @@ export default class Reportedmechanics extends Component {
     //     });
     // });
 
-    
     console.log('in showreports');
-    await axios  
+    await axios
       .get(URL.Url + 'Cgetreport')
       .then((response) => {
         if (response.data) {
           console.log(response.data);
         }
-           this.setState({dataSource: response.data});
-          console.log(this.state.dataSource);
-        if (this.state.dataSource == '')
-          Alert.alert('No Report is posted!');
+        this.setState({dataSource: response.data});
+        console.log(this.state.dataSource);
+        if (this.state.dataSource == '') Alert.alert('No Report is posted!');
       })
       .catch((error) => {
         console.log('ye lo 1', error);
       });
-   
   };
-
 
   movetodetail = (id) => {
     const reportdata = JSON.stringify(this.state.dataSource[id]);
@@ -126,42 +117,44 @@ export default class Reportedmechanics extends Component {
       this.props.navigation.navigate('Reportmechanicdetail');
     }, 2000);
   };
- 
 
   deletereport = (id) => {
     const reportdata = this.state.dataSource[id];
-    console.log(reportdata)
+    console.log(reportdata);
     axios
       .delete(URL.Url + 'Cdeletereport/' + reportdata._id)
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          Alert.alert('Report deleted successfully!')
+          Alert.alert('Report deleted successfully!');
           this.showreports();
         }
       })
       .catch((error) => {
         console.log('ye lo 2', error);
-        Alert.alert('something is wrong')
+        Alert.alert('something is wrong');
       });
-  }
+  };
   render() {
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
         <View style={{marginTop: 40}} />
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Complaints')}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Complaints')}>
             <Image source={images.backarrowh} style={image.backArrow2}></Image>
           </TouchableOpacity>
-         
+
           <View>
             <Text style={[text.heading1purple, text.bold]}>
-              Roported Mechanics 
+              Roported Mechanics
             </Text>
-            <Text style={[text.text14, {color: '#4A4A4A'}]}>Currently Added Reports</Text>
+            <Text style={[text.text14, {color: '#4A4A4A'}]}>
+              Currently Added Reports
+            </Text>
           </View>
-         <View></View>
+          <View></View>
         </View>
         <ScrollView style={{}}>
           <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
@@ -178,49 +171,29 @@ export default class Reportedmechanics extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri:data.userphoto}} />
+                      <Image
+                        style={image.userImg}
+                        source={{uri: data.userphoto}}
+                      />
                     </View>
-
-                    <View style={[style.rowBtw, style.aiCenter]}>
-                      <View style={[style.mr15]}>
-                        <Image
-                          source={images.imagep}
-                          style={[image.image50]}></Image>
-                      </View>
-                      <View>
-                        <View>
-                          <Text style={[text.text16, text.bold]}>
-                            {data.reporttype} issue in {data.date}
-                          </Text>
-                        </View>
-                        <View style={style.row}>
-                          <Text style={[text.text15, {color: colors.gray}]}>
-                           
-                          </Text>
-                        </View>
-                        <View style={[style.mv5]}>
-                       
-                             
-                            <TouchableOpacity
-                            onPress={() => {
-                              this.deletereport(index)
-                           }}
-                             >
-                              <View style={[text.text15, {color: colors.gray}]}>
-                            <Text>Delete </Text>
-                            </View>
-                            </TouchableOpacity> 
-                        </View>
-                      </View>
+                    <View>
+                      <Text style={[text.text16, text.bold]}>
+                        {data.reporttype}
+                      </Text>
+                      <Text style={[text.text15, {color: colors.gray}]}>
+                        {data.date} 
+                      </Text>
                     </View>
                   </View>
 
                   <TouchableOpacity
                     key={index}
                     onPress={() => {
-                      // this.changebuttoncolor(index);
+                      this.deleteissue(index);
                     }}>
-                    
+                    <Image
+                      style={[image.forward]}
+                      source={images.delete}></Image>
                   </TouchableOpacity>
                 </TouchableOpacity>
               );

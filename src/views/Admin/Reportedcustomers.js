@@ -168,62 +168,43 @@ export default class Reportedcustomers extends Component {
             {this.state.dataSource.map((data, index) => {
               return (
                 <TouchableOpacity
-                  key={index}
-                  // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
-                  onPress={() => this.movetodetail(index)}
-                  style={[
-                    appStyle.slotCard,
-                    appStyle.rowJustify,
-                    style.aiCenter,
-                  ]}>
-                  <View style={[style.row, style.aiCenter]}>
-                    <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri:data.userphoto}} />
-                    </View>
-
-                    <View style={[style.rowBtw, style.aiCenter]}>
-                      <View style={[style.mr15]}>
-                        <Image
-                          source={images.imagep}
-                          style={[image.image50]}></Image>
-                      </View>
-                      <View>
-                        <View>
-                          <Text style={[text.text16, text.bold]}>
-                            {data.reporttype} issue in {data.date}
-                          </Text>
-                        </View>
-                        <View style={style.row}>
-                          <Text style={[text.text15, {color: colors.gray}]}>
-                           
-                          </Text>
-                        </View>
-                        <View style={[style.mv5]}>
-                       
-                             
-                            <TouchableOpacity
-                            onPress={() => {
-                              this.deletereport(index)
-                           }}
-                             >
-                              <View style={[text.text15, {color: colors.gray}]}>
-                            <Text>Delete </Text>
-                            </View>
-                            </TouchableOpacity> 
-                        </View>
-                      </View>
-                    </View>
+                key={index}
+                // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
+                onPress={() => this.movetodetail(index)}
+                style={[
+                  appStyle.slotCard,
+                  appStyle.rowJustify,
+                  style.aiCenter,
+                ]}>
+                <View style={[style.row, style.aiCenter]}>
+                  <View style={style.mr10}>
+                    <Image
+                      style={image.userImg}
+                      source={{uri: data.userphoto}}
+                    />
                   </View>
+                  <View>
+                    <Text style={[text.text16, text.bold]}>
+                      {data.reporttype}
+                    </Text>
+                    <Text style={[text.text15, {color: colors.gray}]}>
+                      {data.date} 
+                    </Text>
+                  </View>
+                </View>
 
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      // this.changebuttoncolor(index);
-                    }}>
-                    
-                  </TouchableOpacity>
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    this.deletereport(index);
+                  }}>
+                  <Image
+                    style={[image.forward]}
+                    source={images.delete}></Image>
                 </TouchableOpacity>
-              );
+              </TouchableOpacity>
+          
+                );
             })}
           </View>
         </ScrollView>
