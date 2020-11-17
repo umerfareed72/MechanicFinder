@@ -60,7 +60,7 @@ export default class Mechaniclist extends Component {
 
   componentDidMount = () => {    
      this.getid()
-     //this.showIssues();
+     this.showIssues();
      this.focusListener = this.props.navigation.addListener('didFocus', () => {
      this.showIssues();
      this.getid()

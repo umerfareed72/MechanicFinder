@@ -207,6 +207,10 @@ export default class Postvehicalissue extends Component {
     };
     const options2 = {
       title: 'Select video',
+      StorageOptions: {
+        skipBackup: true,
+        path: 'video',
+      },
        mediaType: 'video',
       path:'video',
       quality: 1
@@ -215,35 +219,37 @@ export default class Postvehicalissue extends Component {
     
   ImagePicker.showImagePicker(options2, (response) => {
     if (response) {
-      console.log('video',response);
-      this.setState({issueuri:response.uri})
-      this.setState({issuevideo:response.path})
-      // var data = new FormData();
-      // const source = {
-      //   uri: response.uri,
-      //   type: response.type,
-      //   name: response.fileName,
-      // };
-      // data.append('file', source);
-      // data.append('upload_preset', 'rjrthtdu');
-      // data.append('cloud_name', 'dbkmbaxmk');
-      // fetch('https://api.cloudinary.com/v1_1/dbkmbaxmk/image/upload', {
-      //   method: 'post',
-      //   body: data,
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // })
-      //   .then((res) => res.json())
-      //   .then((data) => {
-      //     console.log(data.secure_url);
-      //     this.setState({photo: data.secure_url});
-      //   })
-      //   .catch((err) => {
-      //     Alert.alert('An Error Occured While Uploading');
-      //     console.log(err);
-      //   });
+      console.log('video',response.uri);
+     
+      //console.log('imagepicker response',response);
+      var data = new FormData();
+      const source = {
+        uri: response.uri,
+        type: 'video/mp4',
+        name: response.path,
+      };
+      data.append('file', source);
+      data.append('upload_preset', 'rjrthtdu');
+      data.append('cloud_name', 'dbkmbaxmk');
+      fetch('https://api.cloudinary.com/v1_1/dbkmbaxmk/image/upload', {
+        method: 'post',
+        body: data,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data.secure_url);
+      
+         // this.setState({issuevideo:response.path})
+          this.setState({issuevideo: data.secure_url});
+        })
+        .catch((err) => {
+          Alert.alert('An Error Occured While Uploading');
+          console.log(err);
+        });
     } else if (response.didCancel) {
       console.log('User Cancelled Image Picker');
     } else if (response.error) {

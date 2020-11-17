@@ -177,6 +177,7 @@ return true
     };
     ImagePicker.showImagePicker(options, (response) => {
       if (response.uri) {
+        console.log(response)
         var data = new FormData();
         const source = {
           uri: response.uri,
