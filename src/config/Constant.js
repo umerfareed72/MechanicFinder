@@ -40,7 +40,7 @@ export const screenWidth = {
 
 //Url
 export const URL = {
-  Url: 'http://192.168.0.104:5000/',
+  Url: 'http://192.168.0.108:5000/',
 };
 //colors
 export const colors = {
@@ -48,6 +48,7 @@ export const colors = {
   whiteLayer: 'rgba(255, 255, 255, 0.2)',
   orablu: ['#F59E52', '#482C6D'],
   orangeGradient: ['#F59E52', '#DB883F'],
+  boxColor: ['#E79247', '#D85802'],
   inboxBarInActive: ['#fff', '#fff'],
   inboxBarActive: ['#6B379D', '#2B2F92'],
   inputBordercolor: '#9B9B9B',
@@ -116,6 +117,7 @@ subtract: require('../assets/images/subtract.png'),
   username: require('../assets/images/username.png'),
   clock: require('../assets/images/clock.png'),
   Subject: require('../assets/images/subject.png'),
+  stat: require('../assets/images/stat.png'),
   Question: require('../assets/images/question.png'),
   checkBoxEmpty: require('../assets/images/checkBoxEmpty.png'),
   checkBoxTick: require('../assets/images/checkboxtick.png'),

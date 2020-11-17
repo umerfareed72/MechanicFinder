@@ -53,10 +53,10 @@ router.post('/registeradmin', async (req, res) => {
 });
 
 router.post('/sendwarning', async (req, res) => {
-  console.log('in suggestion');
   const Mwarning1 = new Mwarning({
     warning: req.body.warning,
     mdbid: req.body.mdbid,
+    date:Date.now()
   });
   await Mwarning1.save().then(() => {
     res.send(Mwarning1).catch((err) => {
@@ -70,9 +70,6 @@ router.get('/getMwarning/:mdbid', (req, res) => {
     mdbid: req.params.mdbid,
   })
     .sort('id')
-    .select({
-      warning: 1,
-    })
     .then((warning) => {
       if (!warning) return res.send('');
       else res.json(warning);
@@ -667,6 +664,19 @@ router.get('/bodymechanic', (req, res) => {
     });
 });
 
+router.get('/topmechanics', (req, res) => {
+  Mechanicmodel.find({rating:{$gte:3}})
+    .sort('id')
+    .then((mechanic) => {
+      if (!mechanic) {
+        return res.status(404).send('Mechanic Not Found');
+      }
+      return res.status(200).json(mechanic);
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
 
 
 router.get('/enginemechanic', (req, res) => {

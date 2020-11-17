@@ -9,12 +9,11 @@ export default StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'center',
   },
-  xsmall:{
+  xsmall: {
     height: 12,
     width: 12,
     resizeMode: 'contain',
     alignSelf: 'center',
-  
   },
   small: {
     height: 14,
@@ -52,12 +51,11 @@ export default StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 130 / 2,
   },
-  imageCard:{
-    width:screenWidth.width50-20,
-    margin:10
-    
-    },
-    
+  imageCard: {
+    width: screenWidth.width50 - 20,
+    margin: 10,
+  },
+
   insidebox: {
     height: 25,
     width: 20,
@@ -78,6 +76,17 @@ export default StyleSheet.create({
     width: 45,
     alignSelf: 'center',
     resizeMode: 'stretch',
+  },
+  Image30:{
+    height:30,width:30,borderRadius:30,resizeMode:'cover'
+  },
+  image35:{
+    height:35,
+    width:35,
+    resizeMode:"contain",
+    borderRadius:13
+
+
   },
   Size57: {
     height: 45,
@@ -137,8 +146,7 @@ export default StyleSheet.create({
     borderColor: colors.gray,
     justifyContent: 'center',
   },
-  
-  
+
   attachtextimageleft: {
     flex: 1,
     flexDirection: 'row',
@@ -154,7 +162,9 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
   },
   iconAdd: {
-    height: 35, width: 35, resizeMode: 'contain',
+    height: 35,
+    width: 35,
+    resizeMode: 'contain',
     shadowColor: 'rgba(0,0,0,0.16)',
     shadowOffset: {
       width: 0,
@@ -209,16 +219,38 @@ export default StyleSheet.create({
     marginRight: 15,
     height: 15,
     width: 24,
-    tintColor:colors.black2B,
+    tintColor: colors.black2B,
     resizeMode: 'contain',
   },
+  dashboardImg: {
+    width: '100%',
+    height: screenWidth.width35 - 25,
+
+    borderRadius: 15,
+    shadowColor: colors.shadowColor,
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.0,
+    elevation: 6,
+
+    resizeMode: 'cover',
+    justifyContent: 'space-evenly',
+  },
+  dashboardCard2: {
+    width: screenWidth.width45 - 10,
+    marginHorizontal: 10,
+    marginVertical: 10,
+  },
+
   username: {
     marginRight: 15,
     height: 25,
-width: 24,
-tintColor:colors.black2B,
-resizeMode: 'contain',
-
+    width: 24,
+    tintColor: colors.black2B,
+    resizeMode: 'contain',
   },
   searchIcon: {
     height: 18,

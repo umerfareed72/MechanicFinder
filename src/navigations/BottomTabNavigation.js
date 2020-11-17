@@ -225,9 +225,6 @@ const TabNavigator = createDrawerNavigator(
     Navigator: {
       screen: Navigator,
     },
-    Dashboard: {
-      screen: DashboardStack,
-    },
     //   Login: {
     //   screen: Login,
     // },

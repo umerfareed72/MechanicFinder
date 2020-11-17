@@ -49,18 +49,16 @@ export default class MechanicDashboard extends Component {
       refreshing: false,
       bookedUserData: [],
       data: [],
+      warnings: [],
       bookedUserid: '',
-      Amount:0,
-      wid:'',
-      earning:0
-    
+      Amount: 0,
+      earning: 0,
     };
   }
   getData = () => {
     AsyncStorage.getItem('token').then((res) => {
-      
       this.setState({token: res});
-      console.log('token1',res);
+      console.log('token1', res);
       axios
         .get(URL.Url + 'me', {
           headers: {
@@ -80,7 +78,7 @@ export default class MechanicDashboard extends Component {
               axios
                 .get(URL.Url + 'mechanic/' + this.state.mechanicid)
                 .then((mechanic) => {
-                 // console.log(mechanic.data);
+                  // console.log(mechanic.data);
                   this.setState({data: mechanic.data});
                   const send = JSON.stringify(mechanic.data);
                   AsyncStorage.setItem('Mechanicdata', send);
@@ -89,11 +87,11 @@ export default class MechanicDashboard extends Component {
                   axios
                     .get(URL.Url + 'getbookedUser/' + this.state.mechanicid)
                     .then((response) => {
-                    //  console.log(response.data);
+                      //  console.log(response.data);
 
                       response.data.map((item) => {
-                        this.setState({Amount:item.totalamount})
-                    
+                        this.setState({Amount: item.totalamount});
+
                         axios
                           .get(URL.Url + 'user/' + item.userid)
                           .then((response) => {
@@ -112,12 +110,13 @@ export default class MechanicDashboard extends Component {
                             ids['mechanicid'] = item.mechanicid;
                             const sendids = JSON.stringify(ids);
                             AsyncStorage.setItem('mechanicid', sendids);
-                         //   console.log(ids);
-                        
+                            //   console.log(ids);
                           });
                       });
                     })
-                    .then(()=>{ this.getwarning();})
+                    .then(() => {
+                      this.getwarning();
+                    })
                     .catch((error) => {
                       console.log(error, 'Booked User Not Accesible');
                     });
@@ -131,7 +130,6 @@ export default class MechanicDashboard extends Component {
           console.log('Mechanic Data Not Accessible', error);
         });
     });
-   
   };
   requestMechanicLocation = async () => {
     try {
@@ -160,16 +158,13 @@ export default class MechanicDashboard extends Component {
       ) {
         Geolocation.getCurrentPosition(
           (position) => {
-         //   console.log(position);
             this.setState({
               longitude: position.coords.longitude,
               latitude: position.coords.latitude,
             });
             this.getData();
-           
           },
           (error) => {
-            // See error code charts below.
             console.log(error.code, error.message);
           },
           {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
@@ -180,90 +175,48 @@ export default class MechanicDashboard extends Component {
     }
   };
   getwarning = () => {
-    console.log('in get.....warning')
-    axios.get(URL.Url + 'getMwarning/' + this.state.mechanicid)
-    .then((response) => {
-     console.log(response.data[0].warning);
-     this.setState({ wid : response.data[0]._id})
-     
-      if(response.data[0].warning!=='')
-      {Alert.alert('Warning from Admin',response.data[0].warning)}
-
-      
-    })
-    .then(()=> {this.deletewarning();})
-    .catch((error) => {
-      console.log(error);
-    });
-  
-  }
-
-  deletewarning=() => {
     axios
-    .delete(URL.Url + 'Wdelete/' + this.state.wid)
-    .then((response) => {
-      if (response.data) {
-        console.log(response.data);
-       // Alert.alert('W deleted successfully!')
-       
-      }
-    })
-    .catch((error) => {
-      console.log('ye lo 2', error);
-      Alert.alert('something is wrong')
-    });
-  }
+      .get(URL.Url + 'getMwarning/' + this.state.mechanicid)
+      .then((response) => {
+        this.setState({warnings: response.data});
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
     });
   }
-  // removeBooking = () => {
-  //   setInterval(() => {
-  //     axios
-  //       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedUserid)
-  //       .then((res) => {
-  //         this.setState({bookedUserData: null});
-  //         console.log(res.data, 'data updated');
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   }, 100000);
-  // };
-  componentDidMount() {
+   componentDidMount() {
     const {navigation} = this.props;
-    
-    this.requestMechanicLocation()
-   
+
+    this.requestMechanicLocation();
+
     this.focusListener = navigation.addListener('didFocus', () => {
       this.requestMechanicLocation();
- 
     });
-    // this.removeBooking();
   }
 
   Rate = () => {
-    console.log(this.state.mechanicid)
-    axios.get(URL.Url+'bookedmid/'+this.state.mechanicid).then((data)=>{
-      console.log(data.data)
-    var r = [];
-    data.data.map((item, index) => {
-      r.push(item.totalamount);
+    console.log(this.state.mechanicid);
+    axios.get(URL.Url + 'bookedmid/' + this.state.mechanicid).then((data) => {
+      console.log(data.data);
+      var r = [];
+      data.data.map((item, index) => {
+        r.push(item.totalamount);
+      });
+      // Getting sum of numbers
+      var sum = r.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      console.log(sum); // Prints: 15
+
+      this.setState({earning: sum});
     });
-    // Getting sum of numbers
-    var sum = r.reduce(function (a, b) {
-      return a + b;
-    }, 0);
-    console.log(sum); // Prints: 15
-
-    this.setState({earning:sum})
-
-
-    })
   };
-
 
   bookedUser = () => {
     const {bookedUserData, refreshing} = this.state;
@@ -275,7 +228,7 @@ export default class MechanicDashboard extends Component {
           }}
           style={[appStyle.slotCard, appStyle.rowJustify, style.aiCenter]}>
           <View style={[style.row, style.aiCenter]}>
-            <View style={style.mr10}>
+            <View>
               <Image
                 style={image.userImg}
                 source={{uri: bookedUserData.photo}}
@@ -298,9 +251,10 @@ export default class MechanicDashboard extends Component {
                   </Text>
                   <Image source={images.dollar} style={image.medium}></Image>
                 </View>
-                <View >
+                <View>
                   <Text>
-        {bookedUserData.address}{' '}{bookedUserData.city}{' '}{bookedUserData.country}
+                    {bookedUserData.address} {bookedUserData.city}{' '}
+                    {bookedUserData.country}
                   </Text>
                 </View>
               </View>
@@ -329,9 +283,8 @@ export default class MechanicDashboard extends Component {
   };
 
   render() {
-   // console.log(this.state.data)
-    console.log('mechanic idddd',this.state.mechanicid);
-   
+    const {data, warnings} = this.state;
+
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar
@@ -360,51 +313,77 @@ export default class MechanicDashboard extends Component {
             </View>
           </LinearGradient>
         </View>
-        <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
-          <ScrollView>
-            <View style={[style.pv20]}>
-              <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                <Text style={[text.goodfishbd, text.text40, text.greyRegular]}>
-                  Hi {this.state.data.firstname}
-                </Text>
-                <View style={[style.mv5]}>
-                  <StarRating
-                    disabled={true}
-                    maxStars={5}
-                    rating={this.state.data.rating}
-                    // selectedStar={(rating) => this.onStarRatingPress(rating)}
-                    fullStarColor={'#000'}
-                    emptyStarColor={'#000'}
-                    starSize={20}
-                    containerStyle={{width: 110, marginTop: 3}}
-                  />
-                  <Text style={[text.center, style.mv5]}> Reviews({this.state.data.rating}/5.0)</Text>
-                </View>
-              </View>
-              <View style={[style.aiCenter, style.mv10]}>
-                <View style={image.boxContainer}>
-                  <Text style={[text.text30]}> {this.state.earning} $</Text>
-                </View>
-                <View style={style.mv10}>
-                  <Text style={[text.text20, text.goodfishbd, text.darkBlue]}>
-                    {' '}
-                    Your Earning
-                  </Text>
-                </View>
-              </View>
 
-              <View style={[appStyle.rowJustify]}>
-                <Text style={[text.heading4, text.semibold]}>
-                  Available Customers
-                </Text>
-                <Text style={[text.heading4, text.semibold]}>
-                  You need to Know
+        <ScrollView style={[appStyle.bodyBg, appStyle.bodyLayout]}>
+          <View style={[style.pv20]}>
+            <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
+              <Text style={[text.goodfishbd, text.text40, text.greyRegular]}>
+                Hi {data.firstname}
+              </Text>
+              <View style={[style.mv5]}>
+                <StarRating
+                  disabled={true}
+                  maxStars={5}
+                  rating={data.rating}
+                  // selectedStar={(rating) => this.onStarRatingPress(rating)}
+                  fullStarColor={'#000'}
+                  emptyStarColor={'#000'}
+                  starSize={20}
+                  containerStyle={{width: 110, marginTop: 3}}
+                />
+                <Text style={[text.center, style.mv5]}>
+                  {' '}
+                  Reviews({data.rating}/5.0)
                 </Text>
               </View>
-              <View>{this.bookedUser()}</View>
             </View>
-          </ScrollView>
-        </View>
+            <View style={[style.aiCenter, style.mv10]}>
+              <View style={image.boxContainer}>
+                <Text style={[text.text30]}> {this.state.earning} $</Text>
+              </View>
+              <View style={style.mv10}>
+                <Text style={[text.text20, text.goodfishbd, text.darkBlue]}>
+                  {' '}
+                  Your Earning
+                </Text>
+              </View>
+            </View>
+
+            <View style={[appStyle.rowJustify, style.aiCenter]}>
+              <Text style={[text.heading2, text.semibold]}>Booked User</Text>
+              <Text style={[text.heading4, text.semibold]}>
+                You need to Know
+              </Text>
+            </View>
+            <View>{this.bookedUser()}</View>
+            <View style={[appStyle.rowJustify, style.aiCenter]}>
+              <Text style={[text.heading2, text.semibold]}>Warnings</Text>
+              <Text style={[text.heading4, text.semibold, text.orange]}>
+                Should worry about that
+              </Text>
+            </View>
+            {warnings.map((warn) => {
+              return (
+                <TouchableOpacity style={[appStyle.slotCard]}>
+                  <View style={[style.row, style.aiCenter]}>
+                    <Image
+                      style={[image.Image30, style.mr10]}
+                      source={{uri: data.photo}}
+                    />
+                    <Text style={[text.text16, text.bold]}>
+                      {data.firstname} {data.lastname}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={[text.heading5, style.mv10, style.mh5]}>
+                      {warn.warning}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }

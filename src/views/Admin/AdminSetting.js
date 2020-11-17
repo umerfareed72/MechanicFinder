@@ -14,7 +14,6 @@ import {
   Keyboard,
   Button,
   Platform,
- 
 } from 'react-native';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -23,7 +22,6 @@ import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
 import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
-
 
 import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
@@ -47,15 +45,15 @@ export default class AdminSetting extends Component {
     };
   }
   onSignout = () => {
-    const {navigation}=this.props;
-  
+    const {navigation} = this.props;
+
     AsyncStorage.removeItem('atoken').then(() => {
       setTimeout(() => {
-       navigation.navigate('LoginAsAdmin') 
+        navigation.navigate('LoginAsAdmin');
       }, 1000);
     });
-   
   };
+
   render() {
     return (
       <SafeAreaView style={appStyle.safeContainer}>
@@ -96,8 +94,7 @@ export default class AdminSetting extends Component {
         <View style={{marginTop: 40}} />
 
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
-          <View style={style.mh20} >
-          </View>
+          <View style={style.mh20}></View>
           <View>
             <Text style={[text.heading1purple, text.bold]}>Settings</Text>
           </View>
@@ -133,7 +130,7 @@ export default class AdminSetting extends Component {
                       source={images.userPurple}
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
-                    Manage User 
+                      Manage User
                     </Text>
                   </View>
 
@@ -147,7 +144,9 @@ export default class AdminSetting extends Component {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('MechanicManagement')}
+                onPress={() =>
+                  this.props.navigation.navigate('MechanicManagement')
+                }
                 style={[style.mb20]}>
                 <View style={[style.rowBtw]}>
                   <View style={[style.row, style.aiCenter]}>
@@ -156,7 +155,7 @@ export default class AdminSetting extends Component {
                       source={images.userPurple}
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
-                    Manage Mechanic 
+                      Manage Mechanic
                     </Text>
                   </View>
 
@@ -169,8 +168,8 @@ export default class AdminSetting extends Component {
                 <View style={style.borderBottomNav} />
               </TouchableOpacity>
 
-              {/* <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Complaints')}
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('ServiceRates')}
                 style={[style.mb20]}>
                 <View style={[style.rowBtw]}>
                   <View style={[style.row, style.aiCenter]}>
@@ -179,7 +178,7 @@ export default class AdminSetting extends Component {
                       source={images.terms}
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
-                 Complaints
+                      Service Rates
                     </Text>
                   </View>
 
@@ -190,7 +189,7 @@ export default class AdminSetting extends Component {
                 </View>
 
                 <View style={style.borderBottomNav} />
-              </TouchableOpacity> */}
+              </TouchableOpacity>
 
               <TouchableOpacity
                 // onPress={() => this.props.navigation.navigate('Privacy')}
@@ -202,7 +201,7 @@ export default class AdminSetting extends Component {
                       source={images.legalIcon}
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
-                       Policies
+                      Policies
                     </Text>
                   </View>
 

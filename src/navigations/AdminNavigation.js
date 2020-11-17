@@ -11,14 +11,14 @@ import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createDrawerNavigator} from 'react-navigation-drawer';
-import AdminDashboard from '../views/Admin/AdminDashboard'
-import UserManagement from '../views/Admin/UserManagement'
-import MechanicManagement from '../views/Admin/MechanicManagement'
-import AdminSetting from '../views/Admin/AdminSetting'
-import Complaints from '../views/Admin/Complaints'
-import Reportedmechanics from '../views/Admin/Reportedmechanics'
-import Reportedcustomers from '../views/Admin/Reportedcustomers'
-import Userdetail from '../views/Admin/Userdetail'
+import AdminDashboard from '../views/Admin/AdminDashboard';
+import UserManagement from '../views/Admin/UserManagement';
+import MechanicManagement from '../views/Admin/MechanicManagement';
+import AdminSetting from '../views/Admin/AdminSetting';
+import Complaints from '../views/Admin/Complaints';
+import Reportedmechanics from '../views/Admin/Reportedmechanics';
+import Reportedcustomers from '../views/Admin/Reportedcustomers';
+import Userdetail from '../views/Admin/Userdetail';
 import Reportmechanicdetail from '../views/Admin/Reportmechanicdetail';
 import RMechanicprofile from '../views/Admin/RMechanicprofile';
 import Customerprofile from '../views/Admin/Customerprofile';
@@ -36,49 +36,20 @@ import {
   URL,
 } from '../config/Constant';
 import LoginasMechanic from '../views/registration/LoginasMechanic';
-import AddServiceRates from '../views/Admin/AddServiceRates'
-import ServiceRates from '../views/Admin/ServiceRates'
-import UpdateServiceRate from '../views/Admin/UpdateServiceRate'
+import AddServiceRates from '../views/Admin/AddServiceRates';
+import ServiceRates from '../views/Admin/ServiceRates';
+import UpdateServiceRate from '../views/Admin/UpdateServiceRate';
 import Mechanicprofile from '../views/Admin/Mechanicprofile';
-import Mechanicdetail from '../views/Admin/Mechanicdetail'
+import Mechanicdetail from '../views/Admin/Mechanicdetail';
+import Analytic from '../views/Admin/Analytic';
 //add new screen to this stack here
-const DashboardStack = createStackNavigator(
+
+const UserStackReport = createStackNavigator(
   {
-    AdminDashboard: {
-      screen: AdminDashboard,
-    },
-  },
-  {
-    headerMode: 'none',
-    navigationOptions: {
-      headerVisible: false,
-    },
-  },
-);
-const RatesStack = createStackNavigator(
-  {
-    ServiceRates:ServiceRates,
-  AddServiceRates:AddServiceRates, 
-  UpdateServiceRate:UpdateServiceRate
-  },
-  {
-    headerMode: 'none',
-    navigationOptions: {
-      headerVisible: false,
-    },
-  },
-);
-const SettingStack = createStackNavigator(
-  {
-    AdminSetting:AdminSetting,
-    UserManagement: UserManagement,
-    MechanicManagement: MechanicManagement,
-    Electricmechanic:Electricmechanic,
-    Enginemechanic:Enginemechanic,
-    Paintermechanic:Paintermechanic,
-    Bodymechanic:Bodymechanic,
-    Mechanicdetail:Mechanicdetail,
-    Userdetail:Userdetail
+    Reportedcustomers: Reportedcustomers,
+    Reportmechanicdetail: Reportmechanicdetail,
+    Customerprofile: Customerprofile,
+  
   },
   {
     headerMode: 'none',
@@ -88,17 +59,11 @@ const SettingStack = createStackNavigator(
   },
 );
 
-const Complaintstack = createStackNavigator(
+const MechanicStackReport = createStackNavigator(
   {
-    Complaints:Complaints,
-    Reportedcustomers:Reportedcustomers,
-    Reportedmechanics:Reportedmechanics,
-    Reportmechanicdetail:Reportmechanicdetail,
-    RMechanicprofile:RMechanicprofile,
-    Customerprofile:Customerprofile,
-    Mechanicprofile:Mechanicprofile,
-    Mhelp:Mhelp,
-    Chelp:Chelp,
+    Reportedmechanics: Reportedmechanics,
+    RMechanicprofile: RMechanicprofile,
+    Mechanicprofile: Mechanicprofile,
     
   },
   {
@@ -109,7 +74,97 @@ const Complaintstack = createStackNavigator(
   },
 );
 
-  
+
+
+const DashboardStack = createStackNavigator(
+ 
+  {
+
+    AdminDashboard: {
+      screen: AdminDashboard,
+    },
+    UserStackReport:UserStackReport,
+    MechanicStackReport:MechanicStackReport,
+    Mhelp: Mhelp,
+    Chelp: Chelp,
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+const RatesStack = createStackNavigator(
+  {
+    ServiceRates: ServiceRates,
+    AddServiceRates: AddServiceRates,
+    UpdateServiceRate: UpdateServiceRate,
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+
+const MechanicManagementStack = createStackNavigator(
+  {
+    MechanicManagement: MechanicManagement,
+    Electricmechanic: Electricmechanic,
+    Enginemechanic: Enginemechanic,
+    Paintermechanic: Paintermechanic,
+    Bodymechanic: Bodymechanic,
+    Mechanicdetail: Mechanicdetail,
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+
+const UserManagementStack = createStackNavigator(
+  {
+    UserManagement: UserManagement,
+    Userdetail: Userdetail,
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+
+const SettingStack = createStackNavigator(
+  {
+    AdminSetting: AdminSetting,
+    Rates: RatesStack,
+    MechanicManagement: MechanicManagementStack,
+    UserManagement: UserManagementStack,
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+const Analyticstack = createStackNavigator(
+  {
+    Analytic: Analytic,
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+
 const Navigator = createMaterialBottomTabNavigator(
   {
     AdminDashboard: {
@@ -124,27 +179,20 @@ const Navigator = createMaterialBottomTabNavigator(
         ),
       },
     },
-  
-   Rates: {
-      screen: RatesStack,
+
+    Analytic: {
+      screen: Analyticstack,
       navigationOptions: {
-        tabBarLabel: 'Service Rates',
+        tabBarLabel: 'Analytics',
         tabBarIcon: ({tintColor}) => (
           <Image
-            style={{resizeMode: 'contain', height: 25, width: 25,tintColor:colors.gray}}
-            source={images.dollar}
-          />
-        ),
-      },
-    },
-    Complaints: {
-      screen: Complaintstack,
-      navigationOptions: {
-        tabBarLabel: 'Complaints',
-        tabBarIcon: ({tintColor}) => (
-          <Image
-            style={{resizeMode: 'contain', height: 25, width: 25,tintColor:colors.gray}}
-            source={images.help}
+            style={{
+              resizeMode: 'contain',
+              height: 25,
+              width: 25,
+              tintColor: colors.gray,
+            }}
+            source={images.stat}
           />
         ),
       },
@@ -161,23 +209,21 @@ const Navigator = createMaterialBottomTabNavigator(
     //     ),
     //   },
     // },
-      Settings: {
-        screen: SettingStack,
-        navigationOptions: {
-          tabBarLabel: 'Setting',
-          tabBarIcon: ({tintColor}) => (
-            <Image
-              style={{resizeMode: 'contain', height: 25, width: 25}}
-              source={images.setting}
-            />
-          ),
-        },
+    Settings: {
+      screen: SettingStack,
+      navigationOptions: {
+        tabBarLabel: 'Setting',
+        tabBarIcon: ({tintColor}) => (
+          <Image
+            style={{resizeMode: 'contain', height: 25, width: 25}}
+            source={images.setting}
+          />
+        ),
       },
     },
-  
+  },
 
   {
-
     initialRouteName: 'AdminDashboard',
     activeColor: '#F59E52',
     activeBackgroundColor: '#fff',
@@ -186,6 +232,5 @@ const Navigator = createMaterialBottomTabNavigator(
     barStyle: {backgroundColor: '#fff'},
   },
 );
-
 
 export default createAppContainer(Navigator);

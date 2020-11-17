@@ -40,8 +40,8 @@ app.use(Productroutes);
 app.use(BookProductroutes);
 app.use(Serviceroutes);
 const mongouri =
-     'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';
- //'mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/SmartAutoMechanicFinder?retryWrites=true&w=majority';
+    //  'mongodb+srv://cnq:K6ARnxxT57GFnOTQ@cluster0-xkczw.mongodb.net/test?retryWrites=true&w=majority';
+ 'mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/SmartAutoMechanicFinder?retryWrites=true&w=majority';
 // "mongodb+srv://Umerfareed:20Rupees@cluster0.jobcl.mongodb.net/test"
 mongoose.connect(mongouri, {
   useNewUrlParser: true,
