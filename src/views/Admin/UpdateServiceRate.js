@@ -12,7 +12,7 @@ import {
   ImageBackground,
   Dimensions,
   Keyboard,
-  Platform,
+  Platform,ToastAndroid
 } from 'react-native';
 import Modal from 'react-native-modal';
 
@@ -64,7 +64,12 @@ id:'',
         })
         .then((response) => {
           console.log(response.data);
-          alert('Item Successfully Updated')
+          ToastAndroid.show(
+            'Service Successfully Updated!!',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
+          this.props.navigation.navigate("ServiceRates")
         });
   };
   componentDidMount(){

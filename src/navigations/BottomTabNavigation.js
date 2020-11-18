@@ -11,7 +11,7 @@ import {createAppContainer} from 'react-navigation';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createDrawerNavigator} from 'react-navigation-drawer';
-
+import breportmechanic from '../views/main/breportmechanic';
 import Dashboard from '../views/main/Dashboard';
 import HomeDetail from '../views/main/HomeDetail';
 // import Discover from '../views/main/Discover';
@@ -176,6 +176,7 @@ const BookNowStack = createStackNavigator(
   {
     ProfileDetail: ProfileDetail,
     BookNow: BookNow,
+    breportmechanic:breportmechanic,
    
   },
   {

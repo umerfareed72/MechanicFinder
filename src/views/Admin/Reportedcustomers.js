@@ -131,9 +131,9 @@ export default class Reportedcustomers extends Component {
 
   deletereport = (id) => {
     const reportdata = this.state.dataSource[id];
-    console.log(reportdata)
+    console.log(reportdata)  
     axios
-      .delete(URL.Url + 'Cdeletereport/' + reportdata._id)
+      .delete(URL.Url + 'Mdeletereport/' + reportdata._id)
       .then((response) => {
         if (response.data) {
           console.log(response.data);

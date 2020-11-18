@@ -39,7 +39,7 @@ import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
-export default class Reportmechanic extends Component {
+export default class BReportmechanic extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -118,7 +118,7 @@ export default class Reportmechanic extends Component {
           ToastAndroid.LONG,
         );
         try {
-          this.props.navigation.navigate('Issuedetail');
+          this.props.navigation.navigate('ProfileDetail');
         } catch (e) {
           console.log('error hai', e);
         }

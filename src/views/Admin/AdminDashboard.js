@@ -419,7 +419,7 @@ class AdminDashboard extends Component {
               <Text style={[text.heading2, text.semibold]}>
                 Top Rated Mechanics
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>{this.props.navigation.navigate('highratedmechanics')}}>
                 <Text style={[text.heading3, text.semibold]}>View All</Text>
               </TouchableOpacity>
             </View>

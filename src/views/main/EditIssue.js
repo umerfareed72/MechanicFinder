@@ -16,7 +16,7 @@ import {
   KeyboardAvoidingView,
   Alert,
   StyleSheet,
-  COLORS,
+  COLORS,ToastAndroid
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 // import RNPickerSelect from 'react-native-picker-select';
@@ -66,7 +66,8 @@ export default class Editissue extends Component {
       description: '',
       token: '',
       issuedata:[],
-      issueid:''
+      issueid:'',
+
     };
   }
     getData = async () => {
@@ -115,9 +116,14 @@ export default class Editissue extends Component {
       .then(async (res) => {
         console.log(res.data);
         console.log(this.state.userdbid);
-        Alert.alert('Issue updated Successfully we will help U soon!');
+        
+        ToastAndroid.show(
+          'Issue updated Successfully we will help U soon!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         try {
-          this.props.navigation.navigate('issuelistC');
+          this.props.navigation.navigate('IssueListC');
         } catch (e) {
           console.log('error hai', e);
         }
@@ -191,37 +197,48 @@ export default class Editissue extends Component {
                 style={[style.headerHeight4]}>
                 <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
                   <Text style={[text.text35, {color: colors.white}]}>
-                    Post Issue
+                   Edit Issue
                   </Text>
                   <Text style={[text.text20, {color: colors.white}]}>
-                    (Share your Vehical issue with us...)
+                    
                   </Text>
                 </View>
               </LinearGradient>
             </View>
             <View style={[appStyle.bodyBg]}>
-              <View
+            <View
                 style={[
                   appStyle.rowBtw,
+                  style.aiCenter,
                   appStyle.bodyLayout,
                   appStyle.bodyShadowTop,
-                  {backgroundColor: '#fff'},
+                  style.mh40,
+                  {
+                    backgroundColor: colors.lightgray,
+                    borderBottomLeftRadius: 10,
+                    borderBottomRightRadius: 10,
+                  },
                 ]}>
-                <TouchableOpacity onPress={() => this.tabStep1()}>
+                <TouchableOpacity
+                  onPress={() => this.tabStep1()}
+                  style={style.mh20}>
                   <Text
                     style={[
-                      text.tab,
+                      text.heading2,
                       text.semibold,
+
                       {color: this.state.ColorStep1},
                     ]}>
                     Step 1
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.tabStep2()}>
+                <TouchableOpacity
+                  onPress={() => this.tabStep2()}
+                  style={style.mh20}>
                   <Text
                     style={[
-                      text.tab,
+                      text.heading2,
                       text.semibold,
                       {color: this.state.ColorStep2},
                     ]}>
@@ -238,7 +255,7 @@ export default class Editissue extends Component {
                 ]}>
                 <View style={[appStyle.headingLayout]}>
                   <Text style={[style.headerStyle, style.bottomborder]}>
-                    Please fill this form and update anything you
+                    Update anything you Want
                   </Text>
                 </View>
                 <View>
