@@ -473,8 +473,13 @@ export default class HomeDetail extends Component {
                       </TouchableOpacity>
                       <View style={[style.pv10, style.ph30]}>
                   <Text
-                    onPress={() => {
-                      this.props.navigation.navigate('reportmechanic',{mdbid:data._id});
+                    onPress={() => { this.ratingModal()
+                     
+                      
+                this.props.navigation.navigate('breportmechanic',{mdbid:data._id});
+              
+                     
+                  
                     }}
                     style={[text.right, text.text14, {color: colors.link}]}>
                     Report this Mechanic
@@ -506,13 +511,13 @@ export default class HomeDetail extends Component {
 
                 <View style={[style.row, style.jcSpaceBetween, style.ph20]}>
                   <TouchableOpacity
-                    onPress={() => this.props.navigation.goBack()}
+                    onPress={() => this.props.navigation.navigate("Dashboard")}
                     style={[image.headerBackArrow]}>
                     <Image
                       style={[image.backArrow]}
                       source={images.backArrow}></Image>
                   </TouchableOpacity>
-                  <View></View>
+                  <View></View>  
                   <TouchableOpacity
                     onPress={this.CancelBooking}
                     style={[

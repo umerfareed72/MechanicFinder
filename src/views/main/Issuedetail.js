@@ -56,7 +56,7 @@ export default class HomeDetail extends Component {
       firstname:'',
       issueid: '',
       mid:'',
-      placeholder:'Enter text here',
+      placeholder:' Enter text here',
      
       userdata:''
     };
@@ -438,10 +438,11 @@ console.log(this.state.firstname)
                 {display: this.state.TabDataReview},
               ]}>
               <TextInput
-                style={input.textinputstyle}
+                style={{height: 40, width: "95%", borderColor: 'gray', borderWidth: 2, borderRadius: 20,  marginBottom: 20, fontSize: 18 }}
                 placeholder={this.state.placeholder}
                 secureTextEntry={true}
                 secureTextEntry={false}
+                underlineColorAndroid={true}
                 onChangeText={(text) => {
                   this.setState({
                     suggestion: text,

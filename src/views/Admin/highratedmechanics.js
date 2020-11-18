@@ -55,13 +55,15 @@ export default class Highratedmechanics extends Component {
       userId: '',
       userdbid: '',
       token: '',
+      
+      topmechanics: [],
     };
   }
 
   componentDidMount = () => {
-    this.showreports();
+    this.gettopMechanics();
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
-      this.showreports();
+     this.gettopMechanics();
     });
   };
 
@@ -72,42 +74,21 @@ export default class Highratedmechanics extends Component {
   //   })
   //   };
 
-  showreports = async () => {
-    // AsyncStorage.getItem('userId')
-    //   .then((res) => {
-    //     const id = JSON.parse(res);
-    //     this.setState({userId: id});
 
-    // AsyncStorage.getItem('usersignintoken').then((res) => {
-    //   this.setState({token: res});
-    //   console.log(this.state.token);
-    //   axios
-    //     .get(URL.Url + 'me', {
-    //       headers: {
-    //         'x-access-token': this.state.token,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       this.setState({userdbid: response.data.userid}).catch((error) => {
-    //         console.log(error);
-    //       });
-    //     });
-    // });
-
-    console.log('in showreports');
-    await axios
-      .get(URL.Url + 'Cgetreport')
-      .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
-        this.setState({dataSource: response.data});
-        console.log(this.state.dataSource);
-        if (this.state.dataSource == '') Alert.alert('No Report is posted!');
-      })
-      .catch((error) => {
-        console.log('ye lo 1', error);
+  gettopMechanics = () => {
+    try {
+      axios.get(URL.Url + 'topmechanics').then((res) => {
+        this.setState({topmechanics: res.data});
+        console.log(res.data);
       });
+    } catch (error) {
+      console.log(error);
+      return (
+        <View style={[style.aiCenter]}>
+          <ActivityIndicator color="#bc2b78" size="large"></ActivityIndicator>
+        </View>
+      );
+    }
   };
 
   movetodetail = (id) => {
@@ -140,6 +121,7 @@ export default class Highratedmechanics extends Component {
       });
   };
   render() {
+    const {topmechanics} = this.state;
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
@@ -152,55 +134,54 @@ export default class Highratedmechanics extends Component {
 
           <View>
             <Text style={[text.heading1purple, text.bold]}>
-              Reported Mechanics
+              High Rated Mechanics 
             </Text>
             <Text style={[text.text14, {color: '#4A4A4A'}]}>
-              Currently Added Reports
+          
             </Text>
           </View>
           <View></View>
         </View>
         <ScrollView style={{}}>
           <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
-            {this.state.dataSource.map((data, index) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
-                  onPress={() => this.movetodetail(index)}
-                  style={[
-                    appStyle.slotCard,
-                    appStyle.rowJustify,
-                    style.aiCenter,
-                  ]}>
-                  <View style={[style.row, style.aiCenter]}>
-                    <View style={style.mr10}>
-                      <Image
-                        style={image.userImg}
-                        source={{uri: data.userphoto}}
-                      />
-                    </View>
-                    <View>
-                      <Text style={[text.text16, text.bold]}>
-                        {data.reporttype}
-                      </Text>
-                      <Text style={[text.text15, {color: colors.gray}]}>
-                        {data.date} 
-                      </Text>
+          {topmechanics.map((data, index) => {
+               {
+                return (
+                  <View
+                    style={[
+                      appStyle.DashboardslotCard,
+                      appStyle.rowJustify,
+                      style.aiCenter,
+                      style.mv10,
+                    ]}>
+                    <View style={[style.rowBtw, style.aiCenter]}>
+                      <View style={[style.mr10]}>
+                        <Image
+                          source={images.dummy1}
+                          style={[image.image35]}></Image>
+                      </View>
+                      <View style={style.p10}>
+                        <View>
+                          <Text style={[text.text16, text.bold]}>
+                            {data.firstname} {data.lastname}
+                          </Text>
+                        </View>
+                        <View style={style.row}>
+                          <StarRating
+                            disabled={true}
+                            maxStars={5}
+                            rating={data.rating}
+                            fullStarColor={'#F59E52'}
+                            emptyStarColor={'#F59E52'}
+                            starSize={15}
+                            containerStyle={{width: 110, marginTop: 3}}
+                          />
+                        </View>
+                      </View>
                     </View>
                   </View>
-
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      this.deletereport(index);
-                    }}>
-                    <Image
-                      style={[image.forward]}
-                      source={images.delete}></Image>
-                  </TouchableOpacity>
-                </TouchableOpacity>
-              );
+                );
+              }
             })}
           </View>
         </ScrollView>
