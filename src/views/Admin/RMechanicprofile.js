@@ -128,6 +128,30 @@ export default class RMechanicprofile extends Component {
         Alert.alert('something is wrong');
       });
   };
+
+  deletewarning = (id) => {
+    const reportdata = this.state.warnings[id];
+    console.log(reportdata);
+    axios
+      .delete(URL.Url + 'Mdeletewarning/' +reportdata._id)
+      .then((response) => { 
+        if (response.data) {
+          console.log(response.data);
+          ToastAndroid.show(
+            'Warning Deleted Successfully!',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
+          this.getwarning();
+        }
+      })
+      .catch((error) => {
+        console.log('ye lo 2', error);
+        Alert.alert('something is wrong');
+      });
+  };
+
+
   sendwarning = () => {
     axios
       .post(URL.Url + 'sendwarning', {
@@ -180,6 +204,7 @@ export default class RMechanicprofile extends Component {
         this.setState({TabDataOverview: 'none'});
     this.setState({ColorOverview: colors.gray});
     this.setState({ColorReview: colors.white});
+    this.getwarning();
     };
   render() {
     const {mechanicdata,warnings} = this.state;
@@ -213,8 +238,8 @@ export default class RMechanicprofile extends Component {
                   <View style={[style.aiCenter, style.mb10]}>
                     <Text style={[text.h1]}>Manage Mechanic</Text>
                   </View>
-                  <View style={[style.mb5]}>
-                    <Text style={[text.heading3]}>Add Description</Text>
+                  <View style={[style.mb5,style.aiCenter]}>
+                    <Text style={[text.heading3]}>Add Wwarning</Text>
                   </View>
 
                   <View style={[style.aiCenter]}>
@@ -224,7 +249,7 @@ export default class RMechanicprofile extends Component {
                           this.setState({warning: text});
                         }}
                         placeholder={
-                          'Please tell me something about your booked Mechanic'
+                          'Type Warning message here'
                         }
                         placeholderTextColor={'#c7c7c7'}
                         underlineColorAndroid={'transparent'}
@@ -243,7 +268,7 @@ export default class RMechanicprofile extends Component {
                       onPress={this.deletemechanic}
                       style={[button.Profilebutton, {marginTop: 20}]}>
                       <Text style={[button.bookbutton, text.center]}>
-                        Delete
+                        Delete Account
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -397,7 +422,7 @@ export default class RMechanicprofile extends Component {
 
             {/* Reviews Tab End  */}
             <View style={[{display:this.state.TabDataReview},style.mh10]}>
-            {warnings.map((warn) => {
+            {warnings.map((warn,index) => {
               return (
                 <TouchableOpacity style={[appStyle.slotCard,style.w100,style.row]}>
                   <View style={[style.w10, style.aiCenter]}>
@@ -420,6 +445,15 @@ export default class RMechanicprofile extends Component {
                       {warn.warning}
                     </Text>
                   </View>
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      this.deletewarning(index);
+                    }}>
+                    <Image
+                      style={[image.forward]}
+                      source={images.delete}></Image>
+                  </TouchableOpacity>
                 </TouchableOpacity>
               );
             })}

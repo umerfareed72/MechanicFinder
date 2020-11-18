@@ -41,7 +41,7 @@ import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Picker} from '@react-native-community/picker';
 import {color} from 'react-native-reanimated';
-export default class Reportedmechanics extends Component {
+export default class Highratedmechanics extends Component {
   constructor(props) {
     super(props);
     this.state = {

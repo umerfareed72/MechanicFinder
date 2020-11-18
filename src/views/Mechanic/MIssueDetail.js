@@ -123,7 +123,11 @@ export default class HomeDetail extends Component {
       })
       .then((res) => {
         console.log(res.data);
-        Alert.alert('Your Suggestion is posted successfully!');
+        ToastAndroid.show(
+          'Suggestion posted!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         this.getsuggestions();
         this.props.navigation.navigate('IssueList')
       })
@@ -184,7 +188,7 @@ console.log(this.state.firstname)
             style={{height: screenHeight.height25}}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
+              onPress={() => this.props.navigation.navigate("IssueList")}
               style={[image.headerBackArrow]}>
               <Image
                 style={[image.backArrow]}
@@ -192,7 +196,7 @@ console.log(this.state.firstname)
             </TouchableOpacity>
             <View style={[appStyle.headInner, style.ph20]}>
               <View style={[style.mv5]}>
-                <StarRating
+                {/* <StarRating
                   disabled={true}
                   maxStars={5}
                   rating={this.state.starCount}
@@ -201,7 +205,7 @@ console.log(this.state.firstname)
                   emptyStarColor={'#fff'}
                   starSize={20}
                   containerStyle={{width: 110, marginTop: 3}}
-                />
+                /> */}
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.heading1, text.bold]}>

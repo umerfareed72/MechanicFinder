@@ -66,6 +66,7 @@ export default class Analytic extends Component {
       engineissue: '',
       bodyissue: '',
       registereduser: '',
+      registeredmechanics:'',
       painterissuecount: '',
       topmechanics: [],
     };
@@ -196,6 +197,17 @@ export default class Analytic extends Component {
         if (response) {
           console.log(response.data);
           this.setState({bookedmcount: response.data});
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      axios
+      .get(URL.Url + 'mechaniccount')
+      .then((response) => {
+        if (response) {
+          console.log(response.data);
+          this.setState({registeredmechanics: response.data});
         }
       })
       .catch((error) => {
@@ -342,7 +354,7 @@ export default class Analytic extends Component {
                         text.text22,
                         style.mb5,
                       ]}>
-                      {this.state.registereduser}
+                      {this.state.bookedmcount}
                     </Text>
 
                     <Text
@@ -360,7 +372,7 @@ export default class Analytic extends Component {
                 <View style={[appStyle.bigdashboardCard]}>
                   <View style={[style.jcCenter]}>
                     <Text style={[text.textbox, text.center, style.mb5]}>
-                      Mechanics
+                      User
                     </Text>
 
                     <Text
@@ -379,14 +391,14 @@ export default class Analytic extends Component {
                         text.text14,
                         {color: colors.orange},
                       ]}>
-                      Total Online
+                      Registered
                     </Text>
                   </View>
                 </View>
                 <View style={[appStyle.bigdashboardCard]}>
                   <View style={[style.jcCenter]}>
                     <Text style={[text.textbox, text.center, style.mb5]}>
-                      Users
+                     Mechanics
                     </Text>
                     <Text
                       style={[
@@ -395,7 +407,7 @@ export default class Analytic extends Component {
                         text.text22,
                         style.mb5,
                       ]}>
-                      {this.state.registereduser}
+                      {this.state.registeredmechanics}
                     </Text>
 
                     <Text
@@ -404,7 +416,7 @@ export default class Analytic extends Component {
                         text.center,
                         {color: colors.orange},
                       ]}>
-                      Total Online
+                    Registered
                     </Text>
                   </View>
                 </View>

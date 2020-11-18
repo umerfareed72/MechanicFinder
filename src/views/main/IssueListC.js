@@ -59,11 +59,12 @@ export default class Mechaniclist extends Component {
   }
 
   componentDidMount = () => {    
+     
+    // this.showIssues();
      this.getid()
-     this.showIssues();
      this.focusListener = this.props.navigation.addListener('didFocus', () => {
-     this.showIssues();
-     this.getid()
+     //this.showIssues();
+     this.getid() 
     });
     ;
   };
@@ -72,12 +73,12 @@ export default class Mechaniclist extends Component {
     AsyncStorage.getItem('userdata').then((res) => {
     const  response=JSON.parse(res)
      this.setState({userdbid: response._id})
-  })
+  }).then(()=>{this.showIssues();})
   };
 
  
 
-  showIssues = async() => {
+  showIssues = () => {
     // AsyncStorage.getItem('userId')
     //   .then((res) => {
     //     const id = JSON.parse(res);
@@ -101,7 +102,7 @@ export default class Mechaniclist extends Component {
 
     console.log(this.state.userdbid);
     console.log('in showissuesC',this.state.userdbid);
-    await axios
+     axios
       .get(URL.Url + 'vehicalissuesC/' + this.state.userdbid)
       .then((response) => {
         if (response.data) {

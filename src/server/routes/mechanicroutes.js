@@ -12,6 +12,7 @@ const Suggestion = mongoose.model('suggestions');
 const VehicalIssuemodel = mongoose.model('vehicalissue');
 const Mechanicreport = mongoose.model('mechanicreport');
 const Mwarning = mongoose.model('Mwarning');
+const Customerreport = mongoose.model('customerreport')
 const Admin = mongoose.model('Adminschema');
 const uhelp = mongoose.model('uhelp')
 const BookedUsermodel = mongoose.model('BookedUsermodel');
@@ -65,6 +66,16 @@ router.post('/sendwarning', async (req, res) => {
   });
 });
 
+router.delete('/Mdeletewarning/:id', async (req, res) => {  
+  Mwarning.findByIdAndDelete(req.params.id)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
 router.get('/getMwarning/:mdbid', (req, res) => {
   Mwarning.find({
     mdbid: req.params.mdbid,
@@ -106,6 +117,24 @@ router.post('/Creportregister', async (req, res) => {
   });
 });
 
+router.post('/Mreportregister', async (req, res) => {
+  console.log('in Mreport register');
+  const report = new Customerreport({
+    reportdescription: req.body.reportdescription,
+    reporttype: req.body.reporttype,
+    userdbid: req.body.userdbid,
+    mdbid:req.body.mdbid,
+    date: req.body.date,
+    mechanicphoto:req.body.mechanicphoto
+  });
+  await report.save().then(() => {
+    res.send(report).catch((err) => {
+      res.status(404).send(err.message);
+    });
+  });
+});
+
+
 router.get('/Cgetreport', (req, res) => {
   Mechanicreport.find()
     .sort('id')
@@ -116,6 +145,26 @@ router.get('/Cgetreport', (req, res) => {
       mdbid:1,
       date:1,
       userphoto:1
+    })
+    .then((reports) => {
+      if (!reports) return res.status(404).send('Not Found');
+      else res.json(reports);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+router.get('/Mgetreport', (req, res) => {
+  Customerreport.find()
+    .sort('id')
+    .select({
+      reportdescription:1,
+      reporttype:1,
+      userdbid:1,
+      mdbid:1,
+      date:1,
+      mechanicphoto:1
     })
     .then((reports) => {
       if (!reports) return res.status(404).send('Not Found');
@@ -168,7 +217,7 @@ router.get('/cgethelp', (req, res) => {
       question:1,
       message:1,
       userid:1, 
-      userimge:1 
+      userimage:1 
     })
     .then((reports) => {
       if (!reports) return res.status(404).send('Not Found');
@@ -209,6 +258,16 @@ router.delete('/Cdeletereport/:id', async (req, res) => {
     });
 });
 
+router.delete('/Mdeletereport/:id', async (req, res) => {
+  Customerreport.findByIdAndDelete(req.params.id)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
 router.delete('/deletemechanic/:id', async (req, res) => {
   Mechanicmodel.findByIdAndDelete(req.params.id)
     .then((data) => {
@@ -228,6 +287,18 @@ router.route('/paintercount').get(function (req, res) {
     }
   });
 });
+
+router.route('/mechaniccount').get(function (req, res) {
+  Mechanicmodel.count(function (err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+
 
 router.route('/bookedmcount').get(function (req, res) {
   BookedUsermodel.count({Status: 'Online'}, function (err, result) {

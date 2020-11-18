@@ -169,7 +169,7 @@ return true
 
   handleChoosePhoto = () => {
     const options = {
-      title: 'Take Image From',
+      title: 'Take Image From', 
       StorageOptions: {
         skipBackup: true,
         path: 'images',
@@ -444,7 +444,7 @@ return true
 
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Enter Your Password"
+                      placeholder="Confirm Password"
                       secureTextEntry={true}
                       secureTextEntry={true}
                       onChangeText={(text) => {

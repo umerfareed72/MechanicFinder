@@ -15,6 +15,7 @@ import {
   Button,
   Platform,
   Alert,
+  ToastAndroid
 } from 'react-native';
 const axios = require('axios');
 import {
@@ -102,7 +103,7 @@ export default class Reportedcustomers extends Component {
     
     console.log('in showreports');
     await axios  
-      .get(URL.Url + 'Cgetreport')
+      .get(URL.Url + 'Mgetreport')
       .then((response) => {
         if (response.data) {
           console.log(response.data);
@@ -136,7 +137,11 @@ export default class Reportedcustomers extends Component {
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          Alert.alert('Report deleted successfully!')
+          ToastAndroid.show(
+            'Report Deleted Successfully!',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
           this.showreports();
         }
       })
@@ -151,13 +156,13 @@ export default class Reportedcustomers extends Component {
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
         <View style={{marginTop: 40}} />
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Complaints')}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('AdminDashboard')}>
             <Image source={images.backarrowh} style={image.backArrow2}></Image>
           </TouchableOpacity>
          
           <View>
             <Text style={[text.heading1purple, text.bold]}>
-              Roported Mechanics 
+              Reported Customers 
             </Text>
             <Text style={[text.text14, {color: '#4A4A4A'}]}>Currently Added Reports</Text>
           </View>
@@ -180,7 +185,7 @@ export default class Reportedcustomers extends Component {
                   <View style={style.mr10}>
                     <Image
                       style={image.userImg}
-                      source={{uri: data.userphoto}}
+                      source={{uri: data.mechanicphoto}}
                     />
                   </View>
                   <View>

@@ -28,6 +28,7 @@ import Electricmechanic from '../views/Admin/Electricmechanic';
 import Enginemechanic from '../views/Admin/Enginemechanic';
 import Bodymechanic from '../views/Admin/Bodymechanic';
 import Paintermechanic from '../views/Admin/Paintermechanic';
+import highratedmechanics from '../views/Admin/highratedmechanics';
 import {
   colors,
   screenHeight,
@@ -87,6 +88,7 @@ const DashboardStack = createStackNavigator(
     MechanicStackReport:MechanicStackReport,
     Mhelp: Mhelp,
     Chelp: Chelp,
+    highratedmechanics:highratedmechanics,
   },
   {
     headerMode: 'none',

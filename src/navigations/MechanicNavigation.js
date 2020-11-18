@@ -36,7 +36,8 @@ import EditProduct from '../views/Mechanic/EditProduct';
 import IssueList from '../views/Mechanic/IssueList';
 import Issuedetail from '../views/main/Issuedetail';
 import MIssuedetail from '../views/Mechanic/MIssueDetail';
-import MechanicTerms from '../views/Mechanic/MechanicTerms'
+import MechanicTerms from '../views/Mechanic/MechanicTerms';
+import reportcustomer from '../views/Mechanic/reportcustomer';
 //add new screen to this stack here
 const DashboardStack = createStackNavigator(
   {
@@ -138,6 +139,8 @@ const UserBookNowStack = createStackNavigator(
   {
     UserProfileDetail: UserProfileDetail,
     UserProfile: UserProfile,
+    reportcustomer:reportcustomer,
+
   },
   {
     headerMode: 'none',
