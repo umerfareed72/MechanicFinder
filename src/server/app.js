@@ -26,6 +26,7 @@ require('./models/mhelp')
 require('./models/upolicy');
 require('./models/uterms');
 require('./models/customerreport')
+require('./prod')(app)
 const mechanicroutes1 = require('./routes/mechanicroutes');
 const userroutes1 = require('./routes/Userroutes');
 const bookedroutes = require('./routes/BookedUseroutes');
