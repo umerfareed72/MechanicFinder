@@ -220,7 +220,7 @@ class AdminDashboard extends Component {
         <ScrollView style={[appStyle.bodyBg, style.mb20]}>
           <View>
             <View style={[appStyle.rowJustify, appStyle.headingLayout]}>
-              <Text style={[text.heading2, text.semibold]}>Overview</Text>
+              <Text style={[text.heading2, text.semibold]}></Text>
               <Text style={[text.heading3, text.semibold]}>Complaints</Text>
             </View>
 
@@ -318,7 +318,7 @@ class AdminDashboard extends Component {
               </View>
             </View>
             <View style={[appStyle.rowJustify, appStyle.headingLayout]}>
-              <Text style={[text.heading2, text.semibold]}>Overview</Text>
+              <Text style={[text.heading2, text.semibold]}></Text>
               <Text style={[text.heading3, text.semibold]}>Helps</Text>
             </View>
 
@@ -378,7 +378,7 @@ class AdminDashboard extends Component {
                   <TouchableOpacity
                     style={[style.jcCenter]}
                     onPress={() => {
-                      this.props.navigation.navigate('RMechanicprofile');
+                      this.props.navigation.navigate('Mhelp');
                     }}>
                     <View style={[style.asCenter]}>
                       <Image

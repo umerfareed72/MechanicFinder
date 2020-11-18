@@ -169,7 +169,7 @@ showreports = async() => {
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
         <View style={{marginTop: 40}} />
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Complaints')}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('AdminDashboard')}>
             <Image source={images.backarrowh} style={image.backArrow2}></Image>
           </TouchableOpacity>
          

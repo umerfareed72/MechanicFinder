@@ -69,7 +69,7 @@ export default class Postvehicalissue extends Component {
       userdata:{},
       userphoto:'',
       issuevideo:"",
-      issueuri:'',
+      issuevideo1:'',
     };
   }
 
@@ -220,36 +220,36 @@ export default class Postvehicalissue extends Component {
   ImagePicker.showImagePicker(options2, (response) => {
     if (response) {
       console.log('video',response.uri);
-     
+      this.setState({issuevideo:response.path})
+          this.setState({issuevideo1: response.uri});
       //console.log('imagepicker response',response);
-      var data = new FormData();
-      const source = {
-        uri: response.uri,
-        type: 'video/mp4',
-        name: response.path,
-      };
-      data.append('file', source);
-      data.append('upload_preset', 'rjrthtdu');
-      data.append('cloud_name', 'dbkmbaxmk');
-      fetch('https://api.cloudinary.com/v1_1/dbkmbaxmk/image/upload', {
-        method: 'post',
-        body: data,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data.secure_url);
+      // var data = new FormData();
+      // const source = {
+      //   uri: response.uri,
+      //   type: 'video/mp4',
+      //   name: response.path,
+      // };
+      // data.append('file', source);
+      // data.append('upload_preset', 'rjrthtdu');
+      // data.append('cloud_name', 'dbkmbaxmk');
+      // fetch('https://api.cloudinary.com/v1_1/dbkmbaxmk/image/upload', {
+      //   method: 'post',
+      //   body: data,
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // })
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     console.log(data.secure_url);
       
-         // this.setState({issuevideo:response.path})
-          this.setState({issuevideo: data.secure_url});
-        })
-        .catch((err) => {
-          Alert.alert('An Error Occured While Uploading');
-          console.log(err);
-        });
+         
+      //   })
+      //   .catch((err) => {
+      //     Alert.alert('An Error Occured While Uploading');
+      //     console.log(err);
+      //   });
     } else if (response.didCancel) {
       console.log('User Cancelled Image Picker');
     } else if (response.error) {
@@ -460,7 +460,6 @@ export default class Postvehicalissue extends Component {
                       <Picker.Item label="Electric" value="Electric" />  
                       <Picker.Item label="Engine" value="Engine" />
                       <Picker.Item label="Body" value="Body" />
-                      <Picker.Item label="Painter" value="Painter" />
                     </Picker>
                   </View>
                   <View style={[input.textinputcontainer, style.mv5]}>
@@ -499,7 +498,7 @@ export default class Postvehicalissue extends Component {
                     <View style={[image.largeovalcontainer]}>
                       {
                         <Image
-                          source={{uri: this.state.issueuri}}
+                          source={{uri: this.state.issuevideo1}}
                           style={[image.largeovalcontainerupload]}
                         />
                       }

@@ -280,7 +280,7 @@ export default class UserProfileDetail extends Component {
         <SafeAreaView style={[appStyle.safeContainer]}>
           <StatusBar />
           <View style={{}}>
-            <Modal
+            <Modal 
               isVisible={this.state.iscompleteModal}
               animationInTiming={500}
               animationOutTiming={500}>
@@ -330,7 +330,17 @@ export default class UserProfileDetail extends Component {
                       </View>
                     </TouchableOpacity>
                   </View>
+                  <View style={[style.pv10, style.ph30]}>
+                  <Text
+                    onPress={() => {
+                      this.props.navigation.navigate('reportcustomer',{userdbid:data._id});
+                      this.completeModal(); }}
+                    style={[text.right, text.text14, {color: colors.link}]}>
+                    REPORT
+                  </Text>
                 </View>
+                </View>
+                
               </View>
             </Modal>
           </View>

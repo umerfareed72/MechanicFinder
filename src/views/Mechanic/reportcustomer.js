@@ -39,7 +39,7 @@ import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
-export default class Reportmechanic extends Component {
+export default class Reportcustomer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,15 +56,15 @@ export default class Reportmechanic extends Component {
       Phone: '',
       carcompany: '',
       reporttype: '',  
-      userdbid: '',
+      userdbid: this.props.navigation.getParam('userdbid','nothing sent'),
       city: '',
       status: '',
       reportdescription: '',
       token: '',
       date: 'Select date of Incident',
-      mdbid:this.props.navigation.getParam('mdbid','nothing sent'),
-      userdata:'',
-      userphoto:''  
+      mdbid:'',
+      mechanicdata:'',
+      mechanicphoto:''  
     };
   }
 
@@ -73,52 +73,39 @@ export default class Reportmechanic extends Component {
   };
 
   getid = () => {
-    AsyncStorage.getItem('usersignintoken').then((res) => {
-      this.setState({token: res});
-      console.log(this.state.token);
-      axios
-        .get(URL.Url + 'me', {
-          headers: {
-            'x-access-token': this.state.token,
-          },
-        })
-        .then((response) => {
-          this.setState({userdbid: response.data.userid}).catch((error) => {
-            console.log(error);
-          });
-        });
-    });
-    AsyncStorage.getItem('userdata').then((res) => {
+    
+    AsyncStorage.getItem('Mechanicdata').then((res) => {
       
-      this.setState({userdata: JSON.parse(res)});
-      this.setState({userphoto:this.state.userdata.photo})
-      console.log('userphoto12',this.state.userphoto)
+      this.setState({mechanicdata: JSON.parse(res)});
+      this.setState({mechanicphoto:this.state.mechanicdata.photo})
+      this.setState({mdbid:this.state.mechanicdata._id})
+      console.log('mechanicphoto12',this.state.mechanicphoto)
      
-      console.log('firstname',this.state.userdata.photo)
+      console.log('mechanicid',this.state.mdbid)
       
     })
   };
   
   submitReport = () => {
     axios
-      .post(URL.Url + 'Creportregister', {
+      .post(URL.Url + 'Mreportregister', {
         reportdescription: this.state.reportdescription,
         reporttype: this.state.reporttype,
         userdbid: this.state.userdbid,
         mdbid:this.state.mdbid,
         date: this.state.date,
-        userphoto:this.state.userdata.photo
+        mechanicphoto:this.state.mechanicdata.photo
       })
       .then(async (res) => {
         console.log(res.data);
-        console.log(this.state.userdbid);
+        console.log(this.state.mdbid);
         ToastAndroid.show(
-          'Mechanic Reported Successfully!!',
+          'Customer Reported Successfully!!',
           ToastAndroid.BOTTOM,
           ToastAndroid.LONG,
         );
         try {
-          this.props.navigation.navigate('Issuedetail');
+          this.props.navigation.navigate('UserProfileDetail');
         } catch (e) {
           console.log('error hai', e);
         }
@@ -155,7 +142,7 @@ export default class Reportmechanic extends Component {
   render() {
    // console.log('propppppppp',this.props)
      console.log('userid121',this.state.userdbid)
-    console.log('mechanicid121',this.state.mdbid);
+   // console.log('mechanicid121',this.state.mdbid);
     return (
       <SafeAreaView style={style.flex1}>
         <StatusBar />
@@ -170,10 +157,10 @@ export default class Reportmechanic extends Component {
                 style={[style.headerHeight4]}>
                 <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
                   <Text style={[text.text35, {color: colors.white}]}>
-                   Report Mechanic
+                   Report Customer
                   </Text>
                   <Text style={[text.text20, {color: colors.white}]}>
-                    (Report this mechanic from this page)
+                    (Report this Customer from this page)
                   </Text>
                 </View>
               </LinearGradient>
