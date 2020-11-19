@@ -14,7 +14,7 @@ import {
   Keyboard,
   Button,
   Platform,
-  Alert,
+  Alert,ToastAndroid
 } from 'react-native';
 const axios = require('axios');
 import {
@@ -154,7 +154,12 @@ showreports = async() => {
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          Alert.alert('Report deleted successfully!')
+         
+          ToastAndroid.show(
+            'Report deleted successfully!',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
           this.showreports();
         }
       })

@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-Alert,
+Alert,ToastAndroid,
   Button,
 } from 'react-native';
 import {colors, screenHeight, screenWidth,URL, images} from '../../config/Constant';
@@ -40,8 +40,35 @@ export default class Login extends Component {
     };
   }
 
+  validatefield = () => {
+    if (this.state.email == '') {
+      ToastAndroid.show(
+        'Email Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.nickname == '') {
+      ToastAndroid.show(
+        'Nickname Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.newpassword == '') {
+      ToastAndroid.show(
+        'New Password Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } 
+    return true;
+  };
+
+
   updatepass = () => {
-    console.log('in updatepass')
+    if (this.validatefield()){console.log('in updatepass')
     axios
       .put(URL.Url + 'forgetpass/', {
         nickname:this.state.nickname,
@@ -50,7 +77,12 @@ export default class Login extends Component {
       })
       .then(async (res) => { 
         console.log(res.data);
-        Alert.alert('password updated Successfully!');
+        
+        ToastAndroid.show(
+          'password updated Successfully!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         try {
           this.props.navigation.navigate('Login');
         } catch (e) {
@@ -58,10 +90,15 @@ export default class Login extends Component {
         }
       })
       .catch((error) => {
-        Alert.alert('Wrong Email or Nickname !!');
+        ToastAndroid.show(
+          'Wrong Email or Nickname !!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
 
         console.log(error);
-      });
+      });}
+    
   };
 
 
@@ -94,7 +131,7 @@ export default class Login extends Component {
                 </Text>
               </View>
               <View>
-                <View style={[input.textinputcontainer, style.mv30]}>
+                <View style={[input.textinputcontainer, style.mv10]}>
                   <Image source={images.email} style={image.InputImage}></Image>
                   <TextInput
                     style={input.textinputstyle}
@@ -111,7 +148,7 @@ export default class Login extends Component {
                 </View>
               </View>
               <View>
-                <View style={[input.textinputcontainer, style.mv30]}>
+                <View style={[input.textinputcontainer, style.mv10]}>
                   <Image source={images.username} style={image.InputImage}></Image>
                   <TextInput
                     style={input.textinputstyle}
@@ -132,7 +169,7 @@ export default class Login extends Component {
                     <Image source={images.key} style={image.InputImage}></Image>
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Enter Your Password"
+                      placeholder="Enter Your New Password"
                       secureTextEntry={true}
                       onChangeText={(text) => {  
                         this.setState({

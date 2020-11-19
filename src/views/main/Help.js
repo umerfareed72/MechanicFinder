@@ -66,7 +66,26 @@ export default class Help extends Component {
     })
      
     }
-
+    validatefield = () => {
+      if (this.state.question == '') {
+        ToastAndroid.show(
+          'Subject Is Required',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+        return false;
+      } else if (this.state.message == '') {
+        ToastAndroid.show(
+          'Message Is Required',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+        return false;
+      } 
+      return true;
+    };
+  
+  
 
   submithelp = () => {
     axios

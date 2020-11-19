@@ -433,7 +433,7 @@ export default class Login extends Component {
               </View>
               <View style={[style.mv20, style.mh10]}>
                 <Text style={[text.goodfishbd, text.text18, text.center]}>
-                  Do You have an Account?
+                  Create New Account
                 </Text>
               </View>
               <View

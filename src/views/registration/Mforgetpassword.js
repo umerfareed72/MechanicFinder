@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
-Alert,
+Alert,ToastAndroid,
   Button,
 } from 'react-native';
 import {colors, screenHeight, screenWidth,URL, images} from '../../config/Constant';
@@ -38,8 +38,37 @@ export default class Login extends Component {
       email:''
     };
   }
+
+  validatefield = () => {
+    if (this.state.email == '') {
+      ToastAndroid.show(
+        'Email Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.nickname == '') {
+      ToastAndroid.show(
+        'Nickname Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.newpassword == '') {
+      ToastAndroid.show(
+        'New Password Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } 
+    return true;
+  };
+
+
+
   updatepass = () => {
-    console.log('in m updatepass')
+    if (this.validatefield()) {console.log('in m updatepass')
     axios
       .put(URL.Url + 'mforgetpass', {  
         nickname:this.state.nickname,
@@ -48,18 +77,29 @@ export default class Login extends Component {
       })
       .then(async (res) => { 
         console.log(res.data);
-        Alert.alert('password updated Successfully!');
+        
+        ToastAndroid.show(
+          'Password updated Successfully!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
         try {
-          this.props.navigation.navigate('Login');
+          this.props.navigation.navigate('LoginasMechanic');
         } catch (e) {
           console.log('error hai', e);
         }
       })
       .catch((error) => {
-        Alert.alert('Wrong Email or Nickname !!');
+        ToastAndroid.show(
+          'Wrong Email or Nickname !!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+      
 
         console.log(error);
-      });
+      });}
+    
   };
   render() {
     return (
@@ -89,7 +129,7 @@ export default class Login extends Component {
                   Enter your nickname and new password to reset your password.
                 </Text>
               </View>
-              <View>
+              <View> 
                 <View style={[input.textinputcontainer, style.mv10]}>
                   <Image source={images.email} style={image.InputImage}></Image>
                   <TextInput
@@ -148,7 +188,7 @@ export default class Login extends Component {
 
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate('Login');
+                  this.props.navigation.navigate('LoginasMechanic');
                 }}>
                 <View
                   style={[
