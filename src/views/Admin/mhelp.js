@@ -15,6 +15,7 @@ import {
   Button,
   Platform,
   Alert,
+  ToastAndroid
 } from 'react-native';
 const axios = require('axios');
 import {
@@ -110,7 +111,12 @@ export default class Mhelp extends Component {
            this.setState({dataSource: response.data});
           console.log(this.state.dataSource);
         if (this.state.dataSource == '')
-          Alert.alert('No Report is posted!');
+        
+          ToastAndroid.show(
+            'No Report is posted!',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
       })
       .catch((error) => {
         console.log('ye lo 1', error);
@@ -130,7 +136,11 @@ export default class Mhelp extends Component {
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          Alert.alert('Question deleted successfully!')
+          ToastAndroid.show(
+            'Question deleted successfully!',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
           this.showreports();
         }
       })
@@ -165,6 +175,7 @@ export default class Mhelp extends Component {
                   key={index}
                   // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
                 //  onPress={() => this.movetodetail(index)}
+                onPress={()=>this.props.navigation.navigate('Mechanicprofile',{userid:data.userid})}
                   style={[
                     appStyle.slotCard,
                     appStyle.rowJustify,
@@ -201,17 +212,11 @@ export default class Mhelp extends Component {
                               this.deletereport(index) 
                            }}
                              >
-                              <View style={[text.text15, {color: colors.gray}]}>
-                            <Text style={{color:'red'}}>Delete </Text>
-                            </View>
+                             <Image
+                    style={[image.forward]}
+                    source={images.delete}></Image>
                             </TouchableOpacity> 
-                            <TouchableOpacity
-                             onPress={()=>this.props.navigation.navigate('Mechanicprofile',{userid:data.userid})}
-                             >
-                              <View style={[text.text15, {color: colors.gray}]}>
-                            <Text style={{color:'blue'}}>View Profile </Text>
-                            </View>
-                            </TouchableOpacity>
+                           
                         </View>
                       </View>
                     </View>

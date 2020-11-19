@@ -98,9 +98,35 @@ export default class BReportmechanic extends Component {
       
     })
   };
+
+  validatefield = () => {
+    if (this.state.date == '') {
+      ToastAndroid.show(
+        'Date Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.reportdescription == '') {
+      ToastAndroid.show(
+        'Description Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } else if (this.state.reporttype == '') {
+      ToastAndroid.show(
+        'Report type Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    } 
+    return true;
+  };
   
   submitReport = () => {
-    axios
+    if(this.validatefield()){axios
       .post(URL.Url + 'Creportregister', {
         reportdescription: this.state.reportdescription,
         reporttype: this.state.reporttype,
@@ -127,7 +153,8 @@ export default class BReportmechanic extends Component {
         Alert.alert('something went Wrong try again!!');
 
         console.log(error);
-      });
+      });}
+    
   };
 
   tabStep1 = () => {

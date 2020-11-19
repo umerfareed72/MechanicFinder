@@ -178,7 +178,7 @@ export default class Postvehicalissue extends Component {
           console.log(res.data);
           console.log(this.state.userdbid);
           ToastAndroid.show(
-            'Posted issue Successfully we will help U soon!',
+            'Posted issue Successfully!',
             ToastAndroid.BOTTOM,
             ToastAndroid.LONG,
           );

@@ -422,8 +422,8 @@ console.log(this.state.firstname)
                 {display: this.state.TabDataReview},
               ]}>
               <TextInput
-                style={input.textinputstyle}
-                placeholder="Type Suggestion about issue"
+                style={{height: 40, width: "95%", borderColor: 'gray', borderWidth: 2, borderRadius: 20,  marginBottom: 20, fontSize: 18 }}
+                placeholder=" Type Suggestion about issue"
                 secureTextEntry={true}
                 multiline={true}
                 secureTextEntry={false}
