@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const mhelp = new mongoose.Schema({
-    question:String,
-    message:String,
+    question:{type:String,required:'Question is Required'},
+    message:{type:String,required:'Message is Required'},
     userid:String,
     userimage:String
 });

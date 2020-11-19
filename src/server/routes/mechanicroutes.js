@@ -12,9 +12,9 @@ const Suggestion = mongoose.model('suggestions');
 const VehicalIssuemodel = mongoose.model('vehicalissue');
 const Mechanicreport = mongoose.model('mechanicreport');
 const Mwarning = mongoose.model('Mwarning');
-const Customerreport = mongoose.model('customerreport')
+const Customerreport = mongoose.model('customerreport');
 const Admin = mongoose.model('Adminschema');
-const uhelp = mongoose.model('uhelp')
+const uhelp = mongoose.model('uhelp');
 const BookedUsermodel = mongoose.model('BookedUsermodel');
 const mhelp = mongoose.model('mhelp');
 router.post('/issueregister', async (req, res) => {
@@ -31,7 +31,7 @@ router.post('/issueregister', async (req, res) => {
     description: req.body.description,
     date: Date.now(),
     status: req.body.status,
-    issuevideo:req.body.issuevideo
+    issuevideo: req.body.issuevideo,
   });
   await issue.save().then(() => {
     res.send(issue).catch((err) => {
@@ -57,7 +57,7 @@ router.post('/sendwarning', async (req, res) => {
   const Mwarning1 = new Mwarning({
     warning: req.body.warning,
     mdbid: req.body.mdbid,
-    date:Date.now()
+    date: Date.now(),
   });
   await Mwarning1.save().then(() => {
     res.send(Mwarning1).catch((err) => {
@@ -66,7 +66,7 @@ router.post('/sendwarning', async (req, res) => {
   });
 });
 
-router.delete('/Mdeletewarning/:id', async (req, res) => {  
+router.delete('/Mdeletewarning/:id', async (req, res) => {
   Mwarning.findByIdAndDelete(req.params.id)
     .then((data) => {
       res.json(data);
@@ -106,9 +106,9 @@ router.post('/Creportregister', async (req, res) => {
     reportdescription: req.body.reportdescription,
     reporttype: req.body.reporttype,
     userdbid: req.body.userdbid,
-    mdbid:req.body.mdbid,
+    mdbid: req.body.mdbid,
     date: req.body.date,
-    userphoto:req.body.userphoto
+    userphoto: req.body.userphoto,
   });
   await report.save().then(() => {
     res.send(report).catch((err) => {
@@ -123,9 +123,9 @@ router.post('/Mreportregister', async (req, res) => {
     reportdescription: req.body.reportdescription,
     reporttype: req.body.reporttype,
     userdbid: req.body.userdbid,
-    mdbid:req.body.mdbid,
+    mdbid: req.body.mdbid,
     date: req.body.date,
-    mechanicphoto:req.body.mechanicphoto
+    mechanicphoto: req.body.mechanicphoto,
   });
   await report.save().then(() => {
     res.send(report).catch((err) => {
@@ -134,17 +134,16 @@ router.post('/Mreportregister', async (req, res) => {
   });
 });
 
-
 router.get('/Cgetreport', (req, res) => {
   Mechanicreport.find()
     .sort('id')
     .select({
-      reportdescription:1,
-      reporttype:1,
-      userdbid:1,
-      mdbid:1,
-      date:1,
-      userphoto:1
+      reportdescription: 1,
+      reporttype: 1,
+      userdbid: 1,
+      mdbid: 1,
+      date: 1,
+      userphoto: 1,
     })
     .then((reports) => {
       if (!reports) return res.status(404).send('Not Found');
@@ -159,12 +158,12 @@ router.get('/Mgetreport', (req, res) => {
   Customerreport.find()
     .sort('id')
     .select({
-      reportdescription:1,
-      reporttype:1,
-      userdbid:1,
-      mdbid:1,
-      date:1,
-      mechanicphoto:1
+      reportdescription: 1,
+      reporttype: 1,
+      userdbid: 1,
+      mdbid: 1,
+      date: 1,
+      mechanicphoto: 1,
     })
     .then((reports) => {
       if (!reports) return res.status(404).send('Not Found');
@@ -174,12 +173,38 @@ router.get('/Mgetreport', (req, res) => {
       res.status(404).send(err.message);
     });
 });
+
+
+router.delete('/mdeletehelp/:id', (req, res) => {
+  mhelp.findByIdAndDelete({_id:req.params.id})
+    .sort('id')
+    .then((reports) => {
+      if (!reports) return res.status(404).send('Not Found');
+      else res.json(reports);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+router.delete('/udeletehelp/:id', (req, res) => {
+  uhelp.findByIdAndDelete({_id:req.params.id})
+    .sort('id')
+    .then((reports) => {
+      if (!reports) return res.status(404).send('Not Found');
+      else res.json(reports);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+
 router.post('/mhelp', async (req, res) => {
   const mhelp1 = new mhelp({
     question: req.body.question,
     message: req.body.message,
     userid: req.body.userid,
-    userimage:req.body.userimage
+    userimage: req.body.userimage,
   });
 
   mhelp1
@@ -193,13 +218,14 @@ router.post('/mhelp', async (req, res) => {
     });
 });
 router.get('/mgethelp', (req, res) => {
-  mhelp.find()
+  mhelp
+    .find()
     .sort('id')
-    .select({  
-      question:1,
-      message:1,
-      userid:1, 
-      userimage:1 
+    .select({
+      question: 1,
+      message: 1,
+      userid: 1,
+      userimage: 1,
     })
     .then((reports) => {
       if (!reports) return res.status(404).send('Not Found');
@@ -211,13 +237,14 @@ router.get('/mgethelp', (req, res) => {
 });
 
 router.get('/cgethelp', (req, res) => {
-  uhelp.find()
+  uhelp
+    .find()
     .sort('id')
-    .select({  
-      question:1,
-      message:1,
-      userid:1, 
-      userimage:1 
+    .select({
+      question: 1,
+      message: 1,
+      userid: 1,
+      userimage: 1,
     })
     .then((reports) => {
       if (!reports) return res.status(404).send('Not Found');
@@ -228,8 +255,9 @@ router.get('/cgethelp', (req, res) => {
     });
 });
 
-router.delete('/deletemhelp/:id', async (req, res) => {  
-  mhelp.findByIdAndDelete(req.params.id)
+router.delete('/deletemhelp/:id', async (req, res) => {
+  mhelp
+    .findByIdAndDelete(req.params.id)
     .then((data) => {
       res.json(data);
     })
@@ -239,7 +267,8 @@ router.delete('/deletemhelp/:id', async (req, res) => {
 });
 
 router.delete('/deletechelp/:id', async (req, res) => {
-  uhelp.findByIdAndDelete(req.params.id)
+  uhelp
+    .findByIdAndDelete(req.params.id)
     .then((data) => {
       res.json(data);
     })
@@ -297,8 +326,6 @@ router.route('/mechaniccount').get(function (req, res) {
     }
   });
 });
-
-
 
 router.route('/bookedmcount').get(function (req, res) {
   BookedUsermodel.count({Status: 'Online'}, function (err, result) {
@@ -402,7 +429,7 @@ router.get('/vehicalissues/:issuetype/:vehicaltype/:carcompany', (req, res) => {
       phone: 1,
       date: 1,
       status: 1,
-      issuevideo:1
+      issuevideo: 1,
     })
     .then((issues) => {
       if (!issues) return res.status(404).send('Not Found');
@@ -413,7 +440,7 @@ router.get('/vehicalissues/:issuetype/:vehicaltype/:carcompany', (req, res) => {
     });
 });
 
-router.get('/vehicalissuesC/:userdbid', (req, res) => { 
+router.get('/vehicalissuesC/:userdbid', (req, res) => {
   VehicalIssuemodel.find({
     userdbid: req.params.userdbid,
   })
@@ -430,7 +457,7 @@ router.get('/vehicalissuesC/:userdbid', (req, res) => {
       date: 1,
       userphoto: 1,
       status: 1,
-      issuevideo:1
+      issuevideo: 1,
     })
     .then((issues) => {
       if (!issues) return res.status(404).send('Not Found');
@@ -518,7 +545,7 @@ router.post('/adminsignin', async (req, res) => {
   if (!email || !password) {
     return res.status(422).send({error: 'Provide Email and Password Both!!'});
   }
-  const admn1 = await Admin.findOne({email}); 
+  const admn1 = await Admin.findOne({email});
   console.log(admn1);
   if (!admn1) {
     return res.status(422).send({error: 'Email not exist!!'});
@@ -575,7 +602,7 @@ router.post('/mechanicregister', async (req, res) => {
   const mechanic = new Mechanicmodel({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
-    nickname:req.body.nickname,
+    nickname: req.body.nickname,
     email: req.body.email,
     password: req.body.password,
     phone: req.body.phone,
@@ -644,10 +671,9 @@ router.put('/mechaniclocation/:id', async (req, res) => {
     });
 });
 
-
 //Update User Profile
 router.put('/mforgetpass', async (req, res) => {
-  console.log('in m forget api')
+  console.log('in m forget api');
   let {nickname, npassword, email} = req.body;
   bcrypt.genSalt(10, (err, salt) => {
     console.log('IN GENRATE SALT');
@@ -702,9 +728,8 @@ router.put('/mforgetpass', async (req, res) => {
   }
 });
 
-
 router.get('/bodymechanic', (req, res) => {
-  Mechanicmodel.find({skilltype:'Body'})
+  Mechanicmodel.find({skilltype: 'Body'})
     .sort('id')
     .select({
       firstname: 1,
@@ -736,7 +761,7 @@ router.get('/bodymechanic', (req, res) => {
 });
 
 router.get('/topmechanics', (req, res) => {
-  Mechanicmodel.find({rating:{$gte:3}})
+  Mechanicmodel.find({rating: {$gte: 3}})
     .sort('id')
     .then((mechanic) => {
       if (!mechanic) {
@@ -748,10 +773,9 @@ router.get('/topmechanics', (req, res) => {
       return res.send(error);
     });
 });
-
 
 router.get('/enginemechanic', (req, res) => {
-  Mechanicmodel.find({skilltype:'Engine'})
+  Mechanicmodel.find({skilltype: 'Engine'})
     .sort('id')
     .select({
       firstname: 1,
@@ -781,10 +805,9 @@ router.get('/enginemechanic', (req, res) => {
       return res.send(error);
     });
 });
-
 
 router.get('/electricmechanic', (req, res) => {
-  Mechanicmodel.find({skilltype:'Electric'})
+  Mechanicmodel.find({skilltype: 'Electric'})
     .sort('id')
     .select({
       firstname: 1,
@@ -815,10 +838,8 @@ router.get('/electricmechanic', (req, res) => {
     });
 });
 
-
-
 router.get('/paintermechanic', (req, res) => {
-  Mechanicmodel.find({skilltype:'Painter'})
+  Mechanicmodel.find({skilltype: 'Painter'})
     .sort('id')
     .select({
       firstname: 1,
@@ -983,7 +1004,7 @@ router.get(
               let result = c * r; //Get Result In KM
               //Found In 10 KM
 
-              if (result <= 100) {
+              if (result <= 10) {
                 //Distance get
                 nearest.push({
                   mechanicid: item.id,
