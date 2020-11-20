@@ -152,17 +152,45 @@ export default class RMechanicprofile extends Component {
   };
 
 
-  sendwarning = () => {
+  sendwarning = () => {   
     axios
       .post(URL.Url + 'sendwarning', {
         warning: this.state.warning,
         mdbid: this.state.mdbid,
       })
-      .then(async (res) => {
+      .then(async (res) => {  
         console.log(res.data);
         //console.log(this.state.mdbid);
         ToastAndroid.show(
-          'Send Warning Successfully',
+          'Blocked Successfully',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+        this.toggleModal();
+      })
+      .catch((error) => {
+        ToastAndroid.show(
+          'Warning not posted try again!!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+
+        console.log(error);
+      });
+  };
+
+
+  blockmechanic = () => {
+    axios
+      .put(URL.Url + 'blockmechanic/'+ this.state.mdbid, {
+        warning: this.state.warning,
+        mdbid: this.state.mdbid,
+      })
+      .then(async (res) => {  
+        console.log(res.data);
+        //console.log(this.state.mdbid);
+        ToastAndroid.show(
+          'Blocked Successfully',
           ToastAndroid.BOTTOM,
           ToastAndroid.LONG,
         );
@@ -265,10 +293,10 @@ export default class RMechanicprofile extends Component {
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={this.deletemechanic}
+                      onPress={this.blockmechanic}
                       style={[button.Profilebutton, {marginTop: 20}]}>
                       <Text style={[button.bookbutton, text.center]}>
-                        Delete Account
+                        Block Account
                       </Text>
                     </TouchableOpacity>
                   </View>

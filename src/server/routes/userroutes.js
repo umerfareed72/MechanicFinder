@@ -29,6 +29,7 @@ router.post('/userregister', (req, res) => {
     city: req.body.city,
     country: req.body.country,
     date: req.body.date,
+    blocked:false
   });
 
   User.save()
@@ -154,6 +155,25 @@ router.put('/updateuser/:id', (req, res) => {
       res.status(404).send(err.message);
     });
 });
+
+
+
+
+router.put('/blockuser/:id', (req, res) => {
+  const User = Usermodel.findByIdAndUpdate(req.params.id, {
+    blocked:true
+  })
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+      // const token = jwt.sign({userid: User._id}, jwtkey);
+      // res.send({token});
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
 
 
 router.delete('/deleteuser/:id', (req, res) => {  

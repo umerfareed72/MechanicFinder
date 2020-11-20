@@ -92,7 +92,7 @@ export default class MechanicRegister extends Component {
         nickname:this.state.nickname,
         email: this.state.Email,
         password: this.state.Password,
-        phone: this.state.Phone,
+       // phone: this.state.Phone,
         address: this.state.address,
         photo: this.state.photo,
         carcompany: this.state.carcompany,
@@ -111,6 +111,7 @@ export default class MechanicRegister extends Component {
         console.log(res.data.token);
         try {
           this.props.navigation.navigate('LoginasMechanic');
+          ToastAndroid.show('You are Registered', ToastAndroid.BOTTOM);
         } catch (e) {
           console.log('error hai', e);
         }
@@ -313,10 +314,10 @@ export default class MechanicRegister extends Component {
       ToastAndroid.show('Mechanic Rate Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
       return false;
     }
-    else if(this.state.photo==""){
-      ToastAndroid.show('Picture Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
-      return false;
-    }
+    // else if(this.state.photo==""){
+    //   ToastAndroid.show('Picture Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    //   return false;
+    // }
   return true
   }
   

@@ -53,7 +53,7 @@ router.post('/registeradmin', async (req, res) => {
   });
 });
 
-router.post('/sendwarning', async (req, res) => {
+router.post('/sendwarning', async (req, res) => { 
   const Mwarning1 = new Mwarning({
     warning: req.body.warning,
     mdbid: req.body.mdbid,
@@ -567,9 +567,14 @@ router.post('/mechanicsignin', async (req, res) => {
   }
   const mechanic = await Mechanicmodel.findOne({email});
   if (!mechanic) {
-    return res.status(422).send({error: 'Email not exist!!'});
+    return res.status(422).send({message: 'Email not exist!!'});
   }
+   
   try {
+    if(mechanic.blocked==true){
+      return res.send({message:"blocked"});
+    }
+    else
     await mechanic.comparePassword(password);
     const token = jwt.sign(
       {
@@ -618,6 +623,7 @@ router.post('/mechanicregister', async (req, res) => {
     vehicletype: req.body.vehicletype,
     date: req.body.date,
     rating: req.body.rating,
+    blocked:false
   });
 
   await mechanic
@@ -760,6 +766,70 @@ router.get('/bodymechanic', (req, res) => {
     });
 });
 
+
+router.get('/getblockmechanic', (req, res) => {
+  console.log('in getblock mechaniuc api')
+  Mechanicmodel.find({blocked: true})
+    .sort('id')
+    .select({
+      _id:1,
+      firstname: 1,
+      lastname: 1,
+      email: 1,
+      phone: 1,
+      address: 1,
+      photo: 1,
+      carcompany: 1,
+      city: 1,
+      country: 1,
+      skilltype: 1,
+      vehicletype: 1,
+      date: 1,
+      latitude: 1,
+      longitude: 1,
+      mechanicrate: 1,
+      rating: 1,
+    })
+    .then((mechanic) => {
+      if (!mechanic) {
+        return res.status(404).send('Mechanic Not Found');
+      }
+      return res.status(200).json(mechanic);
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
+
+router.put('/blockmechanic/:id', (req, res) => {
+  const User = Mechanicmodel.findByIdAndUpdate(req.params.id, {
+    blocked:true
+  })
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+      // const token = jwt.sign({userid: User._id}, jwtkey);
+      // res.send({token});
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
+
+router.put('/unblockmechanic/:id', (req, res) => {
+  const User = Mechanicmodel.findByIdAndUpdate(req.params.id, {
+    blocked:req.body.blocked
+  })
+    .then((data) => {
+      console.log(data);
+      res.send(data);
+      // const token = jwt.sign({userid: User._id}, jwtkey);
+      // res.send({token});
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    });
+});
 router.get('/topmechanics', (req, res) => {
   Mechanicmodel.find({rating: {$gte: 3}})
     .sort('id')

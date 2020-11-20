@@ -88,7 +88,7 @@ export default class Help extends Component {
   
 
   submithelp = () => {
-    axios
+    if(this.validatefield()){axios
       .post(URL.Url + 'uhelp', {
         question: this.state.question,
         message: this.state.message,
@@ -109,7 +109,8 @@ export default class Help extends Component {
         Alert.alert('something went Wrong!!');
 
         console.log(error);
-      });
+      });}
+    
   };
 
   render() {
