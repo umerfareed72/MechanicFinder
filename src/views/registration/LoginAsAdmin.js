@@ -149,8 +149,10 @@ export default class LoginAsAdmin extends Component {
              
 
                 <TouchableOpacity
-                  onPress={()=>{this.props.navigation.navigate('AdminDashboard')}
-                    // this.submitData
+                  onPress=
+                  {
+                    // ()=>{this.props.navigation.navigate('AdminDashboard')}
+                    this.submitData
                     }>
                   <View style={[button.buttoncontainer, style.mt40]}>
                     <Text

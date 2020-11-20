@@ -436,7 +436,7 @@ class AdminDashboard extends Component {
                     <View style={[style.rowBtw, style.aiCenter]}>
                       <View style={[style.mr10]}>
                         <Image
-                          source={{uri:data.photo}}
+                          source={data.photo}
                           style={[image.image35]}></Image>
                       </View>
                       <View style={style.p10}>
