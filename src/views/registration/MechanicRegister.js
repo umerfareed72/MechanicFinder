@@ -92,7 +92,7 @@ export default class MechanicRegister extends Component {
         nickname:this.state.nickname,
         email: this.state.Email,
         password: this.state.Password,
-       // phone: this.state.Phone,
+        phone: this.state.Phone,
         address: this.state.address,
         photo: this.state.photo,
         carcompany: this.state.carcompany,

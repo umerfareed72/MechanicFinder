@@ -53,7 +53,7 @@ router.post('/registeradmin', async (req, res) => {
   });
 });
 
-router.post('/sendwarning', async (req, res) => { 
+router.post('/sendwarning', async (req, res) => {
   const Mwarning1 = new Mwarning({
     warning: req.body.warning,
     mdbid: req.body.mdbid,
@@ -569,13 +569,11 @@ router.post('/mechanicsignin', async (req, res) => {
   if (!mechanic) {
     return res.status(422).send({message: 'Email not exist!!'});
   }
-   
+
   try {
-    if(mechanic.blocked==true){
-      return res.send({message:"blocked"});
-    }
-    else
-    await mechanic.comparePassword(password);
+    if (mechanic.blocked == true) {
+      return res.send({message: 'blocked'});
+    } else await mechanic.comparePassword(password);
     const token = jwt.sign(
       {
         mechanicid: mechanic._id,
@@ -593,6 +591,7 @@ router.post('/mechanicsignin', async (req, res) => {
         date: mechanic.date,
         mechanicrate: mechanic.mechanicrate,
         rating: mechanic.rating,
+        role:'Mechanic'
       },
       jwtkey,
     );
@@ -623,7 +622,7 @@ router.post('/mechanicregister', async (req, res) => {
     vehicletype: req.body.vehicletype,
     date: req.body.date,
     rating: req.body.rating,
-    blocked:false
+    blocked: false,
   });
 
   await mechanic
@@ -766,13 +765,12 @@ router.get('/bodymechanic', (req, res) => {
     });
 });
 
-
 router.get('/getblockmechanic', (req, res) => {
-  console.log('in getblock mechaniuc api')
+  console.log('in getblock mechaniuc api');
   Mechanicmodel.find({blocked: true})
     .sort('id')
     .select({
-      _id:1,
+      _id: 1,
       firstname: 1,
       lastname: 1,
       email: 1,
@@ -803,7 +801,7 @@ router.get('/getblockmechanic', (req, res) => {
 
 router.put('/blockmechanic/:id', (req, res) => {
   const User = Mechanicmodel.findByIdAndUpdate(req.params.id, {
-    blocked:true
+    blocked: true,
   })
     .then((data) => {
       console.log(data);
@@ -818,7 +816,7 @@ router.put('/blockmechanic/:id', (req, res) => {
 
 router.put('/unblockmechanic/:id', (req, res) => {
   const User = Mechanicmodel.findByIdAndUpdate(req.params.id, {
-    blocked:req.body.blocked
+    blocked: req.body.blocked,
   })
     .then((data) => {
       console.log(data);
@@ -1035,6 +1033,7 @@ router.get(
           carcompany: req.params.carcompany,
           city: city,
           country: country,
+          blocked: false,
         })
           .sort('id')
           .select({
