@@ -174,9 +174,9 @@ router.get('/Mgetreport', (req, res) => {
     });
 });
 
-
 router.delete('/mdeletehelp/:id', (req, res) => {
-  mhelp.findByIdAndDelete({_id:req.params.id})
+  mhelp
+    .findByIdAndDelete({_id: req.params.id})
     .sort('id')
     .then((reports) => {
       if (!reports) return res.status(404).send('Not Found');
@@ -187,7 +187,8 @@ router.delete('/mdeletehelp/:id', (req, res) => {
     });
 });
 router.delete('/udeletehelp/:id', (req, res) => {
-  uhelp.findByIdAndDelete({_id:req.params.id})
+  uhelp
+    .findByIdAndDelete({_id: req.params.id})
     .sort('id')
     .then((reports) => {
       if (!reports) return res.status(404).send('Not Found');
@@ -197,7 +198,6 @@ router.delete('/udeletehelp/:id', (req, res) => {
       res.status(404).send(err.message);
     });
 });
-
 
 router.post('/mhelp', async (req, res) => {
   const mhelp1 = new mhelp({
@@ -763,6 +763,7 @@ router.get('/bodymechanic', (req, res) => {
 router.get('/topmechanics', (req, res) => {
   Mechanicmodel.find({rating: {$gte: 3}})
     .sort('id')
+    .select({rating: 1, firstname: 1, photo: 1, lastname: 1})
     .then((mechanic) => {
       if (!mechanic) {
         return res.status(404).send('Mechanic Not Found');
