@@ -130,7 +130,7 @@ export default class AdminSetting extends Component {
                       source={images.userPurple}
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
-                      Manage User
+                      Blocked Mechanics
                     </Text>
                   </View>
 

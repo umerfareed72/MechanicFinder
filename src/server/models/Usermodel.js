@@ -27,7 +27,8 @@ const Userschema = new mongoose.Schema({
   country: {type: String, required: 'Country is required'},
   longitude: String,
   latitude: String,
-  date: {type: String, required: 'Date of Birth Required is required'}
+  date: {type: String, required: 'Date of Birth Required is required'},
+  blocked:Boolean
 });
 
 

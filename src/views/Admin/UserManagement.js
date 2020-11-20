@@ -90,9 +90,9 @@ export default class UserManagement extends Component {
     // });
 
     
-    console.log('in showissuesC');
+    console.log('in block mechanic');
     await axios
-      .get(URL.Url + 'users')
+      .get(URL.Url + 'getblockmechanic')
       .then((response) => {
         if (response.data) {
           console.log(response.data);
@@ -132,16 +132,19 @@ export default class UserManagement extends Component {
     }, 2000);
   };
 
+
   deleteissue = (id) => {
-    const issuedata = this.state.dataSource[id];
-    console.log(issuedata);
+    const mechanicdata = this.state.dataSource[id];
+    console.log(mechanicdata);
+    console.log("in unblock method");
+    console.log('iddd mechanic',mechanicdata._id);
     axios
-      .delete(URL.Url + 'deleteuser/' + issuedata._id)
+      .put(URL.Url + 'unblockmechanic/' + mechanicdata._id,{blocked:false})
       .then((response) => {
         if (response.data) {
           console.log(response.data);
           ToastAndroid.show(
-            'User Account Deleted !',
+            'Mechanic unblocked successfully',
             ToastAndroid.BOTTOM,
             ToastAndroid.LONG,
           );
@@ -153,6 +156,28 @@ export default class UserManagement extends Component {
         Alert.alert('something is wrong');
       });
   };
+
+  // deleteissue = (id) => {
+  //   const issuedata = this.state.dataSource[id];
+  //   console.log(issuedata);
+  //   axios
+  //     .delete(URL.Url + 'deleteuser/' + issuedata._id)
+  //     .then((response) => {
+  //       if (response.data) {
+  //         console.log(response.data);
+  //         ToastAndroid.show(
+  //           'User Account Deleted !',
+  //           ToastAndroid.BOTTOM,
+  //           ToastAndroid.LONG,
+  //         );
+  //         this.showIssues();
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log('ye lo 2', error);
+  //       Alert.alert('something is wrong');
+  //     });
+  // };
   render() {
     return (
       <SafeAreaView style={appStyle.safeContainer}>
@@ -165,7 +190,7 @@ export default class UserManagement extends Component {
          
           <View>
             <Text style={[text.heading1purple, text.bold]}>
-              Registered Users :
+              Blocked Mechanics :
             </Text>
             <Text style={[text.text14, {color: '#4A4A4A'}]}>Currently Registered</Text>
           </View>

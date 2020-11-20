@@ -101,18 +101,27 @@ export default class Login extends Component {
 
         try {
           
-        ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
+          if(res.data.message=='blocked'){
+            ToastAndroid.show('You are Blocked by Admin', ToastAndroid.BOTTOM);
+          }
+          else
+        {ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
           await AsyncStorage.setItem('token', res.data.token);
          
           console.log(res.data.token);
-          this.props.navigation.navigate('mechanicStack');
+          this.props.navigation.navigate('mechanicStack');}
         } catch (e) {
+         
           console.log('error hai', e);
           Alert.alert('Invalid email password');
         }
       })
       .catch((error) => {
-        ToastAndroid.show('Invalid Mechanic', ToastAndroid.BOTTOM);
+        console.log('error1',error)
+       
+      
+        console.log(error)
+        ToastAndroid.show("Invalid User", ToastAndroid.BOTTOM);
       });
     }
   };
