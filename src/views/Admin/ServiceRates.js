@@ -81,15 +81,14 @@ export default class Products extends Component {
     const senddata = JSON.stringify(this.state.products[id]);
     AsyncStorage.setItem('ServiceRatedata', senddata);
       this.props.navigation.navigate('UpdateServiceRate');
-     
-    };
+      };
 
   deleteProduct = (id) => {
     axios
       .delete(URL.Url + 'deleteServices/' + this.state.products[id]._id)
       .then((del) => {
         console.log(del.data);
-        this.toggleModal();
+     this.getProduct()
       });
   };
 
@@ -129,7 +128,7 @@ export default class Products extends Component {
                 <TouchableOpacity
                   key={index}
                   onPress={() => this.selectProduct(index)}>
-                  <View style={{}}>
+                  {/* <View style={{}}>
                     <Modal
                       isVisible={this.state.isModalVisible}
                       animationInTiming={500}
@@ -161,7 +160,7 @@ export default class Products extends Component {
                         </View>
                       </View>
                     </Modal>
-                  </View>
+                  </View> */}
 
                   <View
                     style={[
@@ -188,7 +187,7 @@ export default class Products extends Component {
                      
                       </View>
                     </View>
-                    <TouchableOpacity onPress={this.toggleModal}>
+                    <TouchableOpacity onPress={()=>this.deleteProduct(index)}>
                       <Image
                         style={[image.forward]}
                         source={images.delete}></Image>

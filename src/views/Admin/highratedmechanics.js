@@ -157,8 +157,8 @@ export default class Highratedmechanics extends Component {
                     <View style={[style.rowBtw, style.aiCenter]}>
                       <View style={[style.mr10]}>
                         <Image
-                          source={data.photo}
-                          style={[image.image35]}></Image>
+                          source={{uri:data.photo}}
+                          style={[image.userImg]}></Image>
                       </View>
                       <View style={style.p10}>
                         <View>

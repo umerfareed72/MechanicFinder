@@ -145,7 +145,9 @@ export default class Products extends Component {
                       animationOutTiming={500}>
                       <View style={[style.flex1, appStyle.rowCenter]}>
                         <View style={[appStyle.modalBg]}>
-                          <Text style={[]}>Are You Sure?</Text>
+                          <Text style={[]}>Sure! 
+                        </Text> 
+                        <Text> Do you want to delete?</Text>
                           <View style={[style.row, style.mt10]}>
                             <TouchableOpacity
                               style={[style.mh10]}

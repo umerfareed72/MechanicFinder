@@ -41,7 +41,6 @@ export default class App extends React.Component {
       this.setState({isMechanicLogin: false});
     }
   };
-
   async componentDidMount() {
     this.detectlogin();
     this.detectMechanicLogin();
