@@ -328,7 +328,8 @@ console.log(this.state.firstname)
               </View>
               <View style={[style.pv10]}>
                 <Text style={[text.paraGray]}>{issuedata.description}</Text>
-              </View><View
+              </View>
+              {/* <View
               style={[
                 style.mb50,
                 appStyle.bodyLayout,
@@ -386,7 +387,7 @@ console.log(this.state.firstname)
                   </TouchableOpacity>
                 </View>
               </View>
-            </View>
+            </View> */}
             </View>
             
             {this.state.suggestiondata.map((data, index) => {

@@ -481,58 +481,6 @@ export default class Postvehicalissue extends Component {
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
                 </View>
-                <View
-                style={[
-                  {
-                    backgroundColor: colors.white,
-                   
-                  },
-                ]}>
-                <View style={appStyle.headingLayout}>
-                  <Text style={[style.headerStyle, style.bottomborder],{textAlign:'center'}}>
-                    Upload Issue Video
-                  </Text>
-                </View>
-                <View style={[style.flex1, style.jcCenter]}>
-                  <View style={[style.aiCenter, style.mv20]}>
-                    <View style={[image.largeovalcontainer]}>
-                      {
-                        <Image
-                          source={{uri: this.state.issuevideo1}}
-                          style={[image.largeovalcontainerupload]}
-                        />
-                      }
-                      <TouchableOpacity
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                        onPress={this.handleChoosePhoto}>
-                        <Image
-                          style={[image.largeimagestyle]}
-                          source={images.camerdark}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                    <View style={style.mv10}>
-                      <Text
-                        style={[
-                          text.textheader5,
-                          style.asCenter,
-                          {textAlign: 'center'},
-                        ]}>
-                        Wait for image of your video which will visible here in 3 seconds
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                
-              </View>
                 <TouchableOpacity onPress={this.tabStep2}>
                   <View
                     style={[

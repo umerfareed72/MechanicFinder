@@ -60,7 +60,7 @@ export default class Newuserconfirm extends Component {
       token: '',
       // FacebookPageId: '',
       profile_pic: '',
-      code:this.props.navigation.getParam('code'),
+      code: this.props.navigation.getParam('code'),
       email: this.props.navigation.getParam('email'),
     };
   }
@@ -92,46 +92,40 @@ export default class Newuserconfirm extends Component {
   };
 
   submitData = () => {
-  {
-      console.log("email in frontend",this.state.email);
+    {
+      console.log('email in frontend', this.state.email);
       //console.log(this.state.email);
 
-      if(this.state.Password==this.state.code)
-    {axios
-      .put(URL.Url + 'confirmuser', {
-          email :this.state.email,
-          econfirm:true,
-      })
-      .then((res) => {
-        console.log("resss",res);
+      if (this.state.Password == this.state.code) {
+        axios
+          .put(URL.Url + 'confirmuser', {
+            email: this.state.email,
+            econfirm: true,
+          })
+          .then((res) => {
+            console.log('resss', res);
 
-        try {
-          
-          if(res.data.message=='confirm')
-          {
-            ToastAndroid.show('Email Confirmed', ToastAndroid.BOTTOM);
-            this.props.navigation.navigate("LoginasMechanic")
-          }
-         
-          else
-        {
-            ToastAndroid.show('Email Not Confirmed', ToastAndroid.BOTTOM);
-        }
-        } catch (e) {
-         
-          console.log('error hai', e);
-          Alert.alert('Invalid some');
-        }
-      })
-      .catch((error) => {
-        console.log('error1',error)
-       
-      
-        console.log(error)
-        ToastAndroid.show("Invalid Api", ToastAndroid.BOTTOM);
-      });}
-      else
-      {ToastAndroid.show("Invalid code", ToastAndroid.BOTTOM);}
+            try {
+              if (res.data.message == 'confirm') {
+                ToastAndroid.show('Email Confirmed', ToastAndroid.BOTTOM);
+                this.props.navigation.navigate('LoginasMechanic');
+              } else {
+                ToastAndroid.show('Email Not Confirmed', ToastAndroid.BOTTOM);
+              }
+            } catch (e) {
+              console.log('error hai', e);
+              Alert.alert('Invalid some');
+            }
+          })
+          .catch((error) => {
+            console.log('error1', error);
+
+            console.log(error);
+            ToastAndroid.show('Invalid Api', ToastAndroid.BOTTOM);
+          });
+      } else {
+        ToastAndroid.show('Invalid code', ToastAndroid.BOTTOM);
+      }
     }
   };
 
@@ -151,7 +145,7 @@ export default class Newuserconfirm extends Component {
                 style={[style.headerHeight4]}>
                 <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
                   <Text style={[text.Eutemia, text.white, text.text30]}>
-                    Smart Auto Mechanic Finder 
+                    Smart Auto Mechanic Finder
                   </Text>
                   <Text
                     style={[
@@ -167,30 +161,27 @@ export default class Newuserconfirm extends Component {
 
             <View style={[appStyle.bodyBg]}>
               <View style={[appStyle.headingLayout]}>
-                <Text style={[style.headerStyle]}>Confirm your email</Text>
+                <Text style={[text.heading2]}>Confirm your email</Text>
               </View>
               <View>
-                <View style={[input.textinputcontainer, style.mv20]}>
-                  <Image source={images.email} style={image.InputImage}></Image>
-                  <Text
-                    
-                    underlineColorAndroid="transparent">
-                        Verification code is sent to your email
-                    </Text>
+                <View style={[style.w80, style.asCenter, style.mv30]}>
+                  <Text style={[text.center, text.heading2Gray]}>
+                    Code is send to your email!Please verify your email
+                  </Text>
                 </View>
-
-                <View style={[input.textinputcontainer, style.mt20]}>
+                <View style={[input.textinputcontainer]}>
                   <Image source={images.key} style={image.InputImage}></Image>
                   <TextInput
                     onFocus={this.changeheight}
                     style={input.textinputstyle}
                     placeholder="Code"
+                    keyboardType={'numeric'}
                     onChangeText={(text) => {
                       this.setState({
                         Password: text,
                       });
                     }}
-                    secureTextEntry={true}
+                    secureTextEntry={false}
                     underlineColorAndroid="transparent"></TextInput>
                 </View>
                 <View style={[style.pv10, style.ph30]}>
@@ -203,8 +194,7 @@ export default class Newuserconfirm extends Component {
                   </Text>
                 </View>
 
-                <TouchableOpacity
-                  onPress={this.submitData}>
+                <TouchableOpacity onPress={this.submitData}>
                   <View style={[button.buttoncontainer, style.mt20]}>
                     <Text
                       style={[
@@ -216,9 +206,6 @@ export default class Newuserconfirm extends Component {
                   </View>
                 </TouchableOpacity>
               </View>
-
-             
-            
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
