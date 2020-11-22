@@ -5,7 +5,6 @@ const app = express();
 const Pusher = require('pusher');
 const pusherConfig = require('../../src/config/pusher.json'); // (1)
 const pusherClient = new Pusher(pusherConfig);
-
 const cors = require('cors');
 require('./models/mechanicmodel');
 const requiretoken = require('./middlewares/requiretoken');

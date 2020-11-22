@@ -74,15 +74,29 @@ export default class MechanicRegister extends Component {
       latitude: '',
       date: 'Date Of Birth',
       mechanicrate: 0,
+      code:'',
     };
   }
   check = () => {
     if (this.state.Password == this.state.CPassword) {
       this.submitData();
     } else {
-  ToastAndroid.show('Password Not Mathed')
+  ToastAndroid.show('Password Not Matched')
     }
   };
+
+  
+  async componentDidMount() {
+    const {navigation} = this.props;
+   this.number();
+    this.focusListener = navigation.addListener('didFocus', () => {
+      
+      this.number();
+      
+    });
+  }
+  
+  
   submitData = () => {
   if(this.validatefield()){
     axios
@@ -92,7 +106,7 @@ export default class MechanicRegister extends Component {
         nickname:this.state.nickname,
         email: this.state.Email,
         password: this.state.Password,
-       // phone: this.state.Phone,
+        phone: this.state.Phone,
         address: this.state.address,
         photo: this.state.photo,
         carcompany: this.state.carcompany,
@@ -104,24 +118,55 @@ export default class MechanicRegister extends Component {
         longitude: this.state.longitude,
         latitude: this.state.latitude,
         mechanicrate: this.state.mechanicrate,
-        rating:this.state.rating
+        rating:this.state.rating,
+        code : this.state.code
       })
       .then(async (res) => {
         console.log(res);
-        console.log(res.data.token);
+        console.log(res.data.token)
+       
         try {
+          
           this.props.navigation.navigate('LoginasMechanic');
           ToastAndroid.show('You are Registered', ToastAndroid.BOTTOM);
         } catch (e) {
           console.log('error hai', e);
         }
       })
+      // .then(()=>{this.sendemail();})
+    
       .catch((error) => {
         ToastAndroid.show('You are Not Registered', ToastAndroid.BOTTOM);
         console.log(error);
       });
   }
+  this.sendemail();
   };
+
+  number = () => {
+    this.setState({ code : Math.trunc(Math.random()*100000).toString()})
+      console.log("code",this.state.code)
+  }
+
+  sendemail = () => {  
+    try {
+      axios.post(URL.Url + 'sendemail',{
+        email:this.state.Email,
+        code:this.state.code
+      }).then((res) => {
+        console.log(res.data);
+      });
+    } catch (error) {
+      console.log(error);
+      return (
+        <View style={[style.aiCenter]}>
+          <ActivityIndicator color="#bc2b78" size="large"></ActivityIndicator>
+        </View>
+      );
+    }
+  };
+
+
   handleChoosePhoto = () => {
     const options = {
       title: 'Take Image From',

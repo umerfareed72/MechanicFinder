@@ -162,7 +162,7 @@ export default class RMechanicprofile extends Component {
         console.log(res.data);
         //console.log(this.state.mdbid);
         ToastAndroid.show(
-          'Blocked Successfully',
+          'Warning Send Successfully',
           ToastAndroid.BOTTOM,
           ToastAndroid.LONG,
         );

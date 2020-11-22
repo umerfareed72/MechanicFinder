@@ -40,7 +40,7 @@ import appStyle from '../../assets/styles/appStyle';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Dashboard from '../main/Dashboard';
 
-export default class Login extends Component {
+export default class Newuserconfirm extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
@@ -60,6 +60,8 @@ export default class Login extends Component {
       token: '',
       // FacebookPageId: '',
       profile_pic: '',
+      code:this.props.navigation.getParam('code'),
+      email: this.props.navigation.getParam('email'),
     };
   }
   UserRegister = () => {
@@ -90,36 +92,35 @@ export default class Login extends Component {
   };
 
   submitData = () => {
-  if(this.validateuser()){
-    axios
-      .post(URL.Url + 'mechanicsignin', {
-        email: this.state.Email,
-        password: this.state.Password,
+  {
+      console.log("email in frontend",this.state.email);
+      //console.log(this.state.email);
+
+      if(this.state.Password==this.state.code)
+    {axios
+      .put(URL.Url + 'confirmuser', {
+          email :this.state.email,
+          econfirm:true,
       })
-      .then(async (res) => {
-        console.log(res);
+      .then((res) => {
+        console.log("resss",res);
 
         try {
           
-          if(res.data.message=='blocked'){
-            ToastAndroid.show('You are Blocked by Admin', ToastAndroid.BOTTOM);
-          }
-          else if(res.data.message=='new')
+          if(res.data.message=='confirm')
           {
-            console.log('New user');
-            console.log("codeg",res.data.code)
-            this.props.navigation.navigate('newuserconfirm',{code:res.data.code,email:res.data.email});
+            ToastAndroid.show('Email Confirmed', ToastAndroid.BOTTOM);
+            this.props.navigation.navigate("LoginasMechanic")
           }
-          else
-        {ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
-          await AsyncStorage.setItem('token', res.data.token);
          
-          console.log(res.data.token);
-          this.props.navigation.navigate('mechanicStack');}
+          else
+        {
+            ToastAndroid.show('Email Not Confirmed', ToastAndroid.BOTTOM);
+        }
         } catch (e) {
          
           console.log('error hai', e);
-          Alert.alert('Invalid email password');
+          Alert.alert('Invalid some');
         }
       })
       .catch((error) => {
@@ -127,8 +128,10 @@ export default class Login extends Component {
        
       
         console.log(error)
-        ToastAndroid.show("Invalid User", ToastAndroid.BOTTOM);
-      });
+        ToastAndroid.show("Invalid Api", ToastAndroid.BOTTOM);
+      });}
+      else
+      {ToastAndroid.show("Invalid code", ToastAndroid.BOTTOM);}
     }
   };
 
@@ -148,7 +151,7 @@ export default class Login extends Component {
                 style={[style.headerHeight4]}>
                 <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
                   <Text style={[text.Eutemia, text.white, text.text30]}>
-                    Smart Auto Mechanic Finder
+                    Smart Auto Mechanic Finder 
                   </Text>
                   <Text
                     style={[
@@ -156,7 +159,7 @@ export default class Login extends Component {
                       text.CinzelDecorativeBold,
                       text.white,
                     ]}>
-                    (Mechanic)
+                    (Welcom to our App)
                   </Text>
                 </View>
               </LinearGradient>
@@ -164,21 +167,16 @@ export default class Login extends Component {
 
             <View style={[appStyle.bodyBg]}>
               <View style={[appStyle.headingLayout]}>
-                <Text style={[style.headerStyle]}>Welcome</Text>
+                <Text style={[style.headerStyle]}>Confirm your email</Text>
               </View>
               <View>
                 <View style={[input.textinputcontainer, style.mv20]}>
                   <Image source={images.email} style={image.InputImage}></Image>
-                  <TextInput
-                    onFocus={this.changeheight}
-                    style={input.textinputstyle}
-                    placeholder="Email"
-                    onChangeText={(text) => {
-                      this.setState({
-                        Email: text,
-                      });
-                    }}
-                    underlineColorAndroid="transparent"></TextInput>
+                  <Text
+                    
+                    underlineColorAndroid="transparent">
+                        Verification code is sent to your email
+                    </Text>
                 </View>
 
                 <View style={[input.textinputcontainer, style.mt20]}>
@@ -186,7 +184,7 @@ export default class Login extends Component {
                   <TextInput
                     onFocus={this.changeheight}
                     style={input.textinputstyle}
-                    placeholder="Password"
+                    placeholder="Code"
                     onChangeText={(text) => {
                       this.setState({
                         Password: text,
@@ -201,7 +199,7 @@ export default class Login extends Component {
                       this.props.navigation.navigate('Mforget');
                     }}
                     style={[text.right, text.text14, {color: colors.link}]}>
-                    Forgot Password
+                    Resend code
                   </Text>
                 </View>
 
@@ -213,56 +211,14 @@ export default class Login extends Component {
                         button.touchablebutton,
                         {color: colors.darkBlue},
                       ]}>
-                      Login
+                      Submit
                     </Text>
                   </View>
                 </TouchableOpacity>
               </View>
 
-              <View style={[style.asCenter, style.mt40]}>
-                <Text style={[text.heading6]}>DO YOU HAVE AN ACCOUNT?</Text>
-              </View>
-              <View
-                style={[
-                  appStyle.rowBtw,
-                  style.mh15,
-                  style.mv10,
-                  appStyle.bodyShadowTop,
-                ]}>
-                <TouchableOpacity
-                  onPress={this.UserRegister}
-                  style={[
-                    {backgroundColor: this.state.Uregister},
-                    appStyle.colLeft,
-                  ]}>
-                  <Text
-                    style={[
-                      style.asCenter,
-                      text.heading3,
-                      text.semibold,
-                      {color: this.state.textUser},
-                    ]}>
-                    User
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={this.MechanicRegister}
-                  style={[
-                    appStyle.colRight,
-                    {backgroundColor: this.state.Mregister},
-                  ]}>
-                  <Text
-                    style={[
-                      style.asCenter,
-                      text.heading3,
-                      text.semibold,
-                      {color: this.state.textMechanic},
-                    ]}>
-                    Mechanic
-                  </Text>
-                </TouchableOpacity>
-              </View>
+             
+            
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

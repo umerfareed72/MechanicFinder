@@ -101,7 +101,7 @@ export default class Editissue extends Component {
   
   submitData = () => {
     axios
-      .put(URL.Url + 'updateissue/'+this.state.issueid, {
+      .put(URL.Url + 'updateissue/'+this.state.issueid, { 
         issuetype: this.state.issuetype,
         phone: this.state.Phone,
         photo: this.state.photo,

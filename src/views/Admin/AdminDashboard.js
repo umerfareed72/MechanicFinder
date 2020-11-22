@@ -50,8 +50,11 @@ class AdminDashboard extends Component {
       bodyissue: '',
       registereduser: '',
       topmechanics: [],
+      code1:''
     };
   }
+
+ 
 
   gettopMechanics = () => {
     try {
@@ -76,6 +79,7 @@ class AdminDashboard extends Component {
       this.getmechanicdata();
       this.getissuedata();
       this.gettopMechanics();
+      
     });
   }
   getmechanicdata = () => {
@@ -137,7 +141,8 @@ class AdminDashboard extends Component {
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
+     
   };
 
   getissuedata = () => {
@@ -189,6 +194,8 @@ class AdminDashboard extends Component {
         console.log(error);
       });
   };
+
+ 
 
   render() {
     const {topmechanics} = this.state;
@@ -422,6 +429,7 @@ class AdminDashboard extends Component {
               <TouchableOpacity onPress={()=>{this.props.navigation.navigate('highratedmechanics')}}>
                 <Text style={[text.heading3, text.semibold]}>View All</Text>
               </TouchableOpacity>
+             
             </View>
             {topmechanics.map((data, index) => {
               if (index < 5) {

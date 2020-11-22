@@ -34,7 +34,9 @@ const mechanicschema = new mongoose.Schema({
   vehicletype: {type: String, required: 'Vehicle Type is required'},
   rating:{type:Number,required:'Mechanic Rating is required'}, 
   date: {type: String, required: 'Date of Birth Required is required'},
-  blocked:Boolean
+  blocked:Boolean,
+  code:String,
+  econfirm:Boolean
 });
 
 mechanicschema.pre('save', function (next) {

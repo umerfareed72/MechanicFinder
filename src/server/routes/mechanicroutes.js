@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const {jwtkey} = require('../keys');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-
+const nodemailer = require("nodemailer");
 const bcrypt = require('bcrypt');
 const Mechanicmodel = mongoose.model('mechanicmodel');
 const Usermodel = mongoose.model('Usermodel');
@@ -40,6 +40,7 @@ router.post('/issueregister', async (req, res) => {
   });
 });
 
+
 router.post('/registeradmin', async (req, res) => {
   console.log('in admin register');
   const admin = new Admin({
@@ -52,6 +53,40 @@ router.post('/registeradmin', async (req, res) => {
     });
   });
 });
+
+
+
+router.post('/sendemail', async (req, res) => { 
+  const {email , code} =req.body;
+  console.log("email",email)
+  console.log("code",code)
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+     service:'gmail', // true for 465, false for other ports
+      auth: {
+        user: "hassanahmedleo786@gmail.com", // generated ethereal user
+        pass: "jamilbushra123", // generated ethereal password
+      },
+    });
+
+    const mesage = {from: 'hassanahmedleo786@gmail.com', // sender address
+    to: email, // list of receivers
+    subject: "Smart Auto Mechanic Finder Code", // Subject line
+    text: "Code is :"+code, // plain text body
+  }
+  
+    // send mail with defined transport object
+    let info = await transporter.sendMail(mesage)
+  
+    console.log("Message sent: %s", info.messageId);
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+  
+    // Preview only available when sending through an Ethereal account
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    res.send("Email Sent")
+  })
+
 
 router.post('/sendwarning', async (req, res) => { 
   const Mwarning1 = new Mwarning({
@@ -530,6 +565,41 @@ router.put('/updateissue/:issueid', (req, res) => {
     });
 });
 
+
+router.put('/confirmuser', async(req, res) => { 
+  console.log("confirnuser api")
+  console.log("confirnuser email",req.body.email)
+  
+  const mechanic =await Mechanicmodel.findOne({email: req.body.email}) .sort('id')
+  .select({
+    _id: 1,})
+  
+   
+      console.log("mechanic db id",mechanic._id)
+      if (!mechanic) {
+        return res.status(404).send('email Not Found');
+      } else {
+        console.log("mechanicid in api",mechanic._id)
+        const User = Mechanicmodel.findByIdAndUpdate(mechanic._id, {
+          econfirm:true,
+        })
+          .then((data) => {
+            console.log('afterupdate', data);
+          res.send({message:"confirm"});
+            // const token = jwt.sign({userid: User._id}, jwtkey);
+            // res.send({token});
+          })
+          .catch((err) => {
+            res.status(404).send(err.message);
+          });
+       
+      }
+   
+  
+});
+
+
+
 router.delete('/deleteissue/:id', async (req, res) => {
   VehicalIssuemodel.findByIdAndDelete(req.params.id)
     .then((data) => {
@@ -573,6 +643,10 @@ router.post('/mechanicsignin', async (req, res) => {
   try {
     if(mechanic.blocked==true){
       return res.send({message:"blocked"});
+    }
+    else if(mechanic.econfirm==false)
+    {
+      return res.send({message:"new",code:mechanic.code,email:mechanic.email});
     }
     else
     await mechanic.comparePassword(password);
@@ -623,7 +697,9 @@ router.post('/mechanicregister', async (req, res) => {
     vehicletype: req.body.vehicletype,
     date: req.body.date,
     rating: req.body.rating,
-    blocked:false
+    code:req.body.code,
+    blocked:false,
+    econfirm:false
   });
 
   await mechanic

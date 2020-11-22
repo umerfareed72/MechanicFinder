@@ -23,7 +23,7 @@ import ForgotPassword from '../views/registration/ForgotPassword';
 import Mforget from '../views/registration/Mforgetpassword';
 import MechanicNavigation from './MechanicNavigation';
 import LoginAsAdmin from "../views/registration/LoginAsAdmin"
-
+import newuserconfirm from '../views/registration/newuserconfirm'
 import AdminNavigation from './AdminNavigation'
 const SplashStack = createStackNavigator(
   {
@@ -47,7 +47,8 @@ const AuthStack = createStackNavigator(
     MechanicRegister: MechanicRegister,
     Forgot: ForgotPassword,
     Mforget: Mforget,
-    LoginAsAdmin:LoginAsAdmin
+    LoginAsAdmin:LoginAsAdmin,
+    newuserconfirm:newuserconfirm,
   },
   {
     headerMode: 'none',
