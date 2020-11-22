@@ -17,7 +17,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import moment from "moment"
+import moment from 'moment';
 import {
   colors,
   screenHeight,
@@ -56,7 +56,7 @@ export default class RMechanicprofile extends Component {
       suggestion: '',
       suggestiondata: [],
       mechanicdata: [],
-      warnings:[],
+      warnings: [],
       firstname: '',
       issueid: '',
       mdbid: this.props.navigation.getParam('mid', 'nothing sent'),
@@ -70,7 +70,6 @@ export default class RMechanicprofile extends Component {
   };
 
   async componentDidMount() {
-  
     this.getmechanicdata();
     this.focusListener = navigation.addListener('didFocus', () => {
       this.getmechanicdata();
@@ -82,8 +81,7 @@ export default class RMechanicprofile extends Component {
       .get(URL.Url + 'getMwarning/' + this.state.mechanicdata._id)
       .then((response) => {
         this.setState({warnings: response.data});
-    
-        })
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -97,7 +95,8 @@ export default class RMechanicprofile extends Component {
           this.setState({mechanicdata: response.data});
           console.log('mechanicdata', this.state.mechanicdata);
         }
-      }) .then(() => {
+      })
+      .then(() => {
         this.getwarning();
       })
       .catch((error) => {
@@ -133,8 +132,8 @@ export default class RMechanicprofile extends Component {
     const reportdata = this.state.warnings[id];
     console.log(reportdata);
     axios
-      .delete(URL.Url + 'Mdeletewarning/' +reportdata._id)
-      .then((response) => { 
+      .delete(URL.Url + 'Mdeletewarning/' + reportdata._id)
+      .then((response) => {
         if (response.data) {
           console.log(response.data);
           ToastAndroid.show(
@@ -151,14 +150,13 @@ export default class RMechanicprofile extends Component {
       });
   };
 
-
-  sendwarning = () => {   
+  sendwarning = () => {
     axios
       .post(URL.Url + 'sendwarning', {
         warning: this.state.warning,
         mdbid: this.state.mdbid,
       })
-      .then(async (res) => {  
+      .then(async (res) => {
         console.log(res.data);
         //console.log(this.state.mdbid);
         ToastAndroid.show(
@@ -179,14 +177,13 @@ export default class RMechanicprofile extends Component {
       });
   };
 
-
   blockmechanic = () => {
     axios
-      .put(URL.Url + 'blockmechanic/'+ this.state.mdbid, {
+      .put(URL.Url + 'blockmechanic/' + this.state.mdbid, {
         warning: this.state.warning,
         mdbid: this.state.mdbid,
       })
-      .then(async (res) => {  
+      .then(async (res) => {
         console.log(res.data);
         //console.log(this.state.mdbid);
         ToastAndroid.show(
@@ -209,23 +206,24 @@ export default class RMechanicprofile extends Component {
 
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
-        this.setState({TabDataReview: 'none'}),
+      this.setState({TabDataReview: 'none'}),
         this.setState({BookNowView: 'none'}),
         this.setState({ColorOverview: colors.white}),
-        this.setState({ColorReview: colors.gray})  } else
+        this.setState({ColorReview: colors.gray});
+    } else
       this.setState({TabDataOverview: 'flex'}),
         this.setState({TabDataReview: 'none'});
     this.setState({BookNowView: 'none'});
     this.setState({ColorOverview: colors.white});
     this.setState({ColorReview: colors.gray});
-   };
+  };
   tabReview = () => {
     if (this.state.TabDataReview == 'flex') {
-        this.setState({TabDataOverview: 'none'}),
+      this.setState({TabDataOverview: 'none'}),
         this.setState({BookNowView: 'none'}),
         this.setState({color: 'none'});
       this.setState({ColorOverview: colors.gray}),
-        this.setState({ColorReview: colors.white}) 
+        this.setState({ColorReview: colors.white});
     } else
       this.setState({TabDataReview: 'flex'}),
         this.setState({BookNowView: 'none'}),
@@ -233,9 +231,9 @@ export default class RMechanicprofile extends Component {
     this.setState({ColorOverview: colors.gray});
     this.setState({ColorReview: colors.white});
     this.getwarning();
-    };
+  };
   render() {
-    const {mechanicdata,warnings} = this.state;
+    const {mechanicdata, warnings} = this.state;
     console.log(this.state.firstname);
     console.log(this.state.issueid);
     console.log('ye ai id profile pa', this.state.mdbid);
@@ -266,19 +264,17 @@ export default class RMechanicprofile extends Component {
                   <View style={[style.aiCenter, style.mb10]}>
                     <Text style={[text.h1]}>Manage Mechanic</Text>
                   </View>
-                  <View style={[style.mb5,style.aiCenter]}>
-                    <Text style={[text.heading3]}>Add Wwarning</Text>
+                  <View style={[style.mb5, style.aiCenter]}>
+                    <Text style={[text.heading3]}>Add Warning</Text>
                   </View>
 
                   <View style={[style.aiCenter]}>
-                    <View style={[appStyle.textareaBorder]}>
+                    <View style={[appStyle.textareaBorder,style.w100]}>
                       <Textarea
                         onChangeText={(text) => {
                           this.setState({warning: text});
                         }}
-                        placeholder={
-                          'Type Warning message here'
-                        }
+                        placeholder={'Type Warning message here'}
                         placeholderTextColor={'#c7c7c7'}
                         underlineColorAndroid={'transparent'}
                       />
@@ -308,7 +304,7 @@ export default class RMechanicprofile extends Component {
 
         <View style={{}}>
           <ImageBackground
-            source={images.carPaint}
+            source={{uri: mechanicdata.photo}}
             style={{height: screenHeight.height25}}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
@@ -323,7 +319,7 @@ export default class RMechanicprofile extends Component {
                 <StarRating
                   disabled={true}
                   maxStars={5}
-                  rating={this.state.starCount}
+                  rating={mechanicdata.rating}
                   selectedStar={(rating) => this.onStarRatingPress(rating)}
                   fullStarColor={'#fff'}
                   emptyStarColor={'#fff'}
@@ -344,41 +340,41 @@ export default class RMechanicprofile extends Component {
           </ImageBackground>
         </View>
         <View style={[appStyle.bodyBg, style.flex1]}>
-            <View
-              style={[
-                appStyle.rowBtw,
-                style.aiCenter,
-                appStyle.bodyLayout,
-                appStyle.bodyShadowTop,
-                style.mh40,
-                {
-                  backgroundColor: colors.lightblue,
-                  borderBottomLeftRadius: 10,
-                  borderBottomRightRadius: 10,
-                },
-              ]}>
-              <TouchableOpacity onPress={() => this.tabOverview()}>
-                <Text
-                  style={[
-                    text.heading2,
-                    text.semibold,
-                    {color: this.state.ColorOverview},
-                  ]}>
-                  Overview
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.tabReview()}>
-                <Text
-                  style={[
-                    text.heading2,
-                    text.semibold,
-                    {color: this.state.ColorReview},
-                  ]}>
-                 Warnings
-                </Text>
-              </TouchableOpacity>
-            </View>
-         
+          <View
+            style={[
+              appStyle.rowBtw,
+              style.aiCenter,
+              appStyle.bodyLayout,
+              appStyle.bodyShadowTop,
+              style.mh40,
+              {
+                backgroundColor: colors.lightblue,
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+              },
+            ]}>
+            <TouchableOpacity onPress={() => this.tabOverview()}>
+              <Text
+                style={[
+                  text.heading2,
+                  text.semibold,
+                  {color: this.state.ColorOverview},
+                ]}>
+                Overview
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.tabReview()}>
+              <Text
+                style={[
+                  text.heading2,
+                  text.semibold,
+                  {color: this.state.ColorReview},
+                ]}>
+                Warnings
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           <ScrollView style={style.mv5}>
             {/* OverView Tab */}
             <View
@@ -449,43 +445,48 @@ export default class RMechanicprofile extends Component {
             </View>
 
             {/* Reviews Tab End  */}
-            <View style={[{display:this.state.TabDataReview},style.mh10]}>
-            {warnings.map((warn,index) => {
-              return (
-                <TouchableOpacity style={[appStyle.slotCard,style.w100,style.row]}>
-                  <View style={[style.w10, style.aiCenter]}>
-                    <Image
-                      style={[image.Image30, style.mh10]}
-                      source={{uri: mechanicdata.photo}}
-                    />
-                  
-                  </View>
-                  <View style={[style.mh10]}>
-                  <Text style={[text.text16, text.bold]}>
-                      {mechanicdata.firstname} {mechanicdata.lastname}
-                    </Text>
-             <View style={[style.row]}>
-              <Text style={[text.paraGray,text.text10]} >Last Updated
-              </Text>
-              <Text style={[style.mh5,text.text10]}>{moment(warn.date).format('DD-MM-YYYY')}</Text>
-              </View>
-                    <Text style={[text.heading3, style.mv5]}>
-                      {warn.warning}
-                    </Text>
-                  </View>
+            <View style={[{display: this.state.TabDataReview}, style.mh10]}>
+              {warnings.map((warn, index) => {
+                return (
                   <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      this.deletewarning(index);
-                    }}>
-                    <Image
-                      style={[image.forward]}
-                      source={images.delete}></Image>
+                    style={[appStyle.slotCard, style.w100, style.row]}>
+                    <View style={[style.w10, style.aiCenter]}>
+                      <Image
+                        style={[image.Image30, style.mh10]}
+                        source={{uri: mechanicdata.photo}}
+                      />
+                    </View>
+                    <View style={[style.mh10]}>
+                      <Text style={[text.text16, text.bold]}>
+                        {mechanicdata.firstname} {mechanicdata.lastname}
+                      </Text>
+                      <View style={[style.row]}>
+                        <Text style={[text.paraGray, text.text10]}>
+                          Last Updated
+                        </Text>
+                        <Text style={[style.mh5, text.text10]}>
+                          {moment(warn.date).format('DD-MM-YYYY')}
+                        </Text>
+                      </View>
+                     
+                    <View style={[style.w80]}>
+                      <Text style={[text.heading3, style.mv5]}>
+                        {warn.warning}
+                      </Text>
+                      </View>
+                    </View>
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        this.deletewarning(index);
+                      }}>
+                      <Image
+                        style={[image.forward]}
+                        source={images.delete}></Image>
+                    </TouchableOpacity>
                   </TouchableOpacity>
-                </TouchableOpacity>
-              );
-            })}
-          
+                );
+              })}
             </View>
           </ScrollView>
         </View>

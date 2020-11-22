@@ -47,8 +47,8 @@ export default class AddServiceRates extends Component {
 id:'',
       refreshing: false,
       title: '',
-      price: '',
-    
+      price: 0,
+data:[]    
     };
   }
 
@@ -75,8 +75,8 @@ id:'',
   componentDidMount(){
     AsyncStorage.getItem('ServiceRatedata').then((res) => {
       const data = JSON.parse(res);
-   this.setState({id:data._id})
-
+      this.setState({id:data._id,title:data.servicename})
+this.setState({price:JSON.stringify(data.serviceamount)})
     })
   }
   onStarRatingPress(rating) {
@@ -86,6 +86,7 @@ id:'',
   }
 
   render() {
+    const {data}=this.state
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar barStyle={'light-content'} translucent={true} />
@@ -118,20 +119,25 @@ id:'',
             <View style={[style.pv20]}>
               <View style={input.floatInput}>
                 <FloatingLabel
-                  onChangeText={(text) => {
+     placeholder={'Service Name'}
+     value={this.state.title}
+    onChangeText={(text) => {
                     this.setState({title: text});
                   }}
                   labelStyle={input.labelInput}
                   inputStyle={input.input}
                   style={input.formInput}
                   onBlur={this.onBlur}>
+               
                 Service Name
                 </FloatingLabel>
               </View>
 
               <View style={input.floatInput}>
                 <FloatingLabel
-                  onChangeText={(text) => {
+     placeholder={'Service Amount'}
+     value={this.state.price}
+     onChangeText={(text) => {
                     this.setState({price: text});
                   }}
                   labelStyle={input.labelInput}
