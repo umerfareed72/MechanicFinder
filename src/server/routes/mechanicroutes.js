@@ -622,7 +622,8 @@ router.post('/adminsignin', async (req, res) => {
   }
   try {
     if (admn1.password == password) {
-      const atoken = jwt.sign({adminid: admn1._id}, jwtkey);
+      const atoken = jwt.sign({adminid: admn1._id,role:'Admin'
+    }, jwtkey);
       res.send({atoken});
     }
   } catch (err) {

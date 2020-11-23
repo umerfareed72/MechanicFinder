@@ -221,7 +221,9 @@ router.post('/usersignin', async (req, res) => {
         city: user.city,
         country: user.country,
         date:user.date,
-        address:user.address
+        address:user.address,
+        role:'User'
+  
       },
       jwtkey,
     );
