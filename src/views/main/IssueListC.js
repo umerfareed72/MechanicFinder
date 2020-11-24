@@ -14,7 +14,7 @@ import {
   Keyboard,
   Button,
   Platform,
-  Alert,
+  Alert,ToastAndroid
 } from 'react-native';
 const axios = require('axios');
 import {
@@ -146,7 +146,11 @@ export default class Mechaniclist extends Component {
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          Alert.alert('Issue deleted successfully!');
+          ToastAndroid.show(
+            'Issue Deleted Successfully!',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
           this.showIssues();
         }
       })
