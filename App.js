@@ -45,7 +45,8 @@ export default class App extends React.Component {
     this.detectlogin();
     this.detectMechanicLogin();
   }
-  isLogin = () => {
+
+  render() {
     if (this.state.isloggedin) {
       return <Bottomtabnavigator></Bottomtabnavigator>;
     } else if (this.state.isMechanicLogin) {
@@ -53,10 +54,6 @@ export default class App extends React.Component {
     } else {
       return <AppNavigator></AppNavigator>;
     }
-  };
-
-  render() {
-    return <View style={styles.container}>{this.isLogin()}</View>;
   }
 
   _handleLoadingError = (error) => {
