@@ -83,7 +83,7 @@ export default class Userdetail extends Component {
     this.getsuggestions();
    
     this.focusListener = navigation.addListener('didFocus', () => {
-      this.getsuggestions();
+     
      
     });
   }

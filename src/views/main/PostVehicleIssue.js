@@ -134,12 +134,13 @@ export default class Postvehicalissue extends Component {
         ToastAndroid.LONG,
       );
       return false;
-    } else if (this.state.phone == '') {
+    } else if (this.state.Phone == '') {
       ToastAndroid.show(
         'Phone Number Is Required',
         ToastAndroid.BOTTOM,
         ToastAndroid.LONG,
       );
+      return false;
     } else if (this.state.issuetype == '') {
       ToastAndroid.show(
         'Issue Type Is Required',

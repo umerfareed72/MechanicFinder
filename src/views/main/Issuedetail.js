@@ -202,14 +202,30 @@ console.log(this.state.firstname)
           <ImageBackground
             source={images.carPaint}
             style={{height: screenHeight.height25}}>
-            <View style={style.bgOverlay} />
-            <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
-              style={[image.headerBackArrow]}>
-              <Image
-                style={[image.backArrow]}
-                source={images.backArrow}></Image>
-            </TouchableOpacity>
+               <View style={style.bgOverlay} />
+             <View style={[style.row, style.jcSpaceBetween, style.ph20]}>
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate("IssueListC")}
+                    style={[image.headerBackArrow]}>
+                    <Image
+                      style={[image.backArrow]}
+                      source={images.backArrow}></Image>
+                  </TouchableOpacity>
+                  <View></View>  
+                  <TouchableOpacity
+                    onPress={()=>{this.props.navigation.navigate("EditIssue")}}
+                    style={[
+                      button.buttonThemeWhite,
+                      style.w30,
+                      style.mt35,
+                      {display: this.state.cancelButton},
+                    ]}>
+                    <Text style={[text.heading4, text.goodfishbd]}>
+                      Edit Issue
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+            
             <View style={[appStyle.headInner, style.ph20]}>
               <View style={[style.mv5]}>
                 {/* <StarRating

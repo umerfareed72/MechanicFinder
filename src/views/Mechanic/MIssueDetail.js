@@ -13,6 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
+  Linking,
   Alert,ToastAndroid
 } from 'react-native';
 import {
@@ -57,6 +58,7 @@ export default class HomeDetail extends Component {
       issueid: '',
       mid:'',
       mphoto:'',
+      phone:'',
     };
   }
 
@@ -66,6 +68,7 @@ export default class HomeDetail extends Component {
         res = JSON.parse(res);
         this.setState({issuedata: res});
         this.setState({issueid: res._id});
+        this.setState({phone:res.phone})
       });
       await AsyncStorage.getItem('Mechanicdata').then((res) => {
         res = JSON.parse(res);
@@ -110,6 +113,18 @@ export default class HomeDetail extends Component {
     // .catch((error) => {
     //   console.log(error);
     // });
+  };
+
+  makeCall = () => {
+    let phoneNumber = '';
+    if (Platform.OS === 'android') {
+      console.log(this.state.phone);
+      phoneNumber = 'tel:' + this.state.phone;
+    } else {
+      phoneNumber = 'telprompt:${1234567890}';
+    }
+
+    Linking.openURL(phoneNumber);
   };
 
   submitsuggestion = () => {
@@ -308,6 +323,18 @@ console.log(this.state.firstname)
               <View style={[style.borderbottom, style.mv10]}>
                 <Text style={[text.heading2Gray]}> {issuedata.issuetype}</Text>
               </View>
+
+              <View style={[appStyle.rowAlignCenter, style.mt10]}>
+                <Image
+                  style={[image.medium, image.Orange, style.mr5]}
+                  source={images.phone}></Image>
+                <Text style={[text.heading2, text.bold]}>Contact (Press to call)</Text>
+              </View>
+              <View style={[style.borderbottom, style.mv10]}>
+                <Text  onPress={this.makeCall}
+                style={[text.heading2Gray]}> {issuedata.phone}</Text>
+              </View>
+
               <View style={[style.mt20]}>
                 <Text style={[text.text16]}>Description about issue</Text>
               </View>

@@ -206,7 +206,7 @@ export default class UserManagement extends Component {
                 <TouchableOpacity
                   key={index}
                   // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
-                  onPress={() => this.movetodetail(index)}
+                //  onPress={() => this.movetodetail(index)}
                   style={[
                     appStyle.slotCard,
                     appStyle.rowJustify,
