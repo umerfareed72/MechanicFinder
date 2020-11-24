@@ -210,7 +210,7 @@ router.post('/usersignin', async (req, res) => {
   }
   try {
     await user.comparePassword(password);
-    const token = jwt.sign(
+    const token =jwt.sign(
       {
         userid: user._id,
         firstname: user.firstname,
@@ -221,7 +221,9 @@ router.post('/usersignin', async (req, res) => {
         city: user.city,
         country: user.country,
         date:user.date,
-        address:user.address
+        address:user.address,
+        role:'User'
+  
       },
       jwtkey,
     );
