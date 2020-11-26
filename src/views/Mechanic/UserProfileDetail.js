@@ -136,7 +136,7 @@ export default class UserProfileDetail extends Component {
                           let result = c * r; //Get Result In KM
                           //Found In 10 KM
                           if (result <= 10) {
-                            this.setState({BookNowView: 'flex'});
+                            this.setState({BookNowView: 'flex',cancelButton:'none'});
                           }
                         })
                         .then((product) => {

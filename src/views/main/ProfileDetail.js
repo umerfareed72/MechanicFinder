@@ -138,7 +138,7 @@ export default class HomeDetail extends Component {
                     //Found In 10 KM
                     if (result <= 10) {
                       // this.setState({cancelButton:'none'})
-                      this.setState({BookNowView: 'flex'});
+                      this.setState({BookNowView: 'flex',cancelButton:'none'});
                     }
                   });
                   await axios

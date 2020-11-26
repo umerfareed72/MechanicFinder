@@ -910,7 +910,21 @@ router.put('/unblockmechanic/:id', (req, res) => {
 router.get('/topmechanics', (req, res) => {
   Mechanicmodel.find({rating: {$gte: 3}})
     .sort('id')
-    .select({rating: 1, firstname: 1, photo: 1, lastname: 1})
+    .select({rating: 1, firstname: 1, photo: 1, lastname: 1,phone:1})
+    .then((mechanic) => {
+      if (!mechanic) {
+        return res.status(404).send('Mechanic Not Found');
+      }
+      return res.status(200).json(mechanic);
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+});
+
+router.get('/topmechanic/:id', (req, res) => {
+  Mechanicmodel.findById(req.params.id)
+    .sort('id')
     .then((mechanic) => {
       if (!mechanic) {
         return res.status(404).send('Mechanic Not Found');
