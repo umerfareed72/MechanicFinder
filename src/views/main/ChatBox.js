@@ -11,7 +11,7 @@ export default class ChatBox extends React.Component {
       messages: [],
       data: [],
       firstname: '',
-      lastname: '',
+      lastname: '',  
     };
     this.pusher = new Pusher(pusherConfig.key, pusherConfig); // (1)
     this.chatChannel = this.pusher.subscribe('chat_channel'); // (2)
