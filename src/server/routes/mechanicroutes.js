@@ -599,6 +599,39 @@ router.put('/confirmuser', async(req, res) => {
 });
 
 
+router.put('/resendcode', async(req, res) => { 
+  console.log("confirnuser api")
+  console.log("confirnuser email",req.body.email)
+  
+  const mechanic =await Mechanicmodel.findOne({email: req.body.email}) .sort('id')
+  .select({
+    _id: 1,})
+  
+   
+      console.log("mechanic db id",mechanic._id)
+      if (!mechanic) {
+        return res.status(404).send('email Not Found');
+      } else {
+        console.log("mechanicid in api",mechanic._id)
+        const User = Mechanicmodel.findByIdAndUpdate(mechanic._id, {
+         code:req.body.code,
+        })
+          .then((data) => {
+            console.log('afterupdate', data);
+          res.send({message:"confirm"});
+            // const token = jwt.sign({userid: User._id}, jwtkey);
+            // res.send({token});
+          })
+          .catch((err) => {
+            res.status(404).send(err.message);
+          });
+       
+      }
+   
+  
+});
+
+
 
 router.delete('/deleteissue/:id', async (req, res) => {
   VehicalIssuemodel.findByIdAndDelete(req.params.id)
@@ -622,8 +655,7 @@ router.post('/adminsignin', async (req, res) => {
   }
   try {
     if (admn1.password == password) {
-      const atoken = jwt.sign({adminid: admn1._id,role:'Admin'
-    }, jwtkey);
+      const atoken = jwt.sign({adminid: admn1._id}, jwtkey);
       res.send({atoken});
     }
   } catch (err) {
@@ -910,21 +942,7 @@ router.put('/unblockmechanic/:id', (req, res) => {
 router.get('/topmechanics', (req, res) => {
   Mechanicmodel.find({rating: {$gte: 3}})
     .sort('id')
-    .select({rating: 1, firstname: 1, photo: 1, lastname: 1,phone:1})
-    .then((mechanic) => {
-      if (!mechanic) {
-        return res.status(404).send('Mechanic Not Found');
-      }
-      return res.status(200).json(mechanic);
-    })
-    .catch((error) => {
-      return res.send(error);
-    });
-});
-
-router.get('/topmechanic/:id', (req, res) => {
-  Mechanicmodel.findById(req.params.id)
-    .sort('id')
+    .select({rating: 1, firstname: 1, photo: 1, lastname: 1})
     .then((mechanic) => {
       if (!mechanic) {
         return res.status(404).send('Mechanic Not Found');

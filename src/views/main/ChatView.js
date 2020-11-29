@@ -35,7 +35,7 @@ import QRCode from 'react-native-qrcode-svg';
 import AutoScroll from 'react-native-auto-scroll';
 
 export default class ChatView extends React.Component {
-  constructor(props) {
+  constructor(props) {  
     super(props);
 
     this.handleSendMessage = this.onSendMessage.bind(this);

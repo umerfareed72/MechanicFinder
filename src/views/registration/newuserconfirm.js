@@ -62,6 +62,7 @@ export default class Newuserconfirm extends Component {
       profile_pic: '',
       code: this.props.navigation.getParam('code'),
       email: this.props.navigation.getParam('email'),
+      newcode:'',
     };
   }
   UserRegister = () => {
@@ -71,6 +72,51 @@ export default class Newuserconfirm extends Component {
   MechanicRegister = () => {
     this.setState({textMechanic: colors.white, Mregister: colors.orange});
     this.props.navigation.navigate('MechanicRegister');
+  };
+  number = () => {
+    this.setState({ newcode : Math.trunc(Math.random()*100000).toString()})
+      console.log("code",this.state.newcode)
+  }
+
+  sendemail = () => {  
+    try {
+      axios.post(URL.Url + 'sendemail',{
+        email:this.state.email,
+        code:this.state.newcode
+      }).then((res) => {
+        console.log(res.data);
+        ToastAndroid.show(
+          'Email Resent Successfully',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+      });
+    } catch (error) {
+      console.log(error);
+      return (
+        <View style={[style.aiCenter]}>
+          <ActivityIndicator color="#bc2b78" size="large"></ActivityIndicator>
+        </View>
+      );
+    }
+  };
+
+  resend = () => {
+    console.log("in resend code");
+    axios
+    .put(URL.Url + 'resendcode', {
+      email:this.state.email,
+      code: this.state.newcode
+    })
+    .then((response) => {
+      console.log(response.data);
+      ToastAndroid.show(
+        'Code Updated Successfully',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+    }).then(()=>{this.setState({code:this.state.newcode})})
+    this.sendemail();
   };
   validateuser = () => {
     if (this.state.Email == '') {
@@ -90,6 +136,16 @@ export default class Newuserconfirm extends Component {
     }
     return true;
   };
+
+  async componentDidMount() {
+    const {navigation} = this.props;
+   this.number();
+    this.focusListener = navigation.addListener('didFocus', () => {
+      
+      this.number();
+      
+    });
+  }
 
   submitData = () => {
     {
@@ -186,9 +242,7 @@ export default class Newuserconfirm extends Component {
                 </View>
                 <View style={[style.pv10, style.ph30]}>
                   <Text
-                    onPress={() => {
-                      this.props.navigation.navigate('Mforget');
-                    }}
+                    onPress={this.resend}
                     style={[text.right, text.text14, {color: colors.link}]}>
                     Resend code
                   </Text>
