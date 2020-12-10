@@ -27,7 +27,7 @@ import {color} from 'react-native-reanimated';
 import {SafeAreaView} from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
-
+import {logout} from "../../actions/index";
 navigateToScreen = (route) => () => {
   const navigateAction = NavigationActions.navigate({
     routeName: route,
@@ -53,18 +53,14 @@ class SideMenu extends React.Component {
   //     this.LoginUserData();
   //   });
   // }
-
-  _Signout = async () => {
-    const login = new Login();
-    login._signOut();
-
-    await AsyncStorage.removeItem('googleData').then(() => {
-      this.props.navigation.navigate('Login');
-    });
-    await AsyncStorage.removeItem('usersignintoken').then(() => {
-      this.props.navigation.navigate('Login');
-    });
+  onSignout = () => {
+    const {navigation} = this.props;
+    // const login = new Login();
+    // login._signOut();
+    navigation.navigate('Login');
+    this.props.logout()
   };
+  
   // LoginUserData = async () => {
   //   try {
   //     await AsyncStorage.getItem('userdata').then((res) => {
@@ -210,7 +206,7 @@ class SideMenu extends React.Component {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={this._Signout}>
+            <TouchableOpacity onPress={this.onSignout}>
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>
                   <Image
@@ -233,5 +229,9 @@ function mapStateToProps(state) {
     auth: state.auth,
   };
 }
-
-export default connect(mapStateToProps, null)(SideMenu);
+function mapDispatchToProps(dispatch) {
+  return {
+    logout: () => dispatch(logout()),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SideMenu);

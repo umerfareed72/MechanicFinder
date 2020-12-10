@@ -107,7 +107,7 @@ class ProfileDetail extends Component {
               .then((response) => {
                 this.setState({data: response.data});
                 this.setState({refreshing: true});
-                response.data['userId'] = userid;
+                response.data['userId'] = item.userid;
                 response.data['bookMechanicid'] = item._id;
                 const sendMechanicData = JSON.stringify(response.data);
                 AsyncStorage.setItem('bookMechanicData', sendMechanicData);
@@ -153,7 +153,7 @@ class ProfileDetail extends Component {
                       .get(
                         URL.Url +
                           'getbuyProduct/' +
-                          this.state.userid +
+                          this.props.auth.user.userid +
                           '/' +
                           this.state.mechanicid,
                       )
@@ -308,7 +308,7 @@ class ProfileDetail extends Component {
 
   submitReview = () => {
     if (this.validateReview()) {
-      const userId = this.state.userid;
+      const userId = this.props.auth.user.userid;
       const mechanicid = this.state.mechanicid;
 
       axios

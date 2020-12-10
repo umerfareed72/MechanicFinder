@@ -17,11 +17,23 @@ import {  createStore,applyMiddleware,compose } from "redux";
 import thunk from "redux-thunk";
 import {set_CurrentUser} from "./src/actions/index"
 import RootReducers from "./src/reducers/RootReducers"
-const store=createStore(RootReducers,compose(applyMiddleware(thunk)))
-if(AsyncStorage.usertoken){
-  store.dispatch(set_CurrentUser(jwt(AsyncStorage.usertoken)))
+import { persistStore, persistReducer } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
+
+  const persistConfig = {
+    key: 'root',
+    storage:AsyncStorage,
   }
-export default class App extends React.Component {
+
+  const persistedReducer = persistReducer(persistConfig, RootReducers)
+  const store=createStore(persistedReducer,compose(applyMiddleware(thunk)))
+  if(AsyncStorage.usertoken){
+    store.dispatch(set_CurrentUser(jwt(AsyncStorage.usertoken)))
+    }
+  
+  let persistor = persistStore(store)
+  export default class App extends React.Component {
+  
   constructor() {
     super();
     this.state = {
@@ -35,7 +47,7 @@ export default class App extends React.Component {
 
   detectlogin = async () => {
     this.setState({isLoaded: true});
-    const token = await AsyncStorage.getItem('usersignintoken');
+    const token = await AsyncStorage.getItem('usertoken');
     if (token) {
       this.setState({isloggedin: true});
     } else {
@@ -54,20 +66,29 @@ export default class App extends React.Component {
   async componentDidMount() {
     this.detectlogin();
     this.detectMechanicLogin();
+  // if(store.getState().auth.isAuthenticated==false){
+    // }
   }
 
   render() {
     console.log(store.getState().auth.user)
-    if (this.state.isloggedin) {
-      return <Bottomtabnavigator></Bottomtabnavigator>;
-    } else if (this.state.isMechanicLogin) {
+   const user=store.getState().auth.user
+    if (this.state.isloggedin && user.role=="User") {
+      return (
+        <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+  <Bottomtabnavigator></Bottomtabnavigator>
+</PersistGate>
+</Provider>
+        );
+    } else if (this.state.isMechanicLogin && user.role=="Mechanic") {
       return <MechanicTab></MechanicTab>;
     } 
-    // else {
-    //   return <AppNavigator></AppNavigator>;
-    // }
+    
   return(<Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
     <AppNavigator></AppNavigator>
+</PersistGate>
   </Provider>
   )
   }
