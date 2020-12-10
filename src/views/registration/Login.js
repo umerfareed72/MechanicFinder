@@ -51,9 +51,11 @@ import {
 } from '@react-native-community/google-signin';
 import EditProfile from '../main/EditProfile';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import Dashboard from '../main/Dashboard';
+import { connect } from "react-redux";
+import {  userlogin } from "../../actions/index";
 
-export default class Login extends Component {
+
+ class Login extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
@@ -255,22 +257,35 @@ export default class Login extends Component {
 
   submitData = () => {
     if (this.validateuser()) {
-      axios
-        .post(URL.Url + 'usersignin', {
-          email: this.state.Email,
-          password: this.state.Password,
-        })
-        .then(async (res) => {
+      const data={email:this.state.Email,password:this.state.Password}
+     this.props.userlogin(data).then(async(res)=>{
           try {
             ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
-            await AsyncStorage.setItem('usersignintoken', res.data.token);
-            console.log(res.data.token);
+         
             this.props.navigation.navigate('userStack'); 
           } catch (e) {
             console.log('error hai', e);
-            Alert.alert('Invalid email password');
+            ToastAndroid.show('Invalid Email', ToastAndroid.BOTTOM);
           }
-        })
+    
+    })
+     
+      // axios
+      //   .post(URL.Url + 'usersignin', {
+      //     email: this.state.Email,
+      //     password: this.state.Password,
+      //   })
+      //   .then(async (res) => {
+      //     try {
+      //       ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
+      //       await AsyncStorage.setItem('usersignintoken', res.data.token);
+      //       console.log(res.data.token);
+      //       this.props.navigation.navigate('userStack'); 
+      //     } catch (e) {
+      //       console.log('error hai', e);
+      //       Alert.alert('Invalid email password');
+      //     }
+      //   })
         .catch((error) => {
           ToastAndroid.show('Invalid User', ToastAndroid.BOTTOM);
         });
@@ -484,3 +499,12 @@ export default class Login extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, { userlogin,})(
+  Login
+);

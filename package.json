@@ -20,7 +20,7 @@
     "axios": "^0.20.0",
     "bcrypt": "^5.0.0",
     "geolib": "^3.3.1",
-    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "native-base": "^2.13.12",

@@ -34,8 +34,10 @@ import StarRating from 'react-native-star-rating';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
 import Login from '../registration/Login';
+import {connect} from 'react-redux';
+import {logout} from "../../actions/index";
 
-export default class Settings extends Component {
+ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,65 +49,55 @@ export default class Settings extends Component {
       isImageVisible: false,
       isLogin: null,
     };
-    // this.state = {
-    //     loading: false,
-    //     items: [],
-    //     refreshing: false,
-    // };
-  }
+     }
   onSignout = () => {
     const {navigation} = this.props;
-    const login = new Login();
-    login._signOut();
-
-    AsyncStorage.removeItem('googleData').then(() => {
-      navigation.navigate('Login');
-    });
-    AsyncStorage.removeItem('usersignintoken').then(() => {
-      navigation.navigate('Login');
-    });
+    // const login = new Login();
+    // login._signOut();
+    navigation.navigate('Login');
+    this.props.logout()
   };
-  LoginUserData = () => {
-    try {
-      AsyncStorage.getItem('userdata').then((res) => {
-        res = JSON.parse(res);
-        console.log(this.state.data, 'User data');
-        this.setState({data: res});
-        this.setState({
-          firstname: this.state.data.firstname,
-        });
-        this.setState({
-          lastname: this.state.data.lastname,
-        });
-        this.setState({
-          email: this.state.data.email,
-        });
-        this.setState({
-          photo: this.state.data.photo,
-        });
-      });
-    } catch (error) {
-      console.log('error');
-    }
-  };
+  // LoginUserData = () => {
+  //   try {
+  //     AsyncStorage.getItem('userdata').then((res) => {
+  //       res = JSON.parse(res);
+  //       console.log(this.state.data, 'User data');
+  //       this.setState({data: res});
+  //       this.setState({
+  //         firstname: this.state.data.firstname,
+  //       });
+  //       this.setState({
+  //         lastname: this.state.data.lastname,
+  //       });
+  //       this.setState({
+  //         email: this.state.data.email,
+  //       });
+  //       this.setState({
+  //         photo: this.state.data.photo,
+  //       });
+  //     });
+  //   } catch (error) {
+  //     console.log('error');
+  //   }
+  // };
 
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
   
   
-  componentDidMount() {
-    const {navigation} = this.props;
-    this.LoginUserData();
-    this.focusListener = navigation.addListener('didFocus', () => {
-      this.LoginUserData();
-    });
-  }
+  // componentDidMount() {
+  //   const {navigation} = this.props;
+  //   this.LoginUserData();
+  //   this.focusListener = navigation.addListener('didFocus', () => {
+  //     this.LoginUserData();
+  //   });
+  // }
   render() {
+    const {auth}=this.props
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
-       
         <View style={{}}>
           <Modal
             isVisible={this.state.isModalVisible}
@@ -157,13 +149,13 @@ export default class Settings extends Component {
             <TouchableOpacity style={style.asCenter} >
               <Image
                 style={[image.ovalcontainerupload, style.shadow]}
-                source={{uri: this.state.photo}}
+                source={{uri: auth.user.photo}}
               />
               {/* <Text style={[text.text18,text.orange,text.semibold]}>Sam Adams</Text> */}
             </TouchableOpacity>
             <View style={[style.asCenter, style.pt5]}>
               <Text style={[text.text18, text.orange, text.semibold]}>
-                {this.state.firstname} {this.state.lastname}
+                {auth.user.firstname} {auth.user.lastname}
               </Text>
             </View>
             {/* header end */}
@@ -290,3 +282,16 @@ export default class Settings extends Component {
     );
   }
 }
+function mapDispatchToProps(dispatch) {
+  return {
+    logout: () => dispatch(logout()),
+  };
+}
+
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Settings);

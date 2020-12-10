@@ -38,8 +38,8 @@ import StarRating from 'react-native-star-rating';
 // import vectorIcon from 'react-native-vector-icons';
 import Textarea from 'react-native-textarea';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
-
-export default class HomeDetail extends Component {
+import {connect} from 'react-redux';
+class ProfileDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,7 +51,7 @@ export default class HomeDetail extends Component {
       ColorOverview: colors.darkBlue,
       ColorProduct: colors.inputBordercolor,
       ColorReview: colors.inputBordercolor,
-      BookNowView: 'none',
+      BookNowView: 'flex',
       CheckBox: images.checkBoxEmpty,
       cancelButton: 'flex',
       isModalVisible: false,
@@ -88,81 +88,83 @@ export default class HomeDetail extends Component {
 
   getdata = () => {
     try {
-      AsyncStorage.getItem('userId')
-        .then((response) => {
-          console.log(response);
-          const userid = JSON.parse(response);
-          this.setState({userid: userid});
-          axios.get(URL.Url + 'getbookedMechanic/' + userid).then((res) => {
-            res.data.map((item) => {
-              this.setState({
-                bookedMechanicId: item._id,
-                mechanicid: item.mechanicid,
-                Amount: item.totalamount,
-              });
-              axios
-                .get(URL.Url + 'mechanic/' + item.mechanicid)
-                .then((response) => {
-                  this.setState({data: response.data});
-                  this.setState({refreshing: true});
-                  response.data['userId'] = userid;
-                  response.data['bookMechanicid'] = item._id;
-                  const sendMechanicData = JSON.stringify(response.data);
-                  AsyncStorage.setItem('bookMechanicData', sendMechanicData);
-                })
-                .then(async (res) => {
-                  await axios.get(URL.Url + 'user/' + userid).then((res) => {
-                    const {data} = this.state;
-                    this.setState({
-                      firstname: res.data.firstname,
-                      lastname: res.data.lastname,
-                      photo: res.data.photo,
-                    });
-
-                    let Lat1 = data.latitude / 57.29577951;
-                    let Lat2 = res.data.latitude / 57.29577951;
-                    let Long1 = data.longitude / 57.29577951;
-                    let Long2 = res.data.longitude / 57.29577951;
-                    // Calaculate distance
-                    let dlat = Lat2 - Lat1;
-                    let dlong = Long2 - Long1;
-                    //Apply Heversine Formula to calculate  Distance of Spherical Objects
-                    let a =
-                      Math.pow(Math.sin(dlat / 2), 2) +
-                      Math.cos(Lat1) *
-                        Math.cos(Lat2) *
-                        Math.pow(Math.sin(dlong / 2), 2);
-                    let c = 2 * Math.asin(Math.sqrt(a));
-                    let r = 6371;
-                    let result = c * r; //Get Result In KM
-                    //Found In 10 KM
-                    if (result <= 10) {
-                      // this.setState({cancelButton:'none'})
-                      this.setState({BookNowView: 'flex',cancelButton:'none'});
-                    }
-                  });
-                  await axios
-                    .get(URL.Url + 'getuser/' + this.state.mechanicid)
-                    .then((res) => {
-                      this.setState({Rating: res.data});
-                    })
-                    .then((product) => {
-                      axios
-                        .get(
-                          URL.Url +
-                            'getbuyProduct/' +
-                            this.state.userid +
-                            '/' +
-                            this.state.mechanicid,
-                        )
-                        .then((prod) => {
-                          this.setState({products: prod.data});
-                        });
-                    });
-                });
+      // AsyncStorage.getItem('userId')
+      //   .then((response) => {
+      //     console.log(response);
+      //     const userid = JSON.parse(response);
+      //     this.setState({userid: userid});
+      axios
+        .get(URL.Url + 'getbookedMechanic/' + this.props.auth.user.userid)
+        .then((res) => {
+          res.data.map((item) => {
+            this.setState({
+              bookedMechanicId: item._id,
+              mechanicid: item.mechanicid,
+              Amount: item.totalamount,
             });
+            axios
+              .get(URL.Url + 'mechanic/' + item.mechanicid)
+              .then((response) => {
+                this.setState({data: response.data});
+                this.setState({refreshing: true});
+                response.data['userId'] = userid;
+                response.data['bookMechanicid'] = item._id;
+                const sendMechanicData = JSON.stringify(response.data);
+                AsyncStorage.setItem('bookMechanicData', sendMechanicData);
+              })
+              .then(async (res) => {
+                await axios.get(URL.Url + 'user/' + userid).then((res) => {
+                  const {data} = this.state;
+                  this.setState({
+                    firstname: res.data.firstname,
+                    lastname: res.data.lastname,
+                    photo: res.data.photo,
+                  });
+
+                  let Lat1 = data.latitude / 57.29577951;
+                  let Lat2 = res.data.latitude / 57.29577951;
+                  let Long1 = data.longitude / 57.29577951;
+                  let Long2 = res.data.longitude / 57.29577951;
+                  // Calaculate distance
+                  let dlat = Lat2 - Lat1;
+                  let dlong = Long2 - Long1;
+                  //Apply Heversine Formula to calculate  Distance of Spherical Objects
+                  let a =
+                    Math.pow(Math.sin(dlat / 2), 2) +
+                    Math.cos(Lat1) *
+                      Math.cos(Lat2) *
+                      Math.pow(Math.sin(dlong / 2), 2);
+                  let c = 2 * Math.asin(Math.sqrt(a));
+                  let r = 6371;
+                  let result = c * r; //Get Result In KM
+                  //Found In 10 KM
+                  if (result <= 10) {
+                    // this.setState({cancelButton:'none'})
+                    // this.setState({BookNowView: 'flex',cancelButton:'none'});
+                  }
+                });
+                await axios
+                  .get(URL.Url + 'getuser/' + this.state.mechanicid)
+                  .then((res) => {
+                    this.setState({Rating: res.data});
+                  })
+                  .then((product) => {
+                    axios
+                      .get(
+                        URL.Url +
+                          'getbuyProduct/' +
+                          this.state.userid +
+                          '/' +
+                          this.state.mechanicid,
+                      )
+                      .then((prod) => {
+                        this.setState({products: prod.data});
+                      });
+                  });
+              });
           });
         })
+        // })
         .catch((error) => {
           console.log('User data not Fetched', error);
         });
@@ -177,7 +179,6 @@ export default class HomeDetail extends Component {
       this.getdata();
     });
   }
-
   CancelBooking = async () => {
     axios
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
@@ -276,11 +277,15 @@ export default class HomeDetail extends Component {
 
   CompleteBooking = async () => {
     axios
-      .put( URL.Url +
-        'completebooking/' +
-        this.state.bookedMechanicId +
-        '/' +
-        this.state.Amount+'/'+'Offline')
+      .put(
+        URL.Url +
+          'completebooking/' +
+          this.state.bookedMechanicId +
+          '/' +
+          this.state.Amount +
+          '/' +
+          'Offline',
+      )
       .then((res) => {
         AsyncStorage.removeItem('bookMechanicData');
         this.props.navigation.navigate('Dashboard');
@@ -300,8 +305,6 @@ export default class HomeDetail extends Component {
         console.log(error);
       });
   };
-
-
 
   submitReview = () => {
     if (this.validateReview()) {
@@ -341,6 +344,9 @@ export default class HomeDetail extends Component {
 
   render() {
     const {data, Rating, products, refreshing} = this.state;
+    const {auth} = this.props;
+    console.log(auth.user.userid, 'idada');
+
     if (data != null && refreshing != false) {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
@@ -459,7 +465,7 @@ export default class HomeDetail extends Component {
                           rating={this.state.rating}
                           selectedStar={(rating) =>
                             this.onStarRatingPress(rating)
-                          }   
+                          }
                           fullStarColor={this.state.fullStar}
                           emptyStarColor={this.state.emptyStar}
                           starSize={40}
@@ -472,19 +478,22 @@ export default class HomeDetail extends Component {
                         </View>
                       </TouchableOpacity>
                       <View style={[style.pv10, style.ph30]}>
-                  <Text
-                    onPress={() => { this.ratingModal()
-                     
-                      
-                this.props.navigation.navigate('breportmechanic',{mdbid:data._id});
-              
-                     
-                  
-                    }}
-                    style={[text.right, text.text14, {color: colors.link}]}>
-                    Report this Mechanic
-                  </Text>
-                </View>
+                        <Text
+                          onPress={() => {
+                            this.ratingModal();
+
+                            this.props.navigation.navigate('breportmechanic', {
+                              mdbid: data._id,
+                            });
+                          }}
+                          style={[
+                            text.right,
+                            text.text14,
+                            {color: colors.link},
+                          ]}>
+                          Report this Mechanic
+                        </Text>
+                      </View>
 
                       <TouchableOpacity
                         onPress={this.submitReview}
@@ -511,13 +520,13 @@ export default class HomeDetail extends Component {
 
                 <View style={[style.row, style.jcSpaceBetween, style.ph20]}>
                   <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate("Dashboard")}
+                    onPress={() => this.props.navigation.navigate('Dashboard')}
                     style={[image.headerBackArrow]}>
                     <Image
                       style={[image.backArrow]}
                       source={images.backArrow}></Image>
                   </TouchableOpacity>
-                  <View></View>  
+                  <View></View>
                   <TouchableOpacity
                     onPress={this.CancelBooking}
                     style={[
@@ -886,3 +895,9 @@ export default class HomeDetail extends Component {
     }
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+export default connect(mapStateToProps, null)(ProfileDetail);
