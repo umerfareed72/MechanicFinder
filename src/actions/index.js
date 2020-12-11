@@ -30,3 +30,14 @@ export function userlogin(data) {
     });
   };
 }
+
+export function mechaniclogin(data) {
+  return (dispatch) => {
+    return axios.post(URL.Url + 'mechanicsignin', data).then((res) => {
+      console.log(jwt(res.data.token), 'userdata');
+      const token = res.data.token;
+      AsyncStorage.setItem('usertoken', token);
+      dispatch(set_CurrentUser(jwt(token)));
+    });
+  };
+}

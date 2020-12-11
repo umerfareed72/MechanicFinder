@@ -257,9 +257,10 @@ class Login extends Component {
   };
 
   submitData = () => {
-    this.setState({isLoading: true});
-
+    
     if (this.validateuser()) {
+      this.setState({isLoading: true});
+
       const data = {email: this.state.Email, password: this.state.Password};
       this.props
         .userlogin(data)

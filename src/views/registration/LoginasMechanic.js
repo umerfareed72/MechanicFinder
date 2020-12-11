@@ -39,8 +39,11 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Dashboard from '../main/Dashboard';
+import {connect} from 'react-redux';
+import {mechaniclogin} from '../../actions/index';
+import {ActivityIndicator} from 'react-native-paper';
 
-export default class Login extends Component {
+ class LoginasMechanic extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
@@ -53,7 +56,7 @@ export default class Login extends Component {
       Email: '',
       Password: '',
       error: '',
-
+isLoading:false,
       gettingLoginStatus: true,
       user_name: '',
       // Bussinessid: '',
@@ -90,38 +93,55 @@ export default class Login extends Component {
   };
 
   submitData = () => {
-  if(this.validateuser()){
-    axios
-      .post(URL.Url + 'mechanicsignin', {
-        email: this.state.Email,
-        password: this.state.Password,
-      })
-      .then(async (res) => {
-        console.log(res);
 
+    if(this.validateuser()){
+      this.setState({isLoading: true});
+   
+    const data = {email: this.state.Email, password: this.state.Password};
+    this.props
+      .mechaniclogin(data)
+      .then(async (res) => {
         try {
-          
-          if(res.data.message=='blocked'){
-            ToastAndroid.show('You are Blocked by Admin', ToastAndroid.BOTTOM);
-          }
-          else if(res.data.message=='new')
-          {
-            console.log('New user');
-            console.log("codeg",res.data.code)
-            this.props.navigation.navigate('newuserconfirm',{code:res.data.code,email:res.data.email});
-          }
-          else
-        {ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
-          await AsyncStorage.setItem('token', res.data.token);
-         
-          console.log(res.data.token);
-          this.props.navigation.navigate('mechanicStack');}
+          ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
+          this.props.navigation.navigate('mechanicStack');
         } catch (e) {
-         
           console.log('error hai', e);
-          Alert.alert('Invalid email password');
+          ToastAndroid.show('Invalid Email', ToastAndroid.BOTTOM);
         }
       })
+
+
+    // axios
+    //   .post(URL.Url + 'mechanicsignin', {
+    //     email: this.state.Email,
+    //     password: this.state.Password,
+    //   })
+    //   .then(async (res) => {
+    //     console.log(res);
+
+    //     try {
+          
+    //       if(res.data.message=='blocked'){
+    //         ToastAndroid.show('You are Blocked by Admin', ToastAndroid.BOTTOM);
+    //       }
+    //       else if(res.data.message=='new')
+    //       {
+    //         console.log('New user');
+    //         console.log("codeg",res.data.code)
+    //         this.props.navigation.navigate('newuserconfirm',{code:res.data.code,email:res.data.email});
+    //       }
+    //       else
+    //     {ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
+    //       await AsyncStorage.setItem('token', res.data.token);
+         
+    //       console.log(res.data.token);
+    //       this.props.navigation.navigate('mechanicStack');}
+    //     } catch (e) {
+         
+    //       console.log('error hai', e);
+    //       Alert.alert('Invalid email password');
+    //     }
+    //   })
       .catch((error) => {
         console.log('error1',error)
        
@@ -133,6 +153,7 @@ export default class Login extends Component {
   };
 
   render() {
+    if (this.props.auth.user != null && this.state.isLoading == false) {
     return (
       <SafeAreaView style={style.flex1}>
         <StatusBar translucent={true} backgroundColor={'transparent'} />
@@ -268,5 +289,31 @@ export default class Login extends Component {
         </KeyboardAvoidingView>
       </SafeAreaView>
     );
+                  }
+                  else{
+                    return (
+                      <SafeAreaView style={[appStyle.safeContainer]}>
+                        <StatusBar
+                          barStyle={'dark-content'}
+                          translucent={true}
+                          backgroundColor="transparent"></StatusBar>
+                        <View style={[style.flex1, style.jcCenter]}>
+                          <View style={[style.aiCenter]}>
+                            <ActivityIndicator
+                              color="#bc2b78"
+                              size="large"></ActivityIndicator>
+                          </View>
+                        </View>
+                      </SafeAreaView>
+                    );
+                  
+                  }
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, {mechaniclogin})(LoginasMechanic);

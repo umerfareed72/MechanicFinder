@@ -40,7 +40,7 @@ import { PersistGate } from 'redux-persist/integration/react'
       hasToken: false,
       isLoaded: false,
       isloggedin: null,
-      isMechanicLogin: null,
+      // isMechanicLogin: null,
     };
     console.disableYellowBox = true;
   }
@@ -54,26 +54,26 @@ import { PersistGate } from 'redux-persist/integration/react'
       this.setState({isloggedin: false});
     }
   };
-  detectMechanicLogin = async () => {
-    this.setState({isLoaded: true});
-    const token = await AsyncStorage.getItem('token');
-    if (token) {
-      this.setState({isMechanicLogin: true});
-    } else {
-      this.setState({isMechanicLogin: false});
-    }
-  };
-  async componentDidMount() {
-    this.detectlogin();
-    this.detectMechanicLogin();
-  // if(store.getState().auth.isAuthenticated==false){
-    // }
-  }
+  // detectMechanicLogin = async () => {
+  //   this.setState({isLoaded: true});
+  //   const token = await AsyncStorage.getItem('token');
+  //   if (token) {
+  //     this.setState({isMechanicLogin: true});
+  //   } else {
+  //     this.setState({isMechanicLogin: false});
+  //   }
+  // };
+  // async componentDidMount() {
+  //   this.detectlogin();
+  //   this.detectMechanicLogin();
+  // // if(store.getState().auth.isAuthenticated==false){
+  //   // }
+  // }
 
   render() {
-    console.log(store.getState().auth.user)
    const user=store.getState().auth.user
-    if (this.state.isloggedin && user.role=="User") {
+   console.log(user) 
+   if (this.state.isloggedin && user.role=="User") {
       return (
         <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
@@ -81,8 +81,14 @@ import { PersistGate } from 'redux-persist/integration/react'
 </PersistGate>
 </Provider>
         );
-    } else if (this.state.isMechanicLogin && user.role=="Mechanic") {
-      return <MechanicTab></MechanicTab>;
+    } else if (this.state.isloggedin && user.role=="Mechanic") {
+      return (
+        <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+<MechanicTab></MechanicTab>
+</PersistGate>
+</Provider>
+      )
     } 
     
   return(<Provider store={store}>

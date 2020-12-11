@@ -16,6 +16,9 @@ import {
   Platform,
 
 } from 'react-native';
+import {connect} from 'react-redux';
+import {logout} from "../../actions/index";
+
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import style from '../../assets/styles/style';
@@ -34,7 +37,7 @@ import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
 import Login from '../registration/Login';
 
-export default class MechanicSetting extends Component {
+ class MechanicSetting extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,53 +54,61 @@ export default class MechanicSetting extends Component {
     //     refreshing: false,
     // };
   }
-  onSignout = () => {
-    const {navigation}=this.props;
+  // onSignout = () => {
+  //   const {navigation}=this.props;
   
-    AsyncStorage.removeItem('token').then(() => {
-  AsyncStorage.removeItem('Mechanicdata')
-      setTimeout(() => {
-        navigation.navigate('LoginasMechanic') 
-      }, 2000);
-    });
+  //   AsyncStorage.removeItem('token').then(() => {
+  // AsyncStorage.removeItem('Mechanicdata')
+  //     setTimeout(() => {
+  //       navigation.navigate('LoginasMechanic') 
+  //     }, 2000);
+  //   });
    
+  // };
+  onSignout = () => {
+    const {navigation} = this.props;
+    // const login = new Login();
+    // login._signOut();
+    navigation.navigate('LoginasMechanic');
+    this.props.logout()
   };
-  LoginUserData = () => {
-    try {
-      AsyncStorage.getItem('Mechanicdata').then((res) => {
-        res = JSON.parse(res);
-        console.log(this.state.data, 'User data');
-        this.setState({data: res});
-        this.setState({
-          firstname: this.state.data.firstname,
-        });
-        this.setState({
-          lastname: this.state.data.lastname,
-        });
-        this.setState({
-          email: this.state.data.email,
-        });
-        this.setState({
-          photo: this.state.data.photo,
-        });
-      });
-    } catch (error) {
-      console.log('error');
-    }
-  };
+  // LoginUserData = () => {
+  //   try {
+  //     AsyncStorage.getItem('Mechanicdata').then((res) => {
+  //       res = JSON.parse(res);
+  //       console.log(this.state.data, 'User data');
+  //       this.setState({data: res});
+  //       this.setState({
+  //         firstname: this.state.data.firstname,
+  //       });
+  //       this.setState({
+  //         lastname: this.state.data.lastname,
+  //       });
+  //       this.setState({
+  //         email: this.state.data.email,
+  //       });
+  //       this.setState({
+  //         photo: this.state.data.photo,
+  //       });
+  //     });
+  //   } catch (error) {
+  //     console.log('error');
+  //   }
+  // };
 
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
 
-  componentDidMount() {
-    const {navigation} = this.props;
-    this.LoginUserData();
-    this.focusListener = navigation.addListener('didFocus', () => {
-      this.LoginUserData();
-    });
-  }
+  // componentDidMount() {
+  //   const {navigation} = this.props;
+  //   this.LoginUserData();
+  //   this.focusListener = navigation.addListener('didFocus', () => {
+  //     this.LoginUserData();
+  //   });
+  // }
   render() {
+    const {auth}=this.props
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
@@ -152,13 +163,13 @@ export default class MechanicSetting extends Component {
             <View style={style.asCenter}>
               <Image
                 style={[image.ovalcontainerupload, style.shadow]}
-                source={{uri: this.state.photo}}
+                source={{uri: auth.user.photo}}
               />
               {/* <Text style={[text.text18,text.orange,text.semibold]}>Sam Adams</Text> */}
             </View>
             <View style={[style.asCenter, style.pt5]}>
               <Text style={[text.text18, text.orange, text.semibold]}>
-                {this.state.firstname} {this.state.lastname}
+                {auth.user.firstname} {auth.user.lastname}
               </Text>
             </View>
             {/* header end */}
@@ -264,3 +275,16 @@ export default class MechanicSetting extends Component {
     );
   }
 }
+function mapDispatchToProps(dispatch) {
+  return {
+    logout: () => dispatch(logout()),
+  };
+}
+
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(MechanicSetting);

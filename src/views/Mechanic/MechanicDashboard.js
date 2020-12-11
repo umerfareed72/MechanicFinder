@@ -37,7 +37,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import Hamburger from '../../components/headerComponent/Hamburger';
 import AsyncStorage from '@react-native-community/async-storage';
-export default class MechanicDashboard extends Component {
+import {connect} from 'react-redux';
+ class MechanicDashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,36 +57,37 @@ export default class MechanicDashboard extends Component {
     };
   }
   getData = () => {
-    AsyncStorage.getItem('token').then((res) => {
-      this.setState({token: res});
-      console.log('token1', res);
-      axios
-        .get(URL.Url + 'me', {
-          headers: {
-            'x-access-token': this.state.token,
-          },
-        })
-        .then((response) => {
-          this.setState({mechanicid: response.data.mechanicid});
+    // AsyncStorage.getItem('token').then((res) => {
+    //   this.setState({token: res});
+    //   console.log('token1', res);
+    //   axios
+    //     .get(URL.Url + 'me', {
+    //       headers: {
+    //         'x-access-token': this.state.token,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       this.setState({mechanicid: response.data.mechanicid});
 
           this.Rate();
           axios
-            .put(URL.Url + 'mechaniclocation/' + this.state.mechanicid, {
+            .put(URL.Url + 'mechaniclocation/' + this.props.auth.user.mechanicid, {
               latitude: this.state.latitude,
               longitude: this.state.longitude,
             })
             .then((response) => {
-              axios
-                .get(URL.Url + 'mechanic/' + this.state.mechanicid)
-                .then((mechanic) => {
-                  // console.log(mechanic.data);
-                  this.setState({data: mechanic.data});
-                  const send = JSON.stringify(mechanic.data);
-                  AsyncStorage.setItem('Mechanicdata', send);
+            console.log(response.data,"update")
+              //   axios
+            //     .get(URL.Url + 'mechanic/' + this.state.mechanicid)
+                // .then((mechanic) => {
+                //   // console.log(mechanic.data);
+                //   this.setState({data: mechanic.data});
+                //   const send = JSON.stringify(mechanic.data);
+                //   AsyncStorage.setItem('Mechanicdata', send);
                 })
                 .then((res) => {
                   axios
-                    .get(URL.Url + 'getbookedUser/' + this.state.mechanicid)
+                    .get(URL.Url + 'getbookedUser/' + this.props.auth.user.mechanicid)
                     .then((response) => {
                       //  console.log(response.data);
 
@@ -111,9 +113,9 @@ export default class MechanicDashboard extends Component {
                             const sendids = JSON.stringify(ids);
                             AsyncStorage.setItem('mechanicid', sendids);
                             //   console.log(ids);
-                          });
-                      });
-                    })
+                          })
+                      // });
+                    // })
                     .then(() => {
                       this.getwarning();
                     })
@@ -124,7 +126,7 @@ export default class MechanicDashboard extends Component {
                 .catch((error) => {
                   console.log('Mechanic Location Not Updated', error);
                 });
-            });
+            // });
         })
         .catch((error) => {
           console.log('Mechanic Data Not Accessible', error);
@@ -176,7 +178,7 @@ export default class MechanicDashboard extends Component {
   };
   getwarning = () => {
     axios
-      .get(URL.Url + 'getMwarning/' + this.state.mechanicid)
+      .get(URL.Url + 'getMwarning/' + this.props.auth.user.mechanicid)
       .then((response) => {
         this.setState({warnings: response.data});
       })
@@ -201,9 +203,8 @@ export default class MechanicDashboard extends Component {
   }
 
   Rate = () => {
-    console.log(this.state.mechanicid);
-    axios.get(URL.Url + 'bookedmid/' + this.state.mechanicid).then((data) => {
-      console.log(data.data);
+    console.log(this.props.auth.user.mechanicid)
+    axios.get(URL.Url + 'bookedmid/' + this.props.auth.user.mechanicid).then((data) => {
       var r = [];
       data.data.map((item, index) => {
         r.push(item.totalamount);
@@ -283,7 +284,9 @@ export default class MechanicDashboard extends Component {
   };
 
   render() {
-    const {data, warnings} = this.state;
+    const {warnings} = this.state;
+
+    const {auth} = this.props;
 
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
@@ -318,13 +321,13 @@ export default class MechanicDashboard extends Component {
           <View style={[style.pv20]}>
             <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
               <Text style={[text.goodfishbd, text.text40, text.greyRegular]}>
-                Hi {data.firstname}
+                Hi {auth.user.firstname}
               </Text>
               <View style={[style.mv5]}>
                 <StarRating
                   disabled={true}
                   maxStars={5}
-                  rating={data.rating}
+                  rating={auth.user.rating}
                   // selectedStar={(rating) => this.onStarRatingPress(rating)}
                   fullStarColor={'#000'}
                   emptyStarColor={'#000'}
@@ -333,7 +336,7 @@ export default class MechanicDashboard extends Component {
                 />
                 <Text style={[text.center, style.mv5]}>
                   {' '}
-                  Reviews({data.rating}/5.0)
+                  Reviews({auth.user.rating}/5.0)
                 </Text>
               </View>
             </View>
@@ -388,3 +391,10 @@ export default class MechanicDashboard extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(MechanicDashboard);

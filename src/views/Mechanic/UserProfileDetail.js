@@ -37,8 +37,10 @@ import StarRating from 'react-native-star-rating';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
-
-export default class UserProfileDetail extends Component {
+import {connect} from 'react-redux';
+import {userlogin} from '../../actions/index';
+import auth from '../../reducers/auth';
+ class UserProfileDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -78,11 +80,11 @@ export default class UserProfileDetail extends Component {
 
   getMechanicLocation = async () => {
     try {
-      await AsyncStorage.getItem('mechanicid')
-        .then((response) => {
-          const res = JSON.parse(response);
+      // await AsyncStorage.getItem('mechanicid')
+      //   .then((response) => {
+      //     const res = JSON.parse(response);
           axios
-            .get(URL.Url + 'getbookedUser/' + res.mechanicid)
+            .get(URL.Url + 'getbookedUser/' + this.props.auth.user.mechanicid)
             .then((book) => {
               if (book.data == '') {
                 console.log('No data ');
@@ -95,19 +97,19 @@ export default class UserProfileDetail extends Component {
                     userid: item.userid,
                     mechanicid: item.mechanicid,
                   });
-                  axios
-                    .get(URL.Url + 'mechanic/' + item.mechanicid)
-                    .then((mechanic) => {
-                      this.setState({mechanicData: mechanic.data});
+                  // axios
+                  //   .get(URL.Url + 'mechanic/' + item.mechanicid)
+                  //   .then((mechanic) => {
+                  //     this.setState({mechanicData: mechanic.data});
 
                       axios
                         .get(URL.Url + 'user/' + item.userid)
                         .then((response) => {
                           this.setState({data: response.data});
                           this.setState({refreshing: true});
-                          console.log(mechanic.data.mechanicrate);
+                          // console.log(mechanic.data.mechanicrate);
                           response.data['mechanicrate'] =
-                            mechanic.data.mechanicrate;
+                           this.props.auth.user.mechanicrate;
                           const sendMechanicData = JSON.stringify(
                             response.data,
                           );
@@ -116,12 +118,12 @@ export default class UserProfileDetail extends Component {
                             sendMechanicData,
                           );
 
-                          const {mechanicData} = this.state;
+                          const {auth} = this.props;
 
                           let Lat1 = response.data.latitude / 57.29577951;
-                          let Lat2 = mechanicData.latitude / 57.29577951;
+                          let Lat2 = auth.user.latitude / 57.29577951;
                           let Long1 = response.data.longitude / 57.29577951;
-                          let Long2 = mechanicData.longitude / 57.29577951;
+                          let Long2 = auth.user.longitude / 57.29577951;
                           // Calaculate distance
                           let dlat = Lat2 - Lat1;
                           let dlong = Long2 - Long1;
@@ -146,16 +148,16 @@ export default class UserProfileDetail extends Component {
                                 'getbuyProduct/' +
                                 this.state.userid +
                                 '/' +
-                                this.state.mechanicid,
+                                this.props.auth.user.mechanicid
                             )
                             .then((prod) => {
                               this.setState({products: prod.data});
                             });
                         });
                     });
-                });
+                // });
               }
-            });
+            // });
         })
 
         .catch((error) => {
@@ -274,7 +276,9 @@ export default class UserProfileDetail extends Component {
   };
 
   render() {
-    const {data, refreshing, products, mechanicData} = this.state;
+    const {data, refreshing, products} = this.state;
+    const {auth} = this.props;
+  
     if (refreshing != false) {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
@@ -514,7 +518,7 @@ export default class UserProfileDetail extends Component {
                 </View>
                 <View style={[style.borderbottom, style.mt10]}>
                   <Text style={[text.heading2Gray]}>
-                    {mechanicData.vehicletype}
+                    {auth.user.vehicletype}
                   </Text>
                 </View>
                 <View style={[appStyle.rowAlignCenter, style.mt10]}>
@@ -525,7 +529,7 @@ export default class UserProfileDetail extends Component {
                 </View>
                 <View style={[style.borderbottom, style.mt10]}>
                   <Text style={[text.heading2Gray]}>
-                    {mechanicData.carcompany}
+                    {auth.user.carcompany}
                   </Text>
                 </View>
 
@@ -537,7 +541,7 @@ export default class UserProfileDetail extends Component {
                 </View>
                 <View style={[style.borderbottom, style.mv10]}>
                   <Text style={[text.heading2Gray]}>
-                    {mechanicData.skilltype}
+                    {auth.user.skilltype}
                   </Text>
                 </View>
 
@@ -759,3 +763,10 @@ export default class UserProfileDetail extends Component {
     }
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, {userlogin})(UserProfileDetail);
