@@ -22,19 +22,19 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import {ListItem, Separator} from 'native-base';
-
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {color} from 'react-native-reanimated';
 import {SafeAreaView} from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
-
+import {connect} from 'react-redux';
+import {logout} from "../../actions/index";
 navigateToScreen = (route) => () => {
   const navigateAction = NavigationActions.navigate({
     routeName: route,
   });
   this.props.navigation.dispatch(navigateAction);
 };
-export default class SideMenu extends React.Component {
+class SideMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,54 +46,51 @@ export default class SideMenu extends React.Component {
     };
   }
 
-  async componentDidMount() {
+  // async componentDidMount() {
+  //   const {navigation} = this.props;
+  //   this.LoginUserData();
+  //   this.focusListener = navigation.addListener('didFocus', () => {
+  //     this.LoginUserData();
+  //   });
+  // }
+  onSignout = () => {
     const {navigation} = this.props;
-    this.LoginUserData();
-    this.focusListener = navigation.addListener('didFocus', () => {
-      this.LoginUserData();
-    });
-  }
-
-  _Signout = async () => {
-    const login = new Login();
-    login._signOut();
-
-    await AsyncStorage.removeItem('googleData').then(() => {
-      this.props.navigation.navigate('Login');
-    });
-    await AsyncStorage.removeItem('usersignintoken').then(() => {
-      this.props.navigation.navigate('Login');
-    });
+    // const login = new Login();
+    // login._signOut();
+    navigation.navigate('Login');
+    this.props.logout()
   };
-  LoginUserData = async () => {
-    try {
-      await AsyncStorage.getItem('userdata').then((res) => {
-        res = JSON.parse(res);
-        console.log(this.state.data, 'Agya Oy Data');
-        this.setState({data: res});
-        this.setState({
-          firstname: this.state.data.firstname,
-        });
-        this.setState({
-          lastname: this.state.data.lastname,
-        });
-        this.setState({
-          email: this.state.data.email,
-        });
-        this.setState({
-          photo: this.state.data.photo,
-        });
-      });
-    } catch (error) {
-      console.log('error');
-    }
-  };
+  
+  // LoginUserData = async () => {
+  //   try {
+  //     await AsyncStorage.getItem('userdata').then((res) => {
+  //       res = JSON.parse(res);
+  //       console.log(this.state.data, 'Agya Oy Data');
+  //       this.setState({data: res});
+  //       this.setState({
+  //         firstname: this.state.data.firstname,
+  //       });
+  //       this.setState({
+  //         lastname: this.state.data.lastname,
+  //       });
+  //       this.setState({
+  //         email: this.state.data.email,
+  //       });
+  //       this.setState({
+  //         photo: this.state.data.photo,
+  //       });
+  //     });
+  //   } catch (error) {
+  //     console.log('error');
+  //   }
+  // };
 
   static navigationOptions = {
     headerShown: false,
   };
 
   render() {
+    const {auth} = this.props;
     return (
       <SafeAreaView style={{backgroundColor: '#ccc', flex: 1}}>
         <StatusBar
@@ -114,15 +111,15 @@ export default class SideMenu extends React.Component {
                   <View style={[style.mr15]}>
                     <Image
                       style={image.mediumovalcontainerupload}
-                      source={{uri: this.state.photo}}></Image>
+                      source={{uri: auth.user.photo}}></Image>
                   </View>
                   <View style={[style.jcCenter, {}]}>
                     <View style={style.mr5}>
                       <Text style={[text.text16, text.white, text.semibold]}>
-                        {this.state.firstname} {this.state.lastname}
+                        {auth.user.firstname} {auth.user.lastname}
                       </Text>
                       <Text style={[text.text12, text.white, text.semibold]}>
-                        {this.state.email}
+                        {auth.user.email}
                       </Text>
                     </View>
                   </View>
@@ -187,8 +184,8 @@ export default class SideMenu extends React.Component {
                     source={images.percent}
                     style={[image.drawerIcon]}></Image>
                   <Text style={[text.textheader4, {color: colors.white}]}>
-                   Posted Issues
-                    </Text>
+                    Posted Issues
+                  </Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -203,14 +200,13 @@ export default class SideMenu extends React.Component {
                     source={images.dollar}
                     style={[image.drawerIcon]}></Image>
                   <Text style={[text.textheader4, {color: colors.white}]}>
-                  Service Rates
-                    </Text>
+                    Service Rates
+                  </Text>
                 </View>
               </View>
             </TouchableOpacity>
 
-
-            <TouchableOpacity onPress={this._Signout}>
+            <TouchableOpacity onPress={this.onSignout}>
               <View style={style.mh20}>
                 <View style={[image.attachtextimageleft]}>
                   <Image
@@ -228,3 +224,14 @@ export default class SideMenu extends React.Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    logout: () => dispatch(logout()),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SideMenu);

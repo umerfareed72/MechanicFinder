@@ -34,7 +34,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
-export default class HomeDetail extends Component {
+import {connect} from 'react-redux'
+class HomeDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -78,15 +79,15 @@ export default class HomeDetail extends Component {
           //Get User Data
 
           .then(async (product) => {
-            await AsyncStorage.getItem('userdata').then((response) => {
-              const res = JSON.parse(response);
-              this.setState({userdata: res});
+            // await AsyncStorage.getItem('userdata').then((response) => {
+            //   const res = JSON.parse(response);
+            //   this.setState({userdata: res});
               //Get added Product of User
               axios
                 .get(
                   URL.Url +
                     'getbuyProduct/' +
-                    res._id +
+                    this.props.auth.user.userid +
                     '/' +
                     this.state.mechanicdata.mechanicid,
                 )
@@ -96,7 +97,7 @@ export default class HomeDetail extends Component {
                 }).then((cal)=>{
                   this.Rate();
                 })
-            });
+            // });
           })
           .catch((error) => {
             console.log(error, 'Review not fetch');
@@ -126,13 +127,14 @@ export default class HomeDetail extends Component {
     } else {
       setTimeout(async () => {
         const totalamount=this.state.Amount+this.state.mechanicdata.mechanicrate
-        const userid = this.state.userdata._id;
+        const userid = this.props.auth.user.userid;
         const mechanicid = this.state.mechanicdata.mechanicid;
         console.log(userid);
         //Add Booked Mechanic In database
         axios
           .post(URL.Url + 'addbookedUser/' + mechanicid + '/' + userid+"/"+totalamount)
           .then((res) => {
+           console.log("booked mechanic"+JSON.stringify(res.data))
             this.setState({BookNowView: 'none'});
             this.setState({deletebutton: 'none'});
             this.props.navigation.navigate('ProfileDetail');
@@ -618,3 +620,10 @@ this.setState({Amount:sum})
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+
+  };
+}
+export default connect(mapStateToProps,null)(HomeDetail);

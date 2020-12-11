@@ -25,7 +25,7 @@ import {
   images,
 } from '../../config/Constant';
 import {Animated} from 'react-native';
-
+import {connect} from 'react-redux';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -41,7 +41,7 @@ import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Picker} from '@react-native-community/picker';
 import {color} from 'react-native-reanimated';
-export default class Mechaniclist extends Component {
+class Mechaniclist extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -60,7 +60,7 @@ export default class Mechaniclist extends Component {
   }
   changebuttoncolor = (id) => {
     axios
-      .get(URL.Url + 'getbookedMechanic/' + this.state.userId)
+      .get(URL.Url + 'getbookedMechanic/' + this.props.auth.user.userid)
       .then((res) => {
         if (res.data == '') {
           this.setState({
@@ -115,10 +115,10 @@ export default class Mechaniclist extends Component {
 
   showMechanics = () => {
     if (this.validate()) {
-      AsyncStorage.getItem('userId')
-        .then((res) => {
-          const id = JSON.parse(res);
-          this.setState({userId: id});
+      // AsyncStorage.getItem('userId')
+      //   .then((res) => {
+      //     const id = JSON.parse(res);
+      //     this.setState({userId: id});
           axios
             .get(
               URL.Url +
@@ -129,7 +129,7 @@ export default class Mechaniclist extends Component {
                 '/' +
                 this.state.carcompany +
                 '/' +
-                id,
+                this.props.auth.user.userid,
             )
             .then((response) => {
               console.log(response.data);
@@ -141,15 +141,15 @@ export default class Mechaniclist extends Component {
                   ToastAndroid.LONG,
                 );
               }
-            })
-            .catch((error) => {
-              console.log(error);
-              ToastAndroid.show(
-                'Something went wrong',
-                ToastAndroid.BOTTOM,
-                ToastAndroid.LONG,
-              );
-            });
+            // })
+            // .catch((error) => {
+            //   console.log(error);
+            //   ToastAndroid.show(
+            //     'Something went wrong',
+            //     ToastAndroid.BOTTOM,
+            //     ToastAndroid.LONG,
+            //   );
+            // });
         })
         .catch((error) => {
           console.log(error);
@@ -323,3 +323,10 @@ export default class Mechaniclist extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps,null)(Mechaniclist);

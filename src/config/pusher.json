@@ -5,5 +5,5 @@
     "secret": "a79932d9355596ecb865",
     "cluster": "ap2",
     "encrypted": true,
-    "restServer":"http://192.168.0.107:5000"
+    "restServer":"https://salty-plateau-55224.herokuapp.com/"
 }
