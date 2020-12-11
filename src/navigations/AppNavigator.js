@@ -5,7 +5,7 @@ import Splash from '../views/registration/Splash';
 import Login from '../views/registration/Login';
 import MechanicRegister from '../views/registration/MechanicRegister';
 import {
-  Button,
+  Button, 
   Image,
   Text,
   View,

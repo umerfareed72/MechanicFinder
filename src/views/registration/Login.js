@@ -85,7 +85,7 @@ export default class Login extends Component {
   };
 
   get_Response_Info = (error, result) => {
-    if (error) {
+    if (error) {  
       //Alert for the Error
       Alert.alert('Error fetching data: ' + error.toString());
     } else {

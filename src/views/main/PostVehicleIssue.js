@@ -480,6 +480,7 @@ export default class Postvehicalissue extends Component {
                         });
                       }}
                       underlineColorAndroid="transparent"></TextInput>
+                      
                   </View>
                   <View style={[style.flex1, style.jcCenter]}>
                   <View style={[style.aiCenter, style.mv20]}>
