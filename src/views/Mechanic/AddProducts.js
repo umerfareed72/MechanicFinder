@@ -25,7 +25,6 @@ import {
   images,
 } from '../../config/Constant';
 var FloatingLabel = require('react-native-floating-labels');
-import AsyncStorage from '@react-native-community/async-storage';
 import {Picker} from '@react-native-community/picker';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -37,10 +36,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import ImagePicker from 'react-native-image-picker';
 import Textarea from 'react-native-textarea';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import axios from 'axios';
-
-export default class AddProducts extends Component {
+import {  connect} from "react-redux";
+ class AddProducts extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -157,12 +155,9 @@ export default class AddProducts extends Component {
   
   submitdata = () => {
     if(this.validatefield()){
-      
-    AsyncStorage.getItem('Mechanicdata').then((res) => {
-      const data = JSON.parse(res);
       axios
         .post(URL.Url + 'AddProduct', {
-          mechanicid: data._id,
+          mechanicid: this.props.auth.user.mechanicid,
           title: this.state.title,
           price: this.state.price,
           quantity: this.state.quantity,
@@ -178,7 +173,6 @@ export default class AddProducts extends Component {
             ToastAndroid.LONG,
           );
         });
-    }); 
   }
   };
   onStarRatingPress(rating) {
@@ -346,3 +340,10 @@ export default class AddProducts extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(AddProducts);

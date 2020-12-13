@@ -24,15 +24,10 @@ import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
 
 import appStyle from '../../assets/styles/appStyle';
-import LinearGradient from 'react-native-linear-gradient';
-import StarRating from 'react-native-star-rating';
-// import Icon from 'react-native-ionicons';
-// import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
-import Login from '../registration/Login';
-
-export default class AdminSetting extends Component {
+import { connect } from "react-redux";
+import {logout} from "../../actions/index"
+ class AdminSetting extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,13 +41,9 @@ export default class AdminSetting extends Component {
   }
   onSignout = () => {
     const {navigation} = this.props;
-
-    AsyncStorage.removeItem('atoken').then(() => {
-      setTimeout(() => {
-        navigation.navigate('LoginAsAdmin');
-      }, 1000);
-    });
-  };
+    navigation.navigate('LoginAsAdmin');
+    this.props.logout();
+   };
 
   render() {
     return (
@@ -242,3 +233,10 @@ export default class AdminSetting extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, {logout})(AdminSetting);

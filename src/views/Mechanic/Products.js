@@ -36,12 +36,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
-
 import axios from 'axios';
-
-export default class Products extends Component {
+import {connect} from "react-redux"
+ class Products extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -61,32 +59,29 @@ export default class Products extends Component {
   state = {
     isModalVisible: false,
   };
-
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
   getProduct = () => {
-    AsyncStorage.getItem('Mechanicdata').then((res) => {
-      const data = JSON.parse(res);
-      axios.get(URL.Url + 'getProduct/' + data._id).then((response) => {
+    axios
+      .get(URL.Url + 'getProduct/' + this.props.auth.user.mechanicid)
+      .then((response) => {
         this.setState({products: response.data});
       });
-    });
   };
   componentDidMount() {
-      const {navigation} = this.props;
+    const {navigation} = this.props;
+    this.getProduct();
+    this.focusListener = navigation.addListener('didFocus', () => {
       this.getProduct();
-      this.focusListener = navigation.addListener('didFocus', () => {
-        this.getProduct();
-      });
-      }
+    });
+  }
 
   selectProduct = (id) => {
     const senddata = JSON.stringify(this.state.products[id]);
     AsyncStorage.setItem('productdata', senddata);
-      this.props.navigation.navigate('EditProduct');
-     
-    };
+    this.props.navigation.navigate('EditProduct');
+  };
 
   deleteProduct = (id) => {
     axios
@@ -145,9 +140,8 @@ export default class Products extends Component {
                       animationOutTiming={500}>
                       <View style={[style.flex1, appStyle.rowCenter]}>
                         <View style={[appStyle.modalBg]}>
-                          <Text style={[]}>Sure! 
-                        </Text> 
-                        <Text> Do you want to delete?</Text>
+                          <Text style={[]}>Sure!</Text>
+                          <Text> Do you want to delete?</Text>
                           <View style={[style.row, style.mt10]}>
                             <TouchableOpacity
                               style={[style.mh10]}
@@ -228,3 +222,11 @@ export default class Products extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(Products);

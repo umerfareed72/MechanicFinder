@@ -48,65 +48,15 @@ import Login from '../registration/Login';
       isModalVisible: false,
       isLogin: null,
     };
-    // this.state = {
-    //     loading: false,
-    //     items: [],
-    //     refreshing: false,
-    // };
   }
-  // onSignout = () => {
-  //   const {navigation}=this.props;
-  
-  //   AsyncStorage.removeItem('token').then(() => {
-  // AsyncStorage.removeItem('Mechanicdata')
-  //     setTimeout(() => {
-  //       navigation.navigate('LoginasMechanic') 
-  //     }, 2000);
-  //   });
-   
-  // };
   onSignout = () => {
     const {navigation} = this.props;
-    // const login = new Login();
-    // login._signOut();
     navigation.navigate('LoginasMechanic');
     this.props.logout()
   };
-  // LoginUserData = () => {
-  //   try {
-  //     AsyncStorage.getItem('Mechanicdata').then((res) => {
-  //       res = JSON.parse(res);
-  //       console.log(this.state.data, 'User data');
-  //       this.setState({data: res});
-  //       this.setState({
-  //         firstname: this.state.data.firstname,
-  //       });
-  //       this.setState({
-  //         lastname: this.state.data.lastname,
-  //       });
-  //       this.setState({
-  //         email: this.state.data.email,
-  //       });
-  //       this.setState({
-  //         photo: this.state.data.photo,
-  //       });
-  //     });
-  //   } catch (error) {
-  //     console.log('error');
-  //   }
-  // };
-
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
-
-  // componentDidMount() {
-  //   const {navigation} = this.props;
-  //   this.LoginUserData();
-  //   this.focusListener = navigation.addListener('didFocus', () => {
-  //     this.LoginUserData();
-  //   });
-  // }
   render() {
     const {auth}=this.props
     return (

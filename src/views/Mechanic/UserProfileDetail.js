@@ -80,9 +80,6 @@ import auth from '../../reducers/auth';
 
   getMechanicLocation = async () => {
     try {
-      // await AsyncStorage.getItem('mechanicid')
-      //   .then((response) => {
-      //     const res = JSON.parse(response);
           axios
             .get(URL.Url + 'getbookedUser/' + this.props.auth.user.mechanicid)
             .then((book) => {
@@ -97,17 +94,11 @@ import auth from '../../reducers/auth';
                     userid: item.userid,
                     mechanicid: item.mechanicid,
                   });
-                  // axios
-                  //   .get(URL.Url + 'mechanic/' + item.mechanicid)
-                  //   .then((mechanic) => {
-                  //     this.setState({mechanicData: mechanic.data});
-
                       axios
                         .get(URL.Url + 'user/' + item.userid)
                         .then((response) => {
                           this.setState({data: response.data});
                           this.setState({refreshing: true});
-                          // console.log(mechanic.data.mechanicrate);
                           response.data['mechanicrate'] =
                            this.props.auth.user.mechanicrate;
                           const sendMechanicData = JSON.stringify(
@@ -155,9 +146,7 @@ import auth from '../../reducers/auth';
                             });
                         });
                     });
-                // });
               }
-            // });
         })
 
         .catch((error) => {
@@ -216,11 +205,6 @@ import auth from '../../reducers/auth';
           'Online',
       )
       .then((res) => {
-        // AsyncStorage.removeItem('bookMechanicData');
-        // console.log(res.data, 'data updated');
-        // this.setState({refreshing: false});
-        //   alert('Your Work is Completed:'
-        //  +"\n"+' Collect Your Cash from User Please.')
         ToastAndroid.show(
           'Collect Your Cash from User Please.',
           ToastAndroid.BOTTOM,
@@ -228,18 +212,6 @@ import auth from '../../reducers/auth';
         );
         this.props.navigation.navigate('MechanicDashboard');
         this.completeModal();
-        // this.state.products.map((item) => {
-        // axios.put(
-        //   URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
-        //     )
-        //     .then((mod) => {
-        //       ToastAndroid.show(
-        //         'All Services Done',
-        //         ToastAndroid.BOTTOM,
-        //         ToastAndroid.LONG,
-        //       );
-        //     });
-        // });
       })
       .catch((error) => {
         console.log(error);

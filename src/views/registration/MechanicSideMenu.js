@@ -40,45 +40,6 @@ navigateToScreen = (route) => () => {
     };
   }
 
-  // async componentDidMount() {
-  //   const {navigation} = this.props;
-  //   this.LoginUserData();
-  //   this.focusListener = navigation.addListener('didFocus', () => {
-  //     this.LoginUserData();
-  //   });
-  // }
-
-  // _Signout = async () => {
-  //   const {navigation} = this.props;
-  //     AsyncStorage.removeItem('token').then(() => {
-  //       AsyncStorage.removeItem('Mechanicdata')
-  //       navigation.navigate('LoginasMechanic');
-  //     });
-     
-  //   };
-  // LoginUserData = async () => {
-  //   try {
-  //     await AsyncStorage.getItem('Mechanicdata').then((res) => {
-  //       res = JSON.parse(res);
-  //       console.log(this.state.data, 'Agya Oy Data');
-  //       this.setState({data: res});
-  //       this.setState({
-  //         firstname: this.state.data.firstname,
-  //       });
-  //       this.setState({
-  //         lastname: this.state.data.lastname,
-  //       });
-  //       this.setState({
-  //         email: this.state.data.email,
-  //       });
-  //       this.setState({
-  //         photo: this.state.data.photo,
-  //       });
-  //     });
-  //   } catch (error) {
-  //     console.log('error');
-  //   }
-  // };
   onSignout = () => {
     const {navigation} = this.props;
     // const login = new Login();

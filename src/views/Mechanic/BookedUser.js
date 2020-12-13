@@ -34,11 +34,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import Hamburger from '../../components/headerComponent/Hamburger';
 import Modal from 'react-native-modal';
+import {connect} from 'react-redux';
 
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import axios from 'axios';
 
-export default class BookedUser extends Component {
+class BookedUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -87,12 +87,11 @@ export default class BookedUser extends Component {
   };
 
   MyBooking = () => {
-    AsyncStorage.getItem('mechanicid').then((res) => {
-      const mechanicid = JSON.parse(res);
-      axios.get(URL.Url + 'users/' +mechanicid.mechanicid).then((data) => {
+    axios
+      .get(URL.Url + 'users/' + this.props.auth.user.mechanicid)
+      .then((data) => {
         this.setState({bookedMechanics: data.data});
       });
-    });
   };
 
   componentDidMount() {
@@ -147,7 +146,6 @@ export default class BookedUser extends Component {
                       style.mh5,
                       {backgroundColor: '#fff'},
                     ]}>
-                
                     <View style={[style.row, style.jcCenter]}>
                       <View style={[style.w20, style.mr5]}>
                         <ImageBackground
@@ -170,16 +168,15 @@ export default class BookedUser extends Component {
                       <View style={[style.jcCenter, style.w80]}>
                         <View style={[style.rowBtw]}>
                           <Text style={[text.heading2, text.semibold]}>
-                            {item.username} 
+                            {item.username}
                           </Text>
                           <Text style={[text.heading3, text.semibold]}>
                             {item.totalamount} $
-                                                      </Text>
-                       
+                          </Text>
                         </View>
-                       <View style={[style.mv5]}>
-                            <Text>Contact Me: {item.useremail}</Text>
-                           </View>
+                        <View style={[style.mv5]}>
+                          <Text>Contact Me: {item.useremail}</Text>
+                        </View>
                         <View style={[appStyle.rowBtw]}>
                           <View style={[appStyle.BookingsmallWidth]}>
                             <Image
@@ -229,3 +226,10 @@ export default class BookedUser extends Component {
     // }
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(BookedUser);

@@ -65,6 +65,7 @@ isLoading:false,
       profile_pic: '',
     };
   }
+ 
   UserRegister = () => {
     this.setState({textUser: colors.white, Uregister: colors.orange});
     this.props.navigation.navigate('SignUp');
@@ -101,47 +102,22 @@ isLoading:false,
     this.props
       .mechaniclogin(data)
       .then(async (res) => {
+        
         try {
-          ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
-          this.props.navigation.navigate('mechanicStack');
-        } catch (e) {
+          if (this.props.auth.user.message === "new") {
+              this.props.navigation.navigate('newuserconfirm');
+        this.setState({isLoading:false})
+          } else {
+            ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
+            this.props.navigation.navigate('mechanicStack');
+         this.setState({isLoading:false})
+          }
+           } catch (e) {
           console.log('error hai', e);
           ToastAndroid.show('Invalid Email', ToastAndroid.BOTTOM);
         }
       })
 
-
-    // axios
-    //   .post(URL.Url + 'mechanicsignin', {
-    //     email: this.state.Email,
-    //     password: this.state.Password,
-    //   })
-    //   .then(async (res) => {
-    //     console.log(res);
-
-    //     try {
-          
-    //       if(res.data.message=='blocked'){
-    //         ToastAndroid.show('You are Blocked by Admin', ToastAndroid.BOTTOM);
-    //       }
-    //       else if(res.data.message=='new')
-    //       {
-    //         console.log('New user');
-    //         console.log("codeg",res.data.code)
-    //         this.props.navigation.navigate('newuserconfirm',{code:res.data.code,email:res.data.email});
-    //       }
-    //       else
-    //     {ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
-    //       await AsyncStorage.setItem('token', res.data.token);
-         
-    //       console.log(res.data.token);
-    //       this.props.navigation.navigate('mechanicStack');}
-    //     } catch (e) {
-         
-    //       console.log('error hai', e);
-    //       Alert.alert('Invalid email password');
-    //     }
-    //   })
       .catch((error) => {
         console.log('error1',error)
        

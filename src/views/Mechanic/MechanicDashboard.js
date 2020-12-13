@@ -38,7 +38,7 @@ import StarRating from 'react-native-star-rating';
 import Hamburger from '../../components/headerComponent/Hamburger';
 import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
- class MechanicDashboard extends Component {
+class MechanicDashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,81 +57,42 @@ import {connect} from 'react-redux';
     };
   }
   getData = () => {
-    // AsyncStorage.getItem('token').then((res) => {
-    //   this.setState({token: res});
-    //   console.log('token1', res);
-    //   axios
-    //     .get(URL.Url + 'me', {
-    //       headers: {
-    //         'x-access-token': this.state.token,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       this.setState({mechanicid: response.data.mechanicid});
-
-          this.Rate();
-          axios
-            .put(URL.Url + 'mechaniclocation/' + this.props.auth.user.mechanicid, {
-              latitude: this.state.latitude,
-              longitude: this.state.longitude,
-            })
-            .then((response) => {
-            console.log(response.data,"update")
-              //   axios
-            //     .get(URL.Url + 'mechanic/' + this.state.mechanicid)
-                // .then((mechanic) => {
-                //   // console.log(mechanic.data);
-                //   this.setState({data: mechanic.data});
-                //   const send = JSON.stringify(mechanic.data);
-                //   AsyncStorage.setItem('Mechanicdata', send);
-                })
-                .then((res) => {
-                  axios
-                    .get(URL.Url + 'getbookedUser/' + this.props.auth.user.mechanicid)
-                    .then((response) => {
-                      //  console.log(response.data);
-
-                      response.data.map((item) => {
-                        this.setState({Amount: item.totalamount});
-
-                        axios
-                          .get(URL.Url + 'user/' + item.userid)
-                          .then((response) => {
-                            setTimeout(() => {
-                              this.setState({
-                                bookedUserData: response.data,
-                              });
-                              this.setState({refreshing: true});
-                              this.setState({bookedUserid: item._id});
-                            }, 2000);
-
-                            // this.state.data['userid'] = item.userid;
-                            // this.state.data['bookedId']=item._id
-
-                            const ids = {};
-                            ids['mechanicid'] = item.mechanicid;
-                            const sendids = JSON.stringify(ids);
-                            AsyncStorage.setItem('mechanicid', sendids);
-                            //   console.log(ids);
-                          })
-                      // });
-                    // })
-                    .then(() => {
-                      this.getwarning();
-                    })
-                    .catch((error) => {
-                      console.log(error, 'Booked User Not Accesible');
-                    });
+    this.Rate();
+    axios
+      .put(URL.Url + 'mechaniclocation/' + this.props.auth.user.mechanicid, {
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+      })
+      .then((response) => {
+        console.log(response.data, 'update');
+      })
+      .catch((error) => {
+        console.log('Mechanic Location Not Updated', error);
+      })
+      .then((res) => {
+        axios
+          .get(URL.Url + 'getbookedUser/' + this.props.auth.user.mechanicid)
+          .then((response) => {
+            response.data.map((item) => {
+              this.setState({Amount: item.totalamount});
+              axios
+                .get(URL.Url + 'user/' + item.userid)
+                .then((response) => {
+                  this.setState({
+                    bookedUserData: response.data,
+                  });
+                  this.setState({refreshing: true});
+                  this.setState({bookedUserid: item._id});
                 })
                 .catch((error) => {
-                  console.log('Mechanic Location Not Updated', error);
+                  console.log(error, 'Booked User Not Accesible');
                 });
-            // });
-        })
-        .catch((error) => {
-          console.log('Mechanic Data Not Accessible', error);
-        });
-    });
+            });
+          });
+      })
+      .then(() => {
+        this.getwarning();
+      });
   };
   requestMechanicLocation = async () => {
     try {
@@ -186,13 +147,12 @@ import {connect} from 'react-redux';
         console.log(error);
       });
   };
-
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
     });
   }
-   componentDidMount() {
+  componentDidMount() {
     const {navigation} = this.props;
 
     this.requestMechanicLocation();
@@ -203,20 +163,21 @@ import {connect} from 'react-redux';
   }
 
   Rate = () => {
-    console.log(this.props.auth.user.mechanicid)
-    axios.get(URL.Url + 'bookedmid/' + this.props.auth.user.mechanicid).then((data) => {
-      var r = [];
-      data.data.map((item, index) => {
-        r.push(item.totalamount);
+    console.log(this.props.auth.user.mechanicid);
+    axios
+      .get(URL.Url + 'bookedmid/' + this.props.auth.user.mechanicid)
+      .then((data) => {
+        var r = [];
+        data.data.map((item, index) => {
+          r.push(item.totalamount);
+        });
+        // Getting sum of numbers
+        var sum = r.reduce(function (a, b) {
+          return a + b;
+        }, 0);
+        console.log(sum); // Prints: 15
+        this.setState({earning: sum});
       });
-      // Getting sum of numbers
-      var sum = r.reduce(function (a, b) {
-        return a + b;
-      }, 0);
-      console.log(sum); // Prints: 15
-
-      this.setState({earning: sum});
-    });
   };
 
   bookedUser = () => {
@@ -371,10 +332,10 @@ import {connect} from 'react-redux';
                   <View style={[style.row, style.aiCenter]}>
                     <Image
                       style={[image.Image30, style.mr10]}
-                      source={{uri: data.photo}}
+                      source={{uri: auth.user.photo}}
                     />
                     <Text style={[text.text16, text.bold]}>
-                      {data.firstname} {data.lastname}
+                      {auth.user.firstname} {auth.user.lastname}
                     </Text>
                   </View>
                   <View>
