@@ -1,9 +1,0 @@
-
-{
-    "appId": "1105382",
-    "key": "abb012422aa6374ba7fc",
-    "secret": "a79932d9355596ecb865",
-    "cluster": "ap2",
-    "encrypted": true,
-    "restServer":"https://salty-plateau-55224.herokuapp.com/"
-}

@@ -42,6 +42,7 @@ const AuthStack = createStackNavigator(
   {
     Login: Login,
     SignUp: SignUp,
+    
     GoogleUserSignUp: GoogleUserSignUp,
     LoginasMechanic: LoginasMechanic,
     MechanicRegister: MechanicRegister,
