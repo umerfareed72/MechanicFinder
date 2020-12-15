@@ -97,10 +97,10 @@ class ChatBox extends React.Component {
           </View>
           <View style={[style.flex2]}>
             <AutoScroll>
-              {this.state.chatMessages.map((msg) => {
+              {this.state.chatMessages.map((msg,index) => {
                 return (
                   <View style={appStyle.chatcontainerleft}>
-                    <View style={[style.mh10]}>
+                    <View key={index} style={[style.mh10]}>
                       <Text style={[text.leftchatstyle]}>{msg}</Text>
                     </View>
                   </View>

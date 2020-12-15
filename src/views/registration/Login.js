@@ -257,7 +257,6 @@ class Login extends Component {
   };
 
   submitData = () => {
-    
     if (this.validateuser()) {
       this.setState({isLoading: true});
 
@@ -266,18 +265,19 @@ class Login extends Component {
         .userlogin(data)
         .then(async (res) => {
           try {
-
             ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
             this.props.navigation.navigate('userStack');
-          this.setState({isLoading:false})
+            this.setState({isLoading: false});
           } catch (e) {
             console.log('error hai', e);
             ToastAndroid.show('Invalid Email', ToastAndroid.BOTTOM);
+            this.setState({isLoading: false});
           }
         })
 
         .catch((error) => {
           ToastAndroid.show('Invalid User', ToastAndroid.BOTTOM);
+          this.setState({isLoading: false});
         });
     }
   };

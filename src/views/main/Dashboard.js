@@ -36,9 +36,6 @@ import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 
 import Hamburger from '../../components/headerComponent/Hamburger';
-import {DrawerNavigator} from 'react-navigation';
-import * as geolib from 'geolib';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import {connect} from 'react-redux';
 
 class Dashboard extends Component {
@@ -169,7 +166,7 @@ class Dashboard extends Component {
         <StatusBar barStyle={'light-content'} backgroundColor={'transparent'} />
 
         {/*Body */}
-        <View style={{}}>
+        <View >
           <LinearGradient
             colors={colors.orablu}
             start={{x: -0.9, y: 1}}
