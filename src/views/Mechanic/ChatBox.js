@@ -1,3 +1,4 @@
+import io from 'socket.io-client';
 import React, {Component} from 'react';
 import {
   Text,
@@ -19,36 +20,49 @@ import {
   Button,
   TouchableNativeFeedbackBase,
 } from 'react-native';
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
-import Icon from 'react-native-vector-icons/AntDesign';
+import {
+  colors,
+  screenHeight,
+  screenWidth,
+  images,
+  URL,
+} from '../../config/Constant';
 import LinearGradient from 'react-native-linear-gradient';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
 import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
-var FloatingLabel = require('react-native-floating-labels');
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import appStyle from '../../assets/styles/appStyle';
-import {Calendar} from 'react-native-calendars';
-import QRCode from 'react-native-qrcode-svg';
 import AutoScroll from 'react-native-auto-scroll';
+import appStyle from '../../assets/styles/appStyle';
+import {connect} from 'react-redux';
 
-export default class ChatView extends React.Component {
+class ChatBox extends React.Component {
   constructor(props) {
     super(props);
-
-    this.handleSendMessage = this.onSendMessage.bind(this);
+    this.state = {
+      chatMessage: '',
+      chatMessages: [],
+      name: '',
+    };
   }
 
-  onSendMessage(e) {
-    // (1)
-    this.props.onSendMessage(e.nativeEvent.text);
-    this.refs.input.clear();
+  componentDidMount() {
+    this.socket = io(URL.Url);
+    this.socket.on('chat message', (msg) => {
+      this.setState({chatMessages: [...this.state.chatMessages, msg]});
+    });
   }
+
+  submitChatMessage = () => {
+    this.socket.emit(
+      'chat message',
+      this.props.auth.user.firstname + ' :' + this.state.chatMessage,
+    );
+    this.setState({chatMessage: ''});
+  };
 
   render() {
-    // (2)
     return (
       <SafeAreaView style={style.flex1}>
         <StatusBar
@@ -56,7 +70,6 @@ export default class ChatView extends React.Component {
           backgroundColor={'transparent'}
           translucent={true}
         />
-
         <KeyboardAvoidingView style={{flexGrow: 1}}>
           <View>
             <LinearGradient
@@ -82,48 +95,49 @@ export default class ChatView extends React.Component {
           </View>
           <View style={[style.flex2]}>
             <AutoScroll>
-              <FlatList
-                data={this.props.messages}
-                renderItem={this.renderItem}
-              />
+              {this.state.chatMessages.map((msg) => {
+                return (
+                  <View style={appStyle.chatcontainerleft}>
+                    <View style={[style.mh10]}>
+                      <Text style={[text.leftchatstyle]}>{msg}</Text>
+                    </View>
+                  </View>
+                );
+              })}
             </AutoScroll>
           </View>
           <View style={[button.buttoncontainer, {borderColor: colors.white}]}>
-            <TextInput
-              autoFocus
-              keyboardType="default"
-              returnKeyType="done"
-              enablesReturnKeyAutomatically
-              style={[text.textlabel15]}
-              blurOnSubmit={false}
-              onSubmitEditing={this.handleSendMessage}
-              ref="input"
-            />
+            <View style={style.row}>
+              <View style={style.flex2}>
+                <TextInput
+                  style={[text.textlabel15]}
+                  autoCorrect={false}
+                  value={this.state.chatMessage}
+                  onSubmitEditing={this.submitChatMessage}
+                  onChangeText={(chatMessage) => {
+                    this.setState({chatMessage});
+                  }}
+                />
+              </View>
+              <TouchableOpacity
+                style={(style.flex1, style.row)}
+                onPress={this.submitChatMessage}>
+                <Image
+                  source={images.arrowright}
+                  style={[image.insidebox]}></Image>
+              </TouchableOpacity>
+            </View>
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
-      /*     
-          <KeyboardAvoidingView style={styles.container} behavior="padding">
-
-                         </KeyboardAvoidingView> */
     );
   }
-
-  renderItem({item}) {
-    // (3)
-    const action = item.action;
-    const name = item.name;
-    if (action == 'message') {
-      return (
-        <View style={appStyle.chatcontainerleft}>
- <View style={[style.mh10]}>
-                    <Text style={[text.leftchatstyle]}>
-                 
-          {name}: {item.message}
-        </Text>
-        </View>
-        </View>
-      );
-    }
-  }
 }
+
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(ChatBox);

@@ -39,19 +39,12 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Dashboard from '../main/Dashboard';
+import {connect} from 'react-redux';
 
-export default class Newuserconfirm extends Component {
+class Newuserconfirm extends Component {
   constructor(props) {
     super(props);
-    console.disableYellowBox = true;
     this.state = {
-      Uregister: colors.white,
-      Mregister: colors.white,
-      textUser: colors.black,
-      textMechanic: colors.black,
-      userInfo: null,
-      Email: '',
-      Password: '',
       error: '',
 
       gettingLoginStatus: true,
@@ -63,6 +56,9 @@ export default class Newuserconfirm extends Component {
       code: this.props.navigation.getParam('code'),
       email: this.props.navigation.getParam('email'),
       newcode:'',
+      code: '',
+      Email: '',
+   
     };
   }
   UserRegister = () => {
@@ -118,17 +114,11 @@ export default class Newuserconfirm extends Component {
     }).then(()=>{this.setState({code:this.state.newcode})})
     this.sendemail();
   };
+    
   validateuser = () => {
-    if (this.state.Email == '') {
+    if (this.state.code == '') {
       ToastAndroid.show(
-        'Email is Required',
-        ToastAndroid.BOTTOM,
-        ToastAndroid.LONG,
-      );
-      return false;
-    } else if (this.state.Password == '') {
-      ToastAndroid.show(
-        'Password is Required',
+        'Code is Required',
         ToastAndroid.BOTTOM,
         ToastAndroid.LONG,
       );
@@ -149,18 +139,15 @@ export default class Newuserconfirm extends Component {
 
   submitData = () => {
     {
-      console.log('email in frontend', this.state.email);
-      //console.log(this.state.email);
-
-      if (this.state.Password == this.state.code) {
+      this.validateuser();
+      if (this.state.code === this.props.auth.user.code) {
         axios
           .put(URL.Url + 'confirmuser', {
-            email: this.state.email,
+            email: this.props.auth.user.email,
             econfirm: true,
           })
           .then((res) => {
             console.log('resss', res);
-
             try {
               if (res.data.message == 'confirm') {
                 ToastAndroid.show('Email Confirmed', ToastAndroid.BOTTOM);
@@ -234,19 +221,19 @@ export default class Newuserconfirm extends Component {
                     keyboardType={'numeric'}
                     onChangeText={(text) => {
                       this.setState({
-                        Password: text,
+                        code: text,
                       });
                     }}
                     secureTextEntry={false}
                     underlineColorAndroid="transparent"></TextInput>
                 </View>
-                <View style={[style.pv10, style.ph30]}>
+                {/* <View style={[style.pv10, style.ph30]}>
                   <Text
                     onPress={this.resend}
                     style={[text.right, text.text14, {color: colors.link}]}>
                     Resend code
                   </Text>
-                </View>
+                </View> */}
 
                 <TouchableOpacity onPress={this.submitData}>
                   <View style={[button.buttoncontainer, style.mt20]}>
@@ -267,3 +254,11 @@ export default class Newuserconfirm extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps)(Newuserconfirm);

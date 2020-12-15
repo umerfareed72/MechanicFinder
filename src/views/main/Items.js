@@ -34,14 +34,12 @@ import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
 import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
-var FloatingLabel = require('react-native-floating-labels');
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
-import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-community/async-storage';
 import Modal from 'react-native-modal';
 import axios from 'axios';
-export default class Items extends Component {
+import {connect} from 'react-redux';
+class Items extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
@@ -80,12 +78,10 @@ export default class Items extends Component {
       alert('No Product Added');
     } else {
       if (this.state.items.quantity != 0 && this.state.items.quantity >= 0) {
-        const amount =
-          this.state.price * this.state.quantity ;
-
+        const amount = this.state.price * this.state.quantity;
         axios
           .post(URL.Url + 'addbuyProduct', {
-            userid: this.state.userdata._id,
+            userid: this.props.auth.user.userid,
             mechanicid: this.state.mechanicdata.mechanicid,
             productid: this.state.items._id,
             quantity: this.state.quantity,
@@ -273,8 +269,7 @@ export default class Items extends Component {
                 <Image style={image.large} source={images.dollar}></Image>
                 <Text style={[text.heading1purple]}>
                   Total Estimated Rate :{' '}
-                  {this.state.price * this.state.quantity }
-                  $
+                  {this.state.price * this.state.quantity}$
                 </Text>
               </View>
 
@@ -322,3 +317,10 @@ export default class Items extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(Items);

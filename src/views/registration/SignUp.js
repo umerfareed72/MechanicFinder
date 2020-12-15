@@ -10,6 +10,7 @@ import {
   CheckBox,
   Image,
   ImageBackground,
+  ActivityIndicator,
   Dimensions,
   Keyboard,
   Platform,
@@ -72,7 +73,8 @@ export default class MechanicRegister extends Component {
       longitude: '',
       latitude: '',
       filePath: {},
-      nickname:''
+      nickname:'',
+      isLoading:false
     };
   }
 
@@ -177,6 +179,7 @@ return true
     };
     ImagePicker.showImagePicker(options, (response) => {
       if (response.uri) {
+        this.setState({isLoading:true})
         console.log(response)
         var data = new FormData();
         const source = {
@@ -199,6 +202,9 @@ return true
           .then((data) => {
             console.log(data.secure_url);
             this.setState({photo: data.secure_url});
+              this.setState({isLoading: false});
+           
+        
           })
           .catch((err) => {
             Alert.alert('An Error Occured While Uploading');
@@ -628,30 +634,45 @@ return true
                 </View>
                 <View style={[style.flex1, style.jcCenter]}>
                   <View style={[style.aiCenter, style.mv20]}>
-                    <View style={[image.largeovalcontainer]}>
-                      {
+                    {this.state.isLoading ? (
+                      <SafeAreaView style={[appStyle.safeContainer]}>
+                        <StatusBar
+                          barStyle={'dark-content'}
+                          translucent={true}
+                          backgroundColor="transparent"></StatusBar>
+                        <View style={[style.flex1, style.jcCenter]}>
+                          <View style={[style.aiCenter]}>
+                            <ActivityIndicator
+                              style={{padding: 50}}
+                              color="#bc2b78"
+                              size="large"></ActivityIndicator>
+                          </View>
+                        </View>
+                      </SafeAreaView>
+                    ) : (
+                      <View style={[image.largeovalcontainer]}>
                         <Image
                           source={{uri: photo}}
                           style={[image.largeovalcontainerupload]}
                         />
-                      }
-                      <TouchableOpacity
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                        onPress={this.handleChoosePhoto}>
-                        <Image
-                          style={[image.largeimagestyle]}
-                          source={images.camerdark}
-                        />
-                      </TouchableOpacity>
-                    </View>
+                        <TouchableOpacity
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                          onPress={this.handleChoosePhoto}>
+                          <Image
+                            style={[image.largeimagestyle]}
+                            source={images.camerdark}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    )}
                     <View style={style.mv10}>
                       <Text
                         style={[
@@ -666,6 +687,7 @@ return true
                     </View>
                   </View>
                 </View>
+               
                 <TouchableOpacity onPress={this.check}>
                   <View
                     style={[

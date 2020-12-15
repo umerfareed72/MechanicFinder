@@ -8,13 +8,14 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
-  CheckBox,
+  ActivityIndicator,
   Image,
   ImageBackground,
   Dimensions,
   Keyboard,
   Button,
   Platform,
+  
 } from 'react-native';
 const axios = require('axios');
 import {
@@ -47,9 +48,7 @@ class Mechaniclist extends Component {
     this.state = {
       rating: 2,
       starCount: 3,
-      isModalVisible: false,
-    };
-    this.state = {
+      isLoading: false,
       dataSource: [],
       slot: '',
       userId: '',
@@ -59,28 +58,30 @@ class Mechaniclist extends Component {
     };
   }
   changebuttoncolor = (id) => {
+    this.setState({isLoading:true})
     axios
       .get(URL.Url + 'getbookedMechanic/' + this.props.auth.user.userid)
       .then((res) => {
-        if (res.data == '') {
+          if (res.data == '') {
           this.setState({
             slot: id,
           });
           if (this.state.slot == id) {
-            // console.log(this.state.dataSource[id])
+            
             const senddata = JSON.stringify(this.state.dataSource[id]);
-            AsyncStorage.setItem('data', senddata);
+            AsyncStorage.setItem('data', senddata); 
             setTimeout(() => {
+              
               this.props.navigation.navigate('HomeDetail');
             }, 2000);
           }
         } else {
+          this.setState({isLoading:false})
           ToastAndroid.show(
             'User Already Book a Mechanic',
             ToastAndroid.BOTTOM,
             ToastAndroid.LONG,
           );
-
           console.log(res.data);
         }
       })
@@ -115,41 +116,28 @@ class Mechaniclist extends Component {
 
   showMechanics = () => {
     if (this.validate()) {
-      // AsyncStorage.getItem('userId')
-      //   .then((res) => {
-      //     const id = JSON.parse(res);
-      //     this.setState({userId: id});
-          axios
-            .get(
-              URL.Url +
-                'nearmechanics/' +
-                this.state.skilltype +
-                '/' +
-                this.state.vehicletype +
-                '/' +
-                this.state.carcompany +
-                '/' +
-                this.props.auth.user.userid,
-            )
-            .then((response) => {
-              console.log(response.data);
-              this.setState({dataSource: response.data});
-              if (response.data.length == 0) {
-                ToastAndroid.show(
-                  'No Mechanic Available',
-                  ToastAndroid.BOTTOM,
-                  ToastAndroid.LONG,
-                );
-              }
-            // })
-            // .catch((error) => {
-            //   console.log(error);
-            //   ToastAndroid.show(
-            //     'Something went wrong',
-            //     ToastAndroid.BOTTOM,
-            //     ToastAndroid.LONG,
-            //   );
-            // });
+      axios
+        .get(
+          URL.Url +
+            'nearmechanics/' +
+            this.state.skilltype +
+            '/' +
+            this.state.vehicletype +
+            '/' +
+            this.state.carcompany +
+            '/' +
+            this.props.auth.user.userid,
+        )
+        .then((response) => {
+          console.log(response.data);
+          this.setState({dataSource: response.data});
+          if (response.data.length == 0) {
+            ToastAndroid.show(
+              'No Mechanic Available',
+              ToastAndroid.BOTTOM,
+              ToastAndroid.LONG,
+            );
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -176,6 +164,9 @@ class Mechaniclist extends Component {
   }
 
   render() {
+    if(this.state.isLoading==false){
+
+    
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
@@ -321,6 +312,23 @@ class Mechaniclist extends Component {
         </ScrollView>
       </SafeAreaView>
     );
+          }
+          else{
+            return(
+              <SafeAreaView style={[appStyle.safeContainer]}>
+                <StatusBar
+                  barStyle={'dark-content'}
+                  translucent={true}
+                  backgroundColor="transparent"></StatusBar>
+                <View style={[style.flex1, style.jcCenter]}>
+                  <View style={[style.aiCenter]}>
+                    <ActivityIndicator
+                      color="#bc2b78"
+                      size="large"></ActivityIndicator>
+                  </View>
+                </View>
+              </SafeAreaView>)
+          }
   }
 }
 function mapStateToProps(state) {
@@ -329,4 +337,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps,null)(Mechaniclist);
+export default connect(mapStateToProps, null)(Mechaniclist);

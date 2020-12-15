@@ -51,7 +51,7 @@ class ProfileDetail extends Component {
       ColorOverview: colors.darkBlue,
       ColorProduct: colors.inputBordercolor,
       ColorReview: colors.inputBordercolor,
-      BookNowView: 'flex',
+      BookNowView: 'none',
       CheckBox: images.checkBoxEmpty,
       cancelButton: 'flex',
       isModalVisible: false,
@@ -68,7 +68,7 @@ class ProfileDetail extends Component {
       firstname: '',
       lastname: '',
       photo: '',
-      refreshing: false,
+      refreshing: null,
       Amount: 0,
       productprice: 0,
     };
@@ -85,14 +85,28 @@ class ProfileDetail extends Component {
       rating: rating,
     });
   }
-
+  getRating = async () => {
+    await axios
+      .get(URL.Url + 'getuser/' + this.state.mechanicid)
+      .then((res) => {
+        this.setState({Rating: res.data});
+      });
+  };
+  getBuyProducts = async () => {
+    await axios
+      .get(
+        URL.Url +
+          'getbuyProduct/' +
+          this.props.auth.user.userid +
+          '/' +
+          this.state.mechanicid,
+      )
+      .then((prod) => {
+        this.setState({products: prod.data});
+      });
+  };
   getdata = () => {
     try {
-      // AsyncStorage.getItem('userId')
-      //   .then((response) => {
-      //     console.log(response);
-      //     const userid = JSON.parse(response);
-      //     this.setState({userid: userid});
       axios
         .get(URL.Url + 'getbookedMechanic/' + this.props.auth.user.userid)
         .then((res) => {
@@ -105,68 +119,45 @@ class ProfileDetail extends Component {
             axios
               .get(URL.Url + 'mechanic/' + item.mechanicid)
               .then((response) => {
+                this.setState({refreshing: false});
                 this.setState({data: response.data});
-                this.setState({refreshing: true});
                 response.data['userId'] = item.userid;
                 response.data['bookMechanicid'] = item._id;
                 const sendMechanicData = JSON.stringify(response.data);
                 AsyncStorage.setItem('bookMechanicData', sendMechanicData);
-              })
-              .then(async (res) => {
-                await axios.get(URL.Url + 'user/' + userid).then((res) => {
-                  const {data} = this.state;
-                  this.setState({
-                    firstname: res.data.firstname,
-                    lastname: res.data.lastname,
-                    photo: res.data.photo,
-                  });
-
-                  let Lat1 = data.latitude / 57.29577951;
-                  let Lat2 = res.data.latitude / 57.29577951;
-                  let Long1 = data.longitude / 57.29577951;
-                  let Long2 = res.data.longitude / 57.29577951;
-                  // Calaculate distance
-                  let dlat = Lat2 - Lat1;
-                  let dlong = Long2 - Long1;
-                  //Apply Heversine Formula to calculate  Distance of Spherical Objects
-                  let a =
-                    Math.pow(Math.sin(dlat / 2), 2) +
-                    Math.cos(Lat1) *
-                      Math.cos(Lat2) *
-                      Math.pow(Math.sin(dlong / 2), 2);
-                  let c = 2 * Math.asin(Math.sqrt(a));
-                  let r = 6371;
-                  let result = c * r; //Get Result In KM
-                  //Found In 10 KM
-                  if (result <= 10) {
-                    // this.setState({cancelButton:'none'})
-                    // this.setState({BookNowView: 'flex',cancelButton:'none'});
-                  }
-                });
-                await axios
-                  .get(URL.Url + 'getuser/' + this.state.mechanicid)
-                  .then((res) => {
-                    this.setState({Rating: res.data});
-                  })
-                  .then((product) => {
-                    axios
-                      .get(
-                        URL.Url +
-                          'getbuyProduct/' +
-                          this.props.auth.user.userid +
-                          '/' +
-                          this.state.mechanicid,
-                      )
-                      .then((prod) => {
-                        this.setState({products: prod.data});
-                      });
-                  });
+                let Lat1 = this.props.auth.user.latitude / 57.29577951;
+                let Lat2 = response.data.latitude / 57.29577951;
+                let Long1 = this.props.auth.user.longitude / 57.29577951;
+                let Long2 = response.data.longitude / 57.29577951;
+                // Calaculate distance
+                let dlat = Lat2 - Lat1;
+                let dlong = Long2 - Long1;
+                //Apply Heversine Formula to calculate  Distance of Spherical Objects
+                let a =
+                  Math.pow(Math.sin(dlat / 2), 2) +
+                  Math.cos(Lat1) *
+                    Math.cos(Lat2) *
+                    Math.pow(Math.sin(dlong / 2), 2);
+                let c = 2 * Math.asin(Math.sqrt(a));
+                let r = 6371;
+                let result = c * r; //Get Result In KM
+                //Found In 10 KM
+                console.log(result, 'resisabhasv');
+                if (result <= 10) {
+                  this.setState({BookNowView: 'flex'});
+                  this.setState({cancelButton: 'none'});
+                }
               });
           });
         })
-        // })
         .catch((error) => {
           console.log('User data not Fetched', error);
+        })
+        .then((product) => {
+          this.getBuyProducts();
+        })
+        .then(() => {
+          this.getRating();
         });
     } catch (error) {
       console.log(error);
@@ -184,7 +175,7 @@ class ProfileDetail extends Component {
       .put(URL.Url + 'cancelbookeduser/' + this.state.bookedMechanicId)
       .then((res) => {
         AsyncStorage.removeItem('bookMechanicData');
-        this.setState({refreshing: false});
+        this.setState({refreshing: true});
         this.props.navigation.navigate('Dashboard');
         ToastAndroid.show(
           'Booking Cancelled',
@@ -197,7 +188,7 @@ class ProfileDetail extends Component {
               URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
             )
             .then((mod) => {
-              this.setState({refreshing: false});
+              this.setState({refreshing: true});
               console.log(res.data, 'data updated');
             });
         });
@@ -289,14 +280,14 @@ class ProfileDetail extends Component {
       .then((res) => {
         AsyncStorage.removeItem('bookMechanicData');
         this.props.navigation.navigate('Dashboard');
-        this.setState({refreshing: false});
+        this.setState({refreshing: true});
         this.state.products.map((item) => {
           axios
             .put(
               URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
             )
             .then((mod) => {
-              this.setState({refreshing: false});
+              this.setState({refreshing: true});
               console.log(res.data, 'data updated');
             });
         });
@@ -310,12 +301,11 @@ class ProfileDetail extends Component {
     if (this.validateReview()) {
       const userId = this.props.auth.user.userid;
       const mechanicid = this.state.mechanicid;
-
       axios
         .post(URL.Url + 'add/' + userId + '/' + mechanicid, {
-          firstname: this.state.firstname,
-          lastname: this.state.lastname,
-          photo: this.state.photo,
+          firstname: this.props.auth.user.firstname,
+          lastname: this.props.auth.user.lastname,
+          photo: this.props.auth.user.photo,
           rating: this.state.rating,
           description: this.state.description,
         })
@@ -330,7 +320,7 @@ class ProfileDetail extends Component {
               );
               this.CompleteBooking();
               console.log(res.data);
-              this.setState({refreshing: false});
+              this.setState({refreshing: true});
             });
         })
         .catch((error) => {
@@ -347,7 +337,7 @@ class ProfileDetail extends Component {
     const {auth} = this.props;
     console.log(auth.user.userid, 'idada');
 
-    if (data != null && refreshing != false) {
+    if (data != null && refreshing === false) {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
           <StatusBar />

@@ -7,7 +7,7 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
-  CheckBox,
+  ActivityIndicator,
   Image,
   ImageBackground,
   Dimensions,
@@ -34,7 +34,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 class HomeDetail extends Component {
   constructor(props) {
     super(props);
@@ -54,9 +54,10 @@ class HomeDetail extends Component {
       isModalVisible: false,
       isdelModalVisible: false,
       Rating: [],
+      isLoading:false,
       userdata: [],
       products: [],
-      Amount:0
+      Amount: 0,
     };
   }
   onStarRatingPress(rating) {
@@ -64,6 +65,21 @@ class HomeDetail extends Component {
       starCount: rating,
     });
   }
+  getProducts = () => {
+    axios
+      .get(
+        URL.Url +
+          'getbuyProduct/' +
+          this.props.auth.user.userid +
+          '/' +
+          this.state.mechanicdata.mechanicid,
+      )
+      .then((prod) => {
+        this.setState({products: prod.data});
+        console.log(prod.data);
+      });
+  };
+
   getData = async () => {
     try {
       //Get Mechanic Data
@@ -73,31 +89,13 @@ class HomeDetail extends Component {
         //Get User Rating
         await axios
           .get(URL.Url + 'getuser/' + res.mechanicid)
+
           .then((res) => {
             this.setState({Rating: res.data});
           })
           //Get User Data
-
-          .then(async (product) => {
-            // await AsyncStorage.getItem('userdata').then((response) => {
-            //   const res = JSON.parse(response);
-            //   this.setState({userdata: res});
-              //Get added Product of User
-              axios
-                .get(
-                  URL.Url +
-                    'getbuyProduct/' +
-                    this.props.auth.user.userid +
-                    '/' +
-                    this.state.mechanicdata.mechanicid,
-                )
-                .then((prod) => {
-                  this.setState({products: prod.data});
-                  console.log(prod.data);
-                }).then((cal)=>{
-                  this.Rate();
-                })
-            // });
+          .then((cal) => {
+            this.Rate();
           })
           .catch((error) => {
             console.log(error, 'Review not fetch');
@@ -110,8 +108,10 @@ class HomeDetail extends Component {
   async componentDidMount() {
     const {navigation} = this.props;
     this.getData();
+    this.getProducts();
     this.focusListener = navigation.addListener('didFocus', () => {
       this.getData();
+      this.getProducts();
     });
   }
   Checked = () => {
@@ -125,16 +125,26 @@ class HomeDetail extends Component {
     if (this.state.CheckBox == images.checkBoxTick) {
       this.props.navigation.navigate('BuyItems');
     } else {
+      this.setState({isLoading:true})
       setTimeout(async () => {
-        const totalamount=this.state.Amount+this.state.mechanicdata.mechanicrate
+        const totalamount =
+          this.state.Amount + this.state.mechanicdata.mechanicrate;
         const userid = this.props.auth.user.userid;
         const mechanicid = this.state.mechanicdata.mechanicid;
         console.log(userid);
         //Add Booked Mechanic In database
         axios
-          .post(URL.Url + 'addbookedUser/' + mechanicid + '/' + userid+"/"+totalamount)
+          .post(
+            URL.Url +
+              'addbookedUser/' +
+              mechanicid +
+              '/' +
+              userid +
+              '/' +
+              totalamount,
+          )
           .then((res) => {
-           console.log("booked mechanic"+JSON.stringify(res.data))
+            console.log('booked mechanic' + JSON.stringify(res.data));
             this.setState({BookNowView: 'none'});
             this.setState({deletebutton: 'none'});
             this.props.navigation.navigate('ProfileDetail');
@@ -142,7 +152,7 @@ class HomeDetail extends Component {
               'Mechanic Booked Successfully',
               ToastAndroid.BOTTOM,
               ToastAndroid.LONG,
-            );  
+            );
           });
       }, 3000);
     }
@@ -160,7 +170,7 @@ class HomeDetail extends Component {
       .then((del) => {
         this.delToggleModel();
         console.log(del.data);
-      }); 
+      });
   };
 
   tabOverview = () => {
@@ -219,7 +229,7 @@ class HomeDetail extends Component {
     this.setState({ColorProduct: colors.inputBordercolor});
   };
   Rate = () => {
-    const {products,Amount} = this.state;
+    const {products, Amount} = this.state;
     var r = [];
     products.map((item, index) => {
       r.push(item.amount);
@@ -229,12 +239,13 @@ class HomeDetail extends Component {
       return a + b;
     }, 0);
     console.log(sum); // Prints: 15
-this.setState({Amount:sum})
+    this.setState({Amount: sum});
   };
 
   render() {
-    const {mechanicdata, Rating, products} = this.state;
 
+    const {mechanicdata, Rating, products} = this.state;
+if(this.state.isLoading===false){
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar
@@ -417,12 +428,13 @@ this.setState({Amount:sum})
                 </Text>
               </View>
 
-
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, image.Orange, style.mr5]}
                   source={images.dollar}></Image>
-                <Text style={[text.heading2, text.bold]}>Mechanic Service Rate</Text>
+                <Text style={[text.heading2, text.bold]}>
+                  Mechanic Service Rate
+                </Text>
               </View>
               <View style={[style.borderbottom, style.mv10]}>
                 <Text style={[text.heading2Gray]}>
@@ -430,7 +442,6 @@ this.setState({Amount:sum})
                   {mechanicdata.mechanicrate}.0
                 </Text>
               </View>
-
 
               <TouchableOpacity
                 style={[style.row, style.mt10, style.aiCenter]}
@@ -459,10 +470,10 @@ this.setState({Amount:sum})
                     style={
                       ({color: colors.Black323}, [text.text22, text.bold])
                     }>
-                    $ {mechanicdata.mechanicrate+this.state.Amount}
+                    $ {mechanicdata.mechanicrate + this.state.Amount}
                   </Text>
                   <Text style={([text.text14], {color: colors.gray})}>
-                   Estimated Amount
+                    Estimated Amount
                   </Text>
                 </View>
                 <View style={[{display: this.state.BookNowView}, style.flex1]}>
@@ -489,7 +500,7 @@ this.setState({Amount:sum})
               <ScrollView style={{}}>
                 {products.map((item, index) => {
                   return (
-                    <TouchableOpacity key={index} >
+                    <TouchableOpacity key={index}>
                       <View style={{}}>
                         <Modal
                           isVisible={this.state.isdelModalVisible}
@@ -617,13 +628,23 @@ this.setState({Amount:sum})
           </ScrollView>
         </View>
       </SafeAreaView>
-    );
+    );}else{
+      return(  <SafeAreaView style={[appStyle.safeContainer]}>
+        <StatusBar barStyle={'dark-content'}></StatusBar>
+        <View style={[style.flex1, style.jcCenter]}>
+          <View style={[style.aiCenter]}>
+            <ActivityIndicator
+              color="#bc2b78"
+              size="large"></ActivityIndicator>
+          </View>
+        </View>
+      </SafeAreaView>)
+    }
   }
 }
 function mapStateToProps(state) {
   return {
     auth: state.auth,
-
   };
 }
-export default connect(mapStateToProps,null)(HomeDetail);
+export default connect(mapStateToProps, null)(HomeDetail);

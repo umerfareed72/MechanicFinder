@@ -34,11 +34,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import Hamburger from '../../components/headerComponent/Hamburger';
 import Modal from 'react-native-modal';
-
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import axios from 'axios';
-
-export default class BookedUser extends Component {
+import {connect} from "react-redux";
+class MyBooking extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -87,13 +85,10 @@ export default class BookedUser extends Component {
   };
 
   MyBooking = () => {
-    AsyncStorage.getItem('userId').then((res) => {
-      const userid = JSON.parse(res);
-      axios.get(URL.Url + 'mechanics/' +userid).then((data) => {
+      axios.get(URL.Url + 'mechanics/' +this.props.auth.user.userid).then((data) => {
         this.setState({bookedMechanics: data.data});
       });
-    });
-  };
+     };
 
   componentDidMount() {
     const {navigation} = this.props;
@@ -229,3 +224,10 @@ export default class BookedUser extends Component {
     // }
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(MyBooking);

@@ -7,8 +7,9 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
-ToastAndroid,
+  ToastAndroid,
   Image,
+  ActivityIndicator,
   ImageBackground,
   Dimensions,
   Keyboard,
@@ -37,9 +38,6 @@ import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
-// import Icon from 'react-native-ionicons';
-// import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
 
 export default class MechanicRegister extends Component {
   constructor(props) {
@@ -60,7 +58,7 @@ export default class MechanicRegister extends Component {
       Country: 'Select Country',
       FirstName: '',
       LastName: '',
-      nickname:'',
+      nickname: '',
       Email: '',
       Password: '',
       CPassword: '',
@@ -74,88 +72,84 @@ export default class MechanicRegister extends Component {
       latitude: '',
       date: 'Date Of Birth',
       mechanicrate: 0,
-      code:'',
+      code: '',
+      isLoading: false,
     };
   }
   check = () => {
     if (this.state.Password == this.state.CPassword) {
       this.submitData();
     } else {
-  ToastAndroid.show('Password Not Matched')
+      ToastAndroid.show('Password Not Matched');
     }
   };
 
-  
   async componentDidMount() {
     const {navigation} = this.props;
-   this.number();
+    this.number();
     this.focusListener = navigation.addListener('didFocus', () => {
-      
       this.number();
-      
     });
   }
-  
-  
+
   submitData = () => {
-  if(this.validatefield()){
-    axios
-      .post(URL.Url + 'mechanicregister', {
-        firstname: this.state.FirstName,
-        lastname: this.state.LastName,
-        nickname:this.state.nickname,
-        email: this.state.Email,
-        password: this.state.Password,
-        phone: this.state.Phone,
-        address: this.state.address,
-        photo: this.state.photo,
-        carcompany: this.state.carcompany,
-        city: this.state.City,
-        country: this.state.Country,
-        skilltype: this.state.skilltype,
-        vehicletype: this.state.vehicletype,
-        date: this.state.date,
-        longitude: this.state.longitude,
-        latitude: this.state.latitude,
-        mechanicrate: this.state.mechanicrate,
-        rating:this.state.rating,
-        code : this.state.code
-      })
-      .then(async (res) => {
-        console.log(res);
-        console.log(res.data.token)
-       
-        try {
-          
-          this.props.navigation.navigate('LoginasMechanic');
-          ToastAndroid.show('You are Registered', ToastAndroid.BOTTOM);
-        } catch (e) {
-          console.log('error hai', e);
-        }
-      })
-      // .then(()=>{this.sendemail();})
-    
-      .catch((error) => {
-        ToastAndroid.show('You are Not Registered', ToastAndroid.BOTTOM);
-        console.log(error);
-      });
-  }
-  this.sendemail();
+    if (this.validatefield()) {
+      axios
+        .post(URL.Url + 'mechanicregister', {
+          firstname: this.state.FirstName,
+          lastname: this.state.LastName,
+          nickname: this.state.nickname,
+          email: this.state.Email,
+          password: this.state.Password,
+          phone: this.state.Phone,
+          address: this.state.address,
+          photo: this.state.photo,
+          carcompany: this.state.carcompany,
+          city: this.state.City,
+          country: this.state.Country,
+          skilltype: this.state.skilltype,
+          vehicletype: this.state.vehicletype,
+          date: this.state.date,
+          longitude: this.state.longitude,
+          latitude: this.state.latitude,
+          mechanicrate: this.state.mechanicrate,
+          rating: this.state.rating,
+          code: this.state.code,
+        })
+        .then(async (res) => {
+          console.log(res);
+          console.log(res.data.token);
+
+          try {
+            this.props.navigation.navigate('LoginasMechanic');
+            ToastAndroid.show('You are Registered', ToastAndroid.BOTTOM);
+          } catch (e) {
+            console.log('error hai', e);
+          }
+        })
+        .catch((error) => {
+          ToastAndroid.show('You are Not Registered', ToastAndroid.BOTTOM);
+          console.log(error);
+        });
+    }
+    this.sendemail();
   };
 
   number = () => {
-    this.setState({ code : Math.trunc(Math.random()*100000).toString()})
-      console.log("code",this.state.code)
-  }
+    this.setState({code: Math.trunc(Math.random() * 100000).toString()});
+    console.log('code', this.state.code);
+  };
 
-  sendemail = () => {  
+  sendemail = () => {
     try {
-      axios.post(URL.Url + 'sendemail',{
-        email:this.state.Email,
-        code:this.state.code
-      }).then((res) => {
-        console.log(res.data);
-      });
+      axios
+        .post(URL.Url + 'sendemail', {
+          email: this.state.Email,
+          code: this.state.code,
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
     } catch (error) {
       console.log(error);
       return (
@@ -165,7 +159,6 @@ export default class MechanicRegister extends Component {
       );
     }
   };
-
 
   handleChoosePhoto = () => {
     const options = {
@@ -177,6 +170,7 @@ export default class MechanicRegister extends Component {
     };
     ImagePicker.showImagePicker(options, (response) => {
       if (response.uri) {
+        this.setState({isLoading: true});
         var data = new FormData();
         const source = {
           uri: response.uri,
@@ -198,6 +192,7 @@ export default class MechanicRegister extends Component {
           .then((data) => {
             console.log(data.secure_url);
             this.setState({photo: data.secure_url});
+              this.setState({isLoading: false});
           })
           .catch((err) => {
             Alert.alert('An Error Occured While Uploading');
@@ -307,65 +302,112 @@ export default class MechanicRegister extends Component {
     this.setState({ColorStep2: colors.inputBordercolor});
   };
 
-  validatefield=()=>{
-    if(this.state.FirstName==""){
-      ToastAndroid.show('First Name Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+  validatefield = () => {
+    if (this.state.FirstName == '') {
+      ToastAndroid.show(
+        'First Name Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }else if(this.state.LastName==""){
-      ToastAndroid.show('Last Name Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.LastName == '') {
+      ToastAndroid.show(
+        'Last Name Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }else if(this.state.Email==""){
-      ToastAndroid.show('Email Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.Email == '') {
+      ToastAndroid.show(
+        'Email Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }else if(this.state.Password==""){
-      ToastAndroid.show('Password Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.Password == '') {
+      ToastAndroid.show(
+        'Password Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }else if(this.state.CPassword==""){
-      ToastAndroid.show('Confirm Password Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.CPassword == '') {
+      ToastAndroid.show(
+        'Confirm Password Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }else if(this.state.date==""){
-      ToastAndroid.show('Date Of Birth Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.date == '') {
+      ToastAndroid.show(
+        'Date Of Birth Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }else if(this.state.Phone==0){
-      ToastAndroid.show('Phone Number Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
-    }else if(this.state.address==""){
-      ToastAndroid.show('Address Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.Phone == 0) {
+      ToastAndroid.show(
+        'Phone Number Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+    } else if (this.state.address == '') {
+      ToastAndroid.show(
+        'Address Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }
-    else if(this.state.City==""){
-      ToastAndroid.show('City Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.City == '') {
+      ToastAndroid.show(
+        'City Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }
-    else if(this.state.Country==""){
-      ToastAndroid.show('Country Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.Country == '') {
+      ToastAndroid.show(
+        'Country Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }
-    
-    else if(this.state.skilltype==""){
-      ToastAndroid.show('Skill Type Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.skilltype == '') {
+      ToastAndroid.show(
+        'Skill Type Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }
-
-    else if(this.state.carcompany==""){
-      ToastAndroid.show('Car Company Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.carcompany == '') {
+      ToastAndroid.show(
+        'Car Company Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }
-
-    else if(this.state.vehicletype==""){
-      ToastAndroid.show('Vehicle Type Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.vehicletype == '') {
+      ToastAndroid.show(
+        'Vehicle Type Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
-    }
-    else if(this.state.mechanicrate==0){
-      ToastAndroid.show('Mechanic Rate Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
+    } else if (this.state.mechanicrate == 0) {
+      ToastAndroid.show(
+        'Mechanic Rate Is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
       return false;
     }
     // else if(this.state.photo==""){
     //   ToastAndroid.show('Picture Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
     //   return false;
     // }
-  return true
-  }
-  
+    return true;
+  };
+
   render() {
     const {photo} = this.state;
     return (
@@ -624,7 +666,7 @@ export default class MechanicRegister extends Component {
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image source={images.phone} style={image.username}></Image>
                     <TextInput
-                    keyboardType='numeric'
+                      keyboardType="numeric"
                       style={input.textinputstyle}
                       placeholder="Phone Number"
                       onChangeText={(text) => {
@@ -738,7 +780,7 @@ export default class MechanicRegister extends Component {
                     <Image
                       source={images.dollar}
                       style={[image.InputImage]}></Image>
-                 <Picker
+                    <Picker
                       selectedValue={this.state.mechanicrate}
                       style={[text.pickerstyle]}
                       onValueChange={(itemValue, itemIndex) =>
@@ -750,17 +792,6 @@ export default class MechanicRegister extends Component {
                       <Picker.Item label="15" value="15" />
                       <Picker.Item label="20" value="20" />
                     </Picker>
-                 
-                    {/* <TextInput
-                      style={input.textinputstyle}
-                      placeholder="Enter Your Service Rate"
-                      onChangeText={(text) => {
-                        this.setState({
-                          mechanicrate: text,
-                        });
-                      }}
-                      underlineColorAndroid="transparent"></TextInput> */}
-                 
                   </View>
 
                   <View style={[input.textinputcontainer, style.mv10]}>
@@ -779,7 +810,7 @@ export default class MechanicRegister extends Component {
                       <Picker.Item label="Body" value="Body" />
                       <Picker.Item label="Painter" value="Painter" />
                       <Picker.Item label="Electric" value="Electric" />
-                    </Picker>  
+                    </Picker>
                   </View>
 
                   <View style={[input.textinputcontainer, style.mv10]}>
@@ -857,30 +888,45 @@ export default class MechanicRegister extends Component {
                 </View>
                 <View style={[style.flex1, style.jcCenter]}>
                   <View style={[style.aiCenter, style.mv20]}>
-                    <View style={[image.largeovalcontainer]}>
-                      {
+                    {this.state.isLoading ? (
+                      <SafeAreaView style={[appStyle.safeContainer]}>
+                        <StatusBar
+                          barStyle={'dark-content'}
+                          translucent={true}
+                          backgroundColor="transparent"></StatusBar>
+                        <View style={[style.flex1, style.jcCenter]}>
+                          <View style={[style.aiCenter]}>
+                            <ActivityIndicator
+                              style={{padding: 50}}
+                              color="#bc2b78"
+                              size="large"></ActivityIndicator>
+                          </View>
+                        </View>
+                      </SafeAreaView>
+                    ) : (
+                      <View style={[image.largeovalcontainer]}>
                         <Image
                           source={{uri: photo}}
                           style={[image.largeovalcontainerupload]}
                         />
-                      }
-                      <TouchableOpacity
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                        onPress={this.handleChoosePhoto}>
-                        <Image
-                          style={[image.largeimagestyle]}
-                          source={images.camerdark}
-                        />
-                      </TouchableOpacity>
-                    </View>
+                        <TouchableOpacity
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                          onPress={this.handleChoosePhoto}>
+                          <Image
+                            style={[image.largeimagestyle]}
+                            source={images.camerdark}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    )}
                     <View style={style.mv10}>
                       <Text
                         style={[

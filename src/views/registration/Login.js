@@ -257,38 +257,25 @@ class Login extends Component {
   };
 
   submitData = () => {
-    this.setState({isLoading: true});
-
+    
     if (this.validateuser()) {
+      this.setState({isLoading: true});
+
       const data = {email: this.state.Email, password: this.state.Password};
       this.props
         .userlogin(data)
         .then(async (res) => {
           try {
+
             ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
             this.props.navigation.navigate('userStack');
+          this.setState({isLoading:false})
           } catch (e) {
             console.log('error hai', e);
             ToastAndroid.show('Invalid Email', ToastAndroid.BOTTOM);
           }
         })
 
-        // axios
-        //   .post(URL.Url + 'usersignin', {
-        //     email: this.state.Email,
-        //     password: this.state.Password,
-        //   })
-        //   .then(async (res) => {
-        //     try {
-        //       ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
-        //       await AsyncStorage.setItem('usersignintoken', res.data.token);
-        //       console.log(res.data.token);
-        //       this.props.navigation.navigate('userStack');
-        //     } catch (e) {
-        //       console.log('error hai', e);
-        //       Alert.alert('Invalid email password');
-        //     }
-        //   })
         .catch((error) => {
           ToastAndroid.show('Invalid User', ToastAndroid.BOTTOM);
         });

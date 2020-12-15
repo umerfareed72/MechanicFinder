@@ -15,7 +15,7 @@ import {createDrawerNavigator} from 'react-navigation-drawer';
 import MechanicSideMenu from '../views/registration/MechanicSideMenu';
 import MechanicSetting from '../views/Mechanic/MechanicSetting';
 import UserProfile from '../views/Mechanic/UserProfile';
-import Chat from '../views/Mechanic/Chat';
+import Chat from '../views/Mechanic/ChatBox';
 import UserProfileDetail from '../views/Mechanic/UserProfileDetail';
 import Products from '../views/Mechanic/Products'
 import AddProducts from '../views/Mechanic/AddProducts'

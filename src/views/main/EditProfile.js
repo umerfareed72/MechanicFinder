@@ -37,10 +37,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import ImagePicker from 'react-native-image-picker';
 import Textarea from 'react-native-textarea';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import {connect} from 'react-redux';
 import axios from 'axios';
 
-export default class EditProfile extends Component {
+class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -155,12 +155,9 @@ return true
 
 
   submitdata = () => {
-    if(this.validatefield()){
-      
-    AsyncStorage.getItem('userdata').then((res) => {
-      const data = JSON.parse(res);
+    if(this.validatefield()){      
       axios
-        .put(URL.Url + 'updateuser/' + this.state.user._id, {
+        .put(URL.Url + 'updateuser/' + this.props.auth.user.userid, {
           firstname: this.state.firstname,
           lastname: this.state.lastname,
           photo: this.state.photo,
@@ -175,8 +172,7 @@ return true
           console.log(response.data);
           alert('Data Updated');
         });
-    }); 
-  }
+    }
   };
   onStarRatingPress(rating) {
     this.setState({
@@ -184,8 +180,7 @@ return true
     });
   }
   async componentDidMount() {
-    AsyncStorage.getItem('userdata').then((res) => {
-      const data = JSON.parse(res);
+      const data = this.props.auth.user;
       console.log(data);
       this.setState({user: data});
       this.setState({firstname: data.firstname});
@@ -197,8 +192,7 @@ return true
       this.setState({city: data.city});
       this.setState({country: data.country});
       this.setState({password: data.password});
-    });
-  }
+     }
 
   render() {
     const {photo, user} = this.state;
@@ -506,3 +500,10 @@ return true
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(EditProfile);

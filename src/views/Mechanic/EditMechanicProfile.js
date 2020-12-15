@@ -36,11 +36,9 @@ import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import ImagePicker from 'react-native-image-picker';
-import Textarea from 'react-native-textarea';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import axios from 'axios';
-
-export default class EditMechanicProfile extends Component {
+import {connect} from 'react-redux';
+class EditMechanicProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,7 +61,6 @@ export default class EditMechanicProfile extends Component {
       skilltype: '',
       carcompany: '',
       mechanicrate: 0,
-
       edit: false,
       edit1: false,
       edit2: false,
@@ -78,7 +75,6 @@ export default class EditMechanicProfile extends Component {
       edit11: false,
     };
   }
-
   handleChoosePhoto = () => {
     const options = {
       title: 'Take Image From',
@@ -217,32 +213,29 @@ export default class EditMechanicProfile extends Component {
 
   submitdata = () => {
     if (this.validatefield()) {
-      AsyncStorage.getItem('Mechanicdata').then((res) => {
-        const data = JSON.parse(res);
-        axios
-          .put(URL.Url + 'updatemechanic/' + this.state.mechanic._id, {
-            firstname: this.state.firstname,
-            lastname: this.state.lastname,
-            photo: this.state.photo,
-            phone: this.state.phone,
-            address: this.state.address,
-            city: this.state.city,
-            country: this.state.country,
-            email: this.state.email,
-            vehicaltype: this.state.vehicaltype,
-            skilltype: this.state.skilltype,
-            carcompany: this.state.carcompany,
-            mechanicrate: this.state.mechanicrate,
-          })
-          .then((response) => {
-            console.log(response.data);
-            ToastAndroid.show(
-              'Data Updated',
-              ToastAndroid.BOTTOM,
-              ToastAndroid.LONG,
-            );
-          });
-      });
+      axios
+        .put(URL.Url + 'updatemechanic/' + this.props.auth.user.mechanicid, {
+          firstname: this.state.firstname,
+          lastname: this.state.lastname,
+          photo: this.state.photo,
+          phone: this.state.phone,
+          address: this.state.address,
+          city: this.state.city,
+          country: this.state.country,
+          email: this.state.email,
+          vehicaltype: this.state.vehicaltype,
+          skilltype: this.state.skilltype,
+          carcompany: this.state.carcompany,
+          mechanicrate: this.state.mechanicrate,
+        })
+        .then((response) => {
+          console.log(response.data);
+          ToastAndroid.show(
+            'Data Updated',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
+        });
     }
   };
   onStarRatingPress(rating) {
@@ -251,25 +244,22 @@ export default class EditMechanicProfile extends Component {
     });
   }
   async componentDidMount() {
-    AsyncStorage.getItem('Mechanicdata').then((res) => {
-      const data = JSON.parse(res);
-      console.log(data);
-      this.setState({mechanic: data});
-      this.setState({firstname: data.firstname});
-      this.setState({lastname: data.lastname});
-      this.setState({email: data.email});
-      this.setState({photo: data.photo});
-      this.setState({phone: JSON.stringify(data.phone)});
-      this.setState({address: data.address});
-      this.setState({city: data.city});
-      this.setState({country: data.country});
-      this.setState({password: data.password});
-      this.setState({skilltype: data.skilltype});
-      this.setState({vehicletype: data.vehicletype});
-      this.setState({carcompany: data.carcompany});
-      this.setState({mechanicrate: JSON.stringify(data.mechanicrate)});
-      console.log(this.state.mechanicrate);
-    });
+    const data = this.props.auth.user;
+    this.setState({mechanic: data});
+    this.setState({firstname: data.firstname});
+    this.setState({lastname: data.lastname});
+    this.setState({email: data.email});
+    this.setState({photo: data.photo});
+    this.setState({phone: JSON.stringify(data.phone)});
+    this.setState({address: data.address});
+    this.setState({city: data.city});
+    this.setState({country: data.country});
+    this.setState({password: data.password});
+    this.setState({skilltype: data.skilltype});
+    this.setState({vehicletype: data.vehicletype});
+    this.setState({carcompany: data.carcompany});
+    this.setState({mechanicrate: JSON.stringify(data.mechanicrate)});
+    console.log(this.state.mechanicrate);
   }
 
   render() {
@@ -694,3 +684,10 @@ export default class EditMechanicProfile extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(EditMechanicProfile);
