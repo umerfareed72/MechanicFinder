@@ -54,7 +54,6 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {connect} from 'react-redux';
 import {userlogin} from '../../actions/index';
 import {ActivityIndicator} from 'react-native-paper';
-
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -361,10 +360,8 @@ class Login extends Component {
                   </View>
 
                   <TouchableOpacity
+                 
                     onPress={this.submitData}
-                    // onPress={() => {
-                    //   this.props.navigation.navigate('Dashboard');
-                    // }}
                   >
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text

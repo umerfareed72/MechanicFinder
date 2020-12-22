@@ -145,7 +145,7 @@ class ProfileDetail extends Component {
                 console.log(result, 'resisabhasv');
                 if (result <= 10) {
                   this.setState({BookNowView: 'flex'});
-                  this.setState({cancelButton: 'none'});
+                  // this.setState({cancelButton: 'none'});
                 }
               });
           });
@@ -188,8 +188,10 @@ class ProfileDetail extends Component {
               URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
             )
             .then((mod) => {
+    
               this.setState({refreshing: true});
               console.log(res.data, 'data updated');
+        
             });
         });
       })

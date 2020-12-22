@@ -61,7 +61,9 @@ class Newuserconfirm extends Component {
     }
     return true;
   };
-
+componentDidMount(){
+ console.log( this.props.auth.user.code)
+}
   submitData = () => {
     {
       this.validateuser();
