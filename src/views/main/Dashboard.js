@@ -40,7 +40,7 @@ import { DrawerNavigator } from 'react-navigation';
 import * as geolib from 'geolib';
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
-import { connect } from 'react-redux';
+
 
 class Dashboard extends Component {
   constructor(props) {
