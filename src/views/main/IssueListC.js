@@ -25,7 +25,7 @@ import {
   images,
 } from '../../config/Constant';
 import {Animated} from 'react-native';
-
+import {connect} from 'react-redux';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -41,7 +41,7 @@ import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Picker} from '@react-native-community/picker';
 import {color} from 'react-native-reanimated';
-export default class Mechaniclist extends Component {
+class Mechaniclist extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,16 +64,17 @@ export default class Mechaniclist extends Component {
      this.getid()
      this.focusListener = this.props.navigation.addListener('didFocus', () => {
      //this.showIssues();
-     this.getid() 
+     this.getid()
+    
     });
     ;
   };
 
   getid = () => {
-    AsyncStorage.getItem('userdata').then((res) => {
-    const  response=JSON.parse(res)
-     this.setState({userdbid: response._id})
-  }).then(()=>{this.showIssues();})
+   
+     this.setState({userdbid: this.props.auth.user.userid})
+      this.showIssues()
+     
   };
 
  
@@ -103,7 +104,7 @@ export default class Mechaniclist extends Component {
     console.log(this.state.userdbid);
     console.log('in showissuesC',this.state.userdbid);
      axios
-      .get(URL.Url + 'vehicalissuesC/' + this.state.userdbid)
+      .get(URL.Url + 'vehicalissuesC/' + this.props.auth.user.userid)
       .then((response) => {
         if (response.data) {
           console.log(response.data);
@@ -249,3 +250,10 @@ export default class Mechaniclist extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps,null)(Mechaniclist);

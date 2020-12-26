@@ -28,23 +28,24 @@ import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import appstyle from '../../assets/styles/appStyle';
-export default class Login extends Component {
+import { connect } from 'react-redux';
+class Cnewpassword extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
     this.state = {
       // params: params,
 
-      code: '',
-      email: '',
-      userid: '',
+
+      npassword: '',
+      userid: this.props.navigation.getParam('userid2', 'NO-ID'),
     };
   }
 
   validatefield = () => {
-    if (this.state.email == '') {
+    if (this.state.npassword == '') {
       ToastAndroid.show(
-        'Email Is Required',
+        'Password Is Required',
         ToastAndroid.BOTTOM,
         ToastAndroid.LONG,
       );
@@ -57,44 +58,27 @@ export default class Login extends Component {
   updatepass = () => {
     if (this.validatefield()) {
       console.log('in updatepass')
+      console.log(this.state.npassword)
+      console.log(this.state.userid)
+
       axios
-        .put(URL.Url + 'forgetpass1/', {
-          email: this.state.email,
+        .put(URL.Url + 'updatepass', {
+          npassword: this.state.npassword,
+          userid: this.state.userid
         })
         .then(async (res) => {
-
-          this.setState({ userid: res.data._id })
-          console.log("userid", this.state.userid);
+          console.log(res.data);
 
           ToastAndroid.show(
-            'Email found Successfully!',
+            'password updated Successfully!',
             ToastAndroid.BOTTOM,
             ToastAndroid.LONG,
           );
-          axios
-            .post(URL.Url + 'sendemail', {
-              email: this.state.email,
-              code: this.state.code
-            })
-            .then(async (res) => {
-              console.log(res.data);
 
-              ToastAndroid.show(
-                'Code sent Successfully!',
-                ToastAndroid.BOTTOM,
-                ToastAndroid.LONG,
-              );
-              try {
-                console.log("code in forgetpass", this.state.code)
-                this.props.navigation.navigate('Cpasscode', { code: this.state.code, userid: this.state.userid });
-              } catch (e) {
-                console.log('error hai', e);
-              }
-            })
         })
         .catch((error) => {
           ToastAndroid.show(
-            'Email not Registred !',
+            'Something went wrong try again !',
             ToastAndroid.BOTTOM,
             ToastAndroid.LONG,
           );
@@ -104,16 +88,9 @@ export default class Login extends Component {
     }
 
   };
-  number = () => {
-    this.setState({ code: Math.trunc(Math.random() * 100000).toString() });
-    console.log('code', this.state.code);
-  };
-  async componentDidMount() {
-    const { navigation } = this.props;
-    this.number();
-    this.focusListener = navigation.addListener('didFocus', () => {
-      this.number();
-    });
+  componentDidMount() {
+    console.log("code", this.state.code);
+    console.log("userid in new pass", this.state.userid);
   }
 
 
@@ -142,19 +119,20 @@ export default class Login extends Component {
               </View>
               <View style={[style.mh20]}>
                 <Text style={[text.text14, text.center, { color: colors.gray }]}>
-                  Enter your registered email
+                  Enter new Password
                 </Text>
               </View>
               <View>
                 <View style={[input.textinputcontainer, style.mv10]}>
                   <Image source={images.email} style={image.InputImage}></Image>
                   <TextInput
+
                     style={input.textinputstyle}
-                    placeholder="Email"
+                    placeholder="New Password"
                     underlineColorAndroid="transparent"
                     onChangeText={(text) => {
                       this.setState({
-                        email: text,
+                        npassword: text,
                       });
                     }}
                     multiline={true}
@@ -201,7 +179,7 @@ export default class Login extends Component {
                 <View style={[button.buttoncontainer, style.mv10]}>
                   <Text
                     style={[button.touchablebutton, { color: colors.darkBlue }]}>
-                    Next
+                    Submit
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -232,3 +210,10 @@ export default class Login extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(Cnewpassword);

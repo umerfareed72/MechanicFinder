@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -25,8 +25,8 @@ import {
   screenWidth,
   images,
 } from '../../config/Constant';
-import {Animated} from 'react-native';
-
+import { Animated } from 'react-native';
+import { connect } from 'react-redux';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -37,12 +37,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
-import {Picker} from '@react-native-community/picker';
-import {color} from 'react-native-reanimated';
-export default class Mechaniclist extends Component {
+import { Picker } from '@react-native-community/picker';
+import { color } from 'react-native-reanimated';
+class Mechaniclist extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,13 +68,6 @@ export default class Mechaniclist extends Component {
         ToastAndroid.LONG,
       );
       return false;
-    } else if (this.state.carcompany == 'Select Vehicle Name') {
-      ToastAndroid.show(
-        'Vehile Name is Required',
-        ToastAndroid.BOTTOM,
-        ToastAndroid.LONG,
-      );
-      return false;
     } else if (this.state.issuetype == 'Select issue Type') {
       ToastAndroid.show(
         'Vehile Name is Required',
@@ -88,21 +81,23 @@ export default class Mechaniclist extends Component {
 
   showIssues = () => {
     if (this.validate()) {
+      console.log("id in class", this.props.auth.user.mechanicid)
+      console.log("id in class", this.state.issuetype)
+      console.log("id in class", this.state.vehicaltype)
       axios
         .get(
           URL.Url +
-            'vehicalissues/' +  
-            this.state.issuetype +
-            '/' +
-            this.state.vehicaltype +
-            '/' +
-            this.state.carcompany +
-            '/',
+          'vehicalissues/' +
+          this.state.issuetype +
+          '/' +
+          this.state.vehicaltype +
+          '/' +
+          this.props.auth.user.mechanicid
         )
-        .then((response) => {  
+        .then((response) => {
           if (response.data) {
             console.log(response.data);
-            this.setState({dataSource: response.data});
+            this.setState({ dataSource: response.data });
           }
 
           if (this.state.dataSource == '')
@@ -137,12 +132,12 @@ export default class Mechaniclist extends Component {
   };
 
   render() {
-    
+
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
         {/*Body */}
-        <View style={{marginTop: 40}} />
+        <View style={{ marginTop: 40 }} />
 
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
           <TouchableOpacity
@@ -152,7 +147,7 @@ export default class Mechaniclist extends Component {
 
           <View>
             <Text style={[text.heading1purple, text.bold]}>Vehical Issues</Text>
-            <Text style={[text.text14, {color: '#4A4A4A'}]}>
+            <Text style={[text.text14, { color: '#4A4A4A' }]}>
               Have a Nice Day
             </Text>
           </View>
@@ -167,7 +162,7 @@ export default class Mechaniclist extends Component {
               <Picker
                 selectedValue={this.state.vehicaltype}
                 onValueChange={(itemValue, itemIndex) =>
-                  this.setState({vehicaltype: itemValue})
+                  this.setState({ vehicaltype: itemValue })
                 }>
                 <Picker.Item label="Select Vehicle Type" value="" />
                 <Picker.Item label="Heavy Truck" value="Heavy Truck" />
@@ -180,7 +175,7 @@ export default class Mechaniclist extends Component {
               <Picker
                 selectedValue={this.state.issuetype}
                 onValueChange={(itemValue, itemIndex) =>
-                  this.setState({issuetype: itemValue})
+                  this.setState({ issuetype: itemValue })
                 }>
                 <Picker.Item
                   label="Select Which type of issues you want to see..."
@@ -191,29 +186,14 @@ export default class Mechaniclist extends Component {
                 <Picker.Item label="Body" value="Body" />
               </Picker>
             </View>
-            <View style={[style.dropBar, style.mv10]}>
-              <Picker
-                selectedValue={this.state.carcompany}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({carcompany: itemValue})
-                }>
-                <Picker.Item label="Select Vehicle Company" value="Vehicle" />
-                <Picker.Item label="Honda" value="Honda" />
-                <Picker.Item label="Toyota" value="Toyota" />
-                <Picker.Item label="Suzuki" value="Suzuki" />
-                <Picker.Item label="KIA" value="KIA" />
-                <Picker.Item label="Hundai" value="Hundai" />
-                <Picker.Item label="AUDI" value="AUDI" />
-                <Picker.Item label="Mercedese" value="Mercedese" />
-                <Picker.Item label="Range Rover" value="Range Rover" />
-              </Picker>
-            </View>
+
+
             <TouchableOpacity
               style={[
                 button.button1,
                 style.mv10,
                 style.mh40,
-                {backgroundColor: colors.lightgray},
+                { backgroundColor: colors.lightgray },
                 style.aiCenter,
               ]}
               onPress={this.showIssues}>
@@ -229,8 +209,8 @@ export default class Mechaniclist extends Component {
               </View>
             </TouchableOpacity>
             {this.state.dataSource.map((data, index) => {
-             console.log(data)
-             return (
+              console.log(data)
+              return (
                 <TouchableOpacity
                   key={index}
                   // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
@@ -244,8 +224,8 @@ export default class Mechaniclist extends Component {
                     <View style={style.mr10}>
                       <Image
                         style={image.userImg}
-                        source={{uri: data.userphoto}}
-                        
+                        source={{ uri: data.userphoto }}
+
                       />
                     </View>
 
@@ -255,7 +235,7 @@ export default class Mechaniclist extends Component {
                           {data.issuetype} issue in {data.vehicaltype}
                         </Text>
                         <Text
-                          style={[text.text10, text.greyVLight, {width: '40%'}]}
+                          style={[text.text10, text.greyVLight, { width: '40%' }]}
                           numberOfLines={1}
                           ellipsizeMode={'tail'}>
                           {data.description}
@@ -274,7 +254,7 @@ export default class Mechaniclist extends Component {
                       source={images.arrowLong}></Image>
                   </TouchableOpacity>
                 </TouchableOpacity>
-              //  </View>
+                //  </View>
 
                 //  </TouchableOpacity>
               );
@@ -288,3 +268,10 @@ export default class Mechaniclist extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps, null)(Mechaniclist);

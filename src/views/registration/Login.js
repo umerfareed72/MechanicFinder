@@ -260,7 +260,6 @@ class Login extends Component {
     
     if (this.validateuser()) {
       this.setState({isLoading: true});
-
       const data = {email: this.state.Email, password: this.state.Password};
       this.props
         .userlogin(data)

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -36,10 +36,10 @@ import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 
 import Hamburger from '../../components/headerComponent/Hamburger';
-import {DrawerNavigator} from 'react-navigation';
+import { DrawerNavigator } from 'react-navigation';
 import * as geolib from 'geolib';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
-import {connect} from 'react-redux';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
+import { connect } from 'react-redux';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -94,7 +94,7 @@ class Dashboard extends Component {
             // See error code charts below.
             console.log(error.code, error.message);
           },
-          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
         );
       }
     } catch (err) {
@@ -172,12 +172,12 @@ class Dashboard extends Component {
         <View style={{}}>
           <LinearGradient
             colors={colors.orablu}
-            start={{x: -0.9, y: 1}}
-            end={{x: 1, y: 0}}
-            style={{height: screenHeight.height20}}>
+            start={{ x: -0.9, y: 1 }}
+            end={{ x: 1, y: 0 }}
+            style={{ height: screenHeight.height20 }}>
             <View style={style.bgOverlay}></View>
 
-            <View style={{postion: 'absolute', top: 30, left: 10, width: 30}}>
+            <View style={{ postion: 'absolute', top: 30, left: 10, width: 30 }}>
               <Hamburger />
             </View>
             <StatusBar backgroundColor={'transparent'} />
@@ -204,7 +204,7 @@ class Dashboard extends Component {
                 }}
                 style={[style.pv10]}>
                 <ImageBackground
-                  imageStyle={{borderRadius: 8}}
+                  imageStyle={{ borderRadius: 8 }}
                   style={image.homeCategoryImg}
                   source={images.electric}>
                   <View style={[appStyle.categoryLayer]}>
@@ -221,7 +221,7 @@ class Dashboard extends Component {
                   this.props.navigation.navigate('Mechaniclist');
                 }}>
                 <ImageBackground
-                  imageStyle={{borderRadius: 8}}
+                  imageStyle={{ borderRadius: 8 }}
                   style={image.homeCategoryImg}
                   source={images.carPaint}>
                   {/* <View style={style.bgOverlay}></View> */}
@@ -238,7 +238,7 @@ class Dashboard extends Component {
                   this.props.navigation.navigate('Mechaniclist');
                 }}>
                 <ImageBackground
-                  imageStyle={{borderRadius: 8}}
+                  imageStyle={{ borderRadius: 8 }}
                   style={image.homeCategoryImg}
                   source={images.engine}>
                   <View style={[appStyle.categoryLayer]}>
@@ -254,7 +254,7 @@ class Dashboard extends Component {
                   this.props.navigation.navigate('Mechaniclist');
                 }}>
                 <ImageBackground
-                  imageStyle={{borderRadius: 8}}
+                  imageStyle={{ borderRadius: 8 }}
                   style={image.homeCategoryImg}
                   source={images.body}>
                   <View style={[appStyle.categoryLayer]}>

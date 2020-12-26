@@ -28,23 +28,23 @@ import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import appstyle from '../../assets/styles/appStyle';
-export default class Login extends Component {
+export default class Cpasscode extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
     this.state = {
       // params: params,
 
-      code: '',
-      email: '',
-      userid: '',
+      code: this.props.navigation.getParam('code', 'NO-ID'),
+      userid: this.props.navigation.getParam('userid', 'NO-ID'),
+      entercode: ''
     };
   }
 
   validatefield = () => {
-    if (this.state.email == '') {
+    if (this.state.entercode == '') {
       ToastAndroid.show(
-        'Email Is Required',
+        'Code Is Required',
         ToastAndroid.BOTTOM,
         ToastAndroid.LONG,
       );
@@ -57,63 +57,51 @@ export default class Login extends Component {
   updatepass = () => {
     if (this.validatefield()) {
       console.log('in updatepass')
-      axios
-        .put(URL.Url + 'forgetpass1/', {
-          email: this.state.email,
-        })
-        .then(async (res) => {
+      // axios
+      //   .put(URL.Url + 'forgetpass/', {
+      //     nickname:this.state.nickname,
+      //     npassword: this.state.newpassword,
+      //     email:this.state.email
+      //   })
+      //   .then(async (res) => { 
+      //     console.log(res.data);
 
-          this.setState({ userid: res.data._id })
-          console.log("userid", this.state.userid);
+      //     ToastAndroid.show(
+      //       'password updated Successfully!',
+      //       ToastAndroid.BOTTOM,
+      //       ToastAndroid.LONG,
+      //     );
+      if (this.state.entercode == this.state.code) {
+        try {
+          console.log("userid ha kia", this.state.userid)
+          this.props.navigation.navigate('cnewpassword', { userid2: this.state.userid });
+        } catch (e) {
+          console.log('error hai', e);
+        }
+      }
+      else {
+        ToastAndroid.show(
+          'Code is invalid',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+      }
+      //   })
+      //   .catch((error) => {
+      //     ToastAndroid.show(
+      //       'Wrong Email or Nickname !!',
+      //       ToastAndroid.BOTTOM,
+      //       ToastAndroid.LONG,
+      //     );
 
-          ToastAndroid.show(
-            'Email found Successfully!',
-            ToastAndroid.BOTTOM,
-            ToastAndroid.LONG,
-          );
-          axios
-            .post(URL.Url + 'sendemail', {
-              email: this.state.email,
-              code: this.state.code
-            })
-            .then(async (res) => {
-              console.log(res.data);
-
-              ToastAndroid.show(
-                'Code sent Successfully!',
-                ToastAndroid.BOTTOM,
-                ToastAndroid.LONG,
-              );
-              try {
-                console.log("code in forgetpass", this.state.code)
-                this.props.navigation.navigate('Cpasscode', { code: this.state.code, userid: this.state.userid });
-              } catch (e) {
-                console.log('error hai', e);
-              }
-            })
-        })
-        .catch((error) => {
-          ToastAndroid.show(
-            'Email not Registred !',
-            ToastAndroid.BOTTOM,
-            ToastAndroid.LONG,
-          );
-
-          console.log(error);
-        });
+      //     console.log(error);
+      //   });
     }
 
   };
-  number = () => {
-    this.setState({ code: Math.trunc(Math.random() * 100000).toString() });
-    console.log('code', this.state.code);
-  };
-  async componentDidMount() {
-    const { navigation } = this.props;
-    this.number();
-    this.focusListener = navigation.addListener('didFocus', () => {
-      this.number();
-    });
+  componentDidMount() {
+    console.log("code", this.state.code);
+    console.log("cpass userid", this.state.userid);
   }
 
 
@@ -142,19 +130,20 @@ export default class Login extends Component {
               </View>
               <View style={[style.mh20]}>
                 <Text style={[text.text14, text.center, { color: colors.gray }]}>
-                  Enter your registered email
+                  Enter code sent to your Email
                 </Text>
               </View>
               <View>
                 <View style={[input.textinputcontainer, style.mv10]}>
                   <Image source={images.email} style={image.InputImage}></Image>
                   <TextInput
+                    keyboardType='numeric'
                     style={input.textinputstyle}
-                    placeholder="Email"
+                    placeholder="Code"
                     underlineColorAndroid="transparent"
                     onChangeText={(text) => {
                       this.setState({
-                        email: text,
+                        entercode: text,
                       });
                     }}
                     multiline={true}

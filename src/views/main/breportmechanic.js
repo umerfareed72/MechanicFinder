@@ -26,6 +26,7 @@ import {
 } from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 const axios = require('axios');
+import {connect} from 'react-redux';
 import {Picker} from '@react-native-community/picker';
 import DatePicker from 'react-native-datepicker';
 import style from '../../assets/styles/style';
@@ -39,7 +40,7 @@ import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
-export default class BReportmechanic extends Component {
+class BReportmechanic extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -69,34 +70,16 @@ export default class BReportmechanic extends Component {
   }
 
   componentDidMount = () => {
+    console.log("breportttt",this.props.auth.user.userid)
    this.getid();
   };
 
   getid = () => {
-    AsyncStorage.getItem('usersignintoken').then((res) => {
-      this.setState({token: res});
-      console.log(this.state.token);
-      axios
-        .get(URL.Url + 'me', {
-          headers: {
-            'x-access-token': this.state.token,
-          },
-        })
-        .then((response) => {
-          this.setState({userdbid: response.data.userid}).catch((error) => {
-            console.log(error);
-          });
-        });
-    });
-    AsyncStorage.getItem('userdata').then((res) => {
-      
-      this.setState({userdata: JSON.parse(res)});
-      this.setState({userphoto:this.state.userdata.photo})
-      console.log('userphoto12',this.state.userphoto)
-     
-      console.log('firstname',this.state.userdata.photo)
-      
-    })
+   
+    this.setState({userdbid: this.props.auth.user.userid})
+    this.setState({userphoto:this.props.auth.user.photo})
+    console.log('userphoto12',this.state.userphoto)
+    console.log('firstname',this.state.userdata.photo)
   };
 
   validatefield = () => {
@@ -133,7 +116,7 @@ export default class BReportmechanic extends Component {
         userdbid: this.state.userdbid,
         mdbid:this.state.mdbid,
         date: this.state.date,
-        userphoto:this.state.userdata.photo
+        userphoto:this.state.userphoto
       })
       .then(async (res) => {
         console.log(res.data);
@@ -355,3 +338,10 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
 });
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps,null)(BReportmechanic);

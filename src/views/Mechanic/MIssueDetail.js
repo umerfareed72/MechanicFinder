@@ -33,11 +33,11 @@ import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
+import {connect} from 'react-redux';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
-
-export default class HomeDetail extends Component {
+class HomeDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,18 +70,18 @@ export default class HomeDetail extends Component {
         this.setState({issueid: res._id});
         this.setState({phone:res.phone})
       });
-      await AsyncStorage.getItem('Mechanicdata').then((res) => {
-        res = JSON.parse(res);
-        this.setState({firstname: res.firstname});
-        this.setState({mphoto: res.photo});
-        this.setState({mid:res._id})
+    
+        this.setState({firstname: this.props.auth.user.firstname});
+        this.setState({mphoto: this.props.auth.user.photo});
+        this.setState({mid:this.props.auth.user.mechanicid})
         console.log('mid',this.state.mid);
         console.log('mphoto',this.state.mphoto);
-      });
+    
     } catch (error) {}
   };
   async componentDidMount() {
     const {navigation} = this.props;
+    console.log('in mechanic data',this.props.auth.user.mechanicid)
     this.getData();
     this.focusListener = navigation.addListener('didFocus', () => {
       this.getData();  
@@ -487,3 +487,10 @@ console.log(this.state.firstname)
     );
   }
 }  
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps,null)(HomeDetail);

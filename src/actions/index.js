@@ -4,6 +4,7 @@ import {Set_CurrentUser} from '../actions/Types';
 import jwt from 'jwt-decode';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ToastAndroid} from "react-native"
+
 export function logout() {
   return (dispatch) => {
     AsyncStorage.removeItem('googleData');
@@ -16,7 +17,7 @@ export function logout() {
 export function set_CurrentUser(user) {
   return {
     type: Set_CurrentUser,
-    user,
+    user, 
   };
 }
 export function adminlogin(data) {
@@ -45,6 +46,7 @@ export function mechaniclogin(data) {
   return (dispatch) => {
     return axios.post(URL.Url + 'mechanicsignin', data).then((res) => {
       if (res.data.message === "blocked") {
+        dispatch(set_CurrentUser(res.data))
         ToastAndroid.show(
           'Blocked By Admin',
           ToastAndroid.BOTTOM,
@@ -69,10 +71,7 @@ export function mechaniclogin(data) {
       }
 
       
-      // console.log(jwt(res.data.token), 'userdata');
-      // const token = res.data.token;
-      // AsyncStorage.setItem('usertoken', token);
-      // dispatch(set_CurrentUser(jwt(token)));
+     
     });
   };
 }

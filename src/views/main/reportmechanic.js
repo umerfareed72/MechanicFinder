@@ -36,10 +36,11 @@ import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
+import {connect} from 'react-redux';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
-export default class Reportmechanic extends Component {
+class Reportmechanic extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,33 +71,17 @@ export default class Reportmechanic extends Component {
 
   componentDidMount = () => {
    this.getid();
+   console.log("reportttt",this.props.auth.user.photo)
   };
 
   getid = () => {
-    AsyncStorage.getItem('usersignintoken').then((res) => {
-      this.setState({token: res});
-      console.log(this.state.token);
-      axios
-        .get(URL.Url + 'me', {
-          headers: {
-            'x-access-token': this.state.token,
-          },
-        })
-        .then((response) => {
-          this.setState({userdbid: response.data.userid}).catch((error) => {
-            console.log(error);
-          });
-        });
-    });
-    AsyncStorage.getItem('userdata').then((res) => {
-      
-      this.setState({userdata: JSON.parse(res)});
-      this.setState({userphoto:this.state.userdata.photo})
+    
+          this.setState({userdbid: this.props.auth.user.userid})
+      this.setState({userphoto:this.props.auth.user.photo})
       console.log('userphoto12',this.state.userphoto)
-     
       console.log('firstname',this.state.userdata.photo)
       
-    })
+   
   };
 
   validatefield = () => {
@@ -136,7 +121,7 @@ export default class Reportmechanic extends Component {
         userdbid: this.state.userdbid,
         mdbid:this.state.mdbid,
         date: this.state.date,
-        userphoto:this.state.userdata.photo
+        userphoto:this.state.userphoto
       })
       .then(async (res) => {
         console.log(res.data);
@@ -358,3 +343,10 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
 });
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  };
+}
+
+export default connect(mapStateToProps,null)(Reportmechanic);

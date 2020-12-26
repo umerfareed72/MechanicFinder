@@ -4,4 +4,4 @@ import thunk from "redux-thunk";
 export default ()=>{
     let store=createStore(RootReducers,compose(applyMiddleware(thunk)))
     return {store}
-}
+} 

@@ -116,22 +116,6 @@ export default class UserManagement extends Component {
   };
 
   
-  movetodetail = (id) => {
-      console.log('userdetau')
-    const issuedata = JSON.stringify(this.state.dataSource[id]);
-   // AsyncStorage.setItem('mechanicddata', issuedata);
-    setTimeout(() => {
-      this.props.navigation.navigate('Userdetail',{useride:this.state.dataSource[id]._id});
-    }, 2000);
-  };
-  movetoedit = (id) => {
-    const issuedata = JSON.stringify(this.state.dataSource[id]);
-    AsyncStorage.setItem('issuedata', issuedata);
-    setTimeout(() => {
-      this.props.navigation.navigate('EditIssue');
-    }, 2000);
-  };
-
 
   deleteissue = (id) => {
     const mechanicdata = this.state.dataSource[id];
@@ -243,9 +227,9 @@ export default class UserManagement extends Component {
                             style={[image.xsmall, image.Orange]}
                             source={images.email}></Image>
                           <Text style={[text.text15, {color: colors.gray}]}
-                          numberOfLines={0.5}
+                          numberOfLines={0.2}
                           ellipsizeMode={'tail'}>
-                            {data.email}
+                            {data.phone}
                           </Text>
                         </View>
                        
