@@ -98,14 +98,14 @@ import {logout} from "../../actions/index";
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
-        <View style={{}}>
+        <View >
           <Modal
             isVisible={this.state.isModalVisible}
             animationInTiming={500}
             animationOutTiming={500}>
             <View style={[style.flex1, appStyle.rowCenter]}>
               <View style={[appStyle.modalBg]}>
-                <Text style={[]}>Are You Sure?</Text>
+                <Text >Are You Sure?</Text>
                 <View style={[style.row, style.mt10]}>
                   <TouchableOpacity
                     style={[style.mh10]}
@@ -143,16 +143,14 @@ import {logout} from "../../actions/index";
           <View style={{height: 20, width: 40}}></View>
         </View>
 
-        <ScrollView style={{}}>
+        <ScrollView >
           <View style={[appStyle.bodyBg, appStyle.bodyLayout, style.mt20]}>
-            {/* header */}
             <TouchableOpacity style={style.asCenter} >
               <Image
                 style={[image.ovalcontainerupload, style.shadow]}
                 source={{uri: auth.user.photo}}
               />
-              {/* <Text style={[text.text18,text.orange,text.semibold]}>Sam Adams</Text> */}
-            </TouchableOpacity>
+           </TouchableOpacity>
             <View style={[style.asCenter, style.pt5]}>
               <Text style={[text.text18, text.orange, text.semibold]}>
                 {auth.user.firstname} {auth.user.lastname}

@@ -27,7 +27,6 @@ import {
   images,
 } from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
-import DatePicker from 'react-native-datepicker';
 import {Picker} from '@react-native-community/picker';
 const axios = require('axios');
 import style from '../../assets/styles/style';
@@ -58,7 +57,7 @@ export default class MechanicRegister extends Component {
       Country: 'Select Country',
       FirstName: '',
       LastName: '',
-      nickname: '',
+      
       Email: '',
       Password: '',
       CPassword: '',
@@ -70,7 +69,7 @@ export default class MechanicRegister extends Component {
       vehicletype: '',
       longitude: '',
       latitude: '',
-      date: 'Date Of Birth',
+
       mechanicrate: 0,
       code: '',
       isLoading: false,
@@ -98,7 +97,6 @@ export default class MechanicRegister extends Component {
         .post(URL.Url + 'mechanicregister', {
           firstname: this.state.FirstName,
           lastname: this.state.LastName,
-          nickname: this.state.nickname,
           email: this.state.Email,
           password: this.state.Password,
           phone: this.state.Phone,
@@ -109,7 +107,6 @@ export default class MechanicRegister extends Component {
           country: this.state.Country,
           skilltype: this.state.skilltype,
           vehicletype: this.state.vehicletype,
-          date: this.state.date,
           longitude: this.state.longitude,
           latitude: this.state.latitude,
           mechanicrate: this.state.mechanicrate,
@@ -338,14 +335,9 @@ export default class MechanicRegister extends Component {
         ToastAndroid.LONG,
       );
       return false;
-    } else if (this.state.date == '') {
-      ToastAndroid.show(
-        'Date Of Birth Is Required',
-        ToastAndroid.BOTTOM,
-        ToastAndroid.LONG,
-      );
-      return false;
-    } else if (this.state.Phone == 0) {
+    }
+    
+     else if (this.state.Phone == 0) {
       ToastAndroid.show(
         'Phone Number Is Required',
         ToastAndroid.BOTTOM,
@@ -537,20 +529,7 @@ export default class MechanicRegister extends Component {
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
 
-                  <View style={[input.textinputcontainer, style.mv5]}>
-                    <Image
-                      source={images.username}
-                      style={image.username}></Image>
-                    <TextInput
-                      style={input.textinputstyle}
-                      placeholder="Nickname"
-                      onChangeText={(text) => {
-                        this.setState({
-                          nickname: text,
-                        });
-                      }}
-                      underlineColorAndroid="transparent"></TextInput>
-                  </View>
+                
 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
@@ -632,38 +611,6 @@ export default class MechanicRegister extends Component {
                 </View>
                 <View>
                   <View style={[input.textinputcontainer, style.mv5]}>
-                    <View>
-                      <DatePicker
-                        style={{width: 145}}
-                        mode="date"
-                        placeholder={this.state.date}
-                        format="YYYY-MM-DD"
-                        customStyles={{
-                          dateIcon: {
-                            position: 'absolute',
-                            left: -5,
-                            top: 4,
-                            height: 25,
-                            width: 24,
-                            resizeMode: 'contain',
-                          },
-                          dateInput: {
-                            borderColor: colors.white,
-                          },
-                          dateText: {
-                            color: colors.gray,
-                          },
-
-                          // ... You can check the source to find the other keys.
-                        }}
-                        onDateChange={(date) => {
-                          this.setState({date: date});
-                        }}
-                      />
-                    </View>
-                  </View>
-
-                  <View style={[input.textinputcontainer, style.mv5]}>
                     <Image source={images.phone} style={image.username}></Image>
                     <TextInput
                       keyboardType="numeric"
@@ -683,7 +630,7 @@ export default class MechanicRegister extends Component {
                       style={image.InputImage}></Image>
                     <TextInput
                       style={input.textinputstyle}
-                      placeholder="Home Address"
+                      placeholder="Shop Address"
                       onChangeText={(text) => {
                         this.setState({
                           address: text,
@@ -699,9 +646,7 @@ export default class MechanicRegister extends Component {
 
                     <Picker
                       selectedValue={this.state.City}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[text.pickerstyle] }
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({City: itemValue})
                       }>
@@ -720,8 +665,7 @@ export default class MechanicRegister extends Component {
                     <Picker
                       selectedValue={this.state.Country}
                       style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                  text.pickerstyle    ]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({Country: itemValue})
                       }>
@@ -729,6 +673,26 @@ export default class MechanicRegister extends Component {
                       <Picker.Item label="Pakistan" value="Pakistan" />
                     </Picker>
                   </View>
+                  <View style={[input.textinputcontainer, style.mv5]}>
+                    <Image
+                      source={images.dollar}
+                      style={[image.InputImage]}></Image>
+                    <Picker
+                      selectedValue={this.state.mechanicrate}
+                      style={[text.pickerstyle]}
+                      onValueChange={(itemValue, itemIndex) =>
+                        this.setState({mechanicrate: itemValue})
+                      }>
+                      <Picker.Item label="Select Service Rate" value="" />
+                      <Picker.Item label="5" value="5" />
+                      <Picker.Item label="10" value="10" />
+                      <Picker.Item label="15" value="15" />
+                      <Picker.Item label="20" value="20" />
+                      <Picker.Item label="25" value="25" />
+                      <Picker.Item label="30" value="30" />
+                    </Picker>
+                  </View>
+
                 </View>
                 <TouchableOpacity onPress={this.tabStep3}>
                   <View
@@ -776,24 +740,7 @@ export default class MechanicRegister extends Component {
                       work will be assign you on the base of your skills.
                     </Text>
                   </View>
-                  <View style={[input.textinputcontainer, style.mv5]}>
-                    <Image
-                      source={images.dollar}
-                      style={[image.InputImage]}></Image>
-                    <Picker
-                      selectedValue={this.state.mechanicrate}
-                      style={[text.pickerstyle]}
-                      onValueChange={(itemValue, itemIndex) =>
-                        this.setState({mechanicrate: itemValue})
-                      }>
-                      <Picker.Item label="Select Service Rate" value="" />
-                      <Picker.Item label="5" value="5" />
-                      <Picker.Item label="10" value="10" />
-                      <Picker.Item label="15" value="15" />
-                      <Picker.Item label="20" value="20" />
-                    </Picker>
-                  </View>
-
+                
                   <View style={[input.textinputcontainer, style.mv10]}>
                     <Image
                       source={images.carservice}

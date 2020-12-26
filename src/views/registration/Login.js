@@ -54,7 +54,6 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {connect} from 'react-redux';
 import {userlogin} from '../../actions/index';
 import {ActivityIndicator} from 'react-native-paper';
-
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -257,7 +256,6 @@ class Login extends Component {
   };
 
   submitData = () => {
-    
     if (this.validateuser()) {
       this.setState({isLoading: true});
       const data = {email: this.state.Email, password: this.state.Password};
@@ -265,18 +263,19 @@ class Login extends Component {
         .userlogin(data)
         .then(async (res) => {
           try {
-
             ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
             this.props.navigation.navigate('userStack');
-          this.setState({isLoading:false})
+            this.setState({isLoading: false});
           } catch (e) {
             console.log('error hai', e);
             ToastAndroid.show('Invalid Email', ToastAndroid.BOTTOM);
+            this.setState({isLoading: false});
           }
         })
 
         .catch((error) => {
           ToastAndroid.show('Invalid User', ToastAndroid.BOTTOM);
+          this.setState({isLoading: false});
         });
     }
   };
@@ -360,10 +359,8 @@ class Login extends Component {
                   </View>
 
                   <TouchableOpacity
+                 
                     onPress={this.submitData}
-                    // onPress={() => {
-                    //   this.props.navigation.navigate('Dashboard');
-                    // }}
                   >
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text

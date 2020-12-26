@@ -30,7 +30,7 @@ import {
   images,
 } from '../../config/Constant';
 import ImagePicker from 'react-native-image-picker';
-import DatePicker from 'react-native-datepicker';
+// import DatePicker from 'react-native-datepicker';
 import {Picker} from '@react-native-community/picker';
 const axios = require('axios');
 import style from '../../assets/styles/style';
@@ -69,11 +69,11 @@ export default class MechanicRegister extends Component {
       address: '',
       photo: '',
       Phone: 0,
-      date: 'Date Of Birth',
+      // date: 'Date Of Birth',
       longitude: '',
       latitude: '',
       filePath: {},
-      nickname:'',
+      // nickname:'',
       isLoading:false
     };
   }
@@ -111,9 +111,6 @@ validatefield=()=>{
   }else if(this.state.CPassword==""){
     ToastAndroid.show('Confirm Password Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
     return false;
-  }else if(this.state.date==""){
-    ToastAndroid.show('Date Of Birth Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
-    return false;
   }else if(this.state.Phone==0){
     ToastAndroid.show('Phone Number Is Required',ToastAndroid.BOTTOM,ToastAndroid.LONG)
   }else if(this.state.address==""){
@@ -141,7 +138,7 @@ return true
       .post(URL.Url + 'userregister', {
         firstname: this.state.FirstName,
         lastname: this.state.LastName,
-        nickname:this.state.nickname,
+        // nickname:this.state.nickname,
         email: this.state.Email,
         password: this.state.Password,
         phone: this.state.Phone,
@@ -149,7 +146,7 @@ return true
         photo: this.state.photo,
         city: this.state.City,
         country: this.state.Country,
-        date: this.state.date,
+        // date: this.state.date,
         longitude: this.state.longitude,
         latitude: this.state.latitude,
       })
@@ -399,7 +396,7 @@ return true
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
 
-
+{/* 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
                       source={images.username}
@@ -414,7 +411,7 @@ return true
                       }}
                       editable={this.state.editable}
                       underlineColorAndroid="transparent"></TextInput>
-                  </View>
+                  </View> */}
 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image
@@ -496,7 +493,7 @@ return true
                   </Text>
                 </View>
                 <View>
-                  <View style={[input.textinputcontainer, style.mv5]}>
+                  {/* <View style={[input.textinputcontainer, style.mv5]}>
                     <View>
                       <DatePicker
                         style={{width: 145}}
@@ -527,7 +524,7 @@ return true
                         }}
                       />
                     </View>
-                  </View>
+                  </View> */}
 
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image source={images.phone} style={image.username}></Image>

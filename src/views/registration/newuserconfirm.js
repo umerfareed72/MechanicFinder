@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -35,11 +35,11 @@ import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
 import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Dashboard from '../main/Dashboard';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 class Newuserconfirm extends Component {
   constructor(props) {
@@ -55,30 +55,30 @@ class Newuserconfirm extends Component {
       profile_pic: '',
       code: this.props.navigation.getParam('code'),
       email: this.props.navigation.getParam('email'),
-      newcode:'',
+      newcode: '',
       code: '',
       Email: '',
-   
+
     };
   }
   UserRegister = () => {
-    this.setState({textUser: colors.white, Uregister: colors.orange});
+    this.setState({ textUser: colors.white, Uregister: colors.orange });
     this.props.navigation.navigate('SignUp');
   };
   MechanicRegister = () => {
-    this.setState({textMechanic: colors.white, Mregister: colors.orange});
+    this.setState({ textMechanic: colors.white, Mregister: colors.orange });
     this.props.navigation.navigate('MechanicRegister');
   };
   number = () => {
-    this.setState({ newcode : Math.trunc(Math.random()*100000).toString()})
-      console.log("code",this.state.newcode)
+    this.setState({ newcode: Math.trunc(Math.random() * 100000).toString() })
+    console.log("code", this.state.newcode)
   }
 
-  sendemail = () => {  
+  sendemail = () => {
     try {
-      axios.post(URL.Url + 'sendemail',{
-        email:this.state.email,
-        code:this.state.newcode
+      axios.post(URL.Url + 'sendemail', {
+        email: this.state.email,
+        code: this.state.newcode
       }).then((res) => {
         console.log(res.data);
         ToastAndroid.show(
@@ -100,21 +100,21 @@ class Newuserconfirm extends Component {
   resend = () => {
     console.log("in resend code");
     axios
-    .put(URL.Url + 'resendcode', {
-      email:this.state.email,
-      code: this.state.newcode
-    })
-    .then((response) => {
-      console.log(response.data);
-      ToastAndroid.show(
-        'Code Updated Successfully',
-        ToastAndroid.BOTTOM,
-        ToastAndroid.LONG,
-      );
-    }).then(()=>{this.setState({code:this.state.newcode})})
+      .put(URL.Url + 'resendcode', {
+        email: this.state.email,
+        code: this.state.newcode
+      })
+      .then((response) => {
+        console.log(response.data);
+        ToastAndroid.show(
+          'Code Updated Successfully',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+      }).then(() => { this.setState({ code: this.state.newcode }) })
     this.sendemail();
   };
-    
+
   validateuser = () => {
     if (this.state.code == '') {
       ToastAndroid.show(
@@ -126,17 +126,14 @@ class Newuserconfirm extends Component {
     }
     return true;
   };
-
-  async componentDidMount() {
-    const {navigation} = this.props;
-   this.number();
+  componentDidMount() {
+    this.number();
     this.focusListener = navigation.addListener('didFocus', () => {
-      
       this.number();
-      
-    });
-  }
 
+    });
+    console.log(this.props.auth.user.code)
+  }
   submitData = () => {
     {
       this.validateuser();
@@ -178,13 +175,13 @@ class Newuserconfirm extends Component {
         <StatusBar translucent={true} backgroundColor={'transparent'} />
 
         <KeyboardAvoidingView
-          style={{backgroundColor: colors.white, flexGrow: 1}}>
+          style={{ backgroundColor: colors.white, flexGrow: 1 }}>
           <ScrollView>
             <View>
               <LinearGradient
                 colors={colors.orablu}
-                start={{x: -0.9, y: 1}}
-                end={{x: 1, y: 0}}
+                start={{ x: -0.9, y: 1 }}
+                end={{ x: 1, y: 0 }}
                 style={[style.headerHeight4]}>
                 <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
                   <Text style={[text.Eutemia, text.white, text.text30]}>
@@ -240,7 +237,7 @@ class Newuserconfirm extends Component {
                     <Text
                       style={[
                         button.touchablebutton,
-                        {color: colors.darkBlue},
+                        { color: colors.darkBlue },
                       ]}>
                       Submit
                     </Text>
