@@ -23,6 +23,8 @@ import {
   screenWidth,
   images,
 } from '../../config/Constant';
+import moment from 'moment';
+
 import AsyncStorage from '@react-native-community/async-storage';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -175,20 +177,17 @@ class BookedUser extends Component {
                           </Text>
                         </View>
                         <View style={[style.mv5]}>
-                          <Text>Contact Me: {item.useremail}</Text>
+                          <Text>Email Me: {item.useremail}</Text>
                         </View>
                         <View style={[appStyle.rowBtw]}>
                           <View style={[appStyle.BookingsmallWidth]}>
                             <Image
-                              style={[image.locationIconSmall]}
-                              source={images.calendarOrange}></Image>
-                            <Text style={[text.text9]}>28-7-2020</Text>
-                          </View>
-                          <View style={[appStyle.BookingsmallWidth]}>
-                            <Image
-                              style={[image.locationIconSmall]}
-                              source={images.clock}></Image>
-                            <Text style={[text.text9]}>28-7-2020</Text>
+                              style={[image.locationIconSmall,{tintColor:colors.orange}]}
+                              source={images.calendar}></Image>
+                            <Text style={[text.text9]}>
+                              {' '}
+                              {moment(item.date).format('DD-MM-YYYY')}
+                            </Text>
                           </View>
                           <View style={[appStyle.BookingsmallWidth]}>
                             <Image

@@ -34,6 +34,9 @@ export const screenWidth = {
   width25: Math.round((25 / 100) * Dimensions.get('window').width),
   width20: Math.round((20 / 100) * Dimensions.get('window').width),
   width65: Math.round((65 / 100) * Dimensions.get('window').width),
+  width80: Math.round((80 / 100) * Dimensions.get('window').width),
+  width90: Math.round((90 / 100) * Dimensions.get('window').width),
+
 };
 
 //Url
@@ -44,6 +47,7 @@ export const URL = {
 export const colors = {
   orange: '#F59E52',
   whiteLayer: 'rgba(255, 255, 255, 0.2)',
+  red:"red",
   orablu: ['#F59E52', '#482C6D'],
   orangeGradient: ['#F59E52', '#DB883F'],
   boxColor: ['#E79247', '#D85802'],

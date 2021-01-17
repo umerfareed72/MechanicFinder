@@ -23,6 +23,8 @@ import {
   screenWidth,
   images,
 } from '../../config/Constant';
+import moment from 'moment';
+
 import AsyncStorage from '@react-native-community/async-storage';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -35,7 +37,7 @@ import StarRating from 'react-native-star-rating';
 import Hamburger from '../../components/headerComponent/Hamburger';
 import Modal from 'react-native-modal';
 import axios from 'axios';
-import {connect} from "react-redux";
+import {connect} from 'react-redux';
 class MyBooking extends Component {
   constructor(props) {
     super(props);
@@ -85,10 +87,12 @@ class MyBooking extends Component {
   };
 
   MyBooking = () => {
-      axios.get(URL.Url + 'mechanics/' +this.props.auth.user.userid).then((data) => {
+    axios
+      .get(URL.Url + 'mechanics/' + this.props.auth.user.userid)
+      .then((data) => {
         this.setState({bookedMechanics: data.data});
       });
-     };
+  };
 
   componentDidMount() {
     const {navigation} = this.props;
@@ -127,7 +131,6 @@ class MyBooking extends Component {
             </View>
           </LinearGradient>
         </View>
-
         <View style={[appStyle.bodyBg, appStyle.safeContainer]}>
           <View style={[appStyle.headingLayout]}>
             <Text style={[text.heading2, text.semibold]}>My Bookings</Text>
@@ -142,7 +145,6 @@ class MyBooking extends Component {
                       style.mh5,
                       {backgroundColor: '#fff'},
                     ]}>
-                
                     <View style={[style.row, style.jcCenter]}>
                       <View style={[style.w20, style.mr5]}>
                         <ImageBackground
@@ -165,28 +167,27 @@ class MyBooking extends Component {
                       <View style={[style.jcCenter, style.w80]}>
                         <View style={[style.rowBtw]}>
                           <Text style={[text.heading2, text.semibold]}>
-                            {item.mechanicname} 
+                            {item.mechanicname}
                           </Text>
                           <Text style={[text.heading3, text.semibold]}>
                             {item.totalamount} $
-                                                      </Text>
-                       
+                          </Text>
                         </View>
-                       <View style={[style.mv5]}>
-                            <Text>Contact Me: {item.mechanicemail}</Text>
-                           </View>
+                        <View style={[style.mv5]}>
+                          <Text>Email Me: {item.mechanicemail}</Text>
+                        </View>
                         <View style={[appStyle.rowBtw]}>
                           <View style={[appStyle.BookingsmallWidth]}>
                             <Image
-                              style={[image.locationIconSmall]}
-                              source={images.calendarOrange}></Image>
-                            <Text style={[text.text9]}>28-7-2020</Text>
-                          </View>
-                          <View style={[appStyle.BookingsmallWidth]}>
-                            <Image
-                              style={[image.locationIconSmall]}
-                              source={images.clock}></Image>
-                            <Text style={[text.text9]}>28-7-2020</Text>
+                              style={[
+                                image.locationIconSmall,
+                                {tintColor: colors.orange},
+                              ]}
+                              source={images.calendar}></Image>
+                            <Text style={[text.text9]}>
+                              {' '}
+                              {moment(item.date).format('DD-MM-YYYY')}
+                            </Text>
                           </View>
                           <View style={[appStyle.BookingsmallWidth]}>
                             <Image
@@ -196,6 +197,7 @@ class MyBooking extends Component {
                               {item.city} {item.country}{' '}
                             </Text>
                           </View>
+                          <View></View>
                         </View>
                       </View>
                     </View>

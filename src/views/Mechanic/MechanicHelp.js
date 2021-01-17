@@ -152,7 +152,7 @@ class MechanicHelp extends Component {
                           button.touchablebutton,
                           {color: colors.darkBlue},
                         ]}>
-                        Submit mechanics
+                        Submit
                       </Text>
                     </View>
                   </TouchableOpacity>

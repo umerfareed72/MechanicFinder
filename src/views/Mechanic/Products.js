@@ -93,8 +93,7 @@ import {connect} from "react-redux"
           ToastAndroid.BOTTOM,
           ToastAndroid.LONG,
         );
-        this.toggleModal();
-      });
+         });
   };
 
   render() {
@@ -125,7 +124,6 @@ import {connect} from "react-redux"
             <Image style={image.iconAdd} source={images.add}></Image>
           </TouchableOpacity>
         </View>
-
         <ScrollView style={{}}>
           <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
             {products.map((item, index) => {
@@ -133,41 +131,6 @@ import {connect} from "react-redux"
                 <TouchableOpacity
                   key={index}
                   onPress={() => this.selectProduct(index)}>
-                  <View style={{}}>
-                    <Modal
-                      isVisible={this.state.isModalVisible}
-                      animationInTiming={500}
-                      animationOutTiming={500}>
-                      <View style={[style.flex1, appStyle.rowCenter]}>
-                        <View style={[appStyle.modalBg]}>
-                          <Text style={[]}>Sure!</Text>
-                          <Text> Do you want to delete?</Text>
-                          <View style={[style.row, style.mt10]}>
-                            <TouchableOpacity
-                              style={[style.mh10]}
-                              onPress={this.toggleModal}>
-                              <View style={[button.modalButton]}>
-                                <Text style={[text.heading3, text.white]}>
-                                  No
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                              style={[style.mh10]}
-                              onPress={() => this.deleteProduct(index)}>
-                              <View style={[button.modalButton]}>
-                                <Text style={[text.heading3, text.white]}>
-                                  Yes
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </View>
-                    </Modal>
-                  </View>
-
                   <View
                     style={[
                       appStyle.slotCard,
@@ -202,7 +165,7 @@ import {connect} from "react-redux"
                         </View>
                       </View>
                     </View>
-                    <TouchableOpacity onPress={this.toggleModal}>
+                    <TouchableOpacity onPress={()=>{this.deleteProduct(index)}}>
                       <Image
                         style={[image.forward]}
                         source={images.delete}></Image>

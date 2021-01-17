@@ -43,6 +43,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {ActivityIndicator} from 'react-native-paper';
 import Modal from 'react-native-modal';
 const axios = require('axios');
+Geocoder.init('AIzaSyAn4Q1cbuGVM8M6fyElhVgVGLFCLNl6Hf4');
 export default class UserProfile extends Component {
   constructor(props) {
     super(props);
@@ -76,55 +77,74 @@ export default class UserProfile extends Component {
     Linking.openURL(phoneNumber);
   };
 
-  getCity = () => {
-    axios
-      .get(
-        'http://api.positionstack.com/v1/reverse?access_key=01bd92ff4d189472dbd298a5f7142f38&query=' +
-          this.state.data.latitude +
-          ',' +
-          this.state.data.longitude,
-      )
+  // getCity = () => {
+  //   axios
+  //     .get(
+  //       'http://api.positionstack.com/v1/reverse?access_key=01bd92ff4d189472dbd298a5f7142f38&query=' +
+  //         this.state.data.latitude +
+  //         ',' +
+  //         this.state.data.longitude,
+  //     )
 
-      .then((res) => {
-        const {data} = this.state;
-        const address = res.data.data[0];
-        const street = address.street;
-        const city = address.county;
-        const country = address.country;
-        const location = street + ' ' + city + ' ' + country;
-        const latitude = data.latitude;
-        const longitude = data.longitude;
+  //     .then((res) => {
+  //       const {data} = this.state;
+  //       const address = res.data.data[0];
+  //       const street = address.street;
+  //       const city = address.county;
+  //       const country = address.country;
+  //       const location = street + ' ' + city + ' ' + country;
+  //       const latitude = data.latitude;
+  //       const longitude = data.longitude;
+  //       const label = JSON.stringify(location);
+  //       const url = Platform.select({
+  //         ios: 'maps:' + latitude + ',' + longitude + '?q=' + label,
+  //         android: 'geo:' + latitude + ',' + longitude + '?q=' + label,
+  //       });
+  //       console.log(latitude + longitude + label);
+  //       Linking.openURL(url);
+  //     });
+  // };
+
+  getCity = () => {
+    const {data} = this.state;
+    const latitude = data.latitude;
+    const longitude = data.longitude;
+    Geocoder.from(latitude, longitude)
+      .then((json) => {
+        console.log(json.results[0]);
+        var addressComponent = json.results[0].formatted_address;
+
+        const location = addressComponent;
         const label = JSON.stringify(location);
         const url = Platform.select({
           ios: 'maps:' + latitude + ',' + longitude + '?q=' + label,
           android: 'geo:' + latitude + ',' + longitude + '?q=' + label,
         });
-        console.log(latitude + longitude + label);
+
         Linking.openURL(url);
-      });
+      })
+      .catch((error) => console.warn(error));
   };
 
   getMechanicLocation = async () => {
-   AsyncStorage.getItem('bookUserData').then((res)=>{
-    const user=JSON.parse(res) 
-    this.setState({data:user,refreshing:true})
-    console.log(user,'User data')
-    
-   })
+    AsyncStorage.getItem('bookUserData').then((res) => {
+      const user = JSON.parse(res);
+      this.setState({data: user, refreshing: true});
+      console.log(user, 'User data');
+    });
   };
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
 
-
   async componentDidMount() {
-      const {navigation} = this.props;
-      this.getMechanicLocation();
+    const {navigation} = this.props;
+    this.getMechanicLocation();
 
-      this.focusListener = navigation.addListener('didFocus', () => {
-        this.getMechanicLocation();
-      });
-    
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.getMechanicLocation();
+    });
+
     Animated.loop(
       Animated.timing(
         // Animate over time
@@ -212,7 +232,9 @@ export default class UserProfile extends Component {
                 <View style={style.bgOverlay} />
                 <View style={[style.rowBtw, style.ph20, style.pb10]}>
                   <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('UserProfileDetail')}>
+                    onPress={() =>
+                      this.props.navigation.navigate('UserProfileDetail')
+                    }>
                     <Image
                       source={images.backarrowh}
                       style={[
@@ -280,8 +302,7 @@ export default class UserProfile extends Component {
                   <View style={[style.row, style.aiCenter]}>
                     <Image style={image.medium} source={images.dollar}></Image>
                     <Text style={[text.listItems, style.p5]}>
-                     Mechanic Service Charges: {data.mechanicrate} $
-
+                      Mechanic Service Charges: {data.mechanicrate} $
                     </Text>
                   </View>
                   <Animated.View
@@ -305,7 +326,7 @@ export default class UserProfile extends Component {
                       </Text>
                     </TouchableOpacity>
                   </Animated.View>
-                   </View>
+                </View>
               </ScrollView>
             </View>
           </View>
@@ -328,7 +349,9 @@ export default class UserProfile extends Component {
               <View style={style.bgOverlay} />
               <View style={[style.rowBtw, style.ph20, style.pb10]}>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('MechanicDashboard')}>
+                  onPress={() =>
+                    this.props.navigation.navigate('MechanicDashboard')
+                  }>
                   <Image
                     source={images.backarrowh}
                     style={[

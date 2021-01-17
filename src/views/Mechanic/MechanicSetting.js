@@ -182,7 +182,7 @@ import Login from '../registration/Login';
                       source={images.terms}
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
-                      Terms of Service
+                      Terms & Policies
                     </Text>
                   </View>
 

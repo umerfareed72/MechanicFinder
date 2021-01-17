@@ -143,7 +143,7 @@ export default class Highratedmechanics extends Component {
           <View></View>
         </View>
         <ScrollView style={{}}>
-          <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
+          <View style={[appStyle.bodyBg]}>
           {topmechanics.map((data, index) => {
                {
                 return (

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   View,
@@ -13,7 +13,8 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  Alert, ToastAndroid
+  Alert,
+  ToastAndroid,
 } from 'react-native';
 import {
   colors,
@@ -35,8 +36,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
-import { connect } from 'react-redux';
+import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import {connect} from 'react-redux';
 class HomeDetail extends Component {
   constructor(props) {
     super(props);
@@ -60,7 +61,7 @@ class HomeDetail extends Component {
       mid: '',
       placeholder: ' Enter text here',
 
-      userdata: ''
+      userdata: '',
     };
   }
 
@@ -69,11 +70,10 @@ class HomeDetail extends Component {
     try {
       await AsyncStorage.getItem('issuedata').then((res) => {
         res = JSON.parse(res);
-        this.setState({ issuedata: res });
-        this.setState({ issueid: res._id });
-        console.log('issuedata', this.state.issuedata)
+        this.setState({issuedata: res});
+        this.setState({issueid: res._id});
+        console.log('issuedata', this.state.issuedata);
         // this.setState({videourl: res._id});
-
       });
 
       // await AsyncStorage.getItem('userdata').then((res) => {
@@ -81,17 +81,13 @@ class HomeDetail extends Component {
       //   console.log('photoou', this.state.userdata.photo)
 
       // })
-
-
-
-
-    } catch (error) { }
+    } catch (error) {}
   };
   async componentDidMount() {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     this.getData();
     this.getsuggestions();
-    this.setState({ firstname: 'Issue Holder' });
+    this.setState({firstname: 'Issue Holder'});
     this.focusListener = navigation.addListener('didFocus', () => {
       this.getData();
       this.getsuggestions();
@@ -104,38 +100,25 @@ class HomeDetail extends Component {
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          this.setState({ suggestiondata: response.data });
+          this.setState({suggestiondata: response.data});
           console.log(this.state.suggestiondata);
         }
-        if (this.state.suggestiondata == '') ToastAndroid.show(
-          'No Suggestion available',
-          ToastAndroid.BOTTOM,
-          ToastAndroid.LONG,
-        );
-
       })
 
       .catch((error) => {
         console.log(error);
       });
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    // });
   };
 
-
   movetomdetail = (id) => {
-    const mid1 = JSON.stringify(this.state.suggestiondata[id].mid);
-    console.log('mid', mid1)
+    const mid1 = JSON.stringify(this.state.suggestiondata[id]._id);
+
     AsyncStorage.setItem('Mechanicidfromsuggestion', mid1);
-    setTimeout(() => {
-      this.props.navigation.navigate('mdetail');
-    }, 2000);
+    this.props.navigation.navigate('mdetail');
   };
 
   toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
+    this.setState({isModalVisible: !this.state.isModalVisible});
   };
 
   submitsuggestion = () => {
@@ -144,7 +127,7 @@ class HomeDetail extends Component {
         suggestion: this.state.suggestion,
         issueid: this.state.issueid,
         firstname: this.state.firstname,
-        mphoto: this.props.auth.user.photo
+        mphoto: this.props.auth.user.photo,
       })
       .then((res) => {
         console.log(res.data);
@@ -154,7 +137,7 @@ class HomeDetail extends Component {
           ToastAndroid.LONG,
         );
         this.getsuggestions();
-        this.setState({ suggestion: "" })
+        this.setState({suggestion: ''});
       })
       .catch((error) => {
         Alert.alert('something went Wrong!!');
@@ -165,42 +148,42 @@ class HomeDetail extends Component {
 
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
-      this.setState({ TabDataGallery: 'none' }),
-        this.setState({ TabDataReview: 'none' }),
-        this.setState({ BookNowView: 'none' }),
-        this.setState({ ColorOverview: colors.darkBlue }),
-        this.setState({ ColorReview: colors.inputBordercolor }),
-        this.setState({ ColorGallery: colors.inputBordercolor });
+      this.setState({TabDataGallery: 'none'}),
+        this.setState({TabDataReview: 'none'}),
+        this.setState({BookNowView: 'none'}),
+        this.setState({ColorOverview: colors.darkBlue}),
+        this.setState({ColorReview: colors.inputBordercolor}),
+        this.setState({ColorGallery: colors.inputBordercolor});
     } else
-      this.setState({ TabDataOverview: 'flex' }),
-        this.setState({ TabDataGallery: 'none' }),
-        this.setState({ TabDataReview: 'none' });
-    this.setState({ BookNowView: 'none' });
-    this.setState({ ColorOverview: colors.darkBlue });
-    this.setState({ ColorReview: colors.inputBordercolor });
-    this.setState({ ColorGallery: colors.inputBordercolor });
+      this.setState({TabDataOverview: 'flex'}),
+        this.setState({TabDataGallery: 'none'}),
+        this.setState({TabDataReview: 'none'});
+    this.setState({BookNowView: 'none'});
+    this.setState({ColorOverview: colors.darkBlue});
+    this.setState({ColorReview: colors.inputBordercolor});
+    this.setState({ColorGallery: colors.inputBordercolor});
   };
   tabReview = () => {
     if (this.state.TabDataReview == 'flex') {
-      this.setState({ TabDataGallery: 'none' }),
-        this.setState({ TabDataOverview: 'none' }),
-        this.setState({ BookNowView: 'none' }),
-        this.setState({ color: 'none' });
-      this.setState({ ColorOverview: colors.inputBordercolor }),
-        this.setState({ ColorReview: colors.darkBlue }),
-        this.setState({ ColorGallery: colors.inputBordercolor });
+      this.setState({TabDataGallery: 'none'}),
+        this.setState({TabDataOverview: 'none'}),
+        this.setState({BookNowView: 'none'}),
+        this.setState({color: 'none'});
+      this.setState({ColorOverview: colors.inputBordercolor}),
+        this.setState({ColorReview: colors.darkBlue}),
+        this.setState({ColorGallery: colors.inputBordercolor});
     } else
-      this.setState({ TabDataReview: 'flex' }),
-        this.setState({ TabDataGallery: 'none' }),
-        this.setState({ BookNowView: 'none' }),
-        this.setState({ TabDataOverview: 'none' });
-    this.setState({ ColorOverview: colors.inputBordercolor });
-    this.setState({ ColorReview: colors.darkBlue });
-    this.setState({ ColorGallery: colors.inputBordercolor });
+      this.setState({TabDataReview: 'flex'}),
+        this.setState({TabDataGallery: 'none'}),
+        this.setState({BookNowView: 'none'}),
+        this.setState({TabDataOverview: 'none'});
+    this.setState({ColorOverview: colors.inputBordercolor});
+    this.setState({ColorReview: colors.darkBlue});
+    this.setState({ColorGallery: colors.inputBordercolor});
   };
   render() {
-    const { issuedata } = this.state;
-    console.log(this.state.firstname)
+    const {issuedata} = this.state;
+    console.log(this.state.firstname);
     console.log(this.state.issueid);
 
     return (
@@ -220,7 +203,7 @@ class HomeDetail extends Component {
                   <Text style={[text.heading2Gray]}>{this.state.title}</Text>
                 </View>
                 <Image
-                  source={{ uri: issuedata.issuevideo }}
+                  source={{uri: issuedata.issuevideo}}
                   style={[
                     {
                       height: '70%',
@@ -239,14 +222,14 @@ class HomeDetail extends Component {
             </View>
           </Modal>
         </View>
-        <View style={{}}>
+        <TouchableOpacity style={{}} onPress={this.toggleModal}>
           <ImageBackground
-            source={images.carPaint}
-            style={{ height: screenHeight.height25 }}>
+            source={{uri: issuedata.issuevideo}}
+            style={{height: screenHeight.height25}}>
             <View style={style.bgOverlay} />
             <View style={[style.row, style.jcSpaceBetween, style.ph20]}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("IssueListC")}
+                onPress={() => this.props.navigation.navigate('IssueListC')}
                 style={[image.headerBackArrow]}>
                 <Image
                   style={[image.backArrow]}
@@ -254,16 +237,16 @@ class HomeDetail extends Component {
               </TouchableOpacity>
               <View></View>
               <TouchableOpacity
-                onPress={() => { this.props.navigation.navigate("EditIssue") }}
+                onPress={() => {
+                  this.props.navigation.navigate('EditIssue');
+                }}
                 style={[
                   button.buttonThemeWhite,
                   style.w30,
                   style.mt35,
-                  { display: this.state.cancelButton },
+                  {display: this.state.cancelButton},
                 ]}>
-                <Text style={[text.heading4, text.goodfishbd]}>
-                  Edit Issue
-                    </Text>
+                <Text style={[text.heading4, text.goodfishbd]}>Edit Issue</Text>
               </TouchableOpacity>
             </View>
 
@@ -293,7 +276,7 @@ class HomeDetail extends Component {
               </View>
             </View>
           </ImageBackground>
-        </View>
+        </TouchableOpacity>
         <View style={[appStyle.bodyBg, style.flex1]}>
           <View
             style={[
@@ -307,26 +290,24 @@ class HomeDetail extends Component {
                 borderBottomLeftRadius: 10,
                 borderBottomRightRadius: 10,
               },
-            ]}
-          >
+            ]}>
             <TouchableOpacity onPress={() => this.tabOverview()}>
               <Text
                 style={[
                   text.heading2,
                   text.semibold,
-                  { color: this.state.ColorOverview },
+                  {color: this.state.ColorOverview},
                 ]}>
                 Overview
               </Text>
             </TouchableOpacity>
-
 
             <TouchableOpacity onPress={() => this.tabReview()}>
               <Text
                 style={[
                   text.heading2,
                   text.semibold,
-                  { color: this.state.ColorReview },
+                  {color: this.state.ColorReview},
                 ]}>
                 Reviews
               </Text>
@@ -337,7 +318,7 @@ class HomeDetail extends Component {
             <View
               style={[
                 appStyle.bodyLayout,
-                { display: this.state.TabDataOverview },
+                {display: this.state.TabDataOverview},
               ]}>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
@@ -388,90 +369,31 @@ class HomeDetail extends Component {
               <View style={[style.pv10]}>
                 <Text style={[text.paraGray]}>{issuedata.description}</Text>
               </View>
-              <View
-                style={[
-                  style.mb50,
-                  appStyle.bodyLayout,
-                  appStyle.bodyShadowBottom,
-                  {
-                    backgroundColor: colors.white,
-
-                  },
-                ]}>
-                <View style={[appStyle.rowCenter]}>
-                  <View>
-                    <Text
-                      style={
-                        ({ color: colors.Black323 }, [text.text22, text.bold])
-                      }>
-                      Issue image
-                  </Text>
-                    <Text style={([text.text14], { color: colors.gray })}>
-                      (Optional)
-                  </Text>
-                  </View>
-                  <View style={[{ display: this.state.tabOverview }, style.flex1]}>
-                    <TouchableOpacity onPress={this.buyItems}>
-                      <View
-                        style={[
-                          button.buttoncontainer,
-                          { backgroundColor: colors.purple },
-                        ]}>
-                        <TouchableOpacity onPress={() => {
-                          if (this.state.issuedata.issuevideo == '') {
-                            ToastAndroid.show(
-                              'Sorry Video not available',
-                              ToastAndroid.BOTTOM,
-                              ToastAndroid.LONG,
-                            );
-
-                          }
-                          else {
-                            this.toggleModal()
-                          }
-                        }
-                        }><Text onPress={this.toggleModal}
-
-
-                          style={[
-                            { color: colors.white },
-                            button.touchablebutton,
-                            text.semibold,
-                          ]}>
-                            View Image
-                      </Text></TouchableOpacity>
-
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
             </View>
 
             {this.state.suggestiondata.map((data, index) => {
-              console.log('YE LO', data.firstname)
+              console.log('YE LO', data.firstname);
               return (
                 <TouchableOpacity
                   key={index}
-                  onPress={() => { this.movetomdetail(index) }}
-
+                  onPress={() => {
+                    this.movetomdetail(index);
+                  }}
                   style={[
                     appStyle.slotCard,
                     appStyle.rowJustify,
                     style.aiCenter,
-                    { display: this.state.TabDataReview },
+                    {display: this.state.TabDataReview},
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{ uri: data.mphoto }} />
+                      <Image
+                        style={image.userImg}
+                        source={{uri: data.mphoto}}
+                      />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
-                      {/* <View style={[style.mr15]}>
-                        <Image
-                          source={images.imagep}
-                          style={[image.image50]}></Image>
-                      </View> */}
                       <View>
                         <View>
                           <Text style={[text.text16, text.bold, colors.gray]}>
@@ -479,7 +401,7 @@ class HomeDetail extends Component {
                           </Text>
                         </View>
                         <View style={style.row}>
-                          <Text style={[text.text15, { color: colors.black, }]} >
+                          <Text style={[text.text15, {color: colors.black}]}>
                             {data.suggestion}
                           </Text>
                         </View>
@@ -490,16 +412,18 @@ class HomeDetail extends Component {
               );
             })}
 
-
             <View
               style={[
                 appStyle.bodyLayout,
-                { display: this.state.TabDataReview },
+                {display: this.state.TabDataReview},
               ]}>
               <TextInput
-                style={{ height: 40, width: "95%", borderColor: 'gray', borderWidth: 2, borderRadius: 20, marginBottom: 20, fontSize: 18 }}
+                style={[
+                  {borderColor: 'gray', borderWidth: 1, borderRadius: 20},
+                ]}
                 placeholder={this.state.placeholder}
                 secureTextEntry={true}
+                multiline={true}
                 secureTextEntry={false}
                 underlineColorAndroid={true}
                 onChangeText={(text) => {
@@ -507,18 +431,17 @@ class HomeDetail extends Component {
                     suggestion: text,
                   });
                 }}
-
                 underlineColorAndroid="transparent"></TextInput>
 
               <TouchableOpacity onPress={this.submitsuggestion}>
                 <View
                   style={[
                     button.buttoncontainer,
-                    { backgroundColor: colors.purple },
+                    {backgroundColor: colors.purple},
                   ]}>
                   <Text
                     style={[
-                      { color: colors.white },
+                      {color: colors.white},
                       button.touchablebutton,
                       text.semibold,
                     ]}>

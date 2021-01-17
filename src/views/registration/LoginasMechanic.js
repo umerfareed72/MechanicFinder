@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   View,
@@ -35,15 +35,15 @@ import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
 import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Dashboard from '../main/Dashboard';
-import { connect } from 'react-redux';
-import { mechaniclogin } from '../../actions/index';
-import { ActivityIndicator } from 'react-native-paper';
+import {connect} from 'react-redux';
+import {mechaniclogin} from '../../actions/index';
+import {ActivityIndicator} from 'react-native-paper';
 
-class LoginasMechanic extends Component {  
+class LoginasMechanic extends Component {
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
@@ -67,11 +67,11 @@ class LoginasMechanic extends Component {
   }
 
   UserRegister = () => {
-    this.setState({ textUser: colors.white, Uregister: colors.orange });
+    this.setState({textUser: colors.white, Uregister: colors.orange});
     this.props.navigation.navigate('SignUp');
   };
   MechanicRegister = () => {
-    this.setState({ textMechanic: colors.white, Mregister: colors.orange });
+    this.setState({textMechanic: colors.white, Mregister: colors.orange});
     this.props.navigation.navigate('MechanicRegister');
   };
   validateuser = () => {
@@ -94,43 +94,41 @@ class LoginasMechanic extends Component {
   };
 
   submitData = () => {
-
     if (this.validateuser()) {
-      this.setState({ isLoading: true });
+      this.setState({isLoading: true});
 
-      const data = { email: this.state.Email, password: this.state.Password };
+      const data = {email: this.state.Email, password: this.state.Password};
       this.props
         .mechaniclogin(data)
         .then(async (res) => {
-
           try {
-            if (this.props.auth.user.message === "new") {
+            if (this.props.auth.user.message === 'new') {
               this.props.navigation.navigate('newuserconfirm');
-              this.setState({ isLoading: false })
-            }
-            else if (this.props.auth.user.message === "blocked") {
-              ToastAndroid.show('Your Account is blocked by admin', ToastAndroid.BOTTOM);
+              this.setState({isLoading: false});
+            } else if (this.props.auth.user.message === 'blocked') {
+              ToastAndroid.show(
+                'Your Account is blocked by admin',
+                ToastAndroid.BOTTOM,
+              );
               this.props.navigation.navigate('LoginasMechanic');
-              this.setState({ isLoading: false })
-            }
-
-            else {
+              this.setState({isLoading: false});
+            } else {
               ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
               this.props.navigation.navigate('mechanicStack');
-              this.setState({ isLoading: false })
+              this.setState({isLoading: false});
             }
           } catch (e) {
             console.log('error hai', e);
             ToastAndroid.show('Invalid Email', ToastAndroid.BOTTOM);
+            this.setState({isLoading: false});
           }
         })
 
         .catch((error) => {
-          console.log('error1', error)
+          console.log('error1', error);
 
-
-          console.log(error)
-          ToastAndroid.show("Invalid User", ToastAndroid.BOTTOM);
+          console.log(error);
+          ToastAndroid.show('Invalid User', ToastAndroid.BOTTOM);
         });
     }
   };
@@ -142,18 +140,18 @@ class LoginasMechanic extends Component {
           <StatusBar translucent={true} backgroundColor={'transparent'} />
 
           <KeyboardAvoidingView
-            style={{ backgroundColor: colors.white, flexGrow: 1 }}>
+            style={{backgroundColor: colors.white, flexGrow: 1}}>
             <ScrollView>
               <View>
                 <LinearGradient
                   colors={colors.orablu}
-                  start={{ x: -0.9, y: 1 }}
-                  end={{ x: 1, y: 0 }}
+                  start={{x: -0.9, y: 1}}
+                  end={{x: 1, y: 0}}
                   style={[style.headerHeight4]}>
                   <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
                     <Text style={[text.Eutemia, text.white, text.text30]}>
                       Smart Auto Mechanic Finder
-                  </Text>
+                    </Text>
                     <Text
                       style={[
                         text.text18,
@@ -161,7 +159,7 @@ class LoginasMechanic extends Component {
                         text.white,
                       ]}>
                       (Mechanic)
-                  </Text>
+                    </Text>
                   </View>
                 </LinearGradient>
               </View>
@@ -172,7 +170,9 @@ class LoginasMechanic extends Component {
                 </View>
                 <View>
                   <View style={[input.textinputcontainer, style.mv20]}>
-                    <Image source={images.email} style={image.InputImage}></Image>
+                    <Image
+                      source={images.email}
+                      style={image.InputImage}></Image>
                     <TextInput
                       onFocus={this.changeheight}
                       style={input.textinputstyle}
@@ -204,21 +204,20 @@ class LoginasMechanic extends Component {
                       onPress={() => {
                         this.props.navigation.navigate('Mforget');
                       }}
-                      style={[text.right, text.text14, { color: colors.link }]}>
+                      style={[text.right, text.text14, {color: colors.link}]}>
                       Forgot Password
-                  </Text>
+                    </Text>
                   </View>
 
-                  <TouchableOpacity
-                    onPress={this.submitData}>
+                  <TouchableOpacity onPress={this.submitData}>
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text
                         style={[
                           button.touchablebutton,
-                          { color: colors.darkBlue },
+                          {color: colors.darkBlue},
                         ]}>
                         Login
-                    </Text>
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -236,7 +235,7 @@ class LoginasMechanic extends Component {
                   <TouchableOpacity
                     onPress={this.UserRegister}
                     style={[
-                      { backgroundColor: this.state.Uregister },
+                      {backgroundColor: this.state.Uregister},
                       appStyle.colLeft,
                     ]}>
                     <Text
@@ -244,27 +243,27 @@ class LoginasMechanic extends Component {
                         style.asCenter,
                         text.heading3,
                         text.semibold,
-                        { color: this.state.textUser },
+                        {color: this.state.textUser},
                       ]}>
                       User
-                  </Text>
+                    </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     onPress={this.MechanicRegister}
                     style={[
                       appStyle.colRight,
-                      { backgroundColor: this.state.Mregister },
+                      {backgroundColor: this.state.Mregister},
                     ]}>
                     <Text
                       style={[
                         style.asCenter,
                         text.heading3,
                         text.semibold,
-                        { color: this.state.textMechanic },
+                        {color: this.state.textMechanic},
                       ]}>
                       Mechanic
-                  </Text>
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -272,8 +271,7 @@ class LoginasMechanic extends Component {
           </KeyboardAvoidingView>
         </SafeAreaView>
       );
-    }
-    else {
+    } else {
       return (
         <SafeAreaView style={[appStyle.safeContainer]}>
           <StatusBar
@@ -289,7 +287,6 @@ class LoginasMechanic extends Component {
           </View>
         </SafeAreaView>
       );
-
     }
   }
 }
@@ -299,4 +296,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { mechaniclogin })(LoginasMechanic);
+export default connect(mapStateToProps, {mechaniclogin})(LoginasMechanic);

@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  Alert
+  Alert,
 } from 'react-native';
 import {
   colors,
@@ -42,25 +42,17 @@ export default class Mdetail extends Component {
     this.state = {
       rating: 2,
       starCount: 5,
-      TabDataOverview: 'flex',
-      TabDataGallery: 'none',
-      TabDataReview: 'none',
-      ColorOverview: colors.darkBlue,
-      ColorGallery: colors.inputBordercolor,
-      ColorReview: colors.inputBordercolor,
       BookNowView: 'none',
       CheckBox: images.checkBoxEmpty,
       suggestion: '',
-     
-      suggestiondata:[],
+      suggestiondata: [],
       mechanicdata: [],
-      firstname:'',
+      firstname: '',
       issueid: '',
-      mid:''
+      mid: '',
     };
   }
 
-  
   async componentDidMount() {
     const {navigation} = this.props;
     this.getData();
@@ -69,92 +61,38 @@ export default class Mdetail extends Component {
     });
   }
 
-  getmechanicdata = () => {
+  getmechanicdata = (id) => {
     axios
-      .get(URL.Url + 'mechanic/' + this.state.mid)
+      .get(URL.Url + 'mechanic/' + id)
       .then((response) => {
-        if (response.data) {
-          console.log('mechanic ye rha',response.data);
-          this.setState({mechanicdata: response.data});
-          console.log('mechanicdata',this.state.mechanicdata)
-        }
-        
+        this.setState({mechanicdata: response.data});
+        console.log('mechanicdata', this.state.mechanicdata);
       })
       .catch((error) => {
         console.log(error);
       });
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    // });
   };
-
 
   getData = async () => {
-    console.log('in get data');
     try {
-      await AsyncStorage.getItem('Mechanicidfromsuggestion').then((res) => {
-        res = JSON.parse(res);
-        this.setState({mid: res});
-       this.getmechanicdata();
-       
+      AsyncStorage.getItem('Mechanicidfromsuggestion').then((res) => {
+        const id = JSON.parse(res);
+        this.setState({mid: id});
+        this.getmechanicdata(id);
       });
-      console.log('in usersignin');
-      // await AsyncStorage.getItem('usersignintoken').then((res) => {
-      //   // res = JSON.parse(res);
-      //   console.log('response firstname',res)
-        // this.setState({firstname: 'Issue Holder'});
-        
-      // });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   };
-  
-  tabOverview = () => {
-    if (this.state.TabDataOverview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({ColorOverview: colors.darkBlue}),
-        this.setState({ColorReview: colors.inputBordercolor}),
-        this.setState({ColorGallery: colors.inputBordercolor});
-    } else
-      this.setState({TabDataOverview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'});
-    this.setState({BookNowView: 'none'});
-    this.setState({ColorOverview: colors.darkBlue});
-    this.setState({ColorReview: colors.inputBordercolor});
-    this.setState({ColorGallery: colors.inputBordercolor});
-  };
-  tabReview = () => {
-    if (this.state.TabDataReview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataOverview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({color: 'none'});
-      this.setState({ColorOverview: colors.inputBordercolor}),
-        this.setState({ColorReview: colors.darkBlue}),
-        this.setState({ColorGallery: colors.inputBordercolor});
-    } else
-      this.setState({TabDataReview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({TabDataOverview: 'none'});
-    this.setState({ColorOverview: colors.inputBordercolor});
-    this.setState({ColorReview: colors.darkBlue});
-    this.setState({ColorGallery: colors.inputBordercolor});
-  };
+
   render() {
     const {mechanicdata} = this.state;
-console.log(this.state.firstname)
-    console.log(this.state.issueid);
-
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
         <View style={{}}>
           <ImageBackground
-            source={images.carPaint}
+            source={{uri: mechanicdata.userphoto}}
             style={{height: screenHeight.height25}}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
@@ -178,51 +116,17 @@ console.log(this.state.firstname)
                 />
               </View>
               <View style={[style.mv5]}>
-                <Text style={[text.heading1, text.bold]}>
-Mechanic Detail{' '}
-                 
-                </Text>
+                <Text style={[text.heading1, text.bold]}>Mechanic Detail </Text>
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.paraWhite, text.regular]}>
-                  You can view detail of mechanic who commented on your post 
+                  You can view detail of mechanic who commented on your post
                 </Text>
               </View>
             </View>
           </ImageBackground>
         </View>
         <View style={[appStyle.bodyBg, style.flex1]}>
-          <View
-            style={[
-              appStyle.rowBtw,
-              appStyle.bodyLayout,
-              appStyle.bodyShadowTop,
-              {backgroundColor: '#fff'},
-            ]}>
-            <TouchableOpacity onPress={() => this.tabOverview()}>
-              <Text
-                style={[
-                  text.tab1,
-                  text.semibold,
-                  {color: this.state.ColorOverview},
-                ]}>
-                Overview
-              </Text>
-            </TouchableOpacity>
-            {/* 
-            <TouchableOpacity onPress={() => this.tabGallery()}>
-              <Text
-                style={[
-                  text.tab1,
-                  text.semibold,
-                  {color: this.state.ColorGallery},
-                ]}>
-                Gallery
-              </Text>
-            </TouchableOpacity> */}
-
-            
-          </View>
           <ScrollView style={style.mv5}>
             {/* OverView Tab */}
             <View
@@ -234,13 +138,14 @@ Mechanic Detail{' '}
                 {/* <Image
                   style={[image.medium, style.mr5]}
                   source={images.location}></Image> */}
-                <Text style={[text.heading2, text.bold]}>Mechanic id (Copy this id if you want to report this Mechanic)</Text>
+                <Text style={[text.heading2, text.bold]}>
+                  Mechanic id (Copy this id if you want to report this Mechanic)
+                </Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
                 <Text style={[text.heading2Gray]} selectable>
                   {' '}
-
-                 {this.state.mid}
+                  {this.state.mid}
                 </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
@@ -250,10 +155,7 @@ Mechanic Detail{' '}
                 <Text style={[text.heading2, text.bold]}>Contact Number</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}>
-                  {' '}
-                  {mechanicdata.phone}
-                </Text>
+                <Text style={[text.heading2Gray]}> {mechanicdata.phone}</Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
@@ -262,7 +164,10 @@ Mechanic Detail{' '}
                 <Text style={[text.heading2, text.bold]}>Mechanic Type</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}> {mechanicdata.vehicletype}</Text>
+                <Text style={[text.heading2Gray]}>
+                  {' '}
+                  {mechanicdata.vehicletype}
+                </Text>
               </View>
 
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
@@ -272,7 +177,10 @@ Mechanic Detail{' '}
                 <Text style={[text.heading2, text.bold]}>Specialist in </Text>
               </View>
               <View style={[style.borderbottom, style.mv10]}>
-                <Text style={[text.heading2Gray]}> {mechanicdata.skilltype}</Text>
+                <Text style={[text.heading2Gray]}>
+                  {' '}
+                  {mechanicdata.skilltype}
+                </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
@@ -285,35 +193,37 @@ Mechanic Detail{' '}
               </View>
               {/* <TouchableOpacity > */}
               <View
-              style={[
-                style.mb50,
-                appStyle.bodyLayout,
-                appStyle.bodyShadowBottom,
-                {
-                  backgroundColor: colors.white,
-                  
-                },
-              ]}>
-             
-          
-            {/* </TouchableOpacity> */}
-            <View style={[appStyle.rowCenter]}>
-                <View><TouchableOpacity onPress={
-                  ()=>
-                {this.props.navigation.navigate("reportmechanic",
-                {mdbid:this.state.mid})}}>
-                  <Text
-                    style={
-                      ({color: colors.Black323}, [text.text22, text.bold])
-                    }>
-                    Report This Mechanic
-                  </Text>
-                  <Text style={([text.text14], {color: colors.gray})}>
-                    (This will take 1 hour to proceed)
-                  </Text></TouchableOpacity>
-                </View>
-                <View style={[{display: this.state.tabOverview}, style.flex1]}>
-                  {/* <TouchableOpacity onPress={this.buyItems}>
+                style={[
+                  style.mb50,
+                  appStyle.bodyLayout,
+                  appStyle.bodyShadowBottom,
+                  {
+                    backgroundColor: colors.white,
+                  },
+                ]}>
+                {/* </TouchableOpacity> */}
+                <View style={[appStyle.rowCenter]}>
+                  <View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate('reportmechanic', {
+                          mdbid: this.state.mid,
+                        });
+                      }}>
+                      <Text
+                        style={
+                          ({color: colors.Black323}, [text.text22, text.bold])
+                        }>
+                        Report This Mechanic
+                      </Text>
+                      <Text style={([text.text14], {color: colors.gray})}>
+                        (This will take 1 hour to proceed)
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={[{display: this.state.tabOverview}, style.flex1]}>
+                    {/* <TouchableOpacity onPress={this.buyItems}>
                     <View
                       style={[
                         button.buttoncontainer,
@@ -329,12 +239,10 @@ Mechanic Detail{' '}
                       </Text>
                     </View>
                   </TouchableOpacity> */}
+                  </View>
                 </View>
               </View>
-              </View>
             </View>
-            
-            
 
             {/* Reviews Tab End  */}
           </ScrollView>
@@ -342,4 +250,4 @@ Mechanic Detail{' '}
       </SafeAreaView>
     );
   }
-}  
+}

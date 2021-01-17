@@ -188,10 +188,8 @@ class ProfileDetail extends Component {
               URL.Url + 'bookedbuyProduct/' + item._id + '/' + item.productid,
             )
             .then((mod) => {
-    
               this.setState({refreshing: true});
               console.log(res.data, 'data updated');
-        
             });
         });
       })
@@ -281,6 +279,7 @@ class ProfileDetail extends Component {
       )
       .then((res) => {
         AsyncStorage.removeItem('bookMechanicData');
+        this.toggleModal();
         this.props.navigation.navigate('Dashboard');
         this.setState({refreshing: true});
         this.state.products.map((item) => {
@@ -469,23 +468,33 @@ class ProfileDetail extends Component {
                           </Text>
                         </View>
                       </TouchableOpacity>
-                      <View style={[style.pv10, style.ph30]}>
-                        <Text
-                          onPress={() => {
-                            this.ratingModal();
-
-                            this.props.navigation.navigate('breportmechanic', {
-                              mdbid: data._id,
-                            });
-                          }}
-                          style={[
-                            text.right,
-                            text.text14,
-                            {color: colors.link},
-                          ]}>
-                          Report this Mechanic
-                        </Text>
-                      </View>
+                      <TouchableOpacity
+                        style={[style.pv10, style.ph30]}
+                        onPress={() => {
+                          this.ratingModal();
+                          this.props.navigation.navigate('breportmechanic', {
+                            mdbid: data._id,
+                            photo:data.photo
+                          });
+                        }}>
+                        <View style={[style.row, style.aiCenter]}>
+                          <Image
+                            style={[
+                              image.medium,
+                              {tintColor: colors.red},
+                              style.mr5,
+                            ]}
+                            source={images.complaints}></Image>
+                          <Text
+                            style={[
+                              text.right,
+                              text.text18,
+                              {color: colors.link},
+                            ]}>
+                            Register a complaint
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
 
                       <TouchableOpacity
                         onPress={this.submitReview}

@@ -16,7 +16,8 @@ import {
   KeyboardAvoidingView,
   Alert,
   StyleSheet,
-  COLORS,ToastAndroid
+  COLORS,
+  ToastAndroid,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 // import RNPickerSelect from 'react-native-picker-select';
@@ -42,7 +43,7 @@ import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
-
+import Textarea from 'react-native-textarea';
 export default class Editissue extends Component {
   constructor(props) {
     super(props);
@@ -65,12 +66,11 @@ export default class Editissue extends Component {
       status: '',
       description: '',
       token: '',
-      issuedata:[],
-      issueid:'',
-
+      issuedata: [],
+      issueid: '',
     };
   }
-    getData = async () => {
+  getData = async () => {
     try {
       await AsyncStorage.getItem('issuedata').then((res) => {
         res = JSON.parse(res);
@@ -82,26 +82,21 @@ export default class Editissue extends Component {
         this.setState({city: res.city});
         this.setState({Phone: res.phone});
         this.setState({description: res.description});
-        
-    });
-
-    
-      
+      });
     } catch (error) {}
   };
   async componentDidMount() {
     const {navigation} = this.props;
     this.getData();
-    
+
     this.focusListener = navigation.addListener('didFocus', () => {
       this.getData();
-    
     });
   }
-  
+
   submitData = () => {
     axios
-      .put(URL.Url + 'updateissue/'+this.state.issueid, { 
+      .put(URL.Url + 'updateissue/' + this.state.issueid, {
         issuetype: this.state.issuetype,
         phone: this.state.Phone,
         photo: this.state.photo,
@@ -116,7 +111,7 @@ export default class Editissue extends Component {
       .then(async (res) => {
         console.log(res.data);
         console.log(this.state.userdbid);
-        
+
         ToastAndroid.show(
           'Issue updated Successfully we will help U soon!',
           ToastAndroid.BOTTOM,
@@ -156,15 +151,14 @@ export default class Editissue extends Component {
     this.setState({ColorStep2: colors.inputBordercolor});
     this.setState({ColorStep4: colors.inputBordercolor});
   };
-
   tabStep2 = () => {
     if (this.state.TabDataStep2 == 'flex') {
       this.setState({TabDataStep1: 'none'}),
         this.setState({TabDataStep3: 'none'}),
         this.setState({BookNowView: 'none'}),
         this.setState({TabDataStep4: 'none'});
-      this.setState({color: 'none'});
-      this.setState({ColorStep1: colors.inputBordercolor}),
+        this.setState({color: 'none'});
+        this.setState({ColorStep1: colors.inputBordercolor}),
         this.setState({ColorStep3: colors.inputBordercolor}),
         this.setState({ColorStep4: colors.inputBordercolor}),
         this.setState({ColorStep2: colors.darkBlue});
@@ -181,32 +175,42 @@ export default class Editissue extends Component {
   };
   render() {
     const {issuedata} = this.state;
-    
+
     console.log(this.state);
     return (
       <SafeAreaView style={style.flex1}>
         <StatusBar />
         <KeyboardAvoidingView
           style={{backgroundColor: colors.white, flexGrow: 1}}>
-          <ScrollView>
+          <ScrollView >
             <View>
               <LinearGradient
                 colors={colors.orablu}
                 start={{x: -0.9, y: 1}}
                 end={{x: 1, y: 0}}
                 style={[style.headerHeight4]}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.goBack()}
+                  style={[image.headerBackArrow]}>
+                  <Image
+                    style={[image.backArrow]}
+                    source={images.backArrow}></Image>
+                </TouchableOpacity>
                 <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                  <Text style={[text.text35, {color: colors.white}]}>
-                   Edit Issue
+                  <Text
+                    style={[
+                      text.text35,
+                      {color: colors.white},
+                      text.LobsterRegular,
+                    ]}>
+                    Edit Issue
                   </Text>
-                  <Text style={[text.text20, {color: colors.white}]}>
-                    
-                  </Text>
+                  <Text style={[text.text20, {color: colors.white}]}></Text>
                 </View>
               </LinearGradient>
             </View>
             <View style={[appStyle.bodyBg]}>
-            <View
+              <View
                 style={[
                   appStyle.rowBtw,
                   style.aiCenter,
@@ -266,17 +270,15 @@ export default class Editissue extends Component {
 
                     <Picker
                       selectedValue={this.state.vehicaltype}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[text.pickerstyle]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({vehicaltype: itemValue})
                       }>
                       <Picker.Item label="Select Vehicle Type" value="" />
-                <Picker.Item label="Heavy Truck" value="Heavy Truck" />
-                <Picker.Item label="Car" value="Car" />
-                <Picker.Item label="Jeep" value="Jeep" />
-                <Picker.Item label="Bus" value="Bus" />
+                      <Picker.Item label="Heavy Truck" value="Heavy Truck" />
+                      <Picker.Item label="Car" value="Car" />
+                      <Picker.Item label="Jeep" value="Jeep" />
+                      <Picker.Item label="Bus" value="Bus" />
                     </Picker>
                   </View>
 
@@ -287,9 +289,7 @@ export default class Editissue extends Component {
 
                     <Picker
                       selectedValue={this.state.city}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[text.pickerstyle]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({city: itemValue})
                       }>
@@ -308,21 +308,22 @@ export default class Editissue extends Component {
 
                     <Picker
                       selectedValue={this.state.carcompany}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[text.pickerstyle]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({carcompany: itemValue})
                       }>
-                      <Picker.Item label="Select Vehicle Company" value="Vehicle" />
-                <Picker.Item label="Honda" value="Honda" />
-                <Picker.Item label="Toyota" value="Toyota" />
-                <Picker.Item label="Suzuki" value="Suzuki" />
-                <Picker.Item label="KIA" value="KIA" />
-                <Picker.Item label="Hundai" value="Hundai" />
-                <Picker.Item label="AUDI" value="AUDI" />
-                <Picker.Item label="Mercedese" value="Mercedese" />
-                <Picker.Item label="Range Rover" value="Range Rover" />
+                      <Picker.Item
+                        label="Select Vehicle Company"
+                        value="Vehicle"
+                      />
+                      <Picker.Item label="Honda" value="Honda" />
+                      <Picker.Item label="Toyota" value="Toyota" />
+                      <Picker.Item label="Suzuki" value="Suzuki" />
+                      <Picker.Item label="KIA" value="KIA" />
+                      <Picker.Item label="Hundai" value="Hundai" />
+                      <Picker.Item label="AUDI" value="AUDI" />
+                      <Picker.Item label="Mercedese" value="Mercedese" />
+                      <Picker.Item label="Range Rover" value="Range Rover" />
                     </Picker>
                   </View>
                   <View style={[input.textinputcontainer, style.mv5]}>
@@ -332,9 +333,7 @@ export default class Editissue extends Component {
 
                     <Picker
                       selectedValue={this.state.issuetype}
-                      style={[
-                        {height: 50, width: 180, left: -8, color: colors.gray},
-                      ]}
+                      style={[text.pickerstyle]}
                       onValueChange={(itemValue, itemIndex) =>
                         this.setState({issuetype: itemValue})
                       }>
@@ -351,18 +350,13 @@ export default class Editissue extends Component {
 
                     <TextInput
                       style={input.textinputstyle}
-                    //   placeholder={this.state.Phone}
-                     
-                 
+                      value={this.state.Phone}
                       keyboardType={'numeric'}
-                      
-                        
-                       
                       onChangeText={(text) => {
                         this.setState({
                           Phone: text,
                         });
-                      }} 
+                      }}
                       underlineColorAndroid="transparent"></TextInput>
                   </View>
                 </View>
@@ -398,43 +392,43 @@ export default class Editissue extends Component {
                     Provide information about issue{' '}
                   </Text>
                 </View>
+                <View style={[style.mt10, style.mh30]}>
+                  <Text style={[text.heading2]}>Describe your Issue</Text>
+                </View>
                 <View>
-                  <View style={[input.textinputcontainer, style.mv5]}>
-                    <View style={styles.textAreaContainer}>
-                      <TextInput
-                        style={styles.textArea}
-                        underlineColorAndroid="transparent"
-                       // placeholder={this.state.description}
+                  <View style={[style.aiCenter, style.mh30, style.mv10]}>
+                    <View style={[appStyle.textareaBorder, style.w100]}>
+                      <Textarea
+                        value={this.state.description}
                         onChangeText={(text) => {
-                          this.setState({
-                            description: text,
-                          });
+                          this.setState({description: text});
                         }}
-                        numberOfLines={10}
-                        multiline={true}
+                        placeholder={'Type message here'}
+                        placeholderTextColor={'#c7c7c7'}
+                        underlineColorAndroid={'transparent'}
                       />
                     </View>
                   </View>
-
-                  <TouchableOpacity onPress={this.submitData}>
-                    <View
-                      style={[
-                        button.buttoncontainer,
-                        style.mt20,
-                        style.mh50,
-                        {backgroundColor: colors.purple},
-                      ]}>
-                      <Text
-                        style={[
-                          {color: colors.white},
-                          button.touchablebutton,
-                          text.semibold,
-                        ]}>
-                        Update Issue !
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
                 </View>
+
+                <TouchableOpacity onPress={this.submitData}>
+                  <View
+                    style={[
+                      button.buttoncontainer,
+                      style.mt20,
+                      style.mh50,
+                      {backgroundColor: colors.purple},
+                    ]}>
+                    <Text
+                      style={[
+                        {color: colors.white},
+                        button.touchablebutton,
+                        text.semibold,
+                      ]}>
+                      Update Issue !
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               </View>
             </View>
           </ScrollView>

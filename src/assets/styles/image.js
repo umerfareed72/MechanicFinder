@@ -130,6 +130,11 @@ export default StyleSheet.create({
     borderColor: colors.gray,
     justifyContent: 'center',
   },
+
+
+
+
+  
   ovalcontainerupload: {
     height: 90,
     width: 90,

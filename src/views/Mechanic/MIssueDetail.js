@@ -151,8 +151,7 @@ class HomeDetail extends Component {
           ToastAndroid.LONG,
         );
         this.getsuggestions();
-        this.props.navigation.navigate('IssueList')
-      })
+        })
       .catch((error) => {
         Alert.alert('something went Wrong!!');
 
@@ -237,9 +236,9 @@ class HomeDetail extends Component {
             </View>
           </Modal>
         </View>
-        <View style={{}}>
+        <TouchableOpacity onPress={this.toggleModal}>
           <ImageBackground
-            source={images.carPaint}
+            source={{uri:issuedata.issuevideo}}
             style={{ height: screenHeight.height25 }}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
@@ -276,7 +275,7 @@ class HomeDetail extends Component {
               </View>
             </View>
           </ImageBackground>
-        </View>
+        </TouchableOpacity>
         <View style={[appStyle.bodyBg, style.flex1]}>
           <View
             style={[
@@ -382,61 +381,9 @@ class HomeDetail extends Component {
               </View>
               <View style={[style.pv10]}>
                 <Text style={[text.paraGray]}>{issuedata.description}</Text>
-              </View><View
-                style={[
-                  style.mb50,
-                  appStyle.bodyLayout,
-                  appStyle.bodyShadowBottom,
-                  {
-                    backgroundColor: colors.white,
-
-                  },
-                ]}>
-                <View style={[appStyle.rowCenter]}>
-                  <View>
-                    <Text
-                      style={
-                        ({ color: colors.Black323 }, [text.text22, text.bold])
-                      }>
-                      Issue picture
-                  </Text>
-                    <Text style={([text.text14], { color: colors.gray })}>
-                      (Optional)
-                  </Text>
-                  </View>
-                  <View style={[{ display: this.state.tabOverview }, style.flex1]}>
-                    <TouchableOpacity onPress={() => {
-                      if (this.state.issuedata.issuevideo == '') {
-                        ToastAndroid.show(
-                          'Sorry Picture not available',
-                          ToastAndroid.BOTTOM,
-                          ToastAndroid.LONG,
-                        );
-
-                      }
-                      else { this.toggleModal() }
-                    }
-                    }>
-                      <View
-                        style={[
-                          button.buttoncontainer,
-                          { backgroundColor: colors.purple },
-                        ]}>
-                        <Text onPress={this.toggleModal}
-                          style={[
-                            { color: colors.white },
-                            button.touchablebutton,
-                            text.semibold,
-                          ]}>
-                          View Image
-                      </Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </View>
               </View>
-            </View>
-
+             </View> 
+             
             {this.state.suggestiondata.map((data, index) => {
               console.log('YE LO', data.firstname)
               console.log('YE LO pp', data)

@@ -156,7 +156,7 @@ class MechanicSideMenu extends React.Component {
 
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('Products');
+                this.props.navigation.navigate('IssueList');
               }}
             >
               <View style={style.mh20}>
@@ -165,7 +165,7 @@ class MechanicSideMenu extends React.Component {
                     source={images.percent}
                     style={[image.drawerIcon]}></Image>
                   <Text style={[text.textheader4, { color: colors.white }]}>
-                    Products
+                  Vehicle Issues
                   </Text>
                 </View>
               </View>

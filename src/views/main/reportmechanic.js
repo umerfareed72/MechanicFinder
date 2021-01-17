@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   View,
@@ -15,7 +15,8 @@ import {
   Platform,
   Alert,
   StyleSheet,
-  KeyboardAvoidingView, ToastAndroid
+  KeyboardAvoidingView,
+  ToastAndroid,
 } from 'react-native';
 import {
   colors,
@@ -27,7 +28,7 @@ import {
 import Textarea from 'react-native-textarea';
 import AsyncStorage from '@react-native-community/async-storage';
 const axios = require('axios');
-import { Picker } from '@react-native-community/picker';
+import {Picker} from '@react-native-community/picker';
 import DatePicker from 'react-native-datepicker';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -37,22 +38,14 @@ import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
+import {withSafeAreaInsets} from 'react-native-safe-area-context';
 class Reportmechanic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      TabDataStep1: 'flex',
-      TabDataStep2: 'none',
-      TabDataStep3: 'none',
-      TabDataStep4: 'none',
-      ColorStep1: colors.darkBlue,
-      ColorStep2: colors.inputBordercolor,
-      ColorStep3: colors.inputBordercolor,
-      ColorStep4: colors.inputBordercolor,
       issuetype: '',
       photo: '',
       Phone: '',
@@ -66,24 +59,21 @@ class Reportmechanic extends Component {
       date: Date().toLocaleString(),
       mdbid: this.props.navigation.getParam('mdbid', 'nothing sent'),
       userdata: '',
-      userphoto: ''
+      userphoto: '',
     };
   }
 
   componentDidMount = () => {
     this.getid();
-    console.log("reportttt", this.props.auth.user.photo)
-    console.log(this.state.date)
+    console.log('reportttt', this.props.auth.user.photo);
+    console.log(this.state.date);
   };
 
   getid = () => {
-
-    this.setState({ userdbid: this.props.auth.user.userid })
-    this.setState({ userphoto: this.props.auth.user.photo })
-    console.log('userphoto12', this.state.userphoto)
-    console.log('firstname', this.state.userdata.photo)
-
-
+    this.setState({userdbid: this.props.auth.user.userid});
+    this.setState({userphoto: this.props.auth.user.photo});
+    console.log('userphoto12', this.state.userphoto);
+    console.log('firstname', this.state.userdata.photo);
   };
 
   validatefield = () => {
@@ -105,9 +95,6 @@ class Reportmechanic extends Component {
     return true;
   };
 
-
-
-
   submitReport = () => {
     if (this.validatefield()) {
       axios
@@ -117,7 +104,7 @@ class Reportmechanic extends Component {
           userdbid: this.state.userdbid,
           mdbid: this.state.mdbid,
           date: this.state.date,
-          userphoto: this.state.userphoto
+          userphoto: this.state.userphoto,
         })
         .then(async (res) => {
           console.log(res.data);
@@ -139,173 +126,104 @@ class Reportmechanic extends Component {
           console.log(error);
         });
     }
-
-  };
-
-  tabStep1 = () => {
-    if (this.state.TabDataStep1 == 'flex') {
-      this.setState({ TabDataStep2: 'none' }),
-        this.setState({ TabDataStep3: 'none' }),
-        this.setState({ TabDataStep4: 'none' });
-      this.setState({ BookNowView: 'flex' }),
-        this.setState({ ColorStep1: colors.darkBlue }),
-        this.setState({ ColorStep3: colors.inputBordercolor }),
-        this.setState({ ColorStep2: colors.inputBordercolor });
-      this.setState({ ColorStep4: colors.inputBordercolor });
-    } else
-      this.setState({ TabDataStep1: 'flex' }),
-        this.setState({ TabDataStep2: 'none' }),
-        this.setState({ TabDataStep3: 'none' });
-    this.setState({ TabDataStep4: 'none' });
-    this.setState({ BookNowView: 'flex' });
-    this.setState({ ColorStep1: colors.darkBlue });
-    this.setState({ ColorStep3: colors.inputBordercolor });
-    this.setState({ ColorStep2: colors.inputBordercolor });
-    this.setState({ ColorStep4: colors.inputBordercolor });
   };
 
   render() {
-    // console.log('propppppppp',this.props)
-    console.log('userid121', this.state.userdbid)
-    console.log('mechanicid121', this.state.mdbid);
     return (
       <SafeAreaView style={style.flex1}>
-        <StatusBar />
-        <KeyboardAvoidingView
-          style={{ backgroundColor: colors.white, flexGrow: 1 }}>
-          <ScrollView>
-            <View>
-              <LinearGradient
-                colors={colors.orablu}
-                start={{ x: -0.9, y: 1 }}
-                end={{ x: 1, y: 0 }}
-                style={[style.headerHeight4]}>
-                <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                  <Text style={[text.text35, { color: colors.white }]}>
-                    Report Mechanic
-                  </Text>
-                  <Text style={[text.text20, { color: colors.white }]}>
-
-                  </Text>
-                </View>
-              </LinearGradient>
-            </View>
-            <View style={[appStyle.bodyBg]}>
-              <View
-                style={[
-                  appStyle.rowBtw,
-                  appStyle.bodyLayout,
-                  appStyle.bodyShadowTop,
-                  { backgroundColor: '#fff' },
-                ]}>
-                <TouchableOpacity onPress={() => this.tabStep1()}>
-                  <Text
-                    style={[
-                      text.tab,
-                      text.semibold,
-                      { color: this.state.ColorStep1 },
-                    ]}>
-
-                  </Text>
-                </TouchableOpacity>
-
-
+      <StatusBar />
+      <KeyboardAvoidingView
+        style={{backgroundColor: colors.white, flexGrow: 1}}>
+        <ScrollView>
+          <View>
+            <LinearGradient
+              colors={colors.orablu}
+              start={{x: -0.9, y: 1}}
+              end={{x: 1, y: 0}}
+              style={[style.headerHeight4]}>
+              <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
+                <Text style={[text.text30, {color: colors.white}]}>
+                  Register Issue
+                </Text>
+                <Text style={[text.text20, {color: colors.white},text.goodfishbd,style.mv5]}>(Register An Issue)</Text>
               </View>
-              <View
-                style={[
-                  {
-                    backgroundColor: colors.white,
-                    display: this.state.BookNowView,
-                  },
-                ]}>
-                <View style={[appStyle.headingLayout]}>
-                  <Text style={[style.headerStyle, style.bottomborder]}>
-                    Subject
-                  </Text>
-                </View>
-                <View>
-                  <View style={[input.textinputcontainer, style.mv5]}>
-                    <Image
-                      source={images.cartype}
-                      style={image.InputImage}></Image>
+            </LinearGradient>
+          </View>
+          <View style={[appStyle.bodyBg]}>
+            <View style={[appStyle.headingLayout]}>
+              <Text style={[style.headerStyle, style.bottomborder]}>
+                Explain Your Issue Here !
+              </Text>
+            </View>
+            {/* <View style={[style.mh20]}> */}
+              <View style={[style.mt10,style.mh30]}>
+                <Text style={[text.heading2]}>Issue Type</Text>
+              </View>
 
-                    <Picker
-                      selectedValue={this.state.reporttype}
-                      style={[
-                        { height: 50, width: 200, left: -8, color: colors.gray },
-                      ]}
-                      onValueChange={(itemValue, itemIndex) =>
-                        this.setState({ reporttype: itemValue })
-                      }>
-                      <Picker.Item label="Select Report Type" value="" />
-                      <Picker.Item label="Abusive" value="Abusive" />
-                      <Picker.Item label="Violent" value="Violent" />
-                      <Picker.Item label="Fraud" value="Fraud" />
-                      <Picker.Item label="Inappropriate" value="Inappropriate" />
-                    </Picker>
+              <View style={[input.textinputcontainer, style.mv5]}>
+                <Image
+                  source={images.cartype}
+                  style={image.InputImage}></Image>
+                <Picker
+                  selectedValue={this.state.reporttype}
+                  style={[text.pickerstyle]}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.setState({reporttype: itemValue})
+                  }>
+                  <Picker.Item label="Select Report Type" value="" />
+                  <Picker.Item label="Abusive" value="Abusive" />
+                  <Picker.Item label="Violent" value="Violent" />
+                  <Picker.Item label="Fraud" value="Fraud" />
+                  <Picker.Item label="Inappropriate" value="Inappropriate" />
+                </Picker>
+              </View>
+
+              <View style={[style.mt10,style.mh30]}>
+                <Text style={[text.heading2]}>Describe your Issue</Text>
+              </View>
+              <View>
+                <View style={[style.aiCenter,style.mh30,style.mv10]}>
+                  <View style={[appStyle.textareaBorder, style.w100]}>
+                    <Textarea
+                      onChangeText={(text) => {
+                        this.setState({reportdescription: text});
+                      }}
+                      placeholder={'Type message here'}
+                      placeholderTextColor={'#c7c7c7'}
+                      underlineColorAndroid={'transparent'}
+                    />
                   </View>
+                </View>
 
-
-
-                  <View style={[appStyle.headingLayout]}>
-                    <Text style={[style.headerStyle, style.bottomborder]}>
-                      Provide Report Description
+                <TouchableOpacity onPress={this.submitReport}>
+                  <View
+                    style={[
+                      button.buttoncontainer,
+                      style.mt20,
+                      style.mh50,
+                      {backgroundColor: colors.purple},
+                    ]}>
+                    <Text
+                      style={[
+                        {color: colors.white},
+                        button.touchablebutton,
+                        text.semibold,
+                      ]}>
+                      Report Issue !
                     </Text>
                   </View>
-                  <View>
-                    <View style={[style.aiCenter]}>
-                      <View style={[appStyle.textareaBorder, style.w100]}>
-                        <Textarea
-                          onChangeText={(text) => {
-                            this.setState({ reportdescription: text });
-                          }}
-                          placeholder={'Type message here'}
-                          placeholderTextColor={'#c7c7c7'}
-                          underlineColorAndroid={'transparent'}
-                        />
-                      </View>
-                    </View>
-
-                    <TouchableOpacity onPress={this.submitReport}>
-                      <View
-                        style={[
-                          button.buttoncontainer,
-                          style.mt20,
-                          style.mh50,
-                          { backgroundColor: colors.purple },
-                        ]}>
-                        <Text
-                          style={[
-                            { color: colors.white },
-                            button.touchablebutton,
-                            text.semibold,
-                          ]}>
-                          Report Issue !
-                      </Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    );
+          {/* </View> */}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+ 
+      );
   }
 }
-const styles = StyleSheet.create({
-  textAreaContainer: {
-    borderWidth: 0.5,
-    padding: 1,
-  },
-  textArea: {
-    height: 200,
-    width: 300,
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-});
+
 function mapStateToProps(state) {
   return {
     auth: state.auth,

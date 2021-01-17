@@ -264,7 +264,7 @@ import auth from '../../reducers/auth';
                 <View style={[appStyle.modalBg]}>
                   <Text style={text.h1}>
                     {parseInt(this.state.Amount) +
-                      parseInt(this.state.extraAmount)}
+                      parseInt(this.state.extraAmount)} $
                   </Text>
                   <View
                     style={[
@@ -306,16 +306,33 @@ import auth from '../../reducers/auth';
                       </View>
                     </TouchableOpacity>
                   </View>
-                  <View style={[style.pv10, style.ph30]}>
-                  <Text
-                    onPress={() => {
-                      this.props.navigation.navigate('reportcustomer',{userdbid:data._id});
-                      this.completeModal(); }}
-                    style={[text.right, text.text14, {color: colors.link}]}>
-                    REPORT
-                  </Text>
-                </View>
-                </View>
+                
+                  <TouchableOpacity
+                        style={[style.pv10, style.ph30]}
+                        onPress={() => {
+                          this.props.navigation.navigate('reportcustomer',{userdbid:data._id,photo:data.photo});
+                          this.completeModal(); }}
+                       
+                        >
+                        <View style={[style.row, style.aiCenter,style.mv5]}>
+                          <Image
+                            style={[
+                              image.small,
+                              {tintColor: colors.red},
+                              style.mr5,
+                            ]}
+                            source={images.complaints}></Image>
+                          <Text
+                            style={[
+                              text.right,
+                              text.text12,
+                              {color: colors.link},
+                            ]}>
+                            Register a Complaint
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                   </View>
                 
               </View>
             </Modal>

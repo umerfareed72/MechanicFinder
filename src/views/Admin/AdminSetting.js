@@ -165,8 +165,8 @@ import {logout} from "../../actions/index"
                 <View style={[style.rowBtw]}>
                   <View style={[style.row, style.aiCenter]}>
                     <Image
-                      style={image.drawerIconmedium}
-                      source={images.terms}
+                      style={[image.drawerIconmedium]}
+                      source={images.legalIcon}
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
                       Service Rates
@@ -189,10 +189,10 @@ import {logout} from "../../actions/index"
                   <View style={[style.row, style.aiCenter]}>
                     <Image
                       style={image.drawerIconmedium}
-                      source={images.legalIcon}
+                      source={images.terms}
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
-                      Policies
+                     Terms & Policies
                     </Text>
                   </View>
 

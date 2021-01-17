@@ -197,7 +197,7 @@ class Mechaniclist extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri:data.userphoto}} />
+                      <Image style={image.userImg} source={{uri:data.issuevideo}} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>

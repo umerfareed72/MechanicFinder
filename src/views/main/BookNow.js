@@ -18,7 +18,6 @@ import {
   Platform,
   Button,
 } from 'react-native';
-
 import {
   colors,
   screenHeight,
@@ -27,8 +26,6 @@ import {
   URL,
   height,
 } from '../../config/Constant';
-import Geocoder from 'react-native-geocoding';
-Geocoder.init('AIzaSyCaEXhEWI8EDSE0TAEtFxU6ykRuKQK5F44');
 import LinearGradient from 'react-native-linear-gradient';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -42,7 +39,9 @@ import StarRating from 'react-native-star-rating';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ActivityIndicator} from 'react-native-paper';
 import Modal from 'react-native-modal';
+import Geocoder from 'react-native-geocoding';
 const axios = require('axios');
+Geocoder.init('AIzaSyAn4Q1cbuGVM8M6fyElhVgVGLFCLNl6Hf4');
 export default class BookNow extends Component {
   constructor(props) {
     super(props);
@@ -72,59 +71,73 @@ export default class BookNow extends Component {
     } else {
       phoneNumber = 'telprompt:${1234567890}';
     }
-
     Linking.openURL(phoneNumber);
   };
 
   getCity = () => {
-    axios
-      .get(
-        'http://api.positionstack.com/v1/reverse?access_key=01bd92ff4d189472dbd298a5f7142f38&query=' +
-          this.state.data.latitude +
-          ',' +
-          this.state.data.longitude,
-      )
+    const {data} = this.state;
+    const latitude = data.latitude;
+    const longitude = data.longitude;
+    Geocoder.from(latitude, longitude)
+      .then((json) => {
+        console.log(json.results[0]);
+        var addressComponent = json.results[0].formatted_address;
 
-      .then((res) => {
-        const {data} = this.state;
-        const address = res.data.data[0];
-        const street = address.street;
-        const city = address.county;
-        const country = address.country;
-        const location = street + ' ' + city + ' ' + country;
-        const latitude = data.latitude;
-        const longitude = data.longitude;
+        const location = addressComponent;
         const label = JSON.stringify(location);
         const url = Platform.select({
           ios: 'maps:' + latitude + ',' + longitude + '?q=' + label,
           android: 'geo:' + latitude + ',' + longitude + '?q=' + label,
         });
-        console.log(latitude + longitude + label);
+
         Linking.openURL(url);
-      });
+      })
+      .catch((error) => console.warn(error));
+    // axios
+    //   .get(
+    //     'http://api.positionstack.com/v1/reverse?access_key=01bd92ff4d189472dbd298a5f7142f38&query=' +
+    //       this.state.data.latitude +
+    //       ',' +
+    //       this.state.data.longitude,
+    //   )
+    //   .then((res) => {
+    //     const {data} = this.state;
+    //     const address = res.data.data[0];
+    //     const street = address.street;
+    //     const city = address.county;
+    //     const country = address.country;
+    //     const location = street + ' ' + city + ' ' + country;
+    //     const latitude = data.latitude;
+    //     const longitude = data.longitude;
+    //     const label = JSON.stringify(location);
+    //     const url = Platform.select({
+    //       ios: 'maps:' + latitude + ',' + longitude + '?q=' + label,
+    //       android: 'geo:' + latitude + ',' + longitude + '?q=' + label,
+    //     });
+    //     console.log(latitude + longitude + label);
+    //     Linking.openURL(url);
+    //   });
   };
 
   getMechanicLocation = async () => {
-   AsyncStorage.getItem('bookMechanicData').then((res)=>{
-    const mechanic=JSON.parse(res) 
-    this.setState({data:mechanic,refreshing:true})
-    console.log(mechanic,'Mechanic data')
-    
-   })
+    AsyncStorage.getItem('bookMechanicData').then((res) => {
+      const mechanic = JSON.parse(res);
+      this.setState({data: mechanic, refreshing: true});
+      console.log(mechanic, 'Mechanic data');
+    });
   };
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
 
-
   async componentDidMount() {
-      const {navigation} = this.props;
-      this.getMechanicLocation();
+    const {navigation} = this.props;
+    this.getMechanicLocation();
 
-      this.focusListener = navigation.addListener('didFocus', () => {
-        this.getMechanicLocation();
-      });
-    
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.getMechanicLocation();
+    });
+
     Animated.loop(
       Animated.timing(
         // Animate over time
@@ -304,7 +317,7 @@ export default class BookNow extends Component {
                       </Text>
                     </TouchableOpacity>
                   </Animated.View>
-                   </View>
+                </View>
               </ScrollView>
             </View>
           </View>

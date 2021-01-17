@@ -46,18 +46,7 @@ const DashboardStack = createStackNavigator(
     },
     BookedUser: {
       screen: BookedUser
-    }
-  },
-  {
-    headerMode: 'none',
-    navigationOptions: {
-      headerVisible: false,
     },
-  },
-);
-
-const IssueStack = createStackNavigator(
-  {
     IssueList: IssueList,
     MIssuedetail: MIssuedetail,
   },
@@ -68,6 +57,7 @@ const IssueStack = createStackNavigator(
     },
   },
 );
+
 const SettingStack = createStackNavigator(
   {
     MechanicSetting: MechanicSetting,
@@ -117,9 +107,9 @@ const Navigator = createMaterialBottomTabNavigator(
       },
     },
     Product: {
-      screen: IssueStack,
+      screen: Productsstack,
       navigationOptions: {
-        tabBarLabel: 'Vehical Issues',
+        tabBarLabel: 'Products',
         tabBarIcon: ({ tintColor }) => (
           <Image
             style={{ resizeMode: 'contain', height: 25, width: 25 }}

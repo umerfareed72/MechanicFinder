@@ -14,7 +14,6 @@ import {
   Keyboard,
   Button,
   Platform,
-
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
@@ -35,9 +34,9 @@ import {withSafeAreaInsets} from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
 import Login from '../registration/Login';
 import {connect} from 'react-redux';
-import {logout} from "../../actions/index";
+import {logout} from '../../actions/index';
 
- class Settings extends Component {
+class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,13 +48,13 @@ import {logout} from "../../actions/index";
       isImageVisible: false,
       isLogin: null,
     };
-     }
+  }
   onSignout = () => {
     const {navigation} = this.props;
     // const login = new Login();
     // login._signOut();
     navigation.navigate('Login');
-    this.props.logout()
+    this.props.logout();
   };
   // LoginUserData = () => {
   //   try {
@@ -84,8 +83,7 @@ import {logout} from "../../actions/index";
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
   };
-  
-  
+
   // componentDidMount() {
   //   const {navigation} = this.props;
   //   this.LoginUserData();
@@ -94,18 +92,18 @@ import {logout} from "../../actions/index";
   //   });
   // }
   render() {
-    const {auth}=this.props
+    const {auth} = this.props;
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
-        <View >
+        <View>
           <Modal
             isVisible={this.state.isModalVisible}
             animationInTiming={500}
             animationOutTiming={500}>
             <View style={[style.flex1, appStyle.rowCenter]}>
               <View style={[appStyle.modalBg]}>
-                <Text >Are You Sure?</Text>
+                <Text>Are You Sure?</Text>
                 <View style={[style.row, style.mt10]}>
                   <TouchableOpacity
                     style={[style.mh10]}
@@ -131,7 +129,7 @@ import {logout} from "../../actions/index";
         </View>
 
         {/*Body */}
-        <View  />
+        <View />
 
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.mt40]}>
           <View style={{postion: 'absolute', top: 0, left: -5}}>
@@ -143,14 +141,14 @@ import {logout} from "../../actions/index";
           <View style={{height: 20, width: 40}}></View>
         </View>
 
-        <ScrollView >
+        <ScrollView>
           <View style={[appStyle.bodyBg, appStyle.bodyLayout, style.mt20]}>
-            <TouchableOpacity style={style.asCenter} >
+            <TouchableOpacity style={style.asCenter}>
               <Image
                 style={[image.ovalcontainerupload, style.shadow]}
                 source={{uri: auth.user.photo}}
               />
-           </TouchableOpacity>
+            </TouchableOpacity>
             <View style={[style.asCenter, style.pt5]}>
               <Text style={[text.text18, text.orange, text.semibold]}>
                 {auth.user.firstname} {auth.user.lastname}
@@ -216,30 +214,7 @@ import {logout} from "../../actions/index";
                       source={images.terms}
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
-                      Terms of Service
-                    </Text>
-                  </View>
-
-                  <Image
-                    style={image.drawerIconmedium}
-                    source={images.arrowRightPurple}
-                  />
-                </View>
-
-                <View style={style.borderBottomNav} />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Privacy')}
-                style={[style.mb20]}>
-                <View style={[style.rowBtw]}>
-                  <View style={[style.row, style.aiCenter]}>
-                    <Image
-                      style={image.drawerIconmedium}
-                      source={images.legalIcon}
-                    />
-                    <Text style={[text.text18, text.purple, style.pl15]}>
-                      Privacy Policy
+                      Terms & Policies
                     </Text>
                   </View>
 
@@ -292,4 +267,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(Settings);
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

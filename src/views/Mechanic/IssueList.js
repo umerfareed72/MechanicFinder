@@ -284,7 +284,7 @@ class Mechaniclist extends Component {
                     <View style={style.mr10}>
                       <Image
                         style={image.userImg}
-                        source={{ uri: data.userphoto }}
+                        source={{ uri: data.issuevideo }}
 
                       />
                     </View>
