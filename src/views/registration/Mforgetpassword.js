@@ -20,7 +20,7 @@ import {
 import { colors, screenHeight, screenWidth, URL, images } from '../../config/Constant';
 const axios = require('axios');
 import LinearGradient from 'react-native-linear-gradient';
-
+ 
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';

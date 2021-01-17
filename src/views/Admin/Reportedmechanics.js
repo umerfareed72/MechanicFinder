@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -14,7 +14,7 @@ import {
   Keyboard,
   Button,
   Platform,
-  Alert,ToastAndroid
+  Alert, ToastAndroid
 } from 'react-native';
 const axios = require('axios');
 import {
@@ -24,7 +24,7 @@ import {
   screenWidth,
   images,
 } from '../../config/Constant';
-import {Animated} from 'react-native';
+import { Animated } from 'react-native';
 
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -36,11 +36,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
-import {Picker} from '@react-native-community/picker';
-import {color} from 'react-native-reanimated';
+import { Picker } from '@react-native-community/picker';
+import { color } from 'react-native-reanimated';
 export default class Reportedmechanics extends Component {
   constructor(props) {
     super(props);
@@ -101,7 +101,7 @@ export default class Reportedmechanics extends Component {
         if (response.data) {
           console.log(response.data);
         }
-        this.setState({dataSource: response.data});
+        this.setState({ dataSource: response.data });
         console.log(this.state.dataSource);
         if (this.state.dataSource == '') Alert.alert('No Report is posted!');
       })
@@ -143,7 +143,7 @@ export default class Reportedmechanics extends Component {
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
-        <View style={{marginTop: 40}} />
+        <View style={{ marginTop: 40 }} />
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('AdminDashboard')}>
@@ -154,7 +154,7 @@ export default class Reportedmechanics extends Component {
             <Text style={[text.heading1purple, text.bold]}>
               Reported Mechanics
             </Text>
-            <Text style={[text.text14, {color: '#4A4A4A'}]}>
+            <Text style={[text.text14, { color: '#4A4A4A' }]}>
               Currently Added Reports
             </Text>
           </View>
@@ -177,15 +177,15 @@ export default class Reportedmechanics extends Component {
                     <View style={style.mr10}>
                       <Image
                         style={image.userImg}
-                        source={{uri: data.userphoto}}
+                        source={{ uri: data.userphoto }}
                       />
                     </View>
                     <View>
                       <Text style={[text.text16, text.bold]}>
                         {data.reporttype}
                       </Text>
-                      <Text style={[text.text15, {color: colors.gray}]}>
-                        {data.date} 
+                      <Text style={[text.text15, { color: colors.gray, width: 100 }]} numberOfLines={1} ellipsizeMode='tail'>
+                        {data.date}
                       </Text>
                     </View>
                   </View>

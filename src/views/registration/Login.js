@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -42,7 +42,7 @@ import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
 import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import appStyle from '../../assets/styles/appStyle';
 import {
   GoogleSignin,
@@ -50,10 +50,10 @@ import {
   statusCodes,
 } from '@react-native-community/google-signin';
 import EditProfile from '../main/EditProfile';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {connect} from 'react-redux';
-import {userlogin} from '../../actions/index';
-import {ActivityIndicator} from 'react-native-paper';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { connect } from 'react-redux';
+import { userlogin } from '../../actions/index';
+import { ActivityIndicator } from 'react-native-paper';
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -83,11 +83,11 @@ class Login extends Component {
   }
   onLogout = () => {
     //Clear the state after logout
-    this.setState({user_name: null, token: null, profile_pic: null});
+    this.setState({ user_name: null, token: null, profile_pic: null });
   };
 
   get_Response_Info = (error, result) => {
-    if (error) {  
+    if (error) {
       //Alert for the Error
       Alert.alert('Error fetching data: ' + error.toString());
     } else {
@@ -104,16 +104,16 @@ class Login extends Component {
   };
 
   UserRegister = () => {
-    this.setState({textUser: colors.white, Uregister: colors.orange});
+    this.setState({ textUser: colors.white, Uregister: colors.orange });
     this.props.navigation.navigate('SignUp');
   };
   MechanicRegister = () => {
-    this.setState({textMechanic: colors.white, Mregister: colors.orange});
+    this.setState({ textMechanic: colors.white, Mregister: colors.orange });
     this.props.navigation.navigate('MechanicRegister');
   };
 
   adminLogin = () => {
-    this.setState({textAdmin: colors.white, adminLogin: colors.orange});
+    this.setState({ textAdmin: colors.white, adminLogin: colors.orange });
     this.props.navigation.navigate('LoginAsAdmin');
   };
   mechanicLogin = () => {
@@ -133,12 +133,12 @@ class Login extends Component {
         } else {
           console.log(
             'Login success with permissions: ' +
-              result.grantedPermissions.toString(),
+            result.grantedPermissions.toString(),
           );
 
           AccessToken.getCurrentAccessToken().then((data) => {
             console.log(data.accessToken.toString());
-            _this.setState({token: data.accessToken.toString()});
+            _this.setState({ token: data.accessToken.toString() });
             const token = data.accessToken.toString();
             const processRequest = new GraphRequest(
               '/me?fields=name,picture.type(large)',
@@ -179,14 +179,14 @@ class Login extends Component {
       //alert("Please Login");
       console.log('Please Login');
     }
-    this.setState({gettingLoginStatus: false});
+    this.setState({ gettingLoginStatus: false });
   };
 
   _getCurrentUserInfo = async () => {
     try {
       const userInfo = await GoogleSignin.signInSilently();
       console.log('User Info --> ', userInfo);
-      this.setState({userInfo: userInfo});
+      this.setState({ userInfo: userInfo });
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_REQUIRED) {
         alert('User has not signed in yet');
@@ -208,7 +208,7 @@ class Login extends Component {
       });
       const userInfo = await GoogleSignin.signIn();
       console.log('User Info --> ', userInfo);
-      this.setState({userInfo: userInfo});
+      this.setState({ userInfo: userInfo });
       const sendData = JSON.stringify(userInfo);
       AsyncStorage.setItem('googleData', sendData);
       this.props.navigation.navigate('GoogleUserSignUp');
@@ -231,7 +231,7 @@ class Login extends Component {
     try {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
-      this.setState({userInfo: null}); // Remove the user from your app's state as well
+      this.setState({ userInfo: null }); // Remove the user from your app's state as well
     } catch (error) {
       console.error(error);
     }
@@ -257,25 +257,39 @@ class Login extends Component {
 
   submitData = () => {
     if (this.validateuser()) {
-      this.setState({isLoading: true});
-      const data = {email: this.state.Email, password: this.state.Password};
+      this.setState({ isLoading: true });
+      const data = { email: this.state.Email, password: this.state.Password };
       this.props
         .userlogin(data)
         .then(async (res) => {
+          if (res == "new") {
+            this.props.navigation.navigate('newuserconfirm');
+          }
           try {
-            ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
-            this.props.navigation.navigate('userStack');
-            this.setState({isLoading: false});
+            if (this.props.auth.user.message === "new") {
+              this.props.navigation.navigate('newuserconfirm1');
+              this.setState({ isLoading: false })
+            }
+            else if (this.props.auth.user.message === "blocked") {
+              ToastAndroid.show('Your Account is blocked by admin', ToastAndroid.BOTTOM);
+              this.props.navigation.navigate('Login');
+              this.setState({ isLoading: false })
+            }
+            else {
+              ToastAndroid.show('Successfully Login', ToastAndroid.BOTTOM);
+              this.props.navigation.navigate('userStack');
+              this.setState({ isLoading: false });
+            }
           } catch (e) {
             console.log('error hai', e);
             ToastAndroid.show('Invalid Email', ToastAndroid.BOTTOM);
-            this.setState({isLoading: false});
+            this.setState({ isLoading: false });
           }
         })
 
         .catch((error) => {
           ToastAndroid.show('Invalid User', ToastAndroid.BOTTOM);
-          this.setState({isLoading: false});
+          this.setState({ isLoading: false });
         });
     }
   };
@@ -287,13 +301,13 @@ class Login extends Component {
           <StatusBar translucent={true} backgroundColor={'transparent'} />
 
           <KeyboardAvoidingView
-            style={{backgroundColor: colors.white, flexGrow: 1}}>
+            style={{ backgroundColor: colors.white, flexGrow: 1 }}>
             <ScrollView>
               <View>
                 <LinearGradient
                   colors={colors.orablu}
-                  start={{x: -0.9, y: 1}}
-                  end={{x: 1, y: 0}}
+                  start={{ x: -0.9, y: 1 }}
+                  end={{ x: 1, y: 0 }}
                   style={[style.headerHeight4]}>
                   <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
                     <Text style={[text.Eutemia, text.white, text.text30]}>
@@ -353,20 +367,20 @@ class Login extends Component {
                       onPress={() => {
                         this.props.navigation.navigate('Forgot');
                       }}
-                      style={[text.right, text.text14, {color: colors.link}]}>
+                      style={[text.right, text.text14, { color: colors.link }]}>
                       Forgot Password
                     </Text>
                   </View>
 
                   <TouchableOpacity
-                 
+
                     onPress={this.submitData}
                   >
                     <View style={[button.buttoncontainer, style.mt20]}>
                       <Text
                         style={[
                           button.touchablebutton,
-                          {color: colors.darkBlue},
+                          { color: colors.darkBlue },
                         ]}>
                         Login
                       </Text>
@@ -406,7 +420,7 @@ class Login extends Component {
                   <TouchableOpacity
                     onPress={this.adminLogin}
                     style={[
-                      {backgroundColor: this.state.adminLogin},
+                      { backgroundColor: this.state.adminLogin },
                       appStyle.colLeft,
                     ]}>
                     <Text
@@ -414,7 +428,7 @@ class Login extends Component {
                         style.asCenter,
                         text.heading3,
                         text.semibold,
-                        {color: this.state.textAdmin},
+                        { color: this.state.textAdmin },
                       ]}>
                       Admin
                     </Text>
@@ -424,14 +438,14 @@ class Login extends Component {
                     onPress={this.mechanicLogin}
                     style={[
                       appStyle.colRight,
-                      {backgroundColor: this.state.mechanicLogin},
+                      { backgroundColor: this.state.mechanicLogin },
                     ]}>
                     <Text
                       style={[
                         style.asCenter,
                         text.heading3,
                         text.semibold,
-                        {color: this.state.textMechanicLogin},
+                        { color: this.state.textMechanicLogin },
                       ]}>
                       Mechanic
                     </Text>
@@ -452,7 +466,7 @@ class Login extends Component {
                   <TouchableOpacity
                     onPress={this.UserRegister}
                     style={[
-                      {backgroundColor: this.state.Uregister},
+                      { backgroundColor: this.state.Uregister },
                       appStyle.colLeft,
                     ]}>
                     <Text
@@ -460,7 +474,7 @@ class Login extends Component {
                         style.asCenter,
                         text.heading3,
                         text.semibold,
-                        {color: this.state.textUser},
+                        { color: this.state.textUser },
                       ]}>
                       User
                     </Text>
@@ -470,14 +484,14 @@ class Login extends Component {
                     onPress={this.MechanicRegister}
                     style={[
                       appStyle.colRight,
-                      {backgroundColor: this.state.Mregister},
+                      { backgroundColor: this.state.Mregister },
                     ]}>
                     <Text
                       style={[
                         style.asCenter,
                         text.heading3,
                         text.semibold,
-                        {color: this.state.textMechanic},
+                        { color: this.state.textMechanic },
                       ]}>
                       Mechanic
                     </Text>
@@ -513,4 +527,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {userlogin})(Login);
+export default connect(mapStateToProps, { userlogin })(Login);

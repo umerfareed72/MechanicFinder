@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {createAppContainer} from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
 import MechanicDashboard from '../views/Mechanic/MechanicDashboard';
-import {createStackNavigator} from 'react-navigation-stack';
-import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
-import {createDrawerNavigator} from 'react-navigation-drawer';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import MechanicSideMenu from '../views/registration/MechanicSideMenu';
 import MechanicSetting from '../views/Mechanic/MechanicSetting';
 import UserProfile from '../views/Mechanic/UserProfile';
@@ -44,8 +44,8 @@ const DashboardStack = createStackNavigator(
     MechanicDashboard: {
       screen: MechanicDashboard,
     },
-    BookedUser:{
-      screen:BookedUser
+    BookedUser: {
+      screen: BookedUser
     }
   },
   {
@@ -56,12 +56,10 @@ const DashboardStack = createStackNavigator(
   },
 );
 
-const  ProductsStack = createStackNavigator(
+const IssueStack = createStackNavigator(
   {
-    Products: Products,
-    AddProducts: AddProducts,
-    EditProduct:EditProduct,
- 
+    IssueList: IssueList,
+    MIssuedetail: MIssuedetail,
   },
   {
     headerMode: 'none',
@@ -73,12 +71,10 @@ const  ProductsStack = createStackNavigator(
 const SettingStack = createStackNavigator(
   {
     MechanicSetting: MechanicSetting,
-    EditMechanicProfile:EditMechanicProfile,
-    MechanicHelp:MechanicHelp,
-    MechanicTerms:MechanicTerms,
-    IssueList:IssueList,
-    MIssuedetail:MIssuedetail,
-    playvideo:playvideo1
+    EditMechanicProfile: EditMechanicProfile,
+    MechanicHelp: MechanicHelp,
+    MechanicTerms: MechanicTerms,
+
   },
   {
     headerMode: 'none',
@@ -87,27 +83,46 @@ const SettingStack = createStackNavigator(
     },
   },
 );
+
+const Productsstack = createStackNavigator(
+  {
+    Products: Products,
+    AddProducts: AddProducts,
+    EditProduct: EditProduct,
+
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+
+
+
+
 const Navigator = createMaterialBottomTabNavigator(
   {
     MechanicDashboard: {
       screen: DashboardStack,
       navigationOptions: {
         tabBarLabel: 'Home',
-        tabBarIcon: ({tintColor}) => (
+        tabBarIcon: ({ tintColor }) => (
           <Image
-            style={{resizeMode: 'contain', height: 25, width: 25}}
+            style={{ resizeMode: 'contain', height: 25, width: 25 }}
             source={images.searchBottom}
           />
         ),
       },
     },
-    Products: {
-      screen: ProductsStack,
+    Product: {
+      screen: IssueStack,
       navigationOptions: {
-        tabBarLabel: 'Products',
-        tabBarIcon: ({tintColor}) => (
+        tabBarLabel: 'Vehical Issues',
+        tabBarIcon: ({ tintColor }) => (
           <Image
-            style={{resizeMode: 'contain', height: 25, width: 25}}
+            style={{ resizeMode: 'contain', height: 25, width: 25 }}
             source={images.store}
           />
         ),
@@ -117,9 +132,9 @@ const Navigator = createMaterialBottomTabNavigator(
       screen: SettingStack,
       navigationOptions: {
         tabBarLabel: 'Setting',
-        tabBarIcon: ({tintColor}) => (
+        tabBarIcon: ({ tintColor }) => (
           <Image
-            style={{resizeMode: 'contain', height: 25, width: 25}}
+            style={{ resizeMode: 'contain', height: 25, width: 25 }}
             source={images.username}
           />
         ),
@@ -132,14 +147,14 @@ const Navigator = createMaterialBottomTabNavigator(
     activeBackgroundColor: '#fff',
     inactiveBackgroundColor: '#fff',
     inactiveColor: '#4E5967',
-    barStyle: {backgroundColor: '#fff'},
+    barStyle: { backgroundColor: '#fff' },
   },
 );
 const UserBookNowStack = createStackNavigator(
   {
     UserProfileDetail: UserProfileDetail,
     UserProfile: UserProfile,
-    reportcustomer:reportcustomer,
+    reportcustomer: reportcustomer,
 
   },
   {
@@ -153,9 +168,9 @@ const Navigators = createMaterialBottomTabNavigator(
       screen: UserBookNowStack,
       navigationOptions: {
         tabBarLabel: 'Profile',
-        tabBarIcon: ({tintColor}) => (
+        tabBarIcon: ({ tintColor }) => (
           <Image
-            style={{resizeMode: 'contain', height: 25, width: 25}}
+            style={{ resizeMode: 'contain', height: 25, width: 25 }}
             source={images.userIcon}
           />
         ),
@@ -166,9 +181,9 @@ const Navigators = createMaterialBottomTabNavigator(
       screen: Chat,
       navigationOptions: {
         tabBarLabel: 'ChatBox',
-        tabBarIcon: ({tintColor}) => (
+        tabBarIcon: ({ tintColor }) => (
           <Image
-            style={{resizeMode: 'contain', height: 25, width: 25}}
+            style={{ resizeMode: 'contain', height: 25, width: 25 }}
             source={images.chatBox}
           />
         ),
@@ -181,7 +196,7 @@ const Navigators = createMaterialBottomTabNavigator(
     activeBackgroundColor: '#fff',
     inactiveBackgroundColor: '#fff',
     inactiveColor: '#4E5967',
-    barStyle: {backgroundColor: '#fff'},
+    barStyle: { backgroundColor: '#fff' },
   },
 );
 
@@ -191,15 +206,18 @@ const MechanicTabNavigator = createDrawerNavigator(
     Navigator: {
       screen: Navigator,
     },
- 
+
     //     LoginasMechanic: {
     //   screen: LoginasMechanic,
     // },
     Navigators: {
       screen: Navigators,
     },
-    Rates:{
-      screen:Rates
+    Rates: {
+      screen: Rates
+    },
+    Products: {
+      screen: Productsstack
     }
   },
   {

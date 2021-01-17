@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -14,7 +14,7 @@ import {
   Keyboard,
   Platform,
   Linking,
-  Alert,ToastAndroid
+  Alert, ToastAndroid
 } from 'react-native';
 import {
   colors,
@@ -25,6 +25,7 @@ import {
 } from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 const axios = require('axios');
+import Modal from 'react-native-modal';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -33,10 +34,10 @@ import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 class HomeDetail extends Component {
   constructor(props) {
     super(props);
@@ -52,13 +53,15 @@ class HomeDetail extends Component {
       BookNowView: 'none',
       CheckBox: images.checkBoxEmpty,
       suggestion: '',
-      issuedata: [],
+      issuedata: {},
       suggestiondata: [],
-      firstname:'',
+      firstname: '',
       issueid: '',
-      mid:'',
-      mphoto:'',
-      phone:'',
+      mid: '',
+      mphoto: '',
+      phone: '',
+      isModalVisible: false,
+
     };
   }
 
@@ -66,25 +69,25 @@ class HomeDetail extends Component {
     try {
       await AsyncStorage.getItem('issuedata').then((res) => {
         res = JSON.parse(res);
-        this.setState({issuedata: res});
-        this.setState({issueid: res._id});
-        this.setState({phone:res.phone})
+        this.setState({ issuedata: res });
+        this.setState({ issueid: res._id });
+        this.setState({ phone: res.phone })
       });
-    
-        this.setState({firstname: this.props.auth.user.firstname});
-        this.setState({mphoto: this.props.auth.user.photo});
-        this.setState({mid:this.props.auth.user.mechanicid})
-        console.log('mid',this.state.mid);
-        console.log('mphoto',this.state.mphoto);
-    
-    } catch (error) {}
+
+      this.setState({ firstname: this.props.auth.user.firstname });
+      this.setState({ mphoto: this.props.auth.user.photo });
+      this.setState({ mid: this.props.auth.user.mechanicid })
+      console.log('mid', this.state.mid);
+      console.log('mphoto', this.state.mphoto);
+
+    } catch (error) { }
   };
   async componentDidMount() {
-    const {navigation} = this.props;
-    console.log('in mechanic data',this.props.auth.user.mechanicid)
+    const { navigation } = this.props;
+    console.log('in mechanic data', this.props.auth.user.mechanicid)
     this.getData();
     this.focusListener = navigation.addListener('didFocus', () => {
-      this.getData();  
+      this.getData();
     });
   }
 
@@ -94,10 +97,10 @@ class HomeDetail extends Component {
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          this.setState({suggestiondata: response.data});
+          this.setState({ suggestiondata: response.data });
           console.log(this.state.suggestiondata);
-          
-          
+
+
         }
         if (this.state.suggestiondata == '') ToastAndroid.show(
           'No Suggestion available',
@@ -113,6 +116,10 @@ class HomeDetail extends Component {
     // .catch((error) => {
     //   console.log(error);
     // });
+  };
+
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
   makeCall = () => {
@@ -132,9 +139,9 @@ class HomeDetail extends Component {
       .post(URL.Url + 'postsuggestion', {
         suggestion: this.state.suggestion,
         issueid: this.state.issueid,
-        firstname:this.state.firstname,
-        mid:this.state.mid,
-        mphoto:this.state.mphoto
+        firstname: this.state.firstname,
+        mid: this.state.mid,
+        mphoto: this.state.mphoto
       })
       .then((res) => {
         console.log(res.data);
@@ -155,52 +162,85 @@ class HomeDetail extends Component {
 
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({ColorOverview: colors.darkBlue}),
-        this.setState({ColorReview: colors.inputBordercolor}),
-        this.setState({ColorGallery: colors.inputBordercolor});
+      this.setState({ TabDataGallery: 'none' }),
+        this.setState({ TabDataReview: 'none' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ ColorOverview: colors.darkBlue }),
+        this.setState({ ColorReview: colors.inputBordercolor }),
+        this.setState({ ColorGallery: colors.inputBordercolor });
     } else
-      this.setState({TabDataOverview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'});
-    this.setState({BookNowView: 'none'});
-    this.setState({ColorOverview: colors.darkBlue});
-    this.setState({ColorReview: colors.inputBordercolor});
-    this.setState({ColorGallery: colors.inputBordercolor});
+      this.setState({ TabDataOverview: 'flex' }),
+        this.setState({ TabDataGallery: 'none' }),
+        this.setState({ TabDataReview: 'none' });
+    this.setState({ BookNowView: 'none' });
+    this.setState({ ColorOverview: colors.darkBlue });
+    this.setState({ ColorReview: colors.inputBordercolor });
+    this.setState({ ColorGallery: colors.inputBordercolor });
   };
   tabReview = () => {
     if (this.state.TabDataReview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataOverview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({color: 'none'});
-      this.setState({ColorOverview: colors.inputBordercolor}),
-        this.setState({ColorReview: colors.darkBlue}),
-        this.setState({ColorGallery: colors.inputBordercolor});
+      this.setState({ TabDataGallery: 'none' }),
+        this.setState({ TabDataOverview: 'none' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ color: 'none' });
+      this.setState({ ColorOverview: colors.inputBordercolor }),
+        this.setState({ ColorReview: colors.darkBlue }),
+        this.setState({ ColorGallery: colors.inputBordercolor });
     } else
-      this.setState({TabDataReview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({TabDataOverview: 'none'});
-    this.setState({ColorOverview: colors.inputBordercolor});
-    this.setState({ColorReview: colors.darkBlue});
-    this.setState({ColorGallery: colors.inputBordercolor});
+      this.setState({ TabDataReview: 'flex' }),
+        this.setState({ TabDataGallery: 'none' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ TabDataOverview: 'none' });
+    this.setState({ ColorOverview: colors.inputBordercolor });
+    this.setState({ ColorReview: colors.darkBlue });
+    this.setState({ ColorGallery: colors.inputBordercolor });
     this.getsuggestions();
   };
   render() {
-    const {issuedata} = this.state;
-console.log(this.state.firstname)
+    const { issuedata } = this.state;
+    console.log(this.state.firstname)
     console.log(this.state.issueid);
 
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
         <View style={{}}>
+          <Modal
+            isVisible={this.state.isModalVisible}
+            animationInTiming={500}
+            animationOutTiming={500}>
+            <View style={[style.flex1, appStyle.rowCenter]}>
+              <TouchableOpacity
+                style={[appStyle.DashboardslotCard, style.w90, style.aiCenter]}
+                onPress={this.toggleModal}>
+                <View style={[style.mv10, style.aiCenter]}>
+                  <Text style={[text.h1]}>Preview Image</Text>
+                  <Text style={[text.heading2Gray]}>{this.state.title}</Text>
+                </View>
+                <Image
+                  source={{ uri: issuedata.issuevideo }}
+                  style={[
+                    {
+                      height: '70%',
+                      alignSelf: 'center',
+                      resizeMode: 'contain',
+                      borderRadius: 10,
+                    },
+                    style.w100,
+                  ]}></Image>
+                <TouchableOpacity
+                  style={[button.buttonTheme, style.mt30, style.w50]}
+                  onPress={this.toggleModal}>
+                  <Text style={[button.btntext1]}> Close Preview </Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
+        <View style={{}}>
           <ImageBackground
             source={images.carPaint}
-            style={{height: screenHeight.height25}}>
+            style={{ height: screenHeight.height25 }}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate("IssueList")}
@@ -245,29 +285,31 @@ console.log(this.state.firstname)
               appStyle.bodyLayout,
               appStyle.bodyShadowTop,
               style.mh40,
-                {backgroundColor: colors.lightgray,
-                       borderBottomLeftRadius: 10,
-                  borderBottomRightRadius: 10,},
+              {
+                backgroundColor: colors.lightgray,
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+              },
             ]}
-         >
+          >
             <TouchableOpacity onPress={() => this.tabOverview()}>
               <Text
                 style={[
                   text.heading2,
                   text.semibold,
-                  {color: this.state.ColorOverview},
+                  { color: this.state.ColorOverview },
                 ]}>
                 Overview
               </Text>
             </TouchableOpacity>
-            
+
 
             <TouchableOpacity onPress={() => this.tabReview()}>
               <Text
                 style={[
                   text.heading2,
                   text.semibold,
-                  {color: this.state.ColorReview},
+                  { color: this.state.ColorReview },
                 ]}>
                 Reviews
               </Text>
@@ -278,7 +320,7 @@ console.log(this.state.firstname)
             <View
               style={[
                 appStyle.bodyLayout,
-                {display: this.state.TabDataOverview},
+                { display: this.state.TabDataOverview },
               ]}>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
@@ -331,8 +373,8 @@ console.log(this.state.firstname)
                 <Text style={[text.heading2, text.bold]}>Contact (Press to call)</Text>
               </View>
               <View style={[style.borderbottom, style.mv10]}>
-                <Text  onPress={this.makeCall}
-                style={[text.heading2Gray]}> {issuedata.phone}</Text>
+                <Text onPress={this.makeCall}
+                  style={[text.heading2Gray]}> {issuedata.phone}</Text>
               </View>
 
               <View style={[style.mt20]}>
@@ -341,66 +383,63 @@ console.log(this.state.firstname)
               <View style={[style.pv10]}>
                 <Text style={[text.paraGray]}>{issuedata.description}</Text>
               </View><View
-              style={[
-                style.mb50,
-                appStyle.bodyLayout,
-                appStyle.bodyShadowBottom,
-                {
-                  backgroundColor: colors.white,
-                  
-                },
-              ]}>
-              <View style={[appStyle.rowCenter]}>
-                <View>
-                  <Text
-                    style={
-                      ({color: colors.Black323}, [text.text22, text.bold])
-                    }>
-                    Issue Video
+                style={[
+                  style.mb50,
+                  appStyle.bodyLayout,
+                  appStyle.bodyShadowBottom,
+                  {
+                    backgroundColor: colors.white,
+
+                  },
+                ]}>
+                <View style={[appStyle.rowCenter]}>
+                  <View>
+                    <Text
+                      style={
+                        ({ color: colors.Black323 }, [text.text22, text.bold])
+                      }>
+                      Issue picture
                   </Text>
-                  <Text style={([text.text14], {color: colors.gray})}>
-                    (Optional)
+                    <Text style={([text.text14], { color: colors.gray })}>
+                      (Optional)
                   </Text>
-                </View>
-                <View style={[{display: this.state.tabOverview}, style.flex1]}>
-                  <TouchableOpacity onPress={()=>{
-                          if(this.state.issuedata.issuevideo=='')
-                          {
-                            ToastAndroid.show(
-                              'Sorry Video not available',
-                              ToastAndroid.BOTTOM,
-                              ToastAndroid.LONG,
-                            );
-                            
-                          }
-                          else
-                          {this.props.navigation.navigate('playvideo',{videourl:this.state.issuedata.issuevideo})
-                        }
+                  </View>
+                  <View style={[{ display: this.state.tabOverview }, style.flex1]}>
+                    <TouchableOpacity onPress={() => {
+                      if (this.state.issuedata.issuevideo == '') {
+                        ToastAndroid.show(
+                          'Sorry Picture not available',
+                          ToastAndroid.BOTTOM,
+                          ToastAndroid.LONG,
+                        );
+
                       }
+                      else { this.toggleModal() }
+                    }
                     }>
-                    <View
-                      style={[
-                        button.buttoncontainer,
-                        {backgroundColor: colors.purple},
-                      ]}>
-                      <Text
+                      <View
                         style={[
-                          {color: colors.white},
-                          button.touchablebutton,
-                          text.semibold,
+                          button.buttoncontainer,
+                          { backgroundColor: colors.purple },
                         ]}>
-                        Play Video
+                        <Text onPress={this.toggleModal}
+                          style={[
+                            { color: colors.white },
+                            button.touchablebutton,
+                            text.semibold,
+                          ]}>
+                          View Image
                       </Text>
-                    </View>
-                  </TouchableOpacity>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </View>
-            </View>
-            
+
             {this.state.suggestiondata.map((data, index) => {
-              console.log('YE LO',data.firstname)
-              console.log('YE LO pp',data)
+              console.log('YE LO', data.firstname)
+              console.log('YE LO pp', data)
 
               return (
                 <TouchableOpacity
@@ -411,11 +450,11 @@ console.log(this.state.firstname)
                     appStyle.slotCard,
                     appStyle.rowJustify,
                     style.aiCenter,
-                    {display: this.state.TabDataReview},
+                    { display: this.state.TabDataReview },
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri :data.mphoto}} />
+                      <Image style={image.userImg} source={{ uri: data.mphoto }} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
@@ -431,7 +470,7 @@ console.log(this.state.firstname)
                           </Text>
                         </View>
                         <View style={style.row}>
-                          <Text style={[text.text15, {color: colors.gray}]}>
+                          <Text style={[text.text15, { color: colors.gray }]}>
                             {data.suggestion}
                           </Text>
                         </View>
@@ -441,15 +480,15 @@ console.log(this.state.firstname)
                 </TouchableOpacity>
               );
             })}
-            
+
 
             <View
               style={[
                 appStyle.bodyLayout,
-                {display: this.state.TabDataReview},
+                { display: this.state.TabDataReview },
               ]}>
               <TextInput
-                style={{height: 40, width: "95%", borderColor: 'gray', borderWidth: 2, borderRadius: 20,  marginBottom: 20, fontSize: 18 }}
+                style={{ height: 40, width: "95%", borderColor: 'gray', borderWidth: 2, borderRadius: 20, marginBottom: 20, fontSize: 18 }}
                 placeholder=" Type Suggestion about issue"
                 secureTextEntry={true}
                 multiline={true}
@@ -458,7 +497,7 @@ console.log(this.state.firstname)
                   this.setState({
                     suggestion: text,
                   });
-                  
+
                 }}
                 underlineColorAndroid="transparent"></TextInput>
 
@@ -466,11 +505,11 @@ console.log(this.state.firstname)
                 <View
                   style={[
                     button.buttoncontainer,
-                    {backgroundColor: colors.purple},
+                    { backgroundColor: colors.purple },
                   ]}>
                   <Text
                     style={[
-                      {color: colors.white},
+                      { color: colors.white },
                       button.touchablebutton,
                       text.semibold,
                     ]}>
@@ -486,11 +525,11 @@ console.log(this.state.firstname)
       </SafeAreaView>
     );
   }
-}  
+}
 function mapStateToProps(state) {
   return {
     auth: state.auth,
   };
 }
 
-export default connect(mapStateToProps,null)(HomeDetail);
+export default connect(mapStateToProps, null)(HomeDetail);

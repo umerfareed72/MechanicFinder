@@ -43,7 +43,7 @@ import { connect } from 'react-redux';
 import { mechaniclogin } from '../../actions/index';
 import { ActivityIndicator } from 'react-native-paper';
 
-class LoginasMechanic extends Component {
+class LoginasMechanic extends Component {  
   constructor(props) {
     super(props);
     console.disableYellowBox = true;
