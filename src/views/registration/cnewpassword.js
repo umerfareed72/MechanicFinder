@@ -35,8 +35,6 @@ class Cnewpassword extends Component {
     console.disableYellowBox = true;
     this.state = {
       // params: params,
-
-
       npassword: '',
       userid: this.props.navigation.getParam('userid2', 'NO-ID'),
     };
@@ -68,7 +66,7 @@ class Cnewpassword extends Component {
         })
         .then(async (res) => {
           console.log(res.data);
-
+this.props.navigation.navigate("Login")
           ToastAndroid.show(
             'password updated Successfully!',
             ToastAndroid.BOTTOM,
@@ -82,7 +80,6 @@ class Cnewpassword extends Component {
             ToastAndroid.BOTTOM,
             ToastAndroid.LONG,
           );
-
           console.log(error);
         });
     }
@@ -124,9 +121,9 @@ class Cnewpassword extends Component {
               </View>
               <View>
                 <View style={[input.textinputcontainer, style.mv10]}>
-                  <Image source={images.email} style={image.InputImage}></Image>
+                  <Image source={images.key} style={image.InputImage}></Image>
                   <TextInput
-
+                    secureTextEntry={true}
                     style={input.textinputstyle}
                     placeholder="New Password"
                     underlineColorAndroid="transparent"
@@ -135,7 +132,7 @@ class Cnewpassword extends Component {
                         npassword: text,
                       });
                     }}
-                    multiline={true}
+                  
 
                   />
                 </View>

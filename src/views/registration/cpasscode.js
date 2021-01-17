@@ -34,7 +34,6 @@ export default class Cpasscode extends Component {
     console.disableYellowBox = true;
     this.state = {
       // params: params,
-
       code: this.props.navigation.getParam('code', 'NO-ID'),
       userid: this.props.navigation.getParam('userid', 'NO-ID'),
       entercode: ''
@@ -135,18 +134,20 @@ export default class Cpasscode extends Component {
               </View>
               <View>
                 <View style={[input.textinputcontainer, style.mv10]}>
-                  <Image source={images.email} style={image.InputImage}></Image>
+                  <Image source={images.key} style={image.InputImage}></Image>
                   <TextInput
                     keyboardType='numeric'
                     style={input.textinputstyle}
                     placeholder="Code"
+                    secureTextEntry={true}
                     underlineColorAndroid="transparent"
                     onChangeText={(text) => {
                       this.setState({
                         entercode: text,
                       });
                     }}
-                    multiline={true}
+                
+                   
 
                   />
                 </View>

@@ -38,7 +38,7 @@ export const screenWidth = {
 
 //Url
 export const URL = {
-  Url: "http://192.168.0.103:5000/"
+  Url: "https://salty-plateau-55224.herokuapp.com/"
 };
 //colors
 export const colors = {

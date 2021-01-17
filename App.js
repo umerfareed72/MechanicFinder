@@ -8,7 +8,7 @@ import {
   StatusBar,
 } from 'react-native';
 import {Provider} from 'react-redux';
-import stores from '../MechanicFinderfyp1/src/reducers/store';
+import stores from '../MechanicFinder/src/reducers/store';
 import MainComponent from './src/MainComponent';
 import AsyncStorage from '@react-native-community/async-storage';
 

@@ -77,8 +77,6 @@ export default class Login extends Component {
               code: this.state.code
             })
             .then(async (res) => {
-              console.log(res.data);
-
               ToastAndroid.show(
                 'Code sent Successfully!',
                 ToastAndroid.BOTTOM,
