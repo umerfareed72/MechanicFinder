@@ -20,6 +20,7 @@ import LoginasMechanic from '../views/registration/LoginasMechanic';
 import GoogleUserSignUp from '../views/registration/GoogleUserSignUp';
 import cnewpassword from '../views/registration/cnewpassword';
 import ForgotPassword from '../views/registration/ForgotPassword';
+//import Usman from '../views/registration/usman'
 import Cpasscode from '../views/registration/cpasscode';
 import Mforget from '../views/registration/Mforgetpassword';
 import mpasscode from '../views/registration/mpasscode';
@@ -27,6 +28,7 @@ import Mnewpassword from '../views/registration/mnewpassword';
 import MechanicNavigation from './MechanicNavigation';
 import LoginAsAdmin from "../views/registration/LoginAsAdmin"
 import newuserconfirm from '../views/registration/newuserconfirm'
+import newuserconfirm1 from '../views/registration/newuser1confirm'
 import AdminNavigation from './AdminNavigation'
 //import mnewpassword from '../views/registration/mnewpassword';
 const SplashStack = createStackNavigator(
@@ -58,6 +60,7 @@ const AuthStack = createStackNavigator(
     Mnewpassword: Mnewpassword,
     LoginAsAdmin: LoginAsAdmin,
     newuserconfirm: newuserconfirm,
+    newuserconfirm1: newuserconfirm1
   },
   {
     headerMode: 'none',

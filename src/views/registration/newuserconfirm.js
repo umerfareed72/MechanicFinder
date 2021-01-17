@@ -128,7 +128,7 @@ class Newuserconfirm extends Component {
   };
   componentDidMount() {
     this.number();
-    this.focusListener = navigation.addListener('didFocus', () => {
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.number();
 
     });

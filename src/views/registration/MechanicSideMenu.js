@@ -7,7 +7,7 @@ import {
   Image,
   StatusBar,
 } from 'react-native';
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+import { colors, screenHeight, screenWidth, images } from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -15,12 +15,12 @@ import text from '../../assets/styles/text';
 import input from '../../assets/styles/input';
 import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {color} from 'react-native-reanimated';
-import {SafeAreaView} from 'react-navigation';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { color } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
-import {connect} from 'react-redux';
-import {logout} from "../../actions/index";
+import { connect } from 'react-redux';
+import { logout } from "../../actions/index";
 
 navigateToScreen = (route) => () => {
   const navigateAction = NavigationActions.navigate({
@@ -28,7 +28,7 @@ navigateToScreen = (route) => () => {
   });
   this.props.navigation.dispatch(navigateAction);
 };
- class MechanicSideMenu extends React.Component {
+class MechanicSideMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,21 +41,21 @@ navigateToScreen = (route) => () => {
   }
 
   onSignout = () => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     // const login = new Login();
     // login._signOut();
     navigation.navigate('LoginasMechanic');
     this.props.logout()
   };
-  
+
   static navigationOptions = {
     headerShown: false,
   };
 
   render() {
-  const {auth}=this.props;
+    const { auth } = this.props;
     return (
-      <SafeAreaView style={{backgroundColor: '#ccc', flex: 1}}>
+      <SafeAreaView style={{ backgroundColor: '#ccc', flex: 1 }}>
         <StatusBar
           translucent={true}
           barStyle={'light-content'}
@@ -64,8 +64,8 @@ navigateToScreen = (route) => () => {
         {/* <View style={{ backgroundColor: 'red', flex: 1 }}> */}
         <LinearGradient
           colors={colors.orablu}
-          start={{x: -0.9, y: 1}}
-          end={{x: 1, y: 0}}
+          start={{ x: -0.9, y: 1 }}
+          end={{ x: 1, y: 0 }}
           style={[style.flex1, style.shadow]}>
           <ScrollView style={{}}>
             <View style={appStyle.borderContainer}>
@@ -74,7 +74,7 @@ navigateToScreen = (route) => () => {
                   <View style={[style.mr15]}>
                     <Image
                       style={image.mediumovalcontainerupload}
-                      source={{uri: auth.user.photo}}></Image>
+                      source={{ uri: auth.user.photo }}></Image>
                   </View>
                   <View style={[style.jcCenter, {}]}>
                     <View style={style.mr5}>
@@ -99,7 +99,7 @@ navigateToScreen = (route) => () => {
                   <Image
                     source={images.saved}
                     style={[image.drawerIcon]}></Image>
-                  <Text style={[text.textheader4, {color: colors.white}]}>
+                  <Text style={[text.textheader4, { color: colors.white }]}>
                     Saved
                   </Text>
                 </View>
@@ -115,7 +115,7 @@ navigateToScreen = (route) => () => {
                   <Image
                     source={images.calendar}
                     style={[image.drawerIcon]}></Image>
-                  <Text style={[text.textheader4, {color: colors.white}]}>
+                  <Text style={[text.textheader4, { color: colors.white }]}>
                     My Booking
                   </Text>
                 </View>
@@ -132,7 +132,7 @@ navigateToScreen = (route) => () => {
                   <Image
                     source={images.setting}
                     style={[image.drawerIcon]}></Image>
-                  <Text style={[text.textheader4, {color: colors.white}]}>
+                  <Text style={[text.textheader4, { color: colors.white }]}>
                     Settings
                   </Text>
                 </View>
@@ -147,8 +147,8 @@ navigateToScreen = (route) => () => {
                   <Image
                     source={images.dollar}
                     style={[image.drawerIcon]}></Image>
-                  <Text style={[text.textheader4, {color: colors.white}]}>
-                 Service Rates
+                  <Text style={[text.textheader4, { color: colors.white }]}>
+                    Service Rates
                     </Text>
                 </View>
               </View>
@@ -156,7 +156,7 @@ navigateToScreen = (route) => () => {
 
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('IssueList');
+                this.props.navigation.navigate('Products');
               }}
             >
               <View style={style.mh20}>
@@ -164,8 +164,8 @@ navigateToScreen = (route) => () => {
                   <Image
                     source={images.percent}
                     style={[image.drawerIcon]}></Image>
-                  <Text style={[text.textheader4, {color: colors.white}]}>
-                  Posted Issues
+                  <Text style={[text.textheader4, { color: colors.white }]}>
+                    Products
                   </Text>
                 </View>
               </View>
@@ -177,7 +177,7 @@ navigateToScreen = (route) => () => {
                   <Image
                     source={images.logout}
                     style={[image.drawerIcon]}></Image>
-                  <Text style={[text.textheader4, {color: colors.white}]}>
+                  <Text style={[text.textheader4, { color: colors.white }]}>
                     Logout
                   </Text>
                 </View>

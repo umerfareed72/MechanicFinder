@@ -57,6 +57,7 @@ class Mechaniclist extends Component {
       carcompany: 'Select Vehicle Name',
       issuetype: 'Select issue Type',
       vehicaltype: 'Select Vehicle Type',
+      distance: "Select Radius"
     };
   }
 
@@ -76,6 +77,14 @@ class Mechaniclist extends Component {
       );
       return false;
     }
+    else if (this.state.distance == 'Select Radius') {
+      ToastAndroid.show(
+        'Area is Required',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
+      return false;
+    }
     return true;
   };
 
@@ -84,37 +93,71 @@ class Mechaniclist extends Component {
       console.log("id in class", this.props.auth.user.mechanicid)
       console.log("id in class", this.state.issuetype)
       console.log("id in class", this.state.vehicaltype)
-      axios
-        .get(
-          URL.Url +
-          'vehicalissues/' +
-          this.state.issuetype +
-          '/' +
-          this.state.vehicaltype +
-          '/' +
-          this.props.auth.user.mechanicid
-        )
-        .then((response) => {
-          if (response.data) {
-            console.log(response.data);
-            this.setState({ dataSource: response.data });
-          }
+      if (this.state.distance == "All") {
+        axios
+          .get(
+            URL.Url +
+            'avehicalissues/' +
+            this.state.issuetype +
+            '/' +
+            this.state.vehicaltype
 
-          if (this.state.dataSource == '')
+          )
+          .then((response) => {
+            if (response.data) {
+              console.log(response.data);
+              this.setState({ dataSource: response.data });
+            }
+
+            if (this.state.dataSource == '')
+              ToastAndroid.show(
+                'No Issue Is Found',
+                ToastAndroid.BOTTOM,
+                ToastAndroid.LONG,
+              );
+          })
+          .catch((error) => {
+            console.log(error);
             ToastAndroid.show(
-              'No Issue Is Found',
+              'Something Went Wrong',
               ToastAndroid.BOTTOM,
               ToastAndroid.LONG,
             );
-        })
-        .catch((error) => {
-          console.log(error);
-          ToastAndroid.show(
-            'Something Went Wrong',
-            ToastAndroid.BOTTOM,
-            ToastAndroid.LONG,
-          );
-        });
+          });
+      }
+      else {
+        axios
+          .get(
+            URL.Url +
+            'vehicalissues/' +
+            this.state.issuetype +
+            '/' +
+            this.state.vehicaltype +
+            '/' +
+            this.props.auth.user.mechanicid
+          )
+          .then((response) => {
+            if (response.data) {
+              console.log(response.data);
+              this.setState({ dataSource: response.data });
+            }
+
+            if (this.state.dataSource == '')
+              ToastAndroid.show(
+                'No Issue Is Found',
+                ToastAndroid.BOTTOM,
+                ToastAndroid.LONG,
+              );
+          })
+          .catch((error) => {
+            console.log(error);
+            ToastAndroid.show(
+              'Something Went Wrong',
+              ToastAndroid.BOTTOM,
+              ToastAndroid.LONG,
+            );
+          });
+      }
 
       // })
       // .catch((error) => {
@@ -188,6 +231,23 @@ class Mechaniclist extends Component {
             </View>
 
 
+            <View style={[style.dropBar, style.mv10]}>
+              <Picker
+                selectedValue={this.state.distance}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({ distance: itemValue })
+                }>
+                <Picker.Item
+                  label="Select Radius"
+                  value=""
+                />
+                <Picker.Item label="All" value="All" />
+                <Picker.Item label="with in 10 km" value="10" />
+                <Picker.Item label="with in 20 km" value="20" />
+              </Picker>
+            </View>
+
+
             <TouchableOpacity
               style={[
                 button.button1,
@@ -234,12 +294,12 @@ class Mechaniclist extends Component {
                         <Text style={[text.text16, text.bold]}>
                           {data.issuetype} issue in {data.vehicaltype}
                         </Text>
-                        <Text
+                        {/* <Text
                           style={[text.text10, text.greyVLight, { width: '40%' }]}
                           numberOfLines={1}
                           ellipsizeMode={'tail'}>
                           {data.description}
-                        </Text>
+                        </Text> */}
                       </View>
                     </View>
                   </View>

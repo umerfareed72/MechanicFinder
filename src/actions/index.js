@@ -1,23 +1,23 @@
 import axios from 'axios';
-import {URL} from '../config/Constant';
-import {Set_CurrentUser} from '../actions/Types';
+import { URL } from '../config/Constant';
+import { Set_CurrentUser } from '../actions/Types';
 import jwt from 'jwt-decode';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ToastAndroid} from "react-native"
+import { ToastAndroid } from "react-native"
 
 export function logout() {
   return (dispatch) => {
     AsyncStorage.removeItem('googleData');
     AsyncStorage.removeItem('usertoken');
     dispatch(set_CurrentUser({}));
-   
+
   };
 }
 
 export function set_CurrentUser(user) {
   return {
     type: Set_CurrentUser,
-    user, 
+    user,
   };
 }
 export function adminlogin(data) {
@@ -34,10 +34,32 @@ export function adminlogin(data) {
 export function userlogin(data) {
   return (dispatch) => {
     return axios.post(URL.Url + 'usersignin', data).then((res) => {
-      console.log(jwt(res.data.token), 'uerdata');
-      const token = res.data.token;
-      AsyncStorage.setItem('usertoken', token);
-      dispatch(set_CurrentUser(jwt(token)));
+      if (res.data.message === "blocked") {
+        dispatch(set_CurrentUser(res.data))
+        ToastAndroid.show(
+          'Blocked By Admin',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+      } else if (res.data.message == "new") {
+        dispatch(set_CurrentUser(res.data))
+        ToastAndroid.show(
+          'Please Verify Your Email',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+      }
+      else {
+        console.log(jwt(res.data.token), 'uerdata');
+        const token = res.data.token;
+        AsyncStorage.setItem('usertoken', token);
+        dispatch(set_CurrentUser(jwt(token)));
+        ToastAndroid.show(
+          'Successfully Login',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+      }
     });
   };
 }
@@ -51,27 +73,24 @@ export function mechaniclogin(data) {
           'Blocked By Admin',
           ToastAndroid.BOTTOM,
           ToastAndroid.LONG,
-        ); 
+        );
       } else if (res.data.message == "new") {
-         dispatch(set_CurrentUser(res.data))
-         ToastAndroid.show(
+        dispatch(set_CurrentUser(res.data))
+        ToastAndroid.show(
           'Please Verify Your Email',
           ToastAndroid.BOTTOM,
           ToastAndroid.LONG,
-        );  
+        );
       } else {
-      const token = res.data.token;
-      AsyncStorage.setItem('usertoken', token);
+        const token = res.data.token;
+        AsyncStorage.setItem('usertoken', token);
         dispatch(set_CurrentUser(jwt(token)));
         ToastAndroid.show(
           'Successfully Login',
           ToastAndroid.BOTTOM,
           ToastAndroid.LONG,
-        ); 
+        );
       }
-
-      
-     
     });
   };
 }
