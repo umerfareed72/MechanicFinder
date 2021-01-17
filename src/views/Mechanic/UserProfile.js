@@ -28,7 +28,7 @@ import {
   height,
 } from '../../config/Constant';
 import Geocoder from 'react-native-geocoding';
-Geocoder.init('AIzaSyCaEXhEWI8EDSE0TAEtFxU6ykRuKQK5F44');
+Geocoder.init('key');
 import LinearGradient from 'react-native-linear-gradient';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
