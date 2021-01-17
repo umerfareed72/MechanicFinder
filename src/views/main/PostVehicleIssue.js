@@ -466,7 +466,7 @@ class Postvehicalissue extends Component {
                             }
                           }}
                           query={{
-                            key: 'AIzaSyAn4Q1cbuGVM8M6fyElhVgVGLFCLNl6Hf4',
+                            key: 'key',
                             language: 'en', // language of the results
                           }}
                           predefinedPlaces={[this.state.current]}
