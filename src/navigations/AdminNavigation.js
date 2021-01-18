@@ -43,12 +43,15 @@ import UpdateServiceRate from '../views/Admin/UpdateServiceRate';
 import Mechanicprofile from '../views/Admin/Mechanicprofile';
 import Mechanicdetail from '../views/Admin/Mechanicdetail';
 import Analytic from '../views/Admin/Analytic';
+import ReportedCustomerDetail from '../views/Admin/ReportedCustomerDetail';
+import CustomerDetail from '../views/Admin/CustomerDetail';
 //add new screen to this stack here
 
 const UserStackReport = createStackNavigator(
   {
     Reportedcustomers: Reportedcustomers,
     Reportmechanicdetail: Reportmechanicdetail,
+    Mechanicprofile: Mechanicprofile,
     Customerprofile: Customerprofile,
   
   },
@@ -63,9 +66,9 @@ const UserStackReport = createStackNavigator(
 const MechanicStackReport = createStackNavigator(
   {
     Reportedmechanics: Reportedmechanics,
+   ReportedCustomerDetail:ReportedCustomerDetail,
     RMechanicprofile: RMechanicprofile,
-    Mechanicprofile: Mechanicprofile,
-    
+  CustomerDetail:CustomerDetail  
   },
   {
     headerMode: 'none',

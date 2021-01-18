@@ -1,3 +1,384 @@
+// import React, {Component} from 'react';
+// import {
+//   Text,
+//   View,
+//   ScrollView,
+//   SafeAreaView,
+//   StatusBar,
+//   TextInput,
+//   TouchableOpacity,
+//   CheckBox,
+//   Image,
+//   ImageBackground,
+//   Dimensions,
+//   Keyboard,
+//   Platform,
+//   Alert
+// } from 'react-native';
+// import {
+//   colors,
+//   screenHeight,
+//   screenWidth,
+//   images,
+//   URL,
+// } from '../../config/Constant';
+// import AsyncStorage from '@react-native-community/async-storage';
+// const axios = require('axios');
+
+// import style from '../../assets/styles/style';
+// import image from '../../assets/styles/image';
+// import text from '../../assets/styles/text';
+// import input from '../../assets/styles/input';
+// import button from '../../assets/styles/button';
+// import appStyle from '../../assets/styles/appStyle';
+// import LinearGradient from 'react-native-linear-gradient';
+// import StarRating from 'react-native-star-rating';
+// // import Icon from 'react-native-ionicons';
+// // import vectorIcon from 'react-native-vector-icons';
+// import {withSafeAreaInsets} from 'react-native-safe-area-context';
+
+// export default class Customerprofile extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       rating: 2,
+//       starCount: 5,
+//       TabDataOverview: 'flex',
+//       TabDataGallery: 'none',
+//       TabDataReview: 'none',
+//       ColorOverview: colors.darkBlue,
+//       ColorGallery: colors.inputBordercolor,
+//       ColorReview: colors.inputBordercolor,
+//       BookNowView: 'none',
+//       CheckBox: images.checkBoxEmpty,
+//       suggestion: '',
+     
+//       suggestiondata:[],
+//       customerdata: [],
+//       firstname:'',
+//       issueid: '',
+//       userid:this.props.navigation.getParam('userid','nothing sent'),
+// warning:''
+//     };
+//   }
+
+  
+//   async componentDidMount() {
+   
+//     this.getcustomerdata();
+//     this.focusListener = navigation.addListener('didFocus', () => {
+//         this.getcustomerdata();
+//     });
+//   }
+
+//   getcustomerdata = () => {
+//     axios
+//       .get(URL.Url + 'user/' + this.state.userid)
+//       .then((response) => {
+//         if (response.data) {
+//           console.log('customer ye rha',response.data);
+//           this.setState({customerdata: response.data});
+//           console.log('customerdata',this.state.customerdata)
+//         }
+        
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//     // })
+//     // .catch((error) => {
+//     //   console.log(error);
+//     // });
+//   };
+
+
+  
+  
+//   tabOverview = () => {
+//     if (this.state.TabDataOverview == 'flex') {
+//       this.setState({TabDataGallery: 'none'}),
+//         this.setState({TabDataReview: 'none'}),
+//         this.setState({BookNowView: 'none'}),
+//         this.setState({ColorOverview: colors.darkBlue}),
+//         this.setState({ColorReview: colors.inputBordercolor}),
+//         this.setState({ColorGallery: colors.inputBordercolor});
+//     } else
+//       this.setState({TabDataOverview: 'flex'}),
+//         this.setState({TabDataGallery: 'none'}),
+//         this.setState({TabDataReview: 'none'});
+//     this.setState({BookNowView: 'none'});
+//     this.setState({ColorOverview: colors.darkBlue});
+//     this.setState({ColorReview: colors.inputBordercolor});
+//     this.setState({ColorGallery: colors.inputBordercolor});
+//   };
+  
+//   render() {
+//     const {customerdata} = this.state;
+// console.log(this.state.firstname)
+//     console.log(this.state.issueid);
+// console.log('ye ai id profile pa',this.state.userid)
+//     return (
+//       <SafeAreaView style={[appStyle.safeContainer]}>
+//         <StatusBar />
+//         <View style={{}}>
+//           <ImageBackground
+//             source={images.carPaint}
+//             style={{height: screenHeight.height25}}>
+//             <View style={style.bgOverlay} />
+//             <TouchableOpacity
+//               onPress={() => this.props.navigation.goBack()}
+//               style={[image.headerBackArrow]}>
+//               <Image
+//                 style={[image.backArrow]}
+//                 source={images.backArrow}></Image>
+//             </TouchableOpacity>
+//             <View style={[appStyle.headInner, style.ph20]}>
+//               <View style={[style.mv5]}>
+//                 <StarRating
+//                   disabled={true}
+//                   maxStars={5}
+//                   rating={this.state.starCount}
+//                   selectedStar={(rating) => this.onStarRatingPress(rating)}
+//                   fullStarColor={'#fff'}
+//                   emptyStarColor={'#fff'}
+//                   starSize={20}
+//                   containerStyle={{width: 110, marginTop: 3}}
+//                 />
+//               </View>
+//               <View style={[style.mv5]}>
+//                 <Text style={[text.heading1, text.bold]}>
+// Customer Detail{' '}
+                 
+//                 </Text>
+//               </View>
+//               <View style={[style.mv5]}>
+//                 <Text style={[text.paraWhite, text.regular]}>
+                 
+//                 </Text>
+//               </View>
+//             </View>
+//           </ImageBackground>
+//         </View>
+//         <View style={[appStyle.bodyBg, style.flex1]}>
+//           <View
+//             style={[
+//               appStyle.rowBtw,
+//               appStyle.bodyLayout,
+//               appStyle.bodyShadowTop,
+//               {backgroundColor: '#fff'},
+//             ]}>
+//             <TouchableOpacity onPress={() => this.tabOverview()}>
+//               <Text
+//                 style={[
+//                   text.tab1,
+//                   text.semibold,
+//                   {color: this.state.ColorOverview},
+//                 ]}>
+//                 Overview
+//               </Text>
+//             </TouchableOpacity>
+//             {/* 
+//             <TouchableOpacity onPress={() => this.tabGallery()}>
+//               <Text
+//                 style={[
+//                   text.tab1,
+//                   text.semibold,
+//                   {color: this.state.ColorGallery},
+//                 ]}>
+//                 Gallery
+//               </Text>
+//             </TouchableOpacity> */}
+
+           
+//           </View>
+//           <ScrollView style={style.mv5}>
+//             {/* OverView Tab */}
+//             <View
+//               style={[
+//                 appStyle.bodyLayout,
+//                 {display: this.state.TabDataOverview},
+//               ]}>
+//               <View style={[appStyle.rowAlignCenter, style.mt10]}>
+//                 {/* <Image
+//                   style={[image.medium, style.mr5]}
+//                   source={images.location}></Image> */}
+//                 <Text style={[text.heading2, text.bold]}>Customer Name</Text>
+//               </View>
+//               <View style={[style.borderbottom, style.mt10]}>
+//                 <Text style={[text.heading2Gray]} selectable>
+//                   {' '}
+
+//                  {this.state.customerdata.firstname}
+//                 </Text>
+//               </View>
+//               <View style={[appStyle.rowAlignCenter, style.mt10]}>
+//                 <Image
+//                   style={[image.medium, style.mr5, image.Orange]}
+//                   source={images.cartype}></Image>
+//                 <Text style={[text.heading2, text.bold]}>Contact Number</Text>
+//               </View>
+//               <View style={[style.borderbottom, style.mt10]}>
+//                 <Text style={[text.heading2Gray]}>
+//                   {' '}
+//                   {customerdata.phone}
+//                 </Text>
+//               </View>
+//               <View style={[appStyle.rowAlignCenter, style.mt10]}>
+//                 <Image
+//                   style={[image.medium, style.mr5, image.Orange]}
+//                   source={images.Company}></Image>
+//                 <Text style={[text.heading2, text.bold]}>Email</Text>
+//               </View>
+//               <View style={[style.borderbottom, style.mt10]}>
+//                 <Text style={[text.heading2Gray]}> {customerdata.email}</Text>
+//               </View>
+
+//               <View style={[appStyle.rowAlignCenter, style.mt10]}>
+//                 <Image
+//                   style={[image.medium, image.Orange, style.mr5]}
+//                   source={images.carservice}></Image>
+//                 <Text style={[text.heading2, text.bold]}>City </Text>
+//               </View>
+//               <View style={[style.borderbottom, style.mv10]}>
+//                 <Text style={[text.heading2Gray]}> {customerdata.city}</Text>
+//               </View>
+//               <View style={[appStyle.rowAlignCenter, style.mt10]}>
+//                 <Image
+//                   style={[image.medium, image.Orange, style.mr5]}
+//                   source={images.location}></Image>
+//                 <Text style={[text.heading2, text.bold]}>Country</Text>
+//               </View>
+//               <View style={[style.borderbottom, style.mv10]}>
+//                 <Text style={[text.heading2Gray]}> {customerdata.country}</Text>
+//               </View>
+//               {/* <TouchableOpacity > */}
+             
+//               <View
+//               style={[
+//                 style.mb50,
+//                 appStyle.bodyLayout,
+//                 appStyle.bodyShadowBottom,
+//                 {
+//                   backgroundColor: colors.white,
+                  
+//                 },
+//               ],{marginTop:20}}>
+             
+          
+//             {/* </TouchableOpacity> */}
+//             <View style={[appStyle.rowCenter] }>
+               
+//                 <View style={[{display: this.state.tabOverview}, style.flex1]}>
+//                   {/* <TouchableOpacity onPress={this.buyItems}>
+//                     <View
+//                       style={[
+//                         button.buttoncontainer,
+//                         {backgroundColor: colors.purple},
+//                       ]}>
+//                       <Text
+//                         style={[
+//                           {color: colors.white},
+//                           button.touchablebutton,
+//                           text.semibold,
+//                         ]}>
+//                         Play Video
+//                       </Text>
+//                     </View>
+//                   </TouchableOpacity> */}
+//                 </View>
+//               </View>
+//               </View>
+//             </View>
+            
+//             {
+//             this.state.suggestiondata.map((data, index) => 
+//             {
+//               console.log('YE LO',data.firstname)
+//               return (
+//                 <TouchableOpacity
+//                   key={index}
+//                   // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
+
+//                   style={[
+//                     appStyle.slotCard,
+//                     appStyle.rowJustify,
+//                     style.aiCenter,
+//                     {display: this.state.TabDataReview},
+//                   ]}>
+//                   <View style={[style.row, style.aiCenter]}>
+//                     <View style={style.mr10}>
+//                       <Image style={image.userImg} source={images.dummy1} />
+//                     </View>
+
+//                     <View style={[style.rowBtw, style.aiCenter]}>
+//                       <View style={[style.mr15]}>
+//                         <Image
+//                           source={images.imagep}
+//                           style={[image.image50]}></Image>
+//                       </View>
+//                       <View>
+//                         <View>
+//                           <Text style={[text.text16, text.bold]}>
+//                             {data.firstname}
+//                           </Text>
+//                         </View>
+//                         <View style={style.row}>
+//                           <Text style={[text.text15, {color: colors.gray}]}>
+//                             {data.suggestion}
+//                           </Text>
+//                         </View>
+//                       </View>
+//                     </View>
+//                   </View>
+//                 </TouchableOpacity>
+//               );
+//             })}
+            
+
+//             <View
+//               style={[
+//                 appStyle.bodyLayout,
+//                 {display: this.state.TabDataReview},
+//               ]}>
+//               <TextInput
+//                 style={input.textinputstyle}
+//                 placeholder="Type Suggestion about issue"
+//                 secureTextEntry={true}
+//                 secureTextEntry={false}
+//                 onChangeText={(text) => {
+//                   this.setState({
+//                     suggestion: text,
+//                   });
+//                 }}
+//                 underlineColorAndroid="transparent"></TextInput>
+
+//               <TouchableOpacity onPress={this.submitsuggestion}>
+//                 <View
+//                   style={[
+//                     button.buttoncontainer,
+//                     {backgroundColor: colors.purple},
+//                   ]}>
+//                   <Text
+//                     style={[
+//                       {color: colors.white},
+//                       button.touchablebutton,
+//                       text.semibold,
+//                     ]}>
+//                     Add Suggestion
+//                   </Text>
+//                 </View>
+//               </TouchableOpacity>
+//             </View>
+
+//             {/* Reviews Tab End  */}
+//           </ScrollView>
+//         </View>
+//       </SafeAreaView>
+//     );
+//   }
+// }  
+
+
 import React, {Component} from 'react';
 import {
   Text,
@@ -13,8 +394,11 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  Alert
+  Alert,
+  ToastAndroid,
 } from 'react-native';
+import Modal from 'react-native-modal';
+import moment from 'moment';
 import {
   colors,
   screenHeight,
@@ -36,32 +420,200 @@ import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import Textarea from 'react-native-textarea';
 
-export default class Customerprofile extends Component {
+export default class RMechanicprofile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       rating: 2,
       starCount: 5,
       TabDataOverview: 'flex',
-      TabDataGallery: 'none',
       TabDataReview: 'none',
-      ColorOverview: colors.darkBlue,
-      ColorGallery: colors.inputBordercolor,
-      ColorReview: colors.inputBordercolor,
+      ColorOverview: colors.white,
+      ColorReview: colors.gray,
       BookNowView: 'none',
       CheckBox: images.checkBoxEmpty,
       suggestion: '',
-     
-      suggestiondata:[],
-      customerdata: [],
-      firstname:'',
+      suggestiondata: [],
+      mechanicdata: [],
+      warnings: [],
+      firstname: '',
       issueid: '',
-      userid:this.props.navigation.getParam('userid','nothing sent'),
-warning:''
+            userid:this.props.navigation.getParam('userid','nothing sent'),
+
+      warning: '',
+      isModalVisible: false,
     };
   }
 
+  // toggleModal = () => {
+  //   this.setState({isModalVisible: !this.state.isModalVisible});
+  // };
+
+  // async componentDidMount() {
+  //   this.getmechanicdata();
+  //   this.focusListener = navigation.addListener('didFocus', () => {
+  //     this.getmechanicdata();
+  //   });
+  // }
+
+  // getwarning = () => {
+  //   axios
+  //     .get(URL.Url + 'getMwarning/' + this.state.mechanicdata._id)
+  //     .then((response) => {
+  //       this.setState({warnings: response.data});
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+
+  // getmechanicdata = () => {
+  //   axios
+  //     .get(URL.Url + 'mechanic/' + this.state.mdbid)
+  //     .then((response) => {
+  //       if (response.data) {
+  //         this.setState({mechanicdata: response.data});
+  //         console.log('mechanicdata', this.state.mechanicdata);
+  //       }
+  //     })
+  //     .then(() => {
+  //       this.getwarning();
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  //   // })
+  //   // .catch((error) => {
+  //   //   console.log(error);
+  //   // });
+  // };
+
+  // deletemechanic = () => {
+  //   axios
+  //     .delete(URL.Url + 'deletemechanic/' + this.state.mdbid)
+  //     .then((response) => {
+  //       if (response.data) {
+  //         console.log(response.data);
+  //         ToastAndroid.show(
+  //           'Mechanic Account Deleted Successfully',
+  //           ToastAndroid.BOTTOM,
+  //           ToastAndroid.LONG,
+  //         );
+  //         this.props.navigation.navigate('Reportedmechanics');
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log('ye lo 2', error);
+  //       Alert.alert('something is wrong');
+  //     });
+  // };
+
+  // deletewarning = (id) => {
+  //   const reportdata = this.state.warnings[id];
+  //   console.log(reportdata);
+  //   axios
+  //     .delete(URL.Url + 'Mdeletewarning/' + reportdata._id)
+  //     .then((response) => {
+  //       if (response.data) {
+  //         console.log(response.data);
+  //         ToastAndroid.show(
+  //           'Warning Deleted Successfully!',
+  //           ToastAndroid.BOTTOM,
+  //           ToastAndroid.LONG,
+  //         );
+  //         this.getwarning();
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log('ye lo 2', error);
+  //       Alert.alert('something is wrong');
+  //     });
+  // };
+
+  // sendwarning = () => {
+  //   axios
+  //     .post(URL.Url + 'sendwarning', {
+  //       warning: this.state.warning,
+  //       mdbid: this.state.mdbid,
+  //     })
+  //     .then(async (res) => {
+  //       console.log(res.data);
+  //       //console.log(this.state.mdbid);
+  //       ToastAndroid.show(
+  //         'Warning Send Successfully',
+  //         ToastAndroid.BOTTOM,
+  //         ToastAndroid.LONG,
+  //       );
+  //       this.toggleModal();
+  //     })
+  //     .catch((error) => {
+  //       ToastAndroid.show(
+  //         'Warning not posted try again!!',
+  //         ToastAndroid.BOTTOM,
+  //         ToastAndroid.LONG,
+  //       );
+
+  //       console.log(error);
+  //     });
+  // };
+
+  // blockmechanic = () => {
+  //   axios
+  //     .put(URL.Url + 'blockmechanic/' + this.state.mdbid, {
+  //       warning: this.state.warning,
+  //       mdbid: this.state.mdbid,
+  //     })
+  //     .then(async (res) => {
+  //       console.log(res.data);
+  //       //console.log(this.state.mdbid);
+  //       ToastAndroid.show(
+  //         'Blocked Successfully',
+  //         ToastAndroid.BOTTOM,
+  //         ToastAndroid.LONG,
+  //       );
+  //       this.toggleModal();
+  //     })
+  //     .catch((error) => {
+  //       ToastAndroid.show(
+  //         'Warning not posted try again!!',
+  //         ToastAndroid.BOTTOM,
+  //         ToastAndroid.LONG,
+  //       );
+
+  //       console.log(error);
+  //     });
+  // };
+
+  tabOverview = () => {
+    if (this.state.TabDataOverview == 'flex') {
+      this.setState({TabDataReview: 'none'}),
+        this.setState({BookNowView: 'none'}),
+        this.setState({ColorOverview: colors.white}),
+        this.setState({ColorReview: colors.gray});
+    } else
+      this.setState({TabDataOverview: 'flex'}),
+        this.setState({TabDataReview: 'none'});
+    this.setState({BookNowView: 'none'});
+    this.setState({ColorOverview: colors.white});
+    this.setState({ColorReview: colors.gray});
+  };
+  tabReview = () => {
+    if (this.state.TabDataReview == 'flex') {
+      this.setState({TabDataOverview: 'none'}),
+        this.setState({BookNowView: 'none'}),
+        this.setState({color: 'none'});
+      this.setState({ColorOverview: colors.gray}),
+        this.setState({ColorReview: colors.white});
+    } else
+      this.setState({TabDataReview: 'flex'}),
+        this.setState({BookNowView: 'none'}),
+        this.setState({TabDataOverview: 'none'});
+    this.setState({ColorOverview: colors.gray});
+    this.setState({ColorReview: colors.white});
+    // this.getwarning();
+  };
   
   async componentDidMount() {
    
@@ -77,8 +629,8 @@ warning:''
       .then((response) => {
         if (response.data) {
           console.log('customer ye rha',response.data);
-          this.setState({customerdata: response.data});
-          console.log('customerdata',this.state.customerdata)
+          this.setState({mechanicdata: response.data});
+          console.log('customerdata',this.state.mechanicdata)
         }
         
       })
@@ -91,38 +643,79 @@ warning:''
     // });
   };
 
-
-  
-  
-  tabOverview = () => {
-    if (this.state.TabDataOverview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({ColorOverview: colors.darkBlue}),
-        this.setState({ColorReview: colors.inputBordercolor}),
-        this.setState({ColorGallery: colors.inputBordercolor});
-    } else
-      this.setState({TabDataOverview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'});
-    this.setState({BookNowView: 'none'});
-    this.setState({ColorOverview: colors.darkBlue});
-    this.setState({ColorReview: colors.inputBordercolor});
-    this.setState({ColorGallery: colors.inputBordercolor});
-  };
-  
   render() {
-    const {customerdata} = this.state;
-console.log(this.state.firstname)
+    const {mechanicdata, warnings} = this.state;
+    console.log(this.state.firstname);
     console.log(this.state.issueid);
-console.log('ye ai id profile pa',this.state.userid)
+    console.log('ye ai id profile pa', this.state.mdbid);
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
+
+        <View style={{}}>
+          <Modal
+            isVisible={this.state.isModalVisible}
+            animationInTiming={500}
+            animationOutTiming={500}>
+            <View style={[style.h100, appStyle.rowEven]}>
+              <View
+                style={[
+                  appStyle.DashboardslotCard,
+                  {height: screenHeight.height60},
+                  style.w100,
+                ]}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  <View style={style.aiFlexEnd}>
+                    <TouchableOpacity onPress={this.toggleModal}>
+                      <Image
+                        style={[image.large, image.Orange]}
+                        source={images.cancel}></Image>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={[style.aiCenter, style.mb10]}>
+                    <Text style={[text.h1]}>Manage User</Text>
+                  </View>
+                  <View style={[style.mb5, style.aiCenter]}>
+                    <Text style={[text.heading3]}>Add Warning</Text>
+                  </View>
+
+                  <View style={[style.aiCenter]}>
+                    <View style={[appStyle.textareaBorder,style.w100]}>
+                      <Textarea
+                        onChangeText={(text) => {
+                          this.setState({warning: text});
+                        }}
+                        placeholder={'Type Warning message here'}
+                        placeholderTextColor={'#c7c7c7'}
+                        underlineColorAndroid={'transparent'}
+                      />
+                    </View>
+                  </View>
+                  <View style={[style.rowBtw, style.mt40]}>
+                    <TouchableOpacity
+                      onPress={this.sendwarning}
+                      style={[button.Profilebutton, {marginTop: 20}]}>
+                      <Text style={[button.bookbutton, text.center]}>
+                        Send Warning
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={this.blockmechanic}
+                      style={[button.Profilebutton, {marginTop: 20}]}>
+                      <Text style={[button.bookbutton, text.center]}>
+                        Block Account
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </ScrollView>
+              </View>
+            </View>
+          </Modal>
+        </View>
+
         <View style={{}}>
           <ImageBackground
-            source={images.carPaint}
+            source={{uri: mechanicdata.photo}}
             style={{height: screenHeight.height25}}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
@@ -133,27 +726,13 @@ console.log('ye ai id profile pa',this.state.userid)
                 source={images.backArrow}></Image>
             </TouchableOpacity>
             <View style={[appStyle.headInner, style.ph20]}>
-              <View style={[style.mv5]}>
-                <StarRating
-                  disabled={true}
-                  maxStars={5}
-                  rating={this.state.starCount}
-                  selectedStar={(rating) => this.onStarRatingPress(rating)}
-                  fullStarColor={'#fff'}
-                  emptyStarColor={'#fff'}
-                  starSize={20}
-                  containerStyle={{width: 110, marginTop: 3}}
-                />
-              </View>
-              <View style={[style.mv5]}>
-                <Text style={[text.heading1, text.bold]}>
-Customer Detail{' '}
-                 
-                </Text>
+               <View style={[style.mv5]}>
+                <Text style={[text.heading1, text.bold]}>Customer Detail </Text>
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.paraWhite, text.regular]}>
-                 
+                  You can delete Customer account or generate warning message
+                  for Customer(According to issue)
                 </Text>
               </View>
             </View>
@@ -163,34 +742,38 @@ Customer Detail{' '}
           <View
             style={[
               appStyle.rowBtw,
+              style.aiCenter,
               appStyle.bodyLayout,
               appStyle.bodyShadowTop,
-              {backgroundColor: '#fff'},
+              style.mh40,
+              {
+                backgroundColor: colors.lightblue,
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+              },
             ]}>
             <TouchableOpacity onPress={() => this.tabOverview()}>
               <Text
                 style={[
-                  text.tab1,
+                  text.heading2,
                   text.semibold,
                   {color: this.state.ColorOverview},
                 ]}>
                 Overview
               </Text>
             </TouchableOpacity>
-            {/* 
-            <TouchableOpacity onPress={() => this.tabGallery()}>
+            <TouchableOpacity onPress={() => this.tabReview()}>
               <Text
                 style={[
-                  text.tab1,
+                  text.heading2,
                   text.semibold,
-                  {color: this.state.ColorGallery},
+                  {color: this.state.ColorReview},
                 ]}>
-                Gallery
+                Warnings
               </Text>
-            </TouchableOpacity> */}
-
-           
+            </TouchableOpacity>
           </View>
+
           <ScrollView style={style.mv5}>
             {/* OverView Tab */}
             <View
@@ -199,181 +782,101 @@ Customer Detail{' '}
                 {display: this.state.TabDataOverview},
               ]}>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
-                {/* <Image
-                  style={[image.medium, style.mr5]}
-                  source={images.location}></Image> */}
+                <Image
+                  style={[image.medium, style.mr5,{tintColor:colors.orange}]}
+                  source={images.username}></Image>
                 <Text style={[text.heading2, text.bold]}>Customer Name</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
                 <Text style={[text.heading2Gray]} selectable>
                   {' '}
-
-                 {this.state.customerdata.firstname}
+                  {this.state.mechanicdata.firstname}
                 </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, style.mr5, image.Orange]}
-                  source={images.cartype}></Image>
+                  source={images.phone}></Image>
                 <Text style={[text.heading2, text.bold]}>Contact Number</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}>
-                  {' '}
-                  {customerdata.phone}
-                </Text>
+                <Text style={[text.heading2Gray]}> {mechanicdata.phone}</Text>
               </View>
-              <View style={[appStyle.rowAlignCenter, style.mt10]}>
-                <Image
-                  style={[image.medium, style.mr5, image.Orange]}
-                  source={images.Company}></Image>
-                <Text style={[text.heading2, text.bold]}>Email</Text>
-              </View>
-              <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}> {customerdata.email}</Text>
-              </View>
-
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, image.Orange, style.mr5]}
-                  source={images.carservice}></Image>
-                <Text style={[text.heading2, text.bold]}>City </Text>
+                  source={images.email}></Image>
+                <Text style={[text.heading2, text.bold]}>Customer Email</Text>
               </View>
-              <View style={[style.borderbottom, style.mv10]}>
-                <Text style={[text.heading2Gray]}> {customerdata.city}</Text>
+              <View style={[style.borderbottom, style.mt10]}>
+                <Text style={[text.heading2Gray]} selectable>
+                  {' '}
+                  {this.state.mechanicdata.email}
+                </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, image.Orange, style.mr5]}
                   source={images.location}></Image>
-                <Text style={[text.heading2, text.bold]}>Country</Text>
+                <Text style={[text.heading2, text.bold]}>Customer City</Text>
               </View>
               <View style={[style.borderbottom, style.mv10]}>
-                <Text style={[text.heading2Gray]}> {customerdata.country}</Text>
+                <Text style={[text.heading2Gray]}> {mechanicdata.city}</Text>
               </View>
-              {/* <TouchableOpacity > */}
-             
-              <View
-              style={[
-                style.mb50,
-                appStyle.bodyLayout,
-                appStyle.bodyShadowBottom,
-                {
-                  backgroundColor: colors.white,
-                  
-                },
-              ],{marginTop:20}}>
-             
-          
-            {/* </TouchableOpacity> */}
-            <View style={[appStyle.rowCenter] }>
-               
-                <View style={[{display: this.state.tabOverview}, style.flex1]}>
-                  {/* <TouchableOpacity onPress={this.buyItems}>
-                    <View
-                      style={[
-                        button.buttoncontainer,
-                        {backgroundColor: colors.purple},
-                      ]}>
-                      <Text
-                        style={[
-                          {color: colors.white},
-                          button.touchablebutton,
-                          text.semibold,
-                        ]}>
-                        Play Video
-                      </Text>
-                    </View>
-                  </TouchableOpacity> */}
-                </View>
-              </View>
-              </View>
-            </View>
-            
-            {
-            this.state.suggestiondata.map((data, index) => 
-            {
-              console.log('YE LO',data.firstname)
-              return (
-                <TouchableOpacity
-                  key={index}
-                  // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
-
-                  style={[
-                    appStyle.slotCard,
-                    appStyle.rowJustify,
-                    style.aiCenter,
-                    {display: this.state.TabDataReview},
-                  ]}>
-                  <View style={[style.row, style.aiCenter]}>
-                    <View style={style.mr10}>
-                      <Image style={image.userImg} source={images.dummy1} />
-                    </View>
-
-                    <View style={[style.rowBtw, style.aiCenter]}>
-                      <View style={[style.mr15]}>
-                        <Image
-                          source={images.imagep}
-                          style={[image.image50]}></Image>
-                      </View>
-                      <View>
-                        <View>
-                          <Text style={[text.text16, text.bold]}>
-                            {data.firstname}
-                          </Text>
-                        </View>
-                        <View style={style.row}>
-                          <Text style={[text.text15, {color: colors.gray}]}>
-                            {data.suggestion}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-            
-
-            <View
-              style={[
-                appStyle.bodyLayout,
-                {display: this.state.TabDataReview},
-              ]}>
-              <TextInput
-                style={input.textinputstyle}
-                placeholder="Type Suggestion about issue"
-                secureTextEntry={true}
-                secureTextEntry={false}
-                onChangeText={(text) => {
-                  this.setState({
-                    suggestion: text,
-                  });
-                }}
-                underlineColorAndroid="transparent"></TextInput>
-
-              <TouchableOpacity onPress={this.submitsuggestion}>
-                <View
-                  style={[
-                    button.buttoncontainer,
-                    {backgroundColor: colors.purple},
-                  ]}>
-                  <Text
-                    style={[
-                      {color: colors.white},
-                      button.touchablebutton,
-                      text.semibold,
-                    ]}>
-                    Add Suggestion
-                  </Text>
-                </View>
+              <TouchableOpacity
+                style={[button.buttonTheme]}
+                onPress={this.toggleModal}>
+                <Text style={[text.btntext]}>Manage Mechanic</Text>
               </TouchableOpacity>
             </View>
 
             {/* Reviews Tab End  */}
+            <View style={[{display: this.state.TabDataReview}, style.mh10]}>
+              {warnings.map((warn, index) => {
+                return (
+                  <TouchableOpacity
+                    style={[appStyle.slotCard, style.w100, style.row]}>
+                    <View style={[style.w10, style.aiCenter]}>
+                      <Image
+                        style={[image.Image30, style.mh10]}
+                        source={{uri: mechanicdata.photo}}
+                      />
+                    </View>
+                    <View style={[style.mh10]}>
+                      <Text style={[text.text16, text.bold]}>
+                        {mechanicdata.firstname} {mechanicdata.lastname}
+                      </Text>
+                      <View style={[style.row]}>
+                        <Text style={[text.paraGray, text.text10]}>
+                          Last Updated
+                        </Text>
+                        <Text style={[style.mh5, text.text10]}>
+                          {moment(warn.date).format('DD-MM-YYYY')}
+                        </Text>
+                      </View>
+                     
+                    <View style={[style.w80]}>
+                      <Text style={[text.heading3, style.mv5]}>
+                        {warn.warning}
+                      </Text>
+                      </View>
+                    </View>
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        this.deletewarning(index);
+                      }}>
+                      <Image
+                        style={[image.forward]}
+                        source={images.delete}></Image>
+                    </TouchableOpacity>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
           </ScrollView>
         </View>
       </SafeAreaView>
     );
   }
-}  
+}

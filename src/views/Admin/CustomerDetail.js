@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  Alert
+  Alert,
 } from 'react-native';
 import {
   colors,
@@ -37,7 +37,7 @@ import StarRating from 'react-native-star-rating';
 // import vectorIcon from 'react-native-vector-icons';
 import {withSafeAreaInsets} from 'react-native-safe-area-context';
 
-export default class Mechanicprofile extends Component {
+export default class CustomerDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,34 +52,32 @@ export default class Mechanicprofile extends Component {
       BookNowView: 'none',
       CheckBox: images.checkBoxEmpty,
       suggestion: '',
-      suggestiondata:[],
+      suggestiondata: [],
       customerdata: [],
-      firstname:'',
+      firstname: '',
       issueid: '',
-      userid:this.props.navigation.getParam('mdbid','nothing sent'),
-      warning:''
+      userid: this.props.navigation.getParam('userid', 'nothing sent'),
+      warning: '',
     };
   }
 
   async componentDidMount() {
-   
     this.getcustomerdata();
     this.focusListener = navigation.addListener('didFocus', () => {
-        this.getcustomerdata();
+      this.getcustomerdata();
     });
   }
 
   getcustomerdata = () => {
-      console.log(this.state.userid)
+    console.log(this.state.userid);
     axios
-      .get(URL.Url + 'mechanic/' + this.state.userid)
+      .get(URL.Url + 'user/' + this.state.userid)
       .then((response) => {
         if (response.data) {
-          console.log('customer ye rha',response.data);
+          console.log('customer ye rha', response.data);
           this.setState({customerdata: response.data});
-          console.log('customerdata',this.state.customerdata)
+          console.log('customerdata', this.state.customerdata);
         }
-        
       })
       .catch((error) => {
         console.log(error);
@@ -90,9 +88,6 @@ export default class Mechanicprofile extends Component {
     // });
   };
 
-
-  
-  
   render() {
     const {customerdata} = this.state;
     return (
@@ -100,7 +95,7 @@ export default class Mechanicprofile extends Component {
         <StatusBar />
         <View style={{}}>
           <ImageBackground
-            source={{uri:customerdata.photo}}
+            source={{uri: customerdata.photo}}
             style={{height: screenHeight.height40}}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
@@ -112,27 +107,10 @@ export default class Mechanicprofile extends Component {
             </TouchableOpacity>
             <View style={[appStyle.headInner, style.ph20]}>
               <View style={[style.mv5]}>
-                <StarRating
-                  disabled={true}
-                  maxStars={5}
-                  rating={customerdata.rating}
-                  selectedStar={(rating) => this.onStarRatingPress(rating)}
-                  fullStarColor={'#fff'}
-                  emptyStarColor={'#fff'}
-                  starSize={20}
-                  containerStyle={{width: 110, marginTop: 3}}
-                />
+                <Text style={[text.heading1, text.bold]}>Customer Detail </Text>
               </View>
               <View style={[style.mv5]}>
-                <Text style={[text.heading1, text.bold]}>
-Mechanic Detail{' '}
-                 
-                </Text>
-              </View>
-              <View style={[style.mv5]}>
-                <Text style={[text.paraWhite, text.regular]}>
-                 
-                </Text>
+                <Text style={[text.paraWhite, text.regular]}></Text>
               </View>
             </View>
           </ImageBackground>
@@ -154,8 +132,7 @@ Mechanic Detail{' '}
               <View style={[style.borderbottom, style.mt10]}>
                 <Text style={[text.heading2Gray]} selectable>
                   {' '}
-
-                 {this.state.customerdata.firstname}
+                  {this.state.customerdata.firstname}
                 </Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
@@ -165,10 +142,7 @@ Mechanic Detail{' '}
                 <Text style={[text.heading2, text.bold]}>Contact Number</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}>
-                  {' '}
-                  {customerdata.phone}
-                </Text>
+                <Text style={[text.heading2Gray]}> {customerdata.phone}</Text>
               </View>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
@@ -199,24 +173,24 @@ Mechanic Detail{' '}
                 <Text style={[text.heading2Gray]}> {customerdata.country}</Text>
               </View>
               {/* <TouchableOpacity > */}
-             
+
               <View
-              style={[
-                style.mb50,
-                appStyle.bodyLayout,
-                appStyle.bodyShadowBottom,
-                {
-                  backgroundColor: colors.white,
-                  
-                },
-              ],{marginTop:20}}>
-             
-          
-            {/* </TouchableOpacity> */}
-            <View style={[appStyle.rowCenter] }>
-               
-                <View style={[{display: this.state.tabOverview}, style.flex1]}>
-                  {/* <TouchableOpacity onPress={this.buyItems}>
+                style={
+                  ([
+                    style.mb50,
+                    appStyle.bodyLayout,
+                    appStyle.bodyShadowBottom,
+                    {
+                      backgroundColor: colors.white,
+                    },
+                  ],
+                  {marginTop: 20})
+                }>
+                {/* </TouchableOpacity> */}
+                <View style={[appStyle.rowCenter]}>
+                  <View
+                    style={[{display: this.state.tabOverview}, style.flex1]}>
+                    {/* <TouchableOpacity onPress={this.buyItems}>
                     <View
                       style={[
                         button.buttoncontainer,
@@ -232,15 +206,13 @@ Mechanic Detail{' '}
                       </Text>
                     </View>
                   </TouchableOpacity> */}
+                  </View>
                 </View>
               </View>
-              </View>
             </View>
-            
-            {
-            this.state.suggestiondata.map((data, index) => 
-            {
-              console.log('YE LO',data.firstname)
+
+            {this.state.suggestiondata.map((data, index) => {
+              console.log('YE LO', data.firstname);
               return (
                 <TouchableOpacity
                   key={index}
@@ -280,9 +252,6 @@ Mechanic Detail{' '}
                 </TouchableOpacity>
               );
             })}
-            
-
-          
 
             {/* Reviews Tab End  */}
           </ScrollView>
@@ -290,4 +259,4 @@ Mechanic Detail{' '}
       </SafeAreaView>
     );
   }
-}  
+}

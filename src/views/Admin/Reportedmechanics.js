@@ -112,9 +112,9 @@ export default class Reportedmechanics extends Component {
 
   movetodetail = (id) => {
     const reportdata = JSON.stringify(this.state.dataSource[id]);
-    AsyncStorage.setItem('reportdata', reportdata);
+    AsyncStorage.setItem('mreportdata', reportdata);
     setTimeout(() => {
-      this.props.navigation.navigate('Reportmechanicdetail');
+      this.props.navigation.navigate('ReportedCustomerDetail');
     }, 2000);
   };
 

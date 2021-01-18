@@ -59,7 +59,7 @@ export default class RMechanicprofile extends Component {
       warnings: [],
       firstname: '',
       issueid: '',
-      mdbid: this.props.navigation.getParam('mid', 'nothing sent'),
+      mdbid: this.props.navigation.getParam('mdbid', 'nothing sent'),
       warning: '',
       isModalVisible: false,
     };
@@ -269,7 +269,7 @@ export default class RMechanicprofile extends Component {
                   </View>
 
                   <View style={[style.aiCenter]}>
-                    <View style={[appStyle.textareaBorder,style.w100]}>
+                    <View style={[appStyle.textareaBorder, style.w100]}>
                       <Textarea
                         onChangeText={(text) => {
                           this.setState({warning: text});
@@ -383,9 +383,9 @@ export default class RMechanicprofile extends Component {
                 {display: this.state.TabDataOverview},
               ]}>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
-                {/* <Image
-                  style={[image.medium, style.mr5]}
-                  source={images.location}></Image> */}
+                <Image
+                  style={[image.medium, style.mr5, {tintColor: colors.orange}]}
+                  source={images.username}></Image>
                 <Text style={[text.heading2, text.bold]}>Mechanic Name</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
@@ -397,7 +397,7 @@ export default class RMechanicprofile extends Component {
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, style.mr5, image.Orange]}
-                  source={images.cartype}></Image>
+                  source={images.phone}></Image>
                 <Text style={[text.heading2, text.bold]}>Contact Number</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
@@ -406,7 +406,7 @@ export default class RMechanicprofile extends Component {
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, style.mr5, image.Orange]}
-                  source={images.Company}></Image>
+                  source={images.cartype}></Image>
                 <Text style={[text.heading2, text.bold]}>Mechanic Type</Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
@@ -468,11 +468,11 @@ export default class RMechanicprofile extends Component {
                           {moment(warn.date).format('DD-MM-YYYY')}
                         </Text>
                       </View>
-                     
-                    <View style={[style.w80]}>
-                      <Text style={[text.heading3, style.mv5]}>
-                        {warn.warning}
-                      </Text>
+
+                      <View style={[style.w80]}>
+                        <Text style={[text.heading3, style.mv5]}>
+                          {warn.warning}
+                        </Text>
                       </View>
                     </View>
                     <TouchableOpacity

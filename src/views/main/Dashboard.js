@@ -50,6 +50,7 @@ class Dashboard extends Component {
       refreshing: false,
       userdata: [],
       dataSource: [],
+      warnings:[],
       // token: '',
       // userid: '',
     };
@@ -164,6 +165,7 @@ class Dashboard extends Component {
   }
 
   render() {
+    const {warnings}=this.state;
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar barStyle={'light-content'} backgroundColor={'transparent'} />
@@ -262,6 +264,33 @@ class Dashboard extends Component {
                   </View>
                 </ImageBackground>
               </TouchableOpacity>
+              <View style={[appStyle.rowJustify, style.aiCenter,style.mh20]}>
+              <Text style={[text.heading2, text.semibold]}>Warnings</Text>
+              <Text style={[text.heading4, text.semibold, text.orange]}>
+                Should worry about that
+              </Text>
+            </View>
+            {warnings.map((warn) => {
+              return (
+                <TouchableOpacity style={[appStyle.slotCard]}>
+                  <View style={[style.row, style.aiCenter]}>
+                    <Image
+                      style={[image.Image30, style.mr10]}
+                      source={{uri: auth.user.photo}}
+                    />
+                    <Text style={[text.text16, text.bold]}>
+                      {auth.user.firstname} {auth.user.lastname}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={[text.heading5, style.mv10, style.mh5]}>
+                      {warn.warning}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+         
             </View>
           </ScrollView>
         </View>

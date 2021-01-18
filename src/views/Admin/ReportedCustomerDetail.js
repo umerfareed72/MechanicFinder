@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   View,
@@ -13,7 +13,7 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  Alert
+  Alert,
 } from 'react-native';
 import {
   colors,
@@ -34,9 +34,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
+import {withSafeAreaInsets} from 'react-native-safe-area-context';
 
-export default class Reportmechanicdetail extends Component {
+export default class ReportedCustomerDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,33 +57,27 @@ export default class Reportmechanicdetail extends Component {
 
       reportid: '',
       mid: '',
-
     };
   }
 
   getData = async () => {
     console.log('in get data');
     try {
-      await AsyncStorage.getItem('reportdata').then((res) => {
+      await AsyncStorage.getItem('mreportdata').then((res) => {
         res = JSON.parse(res);
-        this.setState({ reportdata: res });
-        this.setState({ reportid: res._id });
-        this.setState({ mdbid: res.mdbid });
-        console.log('in usersignin',res.mdbid);
-     
-        this.setState({ userid: res.userdbid });
-
+        this.setState({reportdata: res});
+        this.setState({reportid: res._id});
+        this.setState({mdbid: res.mdbid});
+        this.setState({userid: res.userdbid});
       });
       // await AsyncStorage.getItem('usersignintoken').then((res) => {
       //   // res = JSON.parse(res);
       //   console.log('response firstname',res)
 
-
       // });
-    } catch (error) { }
+    } catch (error) {}
   };
   async componentDidMount() {
-
     this.getData();
     this.focusListener = navigation.addListener('didFocus', () => {
       this.getData();
@@ -96,7 +90,7 @@ export default class Reportmechanicdetail extends Component {
       .then((response) => {
         if (response) {
           console.log(response.data);
-          this.setState({ cphone: response.data.phone })
+          this.setState({cphone: response.data.phone});
         }
       })
       .catch((error) => {
@@ -107,35 +101,35 @@ export default class Reportmechanicdetail extends Component {
       .then((response) => {
         if (response) {
           console.log(response.data);
-          this.setState({ mphone: response.data.phone })
+          this.setState({mphone: response.data.phone});
         }
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
-      this.setState({ TabDataGallery: 'none' }),
-        this.setState({ TabDataReview: 'none' }),
-        this.setState({ BookNowView: 'none' }),
-        this.setState({ ColorOverview: colors.darkBlue }),
-        this.setState({ ColorReview: colors.inputBordercolor }),
-        this.setState({ ColorGallery: colors.inputBordercolor });
+      this.setState({TabDataGallery: 'none'}),
+        this.setState({TabDataReview: 'none'}),
+        this.setState({BookNowView: 'none'}),
+        this.setState({ColorOverview: colors.darkBlue}),
+        this.setState({ColorReview: colors.inputBordercolor}),
+        this.setState({ColorGallery: colors.inputBordercolor});
     } else
-      this.setState({ TabDataOverview: 'flex' }),
-        this.setState({ TabDataGallery: 'none' }),
-        this.setState({ TabDataReview: 'none' });
-    this.setState({ BookNowView: 'none' });
-    this.setState({ ColorOverview: colors.darkBlue });
-    this.setState({ ColorReview: colors.inputBordercolor });
-    this.setState({ ColorGallery: colors.inputBordercolor });
+      this.setState({TabDataOverview: 'flex'}),
+        this.setState({TabDataGallery: 'none'}),
+        this.setState({TabDataReview: 'none'});
+    this.setState({BookNowView: 'none'});
+    this.setState({ColorOverview: colors.darkBlue});
+    this.setState({ColorReview: colors.inputBordercolor});
+    this.setState({ColorGallery: colors.inputBordercolor});
   };
 
   render() {
-    const { reportdata } = this.state;
-    console.log(this.state.firstname)
+    const {reportdata} = this.state;
+    console.log(this.state.firstname);
     console.log(this.state.reportid);
     console.log('mdbidddd', this.state.mdbid);
     console.log('udbidddd', this.state.userid);
@@ -145,11 +139,13 @@ export default class Reportmechanicdetail extends Component {
         <StatusBar />
         <View style={{}}>
           <ImageBackground
-            source={{uri:this.state.reportdata.mechanicphoto}}
-            style={{ height: screenHeight.height35 }}>
+            source={{uri: this.state.reportdata.userphoto}}
+            style={{height: screenHeight.height35}}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Reportedmechanics")}
+              onPress={() =>
+                this.props.navigation.navigate('Reportedmechanics')
+              }
               style={[image.headerBackArrow]}>
               <Image
                 style={[image.backArrow]}
@@ -170,8 +166,7 @@ export default class Reportmechanicdetail extends Component {
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.heading1, text.bold]}>
-                  {reportdata.reporttype} Issue in{' '}
-                  {reportdata.date}
+                  {reportdata.reporttype} Issue in {reportdata.date}
                 </Text>
               </View>
               <View style={[style.mv5]}>
@@ -187,66 +182,71 @@ export default class Reportmechanicdetail extends Component {
             <View
               style={[
                 appStyle.bodyLayout,
-                { display: this.state.TabDataOverview },
+                {display: this.state.TabDataOverview},
               ]}>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
                   style={[image.medium, style.mr5]}
                   source={images.help}></Image>
-                <Text style={[text.heading2, text.bold]}>Report Description </Text>
+                <Text style={[text.heading2, text.bold]}>
+                  Report Description{' '}
+                </Text>
               </View>
               <View style={[style.borderbottom, style.mt10]}>
                 <Text style={[text.heading2Gray]}>
                   {reportdata.reportdescription}
                 </Text>
               </View>
-            
+
               <View style={[style.pv10]}>
                 <Text style={[text.paraGray]}>{reportdata.description}</Text>
-              </View><View
+              </View>
+              <View
                 style={[
                   style.mb50,
                   appStyle.bodyLayout,
                   appStyle.bodyShadowBottom,
                   {
                     backgroundColor: colors.white,
-
                   },
                 ]}>
-
                 <View style={[appStyle.rowCenter]}>
                   <View>
                     <Text
                       style={
-                        ({ color: colors.Black323 }, [text.text22, text.bold])
+                        ({color: colors.Black323}, [text.text22, text.bold])
                       }>
                       Customer
-                  </Text>
-                    <Text style={([text.text14], { color: colors.orange })}>
-                      (Reported)
-                  </Text>
+                    </Text>
+                    <Text style={([text.text14], {color: colors.gray})}>
+                      (Report this Issue)
+                    </Text>
                   </View>
-                  <View style={[{ display: this.state.tabOverview }, style.flex1]}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Customerprofile', { userid: this.state.userid })}>
+                  <View
+                    style={[{display: this.state.tabOverview}, style.flex1]}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate('CustomerDetail', {
+                          userid: this.state.userid,
+                        })
+                      }>
                       <View
                         style={[
                           button.buttoncontainer,
-                          { backgroundColor: colors.purple },
+                          {backgroundColor: colors.purple},
                         ]}>
                         <Text
                           style={[
-                            { color: colors.white },
+                            {color: colors.white},
                             button.touchablebutton,
                             text.semibold,
                           ]}>
                           View Profile
-                      </Text>
+                        </Text>
                       </View>
                     </TouchableOpacity>
                   </View>
-
                 </View>
-
               </View>
 
               <View
@@ -256,53 +256,53 @@ export default class Reportmechanicdetail extends Component {
                   appStyle.bodyShadowBottom,
                   {
                     backgroundColor: colors.white,
-
                   },
                 ]}>
                 <View style={[appStyle.rowCenter]}>
                   <View>
                     <Text
                       style={
-                        ({ color: colors.orangeGradient }, [text.text22, text.bold])
+                        ({color: colors.orangeGradient},
+                        [text.text22, text.bold])
                       }>
                       Mechanic
-                  </Text>
-                    <Text style={([text.text14], { color: colors.gray })}>
-                      (Report this Issue)
-                  </Text>
+                    </Text>
+                    <Text style={([text.text14], {color: colors.orange})}>
+                      (Reported)
+                    </Text>
                   </View>
-                  <View style={[{ display: this.state.tabOverview }, style.flex1]}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Mechanicprofile', { mdbid: this.state.mdbid})}>
+                  <View
+                    style={[{display: this.state.tabOverview}, style.flex1]}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate('RMechanicprofile', {
+                          mdbid: this.state.mdbid,
+                        })
+                      }>
                       <View
                         style={[
                           button.buttoncontainer,
-                          { backgroundColor: colors.purple },
+                          {backgroundColor: colors.purple},
                         ]}>
                         <Text
                           style={[
-                            { color: colors.white },
+                            {color: colors.white},
                             button.touchablebutton,
                             text.semibold,
                           ]}>
                           View Profile
-                      </Text>
+                        </Text>
                       </View>
                     </TouchableOpacity>
                   </View>
-
                 </View>
-
               </View>
             </View>
 
-
-
             {/* Reviews Tab End  */}
           </ScrollView>
-          </View>
-         
-       
+        </View>
       </SafeAreaView>
     );
   }
-}  
+}

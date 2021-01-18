@@ -59,7 +59,7 @@ import {withSafeAreaInsets} from 'react-native-safe-area-context';
         reportdescription: this.state.reportdescription,
         reporttype: this.state.reporttype,
         userdbid: this.state.userdbid,
-        mdbid:this.props.auth.user._id,
+        mdbid:this.props.auth.user.mechanicid,
         date:this.state.date,
         mechanicphoto:this.state.photo
       })
