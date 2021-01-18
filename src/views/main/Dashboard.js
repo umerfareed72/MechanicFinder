@@ -290,7 +290,7 @@ class Dashboard extends Component {
               </View>
               {warnings.map((warn) => {
                 return (
-                  <TouchableOpacity style={[appStyle.slotCard]}>
+                  <TouchableOpacity style={[appStyle.slotCard,style.mh20]}>
                     <View style={[style.row, style.aiCenter]}>
                       <Image
                         style={[image.Image30, style.mr10]}
