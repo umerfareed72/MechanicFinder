@@ -24,6 +24,7 @@ import {
 } from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 const axios = require('axios');
+import Modal from 'react-native-modal';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -57,7 +58,7 @@ export default class Reportmechanicdetail extends Component {
 
       reportid: '',
       mid: '',
-
+      isModalVisible: false,
     };
   }
 
@@ -69,8 +70,8 @@ export default class Reportmechanicdetail extends Component {
         this.setState({ reportdata: res });
         this.setState({ reportid: res._id });
         this.setState({ mdbid: res.mdbid });
-        console.log('in usersignin',res.mdbid);
-     
+        console.log('in usersignin', res.mdbid);
+
         this.setState({ userid: res.userdbid });
 
       });
@@ -114,6 +115,9 @@ export default class Reportmechanicdetail extends Component {
         console.log(error);
       });
   }
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
 
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
@@ -140,12 +144,47 @@ export default class Reportmechanicdetail extends Component {
     console.log('mdbidddd', this.state.mdbid);
     console.log('udbidddd', this.state.userid);
 
+
+
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
         <View style={{}}>
+          <Modal
+            isVisible={this.state.isModalVisible}
+            animationInTiming={500}
+            animationOutTiming={500}>
+            <View style={[style.flex1, appStyle.rowCenter]}>
+              <TouchableOpacity
+                style={[appStyle.DashboardslotCard, style.w90, style.aiCenter]}
+                onPress={this.toggleModal}>
+                <View style={[style.mv10, style.aiCenter]}>
+                  <Text style={[text.h1]}>Preview Image</Text>
+                  <Text style={[text.heading2Gray]}>{this.state.title}</Text>
+                </View>
+                <Image
+                  source={{ uri: this.state.reportdata.mechanicphoto }}
+                  style={[
+                    {
+                      height: '70%',
+                      alignSelf: 'center',
+                      resizeMode: 'contain',
+                      borderRadius: 10,
+                    },
+                    style.w100,
+                  ]}></Image>
+                <TouchableOpacity
+                  style={[button.buttonTheme, style.mt30, style.w50]}
+                  onPress={this.toggleModal}>
+                  <Text style={[button.btntext1]}> Close Preview </Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
+        <TouchableOpacity onPress={this.toggleModal}>
           <ImageBackground
-            source={{uri:this.state.reportdata.mechanicphoto}}
+            source={{ uri: this.state.reportdata.mechanicphoto }}
             style={{ height: screenHeight.height35 }}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
@@ -181,7 +220,7 @@ export default class Reportmechanicdetail extends Component {
               </View>
             </View>
           </ImageBackground>
-        </View>
+        </TouchableOpacity>
         <View style={[appStyle.bodyBg, style.flex1]}>
           <ScrollView style={style.mv5}>
             <View
@@ -200,7 +239,7 @@ export default class Reportmechanicdetail extends Component {
                   {reportdata.reportdescription}
                 </Text>
               </View>
-            
+
               <View style={[style.pv10]}>
                 <Text style={[text.paraGray]}>{reportdata.description}</Text>
               </View><View
@@ -272,7 +311,7 @@ export default class Reportmechanicdetail extends Component {
                   </Text>
                   </View>
                   <View style={[{ display: this.state.tabOverview }, style.flex1]}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Mechanicprofile', { mdbid: this.state.mdbid})}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Mechanicprofile', { mdbid: this.state.mdbid })}>
                       <View
                         style={[
                           button.buttoncontainer,
@@ -299,9 +338,9 @@ export default class Reportmechanicdetail extends Component {
 
             {/* Reviews Tab End  */}
           </ScrollView>
-          </View>
-         
-       
+        </View>
+
+
       </SafeAreaView>
     );
   }

@@ -7,12 +7,12 @@ import {
   AppRegistry,
   StatusBar,
 } from 'react-native';
-import {Provider} from 'react-redux';
-import stores from '../MechanicFinder/src/reducers/store';
+import { Provider } from 'react-redux';
+import stores from '../MechanicFinderfyp1/src/reducers/store';
 import MainComponent from './src/MainComponent';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const {store} = stores();
+const { store } = stores();
 if (AsyncStorage.usertoken) {
   store.dispatch(set_CurrentUser(jwt(AsyncStorage.usertoken)));
 }
@@ -31,7 +31,7 @@ export default class App extends React.Component {
   };
 
   _handleFinishLoading = () => {
-    this.setState({isLoadingComplete: true});
+    this.setState({ isLoadingComplete: true });
   };
 }
 

@@ -94,6 +94,7 @@ class Mechaniclist extends Component {
       console.log("id in class", this.state.issuetype)
       console.log("id in class", this.state.vehicaltype)
       if (this.state.distance == "All") {
+        console.log("in all")
         axios
           .get(
             URL.Url +
@@ -126,6 +127,7 @@ class Mechaniclist extends Component {
           });
       }
       else {
+        console.log("in 10 wala")
         axios
           .get(
             URL.Url +

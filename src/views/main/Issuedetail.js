@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -36,8 +36,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
-import {connect} from 'react-redux';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
+import { connect } from 'react-redux';
 class HomeDetail extends Component {
   constructor(props) {
     super(props);
@@ -70,8 +70,8 @@ class HomeDetail extends Component {
     try {
       await AsyncStorage.getItem('issuedata').then((res) => {
         res = JSON.parse(res);
-        this.setState({issuedata: res});
-        this.setState({issueid: res._id});
+        this.setState({ issuedata: res });
+        this.setState({ issueid: res._id });
         console.log('issuedata', this.state.issuedata);
         // this.setState({videourl: res._id});
       });
@@ -81,13 +81,13 @@ class HomeDetail extends Component {
       //   console.log('photoou', this.state.userdata.photo)
 
       // })
-    } catch (error) {}
+    } catch (error) { }
   };
   async componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     this.getData();
     this.getsuggestions();
-    this.setState({firstname: 'Issue Holder'});
+    this.setState({ firstname: 'Issue Holder' });
     this.focusListener = navigation.addListener('didFocus', () => {
       this.getData();
       this.getsuggestions();
@@ -100,7 +100,7 @@ class HomeDetail extends Component {
       .then((response) => {
         if (response.data) {
           console.log(response.data);
-          this.setState({suggestiondata: response.data});
+          this.setState({ suggestiondata: response.data });
           console.log(this.state.suggestiondata);
         }
       })
@@ -111,14 +111,14 @@ class HomeDetail extends Component {
   };
 
   movetomdetail = (id) => {
-    const mid1 = JSON.stringify(this.state.suggestiondata[id]._id);
+    const mid1 = JSON.stringify(this.state.suggestiondata[id].mid);
 
     AsyncStorage.setItem('Mechanicidfromsuggestion', mid1);
     this.props.navigation.navigate('mdetail');
   };
 
   toggleModal = () => {
-    this.setState({isModalVisible: !this.state.isModalVisible});
+    this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
   submitsuggestion = () => {
@@ -137,7 +137,7 @@ class HomeDetail extends Component {
           ToastAndroid.LONG,
         );
         this.getsuggestions();
-        this.setState({suggestion: ''});
+        this.setState({ suggestion: '' });
       })
       .catch((error) => {
         Alert.alert('something went Wrong!!');
@@ -148,41 +148,41 @@ class HomeDetail extends Component {
 
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({ColorOverview: colors.darkBlue}),
-        this.setState({ColorReview: colors.inputBordercolor}),
-        this.setState({ColorGallery: colors.inputBordercolor});
+      this.setState({ TabDataGallery: 'none' }),
+        this.setState({ TabDataReview: 'none' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ ColorOverview: colors.darkBlue }),
+        this.setState({ ColorReview: colors.inputBordercolor }),
+        this.setState({ ColorGallery: colors.inputBordercolor });
     } else
-      this.setState({TabDataOverview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'});
-    this.setState({BookNowView: 'none'});
-    this.setState({ColorOverview: colors.darkBlue});
-    this.setState({ColorReview: colors.inputBordercolor});
-    this.setState({ColorGallery: colors.inputBordercolor});
+      this.setState({ TabDataOverview: 'flex' }),
+        this.setState({ TabDataGallery: 'none' }),
+        this.setState({ TabDataReview: 'none' });
+    this.setState({ BookNowView: 'none' });
+    this.setState({ ColorOverview: colors.darkBlue });
+    this.setState({ ColorReview: colors.inputBordercolor });
+    this.setState({ ColorGallery: colors.inputBordercolor });
   };
   tabReview = () => {
     if (this.state.TabDataReview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataOverview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({color: 'none'});
-      this.setState({ColorOverview: colors.inputBordercolor}),
-        this.setState({ColorReview: colors.darkBlue}),
-        this.setState({ColorGallery: colors.inputBordercolor});
+      this.setState({ TabDataGallery: 'none' }),
+        this.setState({ TabDataOverview: 'none' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ color: 'none' });
+      this.setState({ ColorOverview: colors.inputBordercolor }),
+        this.setState({ ColorReview: colors.darkBlue }),
+        this.setState({ ColorGallery: colors.inputBordercolor });
     } else
-      this.setState({TabDataReview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({TabDataOverview: 'none'});
-    this.setState({ColorOverview: colors.inputBordercolor});
-    this.setState({ColorReview: colors.darkBlue});
-    this.setState({ColorGallery: colors.inputBordercolor});
+      this.setState({ TabDataReview: 'flex' }),
+        this.setState({ TabDataGallery: 'none' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ TabDataOverview: 'none' });
+    this.setState({ ColorOverview: colors.inputBordercolor });
+    this.setState({ ColorReview: colors.darkBlue });
+    this.setState({ ColorGallery: colors.inputBordercolor });
   };
   render() {
-    const {issuedata} = this.state;
+    const { issuedata } = this.state;
     console.log(this.state.firstname);
     console.log(this.state.issueid);
 
@@ -203,7 +203,7 @@ class HomeDetail extends Component {
                   <Text style={[text.heading2Gray]}>{this.state.title}</Text>
                 </View>
                 <Image
-                  source={{uri: issuedata.issuevideo}}
+                  source={{ uri: issuedata.issuevideo }}
                   style={[
                     {
                       height: '70%',
@@ -224,8 +224,8 @@ class HomeDetail extends Component {
         </View>
         <TouchableOpacity style={{}} onPress={this.toggleModal}>
           <ImageBackground
-            source={{uri: issuedata.issuevideo}}
-            style={{height: screenHeight.height25}}>
+            source={{ uri: issuedata.issuevideo }}
+            style={{ height: screenHeight.height25 }}>
             <View style={style.bgOverlay} />
             <View style={[style.row, style.jcSpaceBetween, style.ph20]}>
               <TouchableOpacity
@@ -244,7 +244,7 @@ class HomeDetail extends Component {
                   button.buttonThemeWhite,
                   style.w30,
                   style.mt35,
-                  {display: this.state.cancelButton},
+                  { display: this.state.cancelButton },
                 ]}>
                 <Text style={[text.heading4, text.goodfishbd]}>Edit Issue</Text>
               </TouchableOpacity>
@@ -296,7 +296,7 @@ class HomeDetail extends Component {
                 style={[
                   text.heading2,
                   text.semibold,
-                  {color: this.state.ColorOverview},
+                  { color: this.state.ColorOverview },
                 ]}>
                 Overview
               </Text>
@@ -307,7 +307,7 @@ class HomeDetail extends Component {
                 style={[
                   text.heading2,
                   text.semibold,
-                  {color: this.state.ColorReview},
+                  { color: this.state.ColorReview },
                 ]}>
                 Reviews
               </Text>
@@ -318,7 +318,7 @@ class HomeDetail extends Component {
             <View
               style={[
                 appStyle.bodyLayout,
-                {display: this.state.TabDataOverview},
+                { display: this.state.TabDataOverview },
               ]}>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
@@ -383,13 +383,13 @@ class HomeDetail extends Component {
                     appStyle.slotCard,
                     appStyle.rowJustify,
                     style.aiCenter,
-                    {display: this.state.TabDataReview},
+                    { display: this.state.TabDataReview },
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
                       <Image
                         style={image.userImg}
-                        source={{uri: data.mphoto}}
+                        source={{ uri: data.mphoto }}
                       />
                     </View>
 
@@ -401,7 +401,7 @@ class HomeDetail extends Component {
                           </Text>
                         </View>
                         <View style={style.row}>
-                          <Text style={[text.text15, {color: colors.black}]}>
+                          <Text style={[text.text15, { color: colors.black }]}>
                             {data.suggestion}
                           </Text>
                         </View>
@@ -415,11 +415,11 @@ class HomeDetail extends Component {
             <View
               style={[
                 appStyle.bodyLayout,
-                {display: this.state.TabDataReview},
+                { display: this.state.TabDataReview },
               ]}>
               <TextInput
                 style={[
-                  {borderColor: 'gray', borderWidth: 1, borderRadius: 20},
+                  { borderColor: 'gray', borderWidth: 1, borderRadius: 20 },
                 ]}
                 placeholder={this.state.placeholder}
                 secureTextEntry={true}
@@ -437,11 +437,11 @@ class HomeDetail extends Component {
                 <View
                   style={[
                     button.buttoncontainer,
-                    {backgroundColor: colors.purple},
+                    { backgroundColor: colors.purple },
                   ]}>
                   <Text
                     style={[
-                      {color: colors.white},
+                      { color: colors.white },
                       button.touchablebutton,
                       text.semibold,
                     ]}>

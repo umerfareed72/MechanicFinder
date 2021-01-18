@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -34,7 +34,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default class Mdetail extends Component {
   constructor(props) {
@@ -54,7 +54,7 @@ export default class Mdetail extends Component {
   }
 
   async componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     this.getData();
     this.focusListener = navigation.addListener('didFocus', () => {
       this.getData();
@@ -62,10 +62,11 @@ export default class Mdetail extends Component {
   }
 
   getmechanicdata = (id) => {
+    console.log("mechanic id", id)
     axios
       .get(URL.Url + 'mechanic/' + id)
       .then((response) => {
-        this.setState({mechanicdata: response.data});
+        this.setState({ mechanicdata: response.data });
         console.log('mechanicdata', this.state.mechanicdata);
       })
       .catch((error) => {
@@ -77,7 +78,7 @@ export default class Mdetail extends Component {
     try {
       AsyncStorage.getItem('Mechanicidfromsuggestion').then((res) => {
         const id = JSON.parse(res);
-        this.setState({mid: id});
+        this.setState({ mid: id });
         this.getmechanicdata(id);
       });
     } catch (error) {
@@ -86,14 +87,14 @@ export default class Mdetail extends Component {
   };
 
   render() {
-    const {mechanicdata} = this.state;
+    const { mechanicdata } = this.state;
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
         <View style={{}}>
           <ImageBackground
-            source={{uri: mechanicdata.userphoto}}
-            style={{height: screenHeight.height25}}>
+            source={{ uri: mechanicdata.userphoto }}
+            style={{ height: screenHeight.height25 }}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}
@@ -112,7 +113,7 @@ export default class Mdetail extends Component {
                   fullStarColor={'#fff'}
                   emptyStarColor={'#fff'}
                   starSize={20}
-                  containerStyle={{width: 110, marginTop: 3}}
+                  containerStyle={{ width: 110, marginTop: 3 }}
                 />
               </View>
               <View style={[style.mv5]}>
@@ -132,7 +133,7 @@ export default class Mdetail extends Component {
             <View
               style={[
                 appStyle.bodyLayout,
-                {display: this.state.TabDataOverview},
+                { display: this.state.TabDataOverview },
               ]}>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 {/* <Image
@@ -212,17 +213,17 @@ export default class Mdetail extends Component {
                       }}>
                       <Text
                         style={
-                          ({color: colors.Black323}, [text.text22, text.bold])
+                          ({ color: colors.Black323 }, [text.text22, text.bold])
                         }>
                         Report This Mechanic
                       </Text>
-                      <Text style={([text.text14], {color: colors.gray})}>
+                      <Text style={([text.text14], { color: colors.gray })}>
                         (This will take 1 hour to proceed)
                       </Text>
                     </TouchableOpacity>
                   </View>
                   <View
-                    style={[{display: this.state.tabOverview}, style.flex1]}>
+                    style={[{ display: this.state.tabOverview }, style.flex1]}>
                     {/* <TouchableOpacity onPress={this.buyItems}>
                     <View
                       style={[

@@ -52,7 +52,7 @@
 //       BookNowView: 'none',
 //       CheckBox: images.checkBoxEmpty,
 //       suggestion: '',
-     
+
 //       suggestiondata:[],
 //       customerdata: [],
 //       firstname:'',
@@ -62,9 +62,9 @@
 //     };
 //   }
 
-  
+
 //   async componentDidMount() {
-   
+
 //     this.getcustomerdata();
 //     this.focusListener = navigation.addListener('didFocus', () => {
 //         this.getcustomerdata();
@@ -80,7 +80,7 @@
 //           this.setState({customerdata: response.data});
 //           console.log('customerdata',this.state.customerdata)
 //         }
-        
+
 //       })
 //       .catch((error) => {
 //         console.log(error);
@@ -92,8 +92,8 @@
 //   };
 
 
-  
-  
+
+
 //   tabOverview = () => {
 //     if (this.state.TabDataOverview == 'flex') {
 //       this.setState({TabDataGallery: 'none'}),
@@ -111,7 +111,7 @@
 //     this.setState({ColorReview: colors.inputBordercolor});
 //     this.setState({ColorGallery: colors.inputBordercolor});
 //   };
-  
+
 //   render() {
 //     const {customerdata} = this.state;
 // console.log(this.state.firstname)
@@ -148,12 +148,12 @@
 //               <View style={[style.mv5]}>
 //                 <Text style={[text.heading1, text.bold]}>
 // Customer Detail{' '}
-                 
+
 //                 </Text>
 //               </View>
 //               <View style={[style.mv5]}>
 //                 <Text style={[text.paraWhite, text.regular]}>
-                 
+
 //                 </Text>
 //               </View>
 //             </View>
@@ -189,7 +189,7 @@
 //               </Text>
 //             </TouchableOpacity> */}
 
-           
+
 //           </View>
 //           <ScrollView style={style.mv5}>
 //             {/* OverView Tab */}
@@ -252,7 +252,7 @@
 //                 <Text style={[text.heading2Gray]}> {customerdata.country}</Text>
 //               </View>
 //               {/* <TouchableOpacity > */}
-             
+
 //               <View
 //               style={[
 //                 style.mb50,
@@ -260,14 +260,14 @@
 //                 appStyle.bodyShadowBottom,
 //                 {
 //                   backgroundColor: colors.white,
-                  
+
 //                 },
 //               ],{marginTop:20}}>
-             
-          
+
+
 //             {/* </TouchableOpacity> */}
 //             <View style={[appStyle.rowCenter] }>
-               
+
 //                 <View style={[{display: this.state.tabOverview}, style.flex1]}>
 //                   {/* <TouchableOpacity onPress={this.buyItems}>
 //                     <View
@@ -289,7 +289,7 @@
 //               </View>
 //               </View>
 //             </View>
-            
+
 //             {
 //             this.state.suggestiondata.map((data, index) => 
 //             {
@@ -333,7 +333,7 @@
 //                 </TouchableOpacity>
 //               );
 //             })}
-            
+
 
 //             <View
 //               style={[
@@ -379,7 +379,7 @@
 // }  
 
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -419,7 +419,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 import Textarea from 'react-native-textarea';
 
 export default class RMechanicprofile extends Component {
@@ -440,7 +440,7 @@ export default class RMechanicprofile extends Component {
       warnings: [],
       firstname: '',
       issueid: '',
-            userid:this.props.navigation.getParam('userid','nothing sent'),
+      userid: this.props.navigation.getParam('userid', 'nothing sent'),
 
       warning: '',
       isModalVisible: false,
@@ -532,107 +532,110 @@ export default class RMechanicprofile extends Component {
   //     });
   // };
 
-  // sendwarning = () => {
-  //   axios
-  //     .post(URL.Url + 'sendwarning', {
-  //       warning: this.state.warning,
-  //       mdbid: this.state.mdbid,
-  //     })
-  //     .then(async (res) => {
-  //       console.log(res.data);
-  //       //console.log(this.state.mdbid);
-  //       ToastAndroid.show(
-  //         'Warning Send Successfully',
-  //         ToastAndroid.BOTTOM,
-  //         ToastAndroid.LONG,
-  //       );
-  //       this.toggleModal();
-  //     })
-  //     .catch((error) => {
-  //       ToastAndroid.show(
-  //         'Warning not posted try again!!',
-  //         ToastAndroid.BOTTOM,
-  //         ToastAndroid.LONG,
-  //       );
+  sendwarning = () => {
+    axios
+      .post(URL.Url + 'usendwarning', {
+        warning: this.state.warning,
+        udbid: this.state.userid,
+      })
+      .then(async (res) => {
+        console.log(res.data);
+        //console.log(this.state.mdbid);
+        ToastAndroid.show(
+          'Warning Send Successfully',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+        this.toggleModal();
+      })
+      .catch((error) => {
+        ToastAndroid.show(
+          'Warning not posted try again!!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
 
-  //       console.log(error);
-  //     });
-  // };
+        console.log(error);
+      });
+  };
 
-  // blockmechanic = () => {
-  //   axios
-  //     .put(URL.Url + 'blockmechanic/' + this.state.mdbid, {
-  //       warning: this.state.warning,
-  //       mdbid: this.state.mdbid,
-  //     })
-  //     .then(async (res) => {
-  //       console.log(res.data);
-  //       //console.log(this.state.mdbid);
-  //       ToastAndroid.show(
-  //         'Blocked Successfully',
-  //         ToastAndroid.BOTTOM,
-  //         ToastAndroid.LONG,
-  //       );
-  //       this.toggleModal();
-  //     })
-  //     .catch((error) => {
-  //       ToastAndroid.show(
-  //         'Warning not posted try again!!',
-  //         ToastAndroid.BOTTOM,
-  //         ToastAndroid.LONG,
-  //       );
+  blockmechanic = () => {
+    axios
+      .put(URL.Url + 'blockuser/' + this.state.userid, {
+        warning: this.state.warning,
+        mdbid: this.state.userid,
+      })
+      .then(async (res) => {
+        console.log(res.data);
+        //console.log(this.state.mdbid);
+        ToastAndroid.show(
+          'Blocked Successfully',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
+        this.toggleModal();
+      })
+      .catch((error) => {
+        ToastAndroid.show(
+          'Warning not posted try again!!',
+          ToastAndroid.BOTTOM,
+          ToastAndroid.LONG,
+        );
 
-  //       console.log(error);
-  //     });
-  // };
+        console.log(error);
+      });
+  };
 
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
-      this.setState({TabDataReview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({ColorOverview: colors.white}),
-        this.setState({ColorReview: colors.gray});
+      this.setState({ TabDataReview: 'none' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ ColorOverview: colors.white }),
+        this.setState({ ColorReview: colors.gray });
     } else
-      this.setState({TabDataOverview: 'flex'}),
-        this.setState({TabDataReview: 'none'});
-    this.setState({BookNowView: 'none'});
-    this.setState({ColorOverview: colors.white});
-    this.setState({ColorReview: colors.gray});
+      this.setState({ TabDataOverview: 'flex' }),
+        this.setState({ TabDataReview: 'none' });
+    this.setState({ BookNowView: 'none' });
+    this.setState({ ColorOverview: colors.white });
+    this.setState({ ColorReview: colors.gray });
   };
   tabReview = () => {
     if (this.state.TabDataReview == 'flex') {
-      this.setState({TabDataOverview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({color: 'none'});
-      this.setState({ColorOverview: colors.gray}),
-        this.setState({ColorReview: colors.white});
+      this.setState({ TabDataOverview: 'none' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ color: 'none' });
+      this.setState({ ColorOverview: colors.gray }),
+        this.setState({ ColorReview: colors.white });
     } else
-      this.setState({TabDataReview: 'flex'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({TabDataOverview: 'none'});
-    this.setState({ColorOverview: colors.gray});
-    this.setState({ColorReview: colors.white});
+      this.setState({ TabDataReview: 'flex' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ TabDataOverview: 'none' });
+    this.setState({ ColorOverview: colors.gray });
+    this.setState({ ColorReview: colors.white });
     // this.getwarning();
   };
-  
+
   async componentDidMount() {
-   
+
     this.getcustomerdata();
     this.focusListener = navigation.addListener('didFocus', () => {
-        this.getcustomerdata();
+      this.getcustomerdata();
     });
   }
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
 
   getcustomerdata = () => {
     axios
       .get(URL.Url + 'user/' + this.state.userid)
       .then((response) => {
         if (response.data) {
-          console.log('customer ye rha',response.data);
-          this.setState({mechanicdata: response.data});
-          console.log('customerdata',this.state.mechanicdata)
+          console.log('customer ye rha', response.data);
+          this.setState({ mechanicdata: response.data });
+          console.log('customerdata', this.state.mechanicdata)
         }
-        
+
       })
       .catch((error) => {
         console.log(error);
@@ -644,7 +647,7 @@ export default class RMechanicprofile extends Component {
   };
 
   render() {
-    const {mechanicdata, warnings} = this.state;
+    const { mechanicdata, warnings } = this.state;
     console.log(this.state.firstname);
     console.log(this.state.issueid);
     console.log('ye ai id profile pa', this.state.mdbid);
@@ -661,7 +664,7 @@ export default class RMechanicprofile extends Component {
               <View
                 style={[
                   appStyle.DashboardslotCard,
-                  {height: screenHeight.height60},
+                  { height: screenHeight.height60 },
                   style.w100,
                 ]}>
                 <ScrollView showsVerticalScrollIndicator={false}>
@@ -680,10 +683,10 @@ export default class RMechanicprofile extends Component {
                   </View>
 
                   <View style={[style.aiCenter]}>
-                    <View style={[appStyle.textareaBorder,style.w100]}>
+                    <View style={[appStyle.textareaBorder, style.w100]}>
                       <Textarea
                         onChangeText={(text) => {
-                          this.setState({warning: text});
+                          this.setState({ warning: text });
                         }}
                         placeholder={'Type Warning message here'}
                         placeholderTextColor={'#c7c7c7'}
@@ -694,14 +697,14 @@ export default class RMechanicprofile extends Component {
                   <View style={[style.rowBtw, style.mt40]}>
                     <TouchableOpacity
                       onPress={this.sendwarning}
-                      style={[button.Profilebutton, {marginTop: 20}]}>
+                      style={[button.Profilebutton, { marginTop: 20 }]}>
                       <Text style={[button.bookbutton, text.center]}>
                         Send Warning
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={this.blockmechanic}
-                      style={[button.Profilebutton, {marginTop: 20}]}>
+                      style={[button.Profilebutton, { marginTop: 20 }]}>
                       <Text style={[button.bookbutton, text.center]}>
                         Block Account
                       </Text>
@@ -715,8 +718,8 @@ export default class RMechanicprofile extends Component {
 
         <View style={{}}>
           <ImageBackground
-            source={{uri: mechanicdata.photo}}
-            style={{height: screenHeight.height25}}>
+            source={{ uri: mechanicdata.photo }}
+            style={{ height: screenHeight.height25 }}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
               onPress={() => this.props.navigation.goBack()}
@@ -726,7 +729,7 @@ export default class RMechanicprofile extends Component {
                 source={images.backArrow}></Image>
             </TouchableOpacity>
             <View style={[appStyle.headInner, style.ph20]}>
-               <View style={[style.mv5]}>
+              <View style={[style.mv5]}>
                 <Text style={[text.heading1, text.bold]}>Customer Detail </Text>
               </View>
               <View style={[style.mv5]}>
@@ -757,7 +760,7 @@ export default class RMechanicprofile extends Component {
                 style={[
                   text.heading2,
                   text.semibold,
-                  {color: this.state.ColorOverview},
+                  { color: this.state.ColorOverview },
                 ]}>
                 Overview
               </Text>
@@ -767,7 +770,7 @@ export default class RMechanicprofile extends Component {
                 style={[
                   text.heading2,
                   text.semibold,
-                  {color: this.state.ColorReview},
+                  { color: this.state.ColorReview },
                 ]}>
                 Warnings
               </Text>
@@ -779,11 +782,11 @@ export default class RMechanicprofile extends Component {
             <View
               style={[
                 appStyle.bodyLayout,
-                {display: this.state.TabDataOverview},
+                { display: this.state.TabDataOverview },
               ]}>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
-                  style={[image.medium, style.mr5,{tintColor:colors.orange}]}
+                  style={[image.medium, style.mr5, { tintColor: colors.orange }]}
                   source={images.username}></Image>
                 <Text style={[text.heading2, text.bold]}>Customer Name</Text>
               </View>
@@ -831,7 +834,7 @@ export default class RMechanicprofile extends Component {
             </View>
 
             {/* Reviews Tab End  */}
-            <View style={[{display: this.state.TabDataReview}, style.mh10]}>
+            <View style={[{ display: this.state.TabDataReview }, style.mh10]}>
               {warnings.map((warn, index) => {
                 return (
                   <TouchableOpacity
@@ -839,7 +842,7 @@ export default class RMechanicprofile extends Component {
                     <View style={[style.w10, style.aiCenter]}>
                       <Image
                         style={[image.Image30, style.mh10]}
-                        source={{uri: mechanicdata.photo}}
+                        source={{ uri: mechanicdata.photo }}
                       />
                     </View>
                     <View style={[style.mh10]}>
@@ -854,11 +857,11 @@ export default class RMechanicprofile extends Component {
                           {moment(warn.date).format('DD-MM-YYYY')}
                         </Text>
                       </View>
-                     
-                    <View style={[style.w80]}>
-                      <Text style={[text.heading3, style.mv5]}>
-                        {warn.warning}
-                      </Text>
+
+                      <View style={[style.w80]}>
+                        <Text style={[text.heading3, style.mv5]}>
+                          {warn.warning}
+                        </Text>
                       </View>
                     </View>
                     <TouchableOpacity

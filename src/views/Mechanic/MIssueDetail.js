@@ -135,6 +135,7 @@ class HomeDetail extends Component {
   };
 
   submitsuggestion = () => {
+    console.log("in sugestion posting")
     axios
       .post(URL.Url + 'postsuggestion', {
         suggestion: this.state.suggestion,
@@ -151,7 +152,7 @@ class HomeDetail extends Component {
           ToastAndroid.LONG,
         );
         this.getsuggestions();
-        })
+      })
       .catch((error) => {
         Alert.alert('something went Wrong!!');
 
@@ -238,7 +239,7 @@ class HomeDetail extends Component {
         </View>
         <TouchableOpacity onPress={this.toggleModal}>
           <ImageBackground
-            source={{uri:issuedata.issuevideo}}
+            source={{ uri: issuedata.issuevideo }}
             style={{ height: screenHeight.height25 }}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
@@ -382,8 +383,8 @@ class HomeDetail extends Component {
               <View style={[style.pv10]}>
                 <Text style={[text.paraGray]}>{issuedata.description}</Text>
               </View>
-             </View> 
-             
+            </View>
+
             {this.state.suggestiondata.map((data, index) => {
               console.log('YE LO', data.firstname)
               console.log('YE LO pp', data)

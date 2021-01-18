@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -28,13 +28,14 @@ import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
 import input from '../../assets/styles/input';
+import Modal from 'react-native-modal';
 import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default class ReportedCustomerDetail extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ export default class ReportedCustomerDetail extends Component {
       reportdata: [],
       mdbid: '',
       userid: '',
-
+      isModalVisible: false,
       reportid: '',
       mid: '',
     };
@@ -65,17 +66,17 @@ export default class ReportedCustomerDetail extends Component {
     try {
       await AsyncStorage.getItem('mreportdata').then((res) => {
         res = JSON.parse(res);
-        this.setState({reportdata: res});
-        this.setState({reportid: res._id});
-        this.setState({mdbid: res.mdbid});
-        this.setState({userid: res.userdbid});
+        this.setState({ reportdata: res });
+        this.setState({ reportid: res._id });
+        this.setState({ mdbid: res.mdbid });
+        this.setState({ userid: res.userdbid });
       });
       // await AsyncStorage.getItem('usersignintoken').then((res) => {
       //   // res = JSON.parse(res);
       //   console.log('response firstname',res)
 
       // });
-    } catch (error) {}
+    } catch (error) { }
   };
   async componentDidMount() {
     this.getData();
@@ -83,14 +84,16 @@ export default class ReportedCustomerDetail extends Component {
       this.getData();
     });
   }
-
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
   gettingdatamechanicuser = () => {
     axios
       .get(URL.Url + 'user/' + this.state.userid)
       .then((response) => {
         if (response) {
           console.log(response.data);
-          this.setState({cphone: response.data.phone});
+          this.setState({ cphone: response.data.phone });
         }
       })
       .catch((error) => {
@@ -101,7 +104,7 @@ export default class ReportedCustomerDetail extends Component {
       .then((response) => {
         if (response) {
           console.log(response.data);
-          this.setState({mphone: response.data.phone});
+          this.setState({ mphone: response.data.phone });
         }
       })
       .catch((error) => {
@@ -111,24 +114,24 @@ export default class ReportedCustomerDetail extends Component {
 
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
-      this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({ColorOverview: colors.darkBlue}),
-        this.setState({ColorReview: colors.inputBordercolor}),
-        this.setState({ColorGallery: colors.inputBordercolor});
+      this.setState({ TabDataGallery: 'none' }),
+        this.setState({ TabDataReview: 'none' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ ColorOverview: colors.darkBlue }),
+        this.setState({ ColorReview: colors.inputBordercolor }),
+        this.setState({ ColorGallery: colors.inputBordercolor });
     } else
-      this.setState({TabDataOverview: 'flex'}),
-        this.setState({TabDataGallery: 'none'}),
-        this.setState({TabDataReview: 'none'});
-    this.setState({BookNowView: 'none'});
-    this.setState({ColorOverview: colors.darkBlue});
-    this.setState({ColorReview: colors.inputBordercolor});
-    this.setState({ColorGallery: colors.inputBordercolor});
+      this.setState({ TabDataOverview: 'flex' }),
+        this.setState({ TabDataGallery: 'none' }),
+        this.setState({ TabDataReview: 'none' });
+    this.setState({ BookNowView: 'none' });
+    this.setState({ ColorOverview: colors.darkBlue });
+    this.setState({ ColorReview: colors.inputBordercolor });
+    this.setState({ ColorGallery: colors.inputBordercolor });
   };
 
   render() {
-    const {reportdata} = this.state;
+    const { reportdata } = this.state;
     console.log(this.state.firstname);
     console.log(this.state.reportid);
     console.log('mdbidddd', this.state.mdbid);
@@ -138,9 +141,42 @@ export default class ReportedCustomerDetail extends Component {
       <SafeAreaView style={[appStyle.safeContainer]}>
         <StatusBar />
         <View style={{}}>
+          <Modal
+            isVisible={this.state.isModalVisible}
+            animationInTiming={500}
+            animationOutTiming={500}>
+            <View style={[style.flex1, appStyle.rowCenter]}>
+              <TouchableOpacity
+                style={[appStyle.DashboardslotCard, style.w90, style.aiCenter]}
+                onPress={this.toggleModal}>
+                <View style={[style.mv10, style.aiCenter]}>
+                  <Text style={[text.h1]}>Preview Image</Text>
+                  <Text style={[text.heading2Gray]}>{this.state.title}</Text>
+                </View>
+                <Image
+                  source={{ uri: this.state.reportdata.userphoto }}
+                  style={[
+                    {
+                      height: '70%',
+                      alignSelf: 'center',
+                      resizeMode: 'contain',
+                      borderRadius: 10,
+                    },
+                    style.w100,
+                  ]}></Image>
+                <TouchableOpacity
+                  style={[button.buttonTheme, style.mt30, style.w50]}
+                  onPress={this.toggleModal}>
+                  <Text style={[button.btntext1]}> Close Preview </Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
+        <TouchableOpacity onPress={this.toggleModal}>
           <ImageBackground
-            source={{uri: this.state.reportdata.userphoto}}
-            style={{height: screenHeight.height35}}>
+            source={{ uri: this.state.reportdata.userphoto }}
+            style={{ height: screenHeight.height35 }}>
             <View style={style.bgOverlay} />
             <TouchableOpacity
               onPress={() =>
@@ -176,13 +212,13 @@ export default class ReportedCustomerDetail extends Component {
               </View>
             </View>
           </ImageBackground>
-        </View>
+        </TouchableOpacity>
         <View style={[appStyle.bodyBg, style.flex1]}>
           <ScrollView style={style.mv5}>
             <View
               style={[
                 appStyle.bodyLayout,
-                {display: this.state.TabDataOverview},
+                { display: this.state.TabDataOverview },
               ]}>
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
@@ -214,16 +250,16 @@ export default class ReportedCustomerDetail extends Component {
                   <View>
                     <Text
                       style={
-                        ({color: colors.Black323}, [text.text22, text.bold])
+                        ({ color: colors.Black323 }, [text.text22, text.bold])
                       }>
                       Customer
                     </Text>
-                    <Text style={([text.text14], {color: colors.gray})}>
+                    <Text style={([text.text14], { color: colors.gray })}>
                       (Report this Issue)
                     </Text>
                   </View>
                   <View
-                    style={[{display: this.state.tabOverview}, style.flex1]}>
+                    style={[{ display: this.state.tabOverview }, style.flex1]}>
                     <TouchableOpacity
                       onPress={() =>
                         this.props.navigation.navigate('CustomerDetail', {
@@ -233,11 +269,11 @@ export default class ReportedCustomerDetail extends Component {
                       <View
                         style={[
                           button.buttoncontainer,
-                          {backgroundColor: colors.purple},
+                          { backgroundColor: colors.purple },
                         ]}>
                         <Text
                           style={[
-                            {color: colors.white},
+                            { color: colors.white },
                             button.touchablebutton,
                             text.semibold,
                           ]}>
@@ -262,17 +298,17 @@ export default class ReportedCustomerDetail extends Component {
                   <View>
                     <Text
                       style={
-                        ({color: colors.orangeGradient},
-                        [text.text22, text.bold])
+                        ({ color: colors.orangeGradient },
+                          [text.text22, text.bold])
                       }>
                       Mechanic
                     </Text>
-                    <Text style={([text.text14], {color: colors.orange})}>
+                    <Text style={([text.text14], { color: colors.orange })}>
                       (Reported)
                     </Text>
                   </View>
                   <View
-                    style={[{display: this.state.tabOverview}, style.flex1]}>
+                    style={[{ display: this.state.tabOverview }, style.flex1]}>
                     <TouchableOpacity
                       onPress={() =>
                         this.props.navigation.navigate('RMechanicprofile', {
@@ -282,11 +318,11 @@ export default class ReportedCustomerDetail extends Component {
                       <View
                         style={[
                           button.buttoncontainer,
-                          {backgroundColor: colors.purple},
+                          { backgroundColor: colors.purple },
                         ]}>
                         <Text
                           style={[
-                            {color: colors.white},
+                            { color: colors.white },
                             button.touchablebutton,
                             text.semibold,
                           ]}>

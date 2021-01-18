@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -34,9 +34,9 @@ import Modal from 'react-native-modal';
 import moment from 'moment';
 import ImagePicker from 'react-native-image-picker';
 import DatePicker from 'react-native-datepicker';
-import {Picker} from '@react-native-community/picker';
+import { Picker } from '@react-native-community/picker';
 const axios = require('axios');
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
 import text from '../../assets/styles/text';
@@ -47,8 +47,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
-import {connect} from 'react-redux';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
+import { connect } from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
 import Textarea from 'react-native-textarea';
 
@@ -102,17 +102,17 @@ class Postvehicalissue extends Component {
   };
 
   getdata = () => {
-    this.setState({userphoto: this.props.auth.user.photo});
+    this.setState({ userphoto: this.props.auth.user.photo });
     console.log('userphoto', this.state.userphoto);
   };
 
   getid = () => {
-    this.setState({userdbid: this.props.auth.user.userid});
+    this.setState({ userdbid: this.props.auth.user.userid });
     this.getdata();
   };
 
   toggleModal = () => {
-    this.setState({isModalVisible: !this.state.isModalVisible});
+    this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
   validatefield = () => {
@@ -230,9 +230,9 @@ class Postvehicalissue extends Component {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      this.setState({isLoading: true});
+      this.setState({ isLoading: true });
       if (response.uri) {
-        this.setState({isLoading: true});
+        this.setState({ isLoading: true });
         console.log(response);
         var data = new FormData();
         const source = {
@@ -254,8 +254,8 @@ class Postvehicalissue extends Component {
           .then((res) => res.json())
           .then((data) => {
             console.log(data.secure_url);
-            this.setState({issuephoto: data.secure_url});
-            this.setState({isLoading: false});
+            this.setState({ issuephoto: data.secure_url });
+            this.setState({ isLoading: false });
           })
           .catch((err) => {
             Alert.alert('An Error Occured While Uploading');
@@ -330,7 +330,7 @@ class Postvehicalissue extends Component {
             // See error code charts below.
             console.log(error.code, error.message);
           },
-          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
         );
       }
       console.log(this.state.latitude);
@@ -341,51 +341,51 @@ class Postvehicalissue extends Component {
 
   tabStep1 = () => {
     if (this.state.TabDataStep1 == 'flex') {
-      this.setState({TabDataStep2: 'none'}),
-        this.setState({TabDataStep3: 'none'}),
-        this.setState({TabDataStep4: 'none'});
-      this.setState({BookNowView: 'flex'}),
-        this.setState({ColorStep1: colors.darkBlue}),
-        this.setState({ColorStep3: colors.inputBordercolor}),
-        this.setState({ColorStep2: colors.inputBordercolor});
-      this.setState({ColorStep4: colors.inputBordercolor});
+      this.setState({ TabDataStep2: 'none' }),
+        this.setState({ TabDataStep3: 'none' }),
+        this.setState({ TabDataStep4: 'none' });
+      this.setState({ BookNowView: 'flex' }),
+        this.setState({ ColorStep1: colors.darkBlue }),
+        this.setState({ ColorStep3: colors.inputBordercolor }),
+        this.setState({ ColorStep2: colors.inputBordercolor });
+      this.setState({ ColorStep4: colors.inputBordercolor });
     } else
-      this.setState({TabDataStep1: 'flex'}),
-        this.setState({TabDataStep2: 'none'}),
-        this.setState({TabDataStep3: 'none'});
-    this.setState({TabDataStep4: 'none'});
-    this.setState({BookNowView: 'flex'});
-    this.setState({ColorStep1: colors.darkBlue});
-    this.setState({ColorStep3: colors.inputBordercolor});
-    this.setState({ColorStep2: colors.inputBordercolor});
-    this.setState({ColorStep4: colors.inputBordercolor});
+      this.setState({ TabDataStep1: 'flex' }),
+        this.setState({ TabDataStep2: 'none' }),
+        this.setState({ TabDataStep3: 'none' });
+    this.setState({ TabDataStep4: 'none' });
+    this.setState({ BookNowView: 'flex' });
+    this.setState({ ColorStep1: colors.darkBlue });
+    this.setState({ ColorStep3: colors.inputBordercolor });
+    this.setState({ ColorStep2: colors.inputBordercolor });
+    this.setState({ ColorStep4: colors.inputBordercolor });
   };
 
   tabStep2 = () => {
     if (this.state.TabDataStep2 == 'flex') {
-      this.setState({TabDataStep1: 'none'}),
-        this.setState({TabDataStep3: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({TabDataStep4: 'none'});
-      this.setState({color: 'none'});
-      this.setState({ColorStep1: colors.inputBordercolor}),
-        this.setState({ColorStep3: colors.inputBordercolor}),
-        this.setState({ColorStep4: colors.inputBordercolor}),
-        this.setState({ColorStep2: colors.darkBlue});
+      this.setState({ TabDataStep1: 'none' }),
+        this.setState({ TabDataStep3: 'none' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ TabDataStep4: 'none' });
+      this.setState({ color: 'none' });
+      this.setState({ ColorStep1: colors.inputBordercolor }),
+        this.setState({ ColorStep3: colors.inputBordercolor }),
+        this.setState({ ColorStep4: colors.inputBordercolor }),
+        this.setState({ ColorStep2: colors.darkBlue });
     } else
-      this.setState({TabDataStep2: 'flex'}),
-        this.setState({TabDataStep1: 'none'}),
-        this.setState({BookNowView: 'none'}),
-        this.setState({TabDataStep3: 'none'});
-    this.setState({TabDataStep4: 'none'});
-    this.setState({ColorStep1: colors.inputBordercolor});
-    this.setState({ColorStep3: colors.inputBordercolor});
-    this.setState({ColorStep2: colors.darkBlue});
-    this.setState({ColorStep4: colors.inputBordercolor});
+      this.setState({ TabDataStep2: 'flex' }),
+        this.setState({ TabDataStep1: 'none' }),
+        this.setState({ BookNowView: 'none' }),
+        this.setState({ TabDataStep3: 'none' });
+    this.setState({ TabDataStep4: 'none' });
+    this.setState({ ColorStep1: colors.inputBordercolor });
+    this.setState({ ColorStep3: colors.inputBordercolor });
+    this.setState({ ColorStep2: colors.darkBlue });
+    this.setState({ ColorStep4: colors.inputBordercolor });
   };
   render() {
-    const {auth} = this.props;
-    const {issuevideo1} = this.state;
+    const { auth } = this.props;
+    const { issuevideo1 } = this.state;
     return (
       <SafeAreaView style={style.flex1}>
         <StatusBar />
@@ -399,7 +399,7 @@ class Postvehicalissue extends Component {
               <View
                 style={[
                   appStyle.DashboardslotCard,
-                  {height: screenHeight.height60},
+                  { height: screenHeight.height60 },
                   style.w100,
                 ]}>
                 <ScrollView
@@ -458,15 +458,15 @@ class Postvehicalissue extends Component {
                               longitude: details.geometry.location.lng,
                             });
                             // setDestLng(details.geometry.location.lng);
-                            this.setState({tlo: details.formatted_address});
-                            this.setState({status: 'Location Saved'});
+                            this.setState({ tlo: details.formatted_address });
+                            this.setState({ status: 'Location Saved' });
                           }}
                           onKeyPress={(e) => {
                             if (e.nativeEvent.key == 'done') {
                             }
                           }}
                           query={{
-                            key: 'key',
+                            key: 'AIzaSyAn4Q1cbuGVM8M6fyElhVgVGLFCLNl6Hf4',
                             language: 'en', // language of the results
                           }}
                           predefinedPlaces={[this.state.current]}
@@ -502,7 +502,7 @@ class Postvehicalissue extends Component {
                       onPress={this.toggleModal}
                       style={[
                         button.Profilebutton,
-                        {marginTop: 20, marginLeft: 75},
+                        { marginTop: 20, marginLeft: 75 },
                       ]}>
                       <Text style={[button.bookbutton, text.center]}>Save</Text>
                     </TouchableOpacity>
@@ -513,19 +513,19 @@ class Postvehicalissue extends Component {
           </Modal>
         </View>
         <KeyboardAvoidingView
-          style={{backgroundColor: colors.white, flexGrow: 1}}>
+          style={{ backgroundColor: colors.white, flexGrow: 1 }}>
           <ScrollView>
             <View>
               <LinearGradient
                 colors={colors.orablu}
-                start={{x: -0.9, y: 1}}
-                end={{x: 1, y: 0}}
+                start={{ x: -0.9, y: 1 }}
+                end={{ x: 1, y: 0 }}
                 style={[style.headerHeight4]}>
                 <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
-                  <Text style={[text.text35, {color: colors.white}]}>
+                  <Text style={[text.text35, { color: colors.white }]}>
                     Post Issue
                   </Text>
-                  <Text style={[text.text20, {color: colors.white},text.goodfishbd]}>
+                  <Text style={[text.text20, { color: colors.white }, text.goodfishbd]}>
                     (Share your Vehical issue with us)
                   </Text>
                 </View>
@@ -553,7 +553,7 @@ class Postvehicalissue extends Component {
                       text.heading2,
                       text.semibold,
 
-                      {color: this.state.ColorStep1},
+                      { color: this.state.ColorStep1 },
                     ]}>
                     Step 1
                   </Text>
@@ -566,7 +566,7 @@ class Postvehicalissue extends Component {
                     style={[
                       text.heading2,
                       text.semibold,
-                      {color: this.state.ColorStep2},
+                      { color: this.state.ColorStep2 },
                     ]}>
                     Step 2
                   </Text>
@@ -594,7 +594,7 @@ class Postvehicalissue extends Component {
                       selectedValue={this.state.vehicaltype}
                       style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
-                        this.setState({vehicaltype: itemValue})
+                        this.setState({ vehicaltype: itemValue })
                       }>
                       <Picker.Item label="Select Vehicle Type" value="" />
                       {/* <Picker.Item label="Heavy Truck" value="Heavy Truck" /> */}
@@ -613,7 +613,7 @@ class Postvehicalissue extends Component {
                       selectedValue={this.state.city}
                       style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
-                        this.setState({city: itemValue})
+                        this.setState({ city: itemValue })
                       }>
                       <Picker.Item label="Select Your City" value="" />
                       <Picker.Item label="Lahore" value="Lahore" />
@@ -632,7 +632,7 @@ class Postvehicalissue extends Component {
                       selectedValue={this.state.carcompany}
                       style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
-                        this.setState({carcompany: itemValue})
+                        this.setState({ carcompany: itemValue })
                       }>
                       <Picker.Item
                         label="Select Vehicle Company"
@@ -657,7 +657,7 @@ class Postvehicalissue extends Component {
                       selectedValue={this.state.issuetype}
                       style={[style.w90]}
                       onValueChange={(itemValue, itemIndex) =>
-                        this.setState({issuetype: itemValue})
+                        this.setState({ issuetype: itemValue })
                       }>
                       <Picker.Item label="Issue Type" value="" />
                       <Picker.Item label="Electric" value="Electric" />
@@ -698,7 +698,7 @@ class Postvehicalissue extends Component {
                       <View>
                         <Text
                           style={
-                            ({color: colors.Black323}, [text.text22, text.bold])
+                            ({ color: colors.Black323 }, [text.text22, text.bold])
                           }>
                           {this.state.status}
                         </Text>
@@ -709,21 +709,21 @@ class Postvehicalissue extends Component {
                               button.buttonThemeWhite,
                               style.w30,
                               style.mt35,
-                              {display: this.state.cancelButton},
+                              { display: this.state.cancelButton },
                             ],
-                            {marginStart: 270})
+                              { marginStart: 270 })
                           }>
                           <Text style={[text.heading4, text.goodfishbd]}>
                             Change
                           </Text>
                         </TouchableOpacity>
-                        <Text style={([text.text14], {color: colors.gray})}>
+                        <Text style={([text.text14], { color: colors.gray })}>
                           {this.state.tlo}
                         </Text>
                       </View>
                       <View
                         style={[
-                          {display: this.state.tabOverview},
+                          { display: this.state.tabOverview },
                           style.flex1,
                         ]}>
                         {/* {/* <TouchableOpacity onPress={() => {
@@ -766,11 +766,11 @@ class Postvehicalissue extends Component {
                       button.buttoncontainer,
                       style.mt20,
                       style.mh50,
-                      {backgroundColor: colors.purple},
+                      { backgroundColor: colors.purple },
                     ]}>
                     <Text
                       style={[
-                        {color: colors.white},
+                        { color: colors.white },
                         button.touchablebutton,
                         text.semibold,
                       ]}>
@@ -798,7 +798,7 @@ class Postvehicalissue extends Component {
                     <View style={[appStyle.textareaBorder, style.w90]}>
                       <Textarea
                         onChangeText={(text) => {
-                          this.setState({description: text});
+                          this.setState({ description: text });
                         }}
                         placeholder={'Type issue description message here'}
                         placeholderTextColor={'#c7c7c7'}
@@ -808,71 +808,71 @@ class Postvehicalissue extends Component {
                   </View>
 
                   <View style={[style.flex1, style.jcCenter]}>
-                  <View style={[style.aiCenter, style.mv20]}>
-                    {this.state.isLoading ? (
-                      <SafeAreaView style={[appStyle.safeContainer]}>
-                        <StatusBar
-                          barStyle={'dark-content'}
-                          translucent={true}
-                          backgroundColor="transparent"></StatusBar>
-                        <View style={[style.flex1, style.jcCenter]}>
-                          <View style={[style.aiCenter]}>
-                            <ActivityIndicator
-                              style={{padding: 50}}
-                              color="#bc2b78"
-                              size="large"></ActivityIndicator>
+                    <View style={[style.aiCenter, style.mv20]}>
+                      {this.state.isLoading ? (
+                        <SafeAreaView style={[appStyle.safeContainer]}>
+                          <StatusBar
+                            barStyle={'dark-content'}
+                            translucent={true}
+                            backgroundColor="transparent"></StatusBar>
+                          <View style={[style.flex1, style.jcCenter]}>
+                            <View style={[style.aiCenter]}>
+                              <ActivityIndicator
+                                style={{ padding: 50 }}
+                                color="#bc2b78"
+                                size="large"></ActivityIndicator>
+                            </View>
                           </View>
-                        </View>
-                      </SafeAreaView>
-                    ) : (
-                      <View style={[image.largeovalcontainer]}>
-                        {
-                          <Image
-                            source={{uri: this.state.issuephoto}}
-                            style={[image.largeovalcontainerupload]}
-                          />
-                        }
-                        <TouchableOpacity
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                          onPress={this.handleChoosePhoto}>
-                          <Image
-                            style={[image.largeimagestyle]}
-                            source={images.camerdark}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    )}
-                    <View style={style.mv10}>
-                      <Text
-                        style={[
-                          text.textheader5,
-                          style.asCenter,
-                          {textAlign: 'center'},
-                        ]}>
-                        Wait for issue picture on camera picture
+                        </SafeAreaView>
+                      ) : (
+                          <View style={[image.largeovalcontainer]}>
+                            {
+                              <Image
+                                source={{ uri: this.state.issuephoto }}
+                                style={[image.largeovalcontainerupload]}
+                              />
+                            }
+                            <TouchableOpacity
+                              style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}
+                              onPress={this.handleChoosePhoto}>
+                              <Image
+                                style={[image.largeimagestyle]}
+                                source={images.camerdark}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        )}
+                      <View style={style.mv10}>
+                        <Text
+                          style={[
+                            text.textheader5,
+                            style.asCenter,
+                            { textAlign: 'center' },
+                          ]}>
+                          Wait for issue picture on camera picture
                       </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
                   <TouchableOpacity onPress={this.submitData}>
                     <View
                       style={[
                         button.buttoncontainer,
                         style.mt20,
                         style.mh50,
-                        {backgroundColor: colors.purple},
+                        { backgroundColor: colors.purple },
                       ]}>
                       <Text
                         style={[
-                          {color: colors.white},
+                          { color: colors.white },
                           button.touchablebutton,
                           text.semibold,
                         ]}>
