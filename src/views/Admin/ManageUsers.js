@@ -42,7 +42,7 @@ import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Picker} from '@react-native-community/picker';
 import {color} from 'react-native-reanimated';
-export default class UserManagement extends Component {
+export default class Bodymechanic extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,30 +68,8 @@ export default class UserManagement extends Component {
   };
 
   showIssues = async () => {
-    // AsyncStorage.getItem('userId')
-    //   .then((res) => {
-    //     const id = JSON.parse(res);
-    //     this.setState({userId: id});
-
-    // AsyncStorage.getItem('usersignintoken').then((res) => {
-    //   this.setState({token: res});
-    //   console.log(this.state.token);
-    //   axios
-    //     .get(URL.Url + 'me', {
-    //       headers: {
-    //         'x-access-token': this.state.token,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       this.setState({userdbid: response.data.userid}).catch((error) => {
-    //         console.log(error);
-    //       });
-    //     });
-    // });
-
-    console.log('in block mechanic');
     await axios
-      .get(URL.Url + 'getblockmechanic')
+      .get(URL.Url + 'users')
       .then((response) => {
         if (response.data) {
           console.log(response.data);
@@ -102,7 +80,7 @@ export default class UserManagement extends Component {
       .then(() => {
         if (this.state.dataSource === '')
           ToastAndroid.show(
-            'No Customer registered',
+            'No User Registered !',
             ToastAndroid.BOTTOM,
             ToastAndroid.LONG,
           );
@@ -112,18 +90,23 @@ export default class UserManagement extends Component {
       });
   };
 
+  movetodetail = (id) => {
+    setTimeout(() => {
+      this.props.navigation.navigate('Userdetail', {
+        userId: this.state.dataSource[id]._id,
+      });
+    }, 2000);
+  };
+  
   deleteissue = (id) => {
-    const mechanicdata = this.state.dataSource[id];
-    console.log(mechanicdata);
-    console.log('in unblock method');
-    console.log('iddd mechanic', mechanicdata._id);
-    axios
-      .put(URL.Url + 'unblockmechanic/' + mechanicdata._id, {blocked: false})
+    const issuedata = this.state.dataSource[id];
+     axios
+      .delete(URL.Url + 'deleteuser/' + issuedata._id)
       .then((response) => {
         if (response.data) {
           console.log(response.data);
           ToastAndroid.show(
-            'Mechanic unblocked successfully',
+            'User Account Deleted !',
             ToastAndroid.BOTTOM,
             ToastAndroid.LONG,
           );
@@ -135,28 +118,6 @@ export default class UserManagement extends Component {
         Alert.alert('something is wrong');
       });
   };
-
-  // deleteissue = (id) => {
-  //   const issuedata = this.state.dataSource[id];
-  //   console.log(issuedata);
-  //   axios
-  //     .delete(URL.Url + 'deleteuser/' + issuedata._id)
-  //     .then((response) => {
-  //       if (response.data) {
-  //         console.log(response.data);
-  //         ToastAndroid.show(
-  //           'User Account Deleted !',
-  //           ToastAndroid.BOTTOM,
-  //           ToastAndroid.LONG,
-  //         );
-  //         this.showIssues();
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log('ye lo 2', error);
-  //       Alert.alert('something is wrong');
-  //     });
-  // };
   render() {
     return (
       <SafeAreaView style={appStyle.safeContainer}>
@@ -170,10 +131,10 @@ export default class UserManagement extends Component {
 
           <View>
             <Text style={[text.heading1purple, text.bold]}>
-              Blocked Mechanics :
+              USER MANAGEMENT :
             </Text>
             <Text style={[text.text14, {color: '#4A4A4A'}]}>
-              You can unblock them
+              Currently Registered
             </Text>
           </View>
           <TouchableOpacity></TouchableOpacity>
@@ -185,7 +146,7 @@ export default class UserManagement extends Component {
                 <TouchableOpacity
                   key={index}
                   // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
-                  //  onPress={() => this.movetodetail(index)}
+                  onPress={() => this.movetodetail(index)}
                   style={[
                     appStyle.slotCard,
                     appStyle.rowJustify,
@@ -211,20 +172,17 @@ export default class UserManagement extends Component {
                         <View style={style.row}>
                           <Image
                             style={[image.xsmall, image.Orange]}
-                            source={images.location}></Image>
+                            source={images.phone}></Image>
                           <Text style={[text.text15, {color: colors.gray}]}>
-                            {data.address} in {data.city}
+                            {data.phone}
                           </Text>
                         </View>
                         <View style={style.row}>
                           <Image
-                            style={[image.xsmall, image.Orange]}
-                            source={images.email}></Image>
-                          <Text
-                            style={[text.text15, {color: colors.gray}]}
-                            numberOfLines={0.2}
-                            ellipsizeMode={'tail'}>
-                            {data.phone}
+                            style={image.xsmall}
+                            source={images.location}></Image>
+                          <Text style={[text.text15, {color: colors.gray}]}>
+                            {data.city}
                           </Text>
                         </View>
                       </View>

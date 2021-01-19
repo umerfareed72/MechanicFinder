@@ -858,7 +858,7 @@ export default class RMechanicprofile extends Component {
                         source={{ uri: mechanicdata.photo }}
                       />
                     </View>
-                    <View style={[style.mh10]}>
+                    <View style={[style.mh10,style.w75]}>
                       <Text style={[text.text16, text.bold]}>
                         {mechanicdata.firstname} {mechanicdata.lastname}
                       </Text>
@@ -871,7 +871,7 @@ export default class RMechanicprofile extends Component {
                         </Text>
                       </View>
 
-                      <View style={[style.w80]}>
+                      <View >
                         <Text style={[text.heading3, style.mv5]}>
                           {warn.warning}
                         </Text>

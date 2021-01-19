@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
+import {createDrawerNavigator} from 'react-navigation-drawer';
 import AdminDashboard from '../views/Admin/AdminDashboard';
 import UserManagement from '../views/Admin/UserManagement';
 //import Blockedusers from '../views/Admin/blockedusers'
@@ -30,6 +30,8 @@ import Enginemechanic from '../views/Admin/Enginemechanic';
 import Bodymechanic from '../views/Admin/Bodymechanic';
 import Paintermechanic from '../views/Admin/Paintermechanic';
 import highratedmechanics from '../views/Admin/highratedmechanics';
+import MechanicHelpProfile from '../views/Admin/MechanicHelpProfile';
+import CustomerHelpProfile from '../views/Admin/CustomerHelpProfile';
 import {
   colors,
   screenHeight,
@@ -47,6 +49,9 @@ import Analytic from '../views/Admin/Analytic';
 import ReportedCustomerDetail from '../views/Admin/ReportedCustomerDetail';
 import CustomerDetail from '../views/Admin/CustomerDetail';
 import Blockedusers from '../views/Admin/blockedusers';
+import ManageUsers from '../views/Admin/ManageUsers';
+import Terms from '../views/Admin/Terms';
+
 //add new screen to this stack here
 
 const UserStackReport = createStackNavigator(
@@ -55,7 +60,6 @@ const UserStackReport = createStackNavigator(
     Reportmechanicdetail: Reportmechanicdetail,
     Mechanicprofile: Mechanicprofile,
     Customerprofile: Customerprofile,
-
   },
   {
     headerMode: 'none',
@@ -70,7 +74,7 @@ const MechanicStackReport = createStackNavigator(
     Reportedmechanics: Reportedmechanics,
     ReportedCustomerDetail: ReportedCustomerDetail,
     RMechanicprofile: RMechanicprofile,
-    CustomerDetail: CustomerDetail
+    CustomerDetail: CustomerDetail,
   },
   {
     headerMode: 'none',
@@ -80,19 +84,41 @@ const MechanicStackReport = createStackNavigator(
   },
 );
 
-
+const CustomerStackHelp = createStackNavigator(
+  {
+    Chelp: Chelp,
+    CustomerHelpProfile: CustomerHelpProfile,
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+const MechanicStackHelp = createStackNavigator(
+  {
+    Mhelp: Mhelp,
+    MechanicHelpProfile: MechanicHelpProfile,
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
 
 const DashboardStack = createStackNavigator(
-
   {
-
     AdminDashboard: {
       screen: AdminDashboard,
     },
+    
     UserStackReport: UserStackReport,
     MechanicStackReport: MechanicStackReport,
-    Mhelp: Mhelp,
-    Chelp: Chelp,
+    CustomerStackHelp: CustomerStackHelp,
+    MechanicStackHelp: MechanicStackHelp,
     highratedmechanics: highratedmechanics,
   },
   {
@@ -123,6 +149,7 @@ const MechanicManagementStack = createStackNavigator(
     Enginemechanic: Enginemechanic,
     Paintermechanic: Paintermechanic,
     Bodymechanic: Bodymechanic,
+    UserManagement: UserManagement,
     Mechanicdetail: Mechanicdetail,
   },
   {
@@ -135,7 +162,7 @@ const MechanicManagementStack = createStackNavigator(
 
 const UserManagementStack = createStackNavigator(
   {
-    UserManagement: UserManagement,
+     ManageUsers:ManageUsers,
     Userdetail: Userdetail,
   },
   {
@@ -145,7 +172,6 @@ const UserManagementStack = createStackNavigator(
     },
   },
 );
-
 
 const BlockedUserManagementStack = createStackNavigator(
   {
@@ -166,7 +192,8 @@ const SettingStack = createStackNavigator(
     Rates: RatesStack,
     MechanicManagement: MechanicManagementStack,
     UserManagement: UserManagementStack,
-    Blockedusers: BlockedUserManagementStack
+    Blockedusers: BlockedUserManagementStack,
+    Terms:Terms
   },
   {
     headerMode: 'none',
@@ -193,9 +220,9 @@ const Navigator = createMaterialBottomTabNavigator(
       screen: DashboardStack,
       navigationOptions: {
         tabBarLabel: 'Home',
-        tabBarIcon: ({ tintColor }) => (
+        tabBarIcon: ({tintColor}) => (
           <Image
-            style={{ resizeMode: 'contain', height: 25, width: 25 }}
+            style={{resizeMode: 'contain', height: 25, width: 25}}
             source={images.searchBottom}
           />
         ),
@@ -206,7 +233,7 @@ const Navigator = createMaterialBottomTabNavigator(
       screen: Analyticstack,
       navigationOptions: {
         tabBarLabel: 'Analytics',
-        tabBarIcon: ({ tintColor }) => (
+        tabBarIcon: ({tintColor}) => (
           <Image
             style={{
               resizeMode: 'contain',
@@ -235,9 +262,9 @@ const Navigator = createMaterialBottomTabNavigator(
       screen: SettingStack,
       navigationOptions: {
         tabBarLabel: 'Setting',
-        tabBarIcon: ({ tintColor }) => (
+        tabBarIcon: ({tintColor}) => (
           <Image
-            style={{ resizeMode: 'contain', height: 25, width: 25 }}
+            style={{resizeMode: 'contain', height: 25, width: 25}}
             source={images.setting}
           />
         ),
@@ -251,7 +278,7 @@ const Navigator = createMaterialBottomTabNavigator(
     activeBackgroundColor: '#fff',
     inactiveBackgroundColor: '#fff',
     inactiveColor: '#4E5967',
-    barStyle: { backgroundColor: '#fff' },
+    barStyle: {backgroundColor: '#fff'},
   },
 );
 

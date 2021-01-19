@@ -180,6 +180,30 @@ class AdminSetting extends Component {
 
                 <View style={style.borderBottomNav} />
               </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate('ManageUsers')
+                }
+                style={[style.mb20]}>
+                <View style={[style.rowBtw]}>
+                  <View style={[style.row, style.aiCenter]}>
+                    <Image
+                      style={image.drawerIconmedium}
+                      source={images.userPurple}
+                    />
+                    <Text style={[text.text18, text.purple, style.pl15]}>
+                      Manage Users
+                    </Text>
+                  </View>
+
+                  <Image
+                    style={image.drawerIconmedium}
+                    source={images.arrowRightPurple}
+                  />
+                </View>
+
+                <View style={style.borderBottomNav} />
+              </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('ServiceRates')}

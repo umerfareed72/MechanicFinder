@@ -13,7 +13,8 @@ import {
   Dimensions,
   Keyboard,
   Platform,
-  Alert,ToastAndroid
+  Alert,
+  ToastAndroid,
 } from 'react-native';
 import {
   colors,
@@ -53,39 +54,13 @@ export default class Userdetail extends Component {
       suggestion: '',
       issuedata: [],
       suggestiondata: [],
-      firstname:'',
+      firstname: '',
       issueid: '',
-      mid:'',
-      placeholder:'Enter text here',
-      userid:this.props.navigation.getParam('useride','nothing sent'),
-      userdata:''
+      mid: '',
+      placeholder: 'Enter text here',
+      userid: this.props.navigation.getParam('userId', 'nothing sent'),
+      userdata: '',
     };
-  }
-
-  getData = async () => {
-    console.log('in get data');  
-    try {
-      await AsyncStorage.getItem('mechanicddata').then((res) => {
-        res = JSON.parse(res);
-        this.setState({issuedata: res});
-        //this.setState({issueid: res._id});
-        console.log('issuedata',this.state.issuedata)
-       // this.setState({videourl: res._id});
-       
-      });
-
-      
-     
-    } catch (error) {}
-  };
-  async componentDidMount() {
-    const {navigation} = this.props;
-    this.getsuggestions();
-   
-    this.focusListener = navigation.addListener('didFocus', () => {
-     
-     
-    });
   }
 
   getsuggestions = () => {
@@ -97,12 +72,12 @@ export default class Userdetail extends Component {
           this.setState({suggestiondata: response.data});
           console.log(this.state.suggestiondata);
         }
-        if (this.state.suggestiondata == '') ToastAndroid.show(
-          'No Suggestion available',
-          ToastAndroid.BOTTOM,
-          ToastAndroid.LONG,
-        );
-        
+        if (this.state.suggestiondata == '')
+          ToastAndroid.show(
+            'No Suggestion available',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
       })
 
       .catch((error) => {
@@ -113,11 +88,6 @@ export default class Userdetail extends Component {
     //   console.log(error);
     // });
   };
-
-
-  
-
-  
 
   tabOverview = () => {
     if (this.state.TabDataOverview == 'flex') {
@@ -136,10 +106,13 @@ export default class Userdetail extends Component {
     this.setState({ColorReview: colors.inputBordercolor});
     this.setState({ColorGallery: colors.inputBordercolor});
   };
- 
+
+  componentDidMount(){
+    this.getsuggestions();
+  }
   render() {
     const {suggestiondata} = this.state;
-console.log(this.state.firstname)
+    console.log(this.state.firstname);
     console.log(this.state.issueid);
 
     return (
@@ -152,8 +125,9 @@ console.log(this.state.firstname)
             <View style={style.bgOverlay} />
             <TouchableOpacity
               onPress={() => {
-               // AsyncStorage.removeItem('mechanicddata')
-                this.props.navigation.goBack()}}
+                // AsyncStorage.removeItem('mechanicddata')
+                this.props.navigation.goBack();
+              }}
               style={[image.headerBackArrow]}>
               <Image
                 style={[image.backArrow]}
@@ -174,45 +148,39 @@ console.log(this.state.firstname)
               </View>
               <View style={[style.mv5]}>
                 <Text style={[text.heading1, text.bold]}>
-                   User from {' '}
-                  {suggestiondata.city}
+                  User from {suggestiondata.city}
                 </Text>
               </View>
               <View style={[style.mv5]}>
-                <Text style={[text.paraWhite, text.regular]}>
-                  
-                </Text>
+                <Text style={[text.paraWhite, text.regular]}></Text>
               </View>
             </View>
           </ImageBackground>
         </View>
         <View style={[appStyle.bodyBg, style.flex1]}>
-        <View
+          <View
             style={[
               appStyle.rowBtw,
               style.aiCenter,
               appStyle.bodyLayout,
               appStyle.bodyShadowTop,
               style.mh40,
-                {backgroundColor: colors.lightgray,
-                       borderBottomLeftRadius: 10,
-                  borderBottomRightRadius: 10,},
-            ]}
-         >
+              {
+                backgroundColor: colors.lightgray,
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+              },
+            ]}>
             <TouchableOpacity onPress={() => this.tabOverview()}>
               <Text
                 style={[
                   text.heading2,
                   text.semibold,
-                  {color: this.state.ColorOverview,alignContent:'center'},
-
-                ]} >
+                  {color: this.state.ColorOverview, alignContent: 'center'},
+                ]}>
                 Overview of User
               </Text>
             </TouchableOpacity>
-            
-
-            
           </View>
           <ScrollView style={style.mv5}>
             {/* OverView Tab */}
@@ -245,15 +213,7 @@ console.log(this.state.firstname)
                   {suggestiondata.address}
                 </Text>
               </View>
-              <View style={[appStyle.rowAlignCenter, style.mt10]}>
-                <Image
-                  style={[image.medium, style.mr5, image.Orange]}
-                  source={images.Company}></Image>
-                <Text style={[text.heading2, text.bold]}>Date of Birth</Text>
-              </View>
-              <View style={[style.borderbottom, style.mt10]}>
-                <Text style={[text.heading2Gray]}> {suggestiondata.date}</Text>
-              </View>
+              
 
               <View style={[appStyle.rowAlignCenter, style.mt10]}>
                 <Image
@@ -282,13 +242,7 @@ console.log(this.state.firstname)
               <View style={[style.borderbottom, style.mv10]}>
                 <Text style={[text.heading2Gray]}> {suggestiondata.email}</Text>
               </View>
-              
             </View>
-            
-           
-            
-
-           
 
             {/* Reviews Tab End  */}
           </ScrollView>
@@ -296,4 +250,4 @@ console.log(this.state.firstname)
       </SafeAreaView>
     );
   }
-}  
+}

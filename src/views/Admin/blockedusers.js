@@ -225,7 +225,7 @@ export default class Blockedusers extends Component {
                                                 <View style={style.row}>
                                                     <Image
                                                         style={[image.xsmall, image.Orange]}
-                                                        source={images.email}></Image>
+                                                        source={images.phone}></Image>
                                                     <Text style={[text.text15, { color: colors.gray }]}
                                                         numberOfLines={0.2}
                                                         ellipsizeMode={'tail'}>

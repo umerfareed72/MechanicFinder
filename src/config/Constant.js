@@ -34,6 +34,9 @@ export const screenWidth = {
   width25: Math.round((25 / 100) * Dimensions.get('window').width),
   width20: Math.round((20 / 100) * Dimensions.get('window').width),
   width65: Math.round((65 / 100) * Dimensions.get('window').width),
+  width70: Math.round((70 / 100) * Dimensions.get('window').width),
+  width75: Math.round((75 / 100) * Dimensions.get('window').width),
+  
   width80: Math.round((80 / 100) * Dimensions.get('window').width),
   width90: Math.round((90 / 100) * Dimensions.get('window').width),
 

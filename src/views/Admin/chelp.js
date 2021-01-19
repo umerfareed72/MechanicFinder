@@ -68,14 +68,14 @@ export default class Chelp extends Component {
     ;
   };
 
-//   getid = () => {
-//     AsyncStorage.getItem('userdata').then((res) => {
-//     const  response=JSON.parse(res)
-//      this.setState({userdbid: response._id})
-//   })
-//   };
+  movetodetail = (id) => {
+    const reportdata = JSON.stringify(this.state.dataSource[id]);
+    AsyncStorage.setItem('chelpdata', reportdata);
+    setTimeout(() => {
+      this.props.navigation.navigate('CustomerHelpProfile');
+    }, 2000);
+  };
 
- 
 showreports = async() => {
   // AsyncStorage.getItem('userId')
   //   .then((res) => {
@@ -109,7 +109,11 @@ showreports = async() => {
          this.setState({dataSource: response.data});
         console.log(this.state.dataSource);
       if (this.state.dataSource == '')
-        Alert.alert('No Report is posted!');
+      ToastAndroid.show(
+        'No Help Issue !',
+        ToastAndroid.BOTTOM,
+        ToastAndroid.LONG,
+      );
     })
     .catch((error) => {
       console.log('ye lo 1', error);
@@ -190,70 +194,45 @@ showreports = async() => {
           <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
             {this.state.dataSource.map((data, index) => {
               return (
+              
+            
+                <TouchableOpacity
+                key={index}
+                onPress={() => this.movetodetail(index)}
+                style={[
+                  appStyle.slotCard,
+                  appStyle.rowJustify,
+                  style.aiCenter,
+                ]}>
+                <View style={[style.row, style.aiCenter]}>
+                  <View style={style.mr10}>
+                    <Image
+                      style={image.userImg}
+                      source={{ uri: data.userimage }}
+                    />
+                  </View>
+                  <View>
+                    <Text style={[text.text16, text.bold]}>
+                      {data.question}
+                    </Text>
+                    <Text style={[text.text15, { color: colors.gray, width: 100 }]} numberOfLines={1} ellipsizeMode='tail'>
+                      {data.message}
+                    </Text>
+                  </View>
+                </View>
+
                 <TouchableOpacity
                   key={index}
-                  // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
-                 // onPress={() => this.movetodetail(index)}
-                  style={[
-                    appStyle.slotCard,
-                    appStyle.rowJustify,
-                    style.aiCenter,
-                  ]}>
-                  <View style={[style.row, style.aiCenter]}>
-                    <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri:data.userimage}} />
-                    </View>
-
-                    <View style={[style.rowBtw, style.aiCenter]}>
-                      <View style={[style.mr15]}>
-                        <Image
-                          source={images.imagep}
-                          style={[image.image50]}></Image>
-                      </View>
-                      <View>
-                        <View>
-                          <Text style={[text.text16, text.bold]}>
-                             Subject: {data.question}
-                          </Text>
-                        </View>
-                        <View style={{flexDirection:'row'}}>
-                          <Text style={[text.text15, {color: colors.gray}]} style={{flex: 1, flexWrap: 'wrap'}} numberOfLines={5}>
-                           {data.message}  
-                          </Text>
-                        </View>
-                        <View style={[style.mv5]}>
-                       
-                             
-                            <TouchableOpacity
-                            onPress={() => {
-                              this.deletereport(index)
-                           }}
-                             >
-                              <View style={[text.text15, {color: colors.gray}]}>
-                            <Text style={{color:'red'}}>Delete </Text>
-                            </View>
-                            </TouchableOpacity> 
-                            <TouchableOpacity
-                            onPress={()=>this.props.navigation.navigate('Customerprofile',{userid:data.userid})}
-                             >
-                              <View style={[text.text15, {color: colors.gray}]}>
-                            <Text style={{color:'blue'}}>View Profile </Text>
-                            </View>
-                            </TouchableOpacity>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      // this.changebuttoncolor(index);
-                    }}>
-                    
-                  </TouchableOpacity>
+                  onPress={() => {
+                    this.deletereport(index);
+                  }}>
+                  <Image
+                    style={[image.forward]}
+                    source={images.delete}></Image>
                 </TouchableOpacity>
-              );
+              </TouchableOpacity>
+           
+                );
             })}
           </View>
         </ScrollView>

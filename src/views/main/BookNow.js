@@ -41,7 +41,7 @@ import {ActivityIndicator} from 'react-native-paper';
 import Modal from 'react-native-modal';
 import Geocoder from 'react-native-geocoding';
 const axios = require('axios');
-Geocoder.init("key");
+Geocoder.init("AIzaSyAn4Q1cbuGVM8M6fyElhVgVGLFCLNl6Hf4");
 export default class BookNow extends Component {
   constructor(props) {
     super(props);

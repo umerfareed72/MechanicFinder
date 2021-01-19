@@ -322,6 +322,10 @@ marginHorizontal:15
     height: '100%',
  
   },
+  h75:{
+    height: '75%',
+ 
+  },
   h70:{
     height: '70%',
  
@@ -344,6 +348,12 @@ marginHorizontal:15
     height: '50%',
   },
 
+  w70: {
+    width: '70%',
+  },
+  w75: {
+    width: '75%',
+  },
   w100: {
     width: '100%',
   },
