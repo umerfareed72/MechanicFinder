@@ -7,12 +7,13 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
-import {createDrawerNavigator} from 'react-navigation-drawer';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import AdminDashboard from '../views/Admin/AdminDashboard';
 import UserManagement from '../views/Admin/UserManagement';
+//import Blockedusers from '../views/Admin/blockedusers'
 import MechanicManagement from '../views/Admin/MechanicManagement';
 import AdminSetting from '../views/Admin/AdminSetting';
 import Complaints from '../views/Admin/Complaints';
@@ -45,6 +46,7 @@ import Mechanicdetail from '../views/Admin/Mechanicdetail';
 import Analytic from '../views/Admin/Analytic';
 import ReportedCustomerDetail from '../views/Admin/ReportedCustomerDetail';
 import CustomerDetail from '../views/Admin/CustomerDetail';
+import Blockedusers from '../views/Admin/blockedusers';
 //add new screen to this stack here
 
 const UserStackReport = createStackNavigator(
@@ -53,7 +55,7 @@ const UserStackReport = createStackNavigator(
     Reportmechanicdetail: Reportmechanicdetail,
     Mechanicprofile: Mechanicprofile,
     Customerprofile: Customerprofile,
-  
+
   },
   {
     headerMode: 'none',
@@ -66,9 +68,9 @@ const UserStackReport = createStackNavigator(
 const MechanicStackReport = createStackNavigator(
   {
     Reportedmechanics: Reportedmechanics,
-   ReportedCustomerDetail:ReportedCustomerDetail,
+    ReportedCustomerDetail: ReportedCustomerDetail,
     RMechanicprofile: RMechanicprofile,
-  CustomerDetail:CustomerDetail  
+    CustomerDetail: CustomerDetail
   },
   {
     headerMode: 'none',
@@ -81,17 +83,17 @@ const MechanicStackReport = createStackNavigator(
 
 
 const DashboardStack = createStackNavigator(
- 
+
   {
 
     AdminDashboard: {
       screen: AdminDashboard,
     },
-    UserStackReport:UserStackReport,
-    MechanicStackReport:MechanicStackReport,
+    UserStackReport: UserStackReport,
+    MechanicStackReport: MechanicStackReport,
     Mhelp: Mhelp,
     Chelp: Chelp,
-    highratedmechanics:highratedmechanics,
+    highratedmechanics: highratedmechanics,
   },
   {
     headerMode: 'none',
@@ -144,12 +146,27 @@ const UserManagementStack = createStackNavigator(
   },
 );
 
+
+const BlockedUserManagementStack = createStackNavigator(
+  {
+    Blockedusers: Blockedusers,
+    //Userdetail: Userdetail,
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
+);
+
 const SettingStack = createStackNavigator(
   {
     AdminSetting: AdminSetting,
     Rates: RatesStack,
     MechanicManagement: MechanicManagementStack,
     UserManagement: UserManagementStack,
+    Blockedusers: BlockedUserManagementStack
   },
   {
     headerMode: 'none',
@@ -176,9 +193,9 @@ const Navigator = createMaterialBottomTabNavigator(
       screen: DashboardStack,
       navigationOptions: {
         tabBarLabel: 'Home',
-        tabBarIcon: ({tintColor}) => (
+        tabBarIcon: ({ tintColor }) => (
           <Image
-            style={{resizeMode: 'contain', height: 25, width: 25}}
+            style={{ resizeMode: 'contain', height: 25, width: 25 }}
             source={images.searchBottom}
           />
         ),
@@ -189,7 +206,7 @@ const Navigator = createMaterialBottomTabNavigator(
       screen: Analyticstack,
       navigationOptions: {
         tabBarLabel: 'Analytics',
-        tabBarIcon: ({tintColor}) => (
+        tabBarIcon: ({ tintColor }) => (
           <Image
             style={{
               resizeMode: 'contain',
@@ -218,9 +235,9 @@ const Navigator = createMaterialBottomTabNavigator(
       screen: SettingStack,
       navigationOptions: {
         tabBarLabel: 'Setting',
-        tabBarIcon: ({tintColor}) => (
+        tabBarIcon: ({ tintColor }) => (
           <Image
-            style={{resizeMode: 'contain', height: 25, width: 25}}
+            style={{ resizeMode: 'contain', height: 25, width: 25 }}
             source={images.setting}
           />
         ),
@@ -234,7 +251,7 @@ const Navigator = createMaterialBottomTabNavigator(
     activeBackgroundColor: '#fff',
     inactiveBackgroundColor: '#fff',
     inactiveColor: '#4E5967',
-    barStyle: {backgroundColor: '#fff'},
+    barStyle: { backgroundColor: '#fff' },
   },
 );
 

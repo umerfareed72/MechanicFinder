@@ -240,7 +240,7 @@ class HomeDetail extends Component {
                 onPress={() => {
                   this.props.navigation.navigate('EditIssue');
                 }}
-                style={[
+                style={[   
                   button.buttonThemeWhite,
                   style.w30,
                   style.mt35,

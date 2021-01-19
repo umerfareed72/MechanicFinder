@@ -266,7 +266,7 @@ export default class Reportmechanicdetail extends Component {
                   </Text>
                   </View>
                   <View style={[{ display: this.state.tabOverview }, style.flex1]}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Customerprofile', { userid: this.state.userid })}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Customerprofile', { userid: this.state.userid })}> 
                       <View
                         style={[
                           button.buttoncontainer,

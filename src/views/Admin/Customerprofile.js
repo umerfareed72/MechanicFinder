@@ -510,27 +510,27 @@ export default class RMechanicprofile extends Component {
   //     });
   // };
 
-  // deletewarning = (id) => {
-  //   const reportdata = this.state.warnings[id];
-  //   console.log(reportdata);
-  //   axios
-  //     .delete(URL.Url + 'Mdeletewarning/' + reportdata._id)
-  //     .then((response) => {
-  //       if (response.data) {
-  //         console.log(response.data);
-  //         ToastAndroid.show(
-  //           'Warning Deleted Successfully!',
-  //           ToastAndroid.BOTTOM,
-  //           ToastAndroid.LONG,
-  //         );
-  //         this.getwarning();
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log('ye lo 2', error);
-  //       Alert.alert('something is wrong');
-  //     });
-  // };
+  deletewarning = (id) => {
+    const reportdata = this.state.warnings[id];
+    console.log(reportdata);
+    axios
+      .delete(URL.Url + 'udeletewarning/' + reportdata._id)
+      .then((response) => {
+        if (response.data) {
+          console.log(response.data);
+          ToastAndroid.show(
+            'Warning Deleted Successfully!',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.LONG,
+          );
+          this.getwarning();
+        }
+      })
+      .catch((error) => {
+        console.log('ye lo 2', error);
+        Alert.alert('something is wrong');
+      });
+  };
 
   sendwarning = () => {
     axios
@@ -555,6 +555,17 @@ export default class RMechanicprofile extends Component {
           ToastAndroid.LONG,
         );
 
+        console.log(error);
+      });
+  };
+
+  getwarning = () => {
+    axios
+      .get(URL.Url + 'getuwarning/' + this.state.userid)
+      .then((response) => {
+        this.setState({ warnings: response.data });
+      })
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -636,6 +647,8 @@ export default class RMechanicprofile extends Component {
           console.log('customerdata', this.state.mechanicdata)
         }
 
+      }).then(() => {
+        this.getwarning();
       })
       .catch((error) => {
         console.log(error);
@@ -829,7 +842,7 @@ export default class RMechanicprofile extends Component {
               <TouchableOpacity
                 style={[button.buttonTheme]}
                 onPress={this.toggleModal}>
-                <Text style={[text.btntext]}>Manage Mechanic</Text>
+                <Text style={[text.btntext]}>Manage User</Text>
               </TouchableOpacity>
             </View>
 

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -14,7 +14,7 @@ import {
   Keyboard,
   Button,
   Platform,
-  Alert,ToastAndroid
+  Alert, ToastAndroid
 } from 'react-native';
 const axios = require('axios');
 import {
@@ -24,7 +24,7 @@ import {
   screenWidth,
   images,
 } from '../../config/Constant';
-import {Animated} from 'react-native';
+import { Animated } from 'react-native';
 
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -36,11 +36,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 // import Icon from 'react-native-ionicons';
 // import vectorIcon from 'react-native-vector-icons';
-import {withSafeAreaInsets} from 'react-native-safe-area-context';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-community/async-storage';
-import {Picker} from '@react-native-community/picker';
-import {color} from 'react-native-reanimated';
+import { Picker } from '@react-native-community/picker';
+import { color } from 'react-native-reanimated';
 export default class UserManagement extends Component {
   constructor(props) {
     super(props);
@@ -60,14 +60,14 @@ export default class UserManagement extends Component {
 
   componentDidMount = () => {    // this.getid()
     // this.showIssues();
-     this.focusListener = this.props.navigation.addListener('didFocus', () => {
-     this.showIssues();
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      this.showIssues();
     });
     ;
   };
 
- 
-  showIssues = async() => {
+
+  showIssues = async () => {
     // AsyncStorage.getItem('userId')
     //   .then((res) => {
     //     const id = JSON.parse(res);
@@ -89,7 +89,7 @@ export default class UserManagement extends Component {
     //     });
     // });
 
-    
+
     console.log('in block mechanic');
     await axios
       .get(URL.Url + 'getblockmechanic')
@@ -97,13 +97,13 @@ export default class UserManagement extends Component {
         if (response.data) {
           console.log(response.data);
         }
-          this.setState({dataSource: response.data});
-          console.log(this.state.dataSource);
-       
+        this.setState({ dataSource: response.data });
+        console.log(this.state.dataSource);
+
       })
-      .then(()=>{
+      .then(() => {
         if (this.state.dataSource === '')
-        ToastAndroid.show(
+          ToastAndroid.show(
             'No Customer registered',
             ToastAndroid.BOTTOM,
             ToastAndroid.LONG,
@@ -112,18 +112,18 @@ export default class UserManagement extends Component {
       .catch((error) => {
         console.log('ye lo 1', error);
       });
-   
+
   };
 
-  
+
 
   deleteissue = (id) => {
     const mechanicdata = this.state.dataSource[id];
     console.log(mechanicdata);
     console.log("in unblock method");
-    console.log('iddd mechanic',mechanicdata._id);
+    console.log('iddd mechanic', mechanicdata._id);
     axios
-      .put(URL.Url + 'unblockmechanic/' + mechanicdata._id,{blocked:false})
+      .put(URL.Url + 'unblockmechanic/' + mechanicdata._id, { blocked: false })
       .then((response) => {
         if (response.data) {
           console.log(response.data);
@@ -166,31 +166,31 @@ export default class UserManagement extends Component {
     return (
       <SafeAreaView style={appStyle.safeContainer}>
         <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
-        <View style={{marginTop: 40}} />
+        <View style={{ marginTop: 40 }} />
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('AdminSetting')}>
             <Image source={images.backarrowh} style={image.backArrow2}></Image>
           </TouchableOpacity>
-         
+
           <View>
             <Text style={[text.heading1purple, text.bold]}>
               Blocked Mechanics :
             </Text>
-            <Text style={[text.text14, {color: '#4A4A4A'}]}>Currently Registered</Text>
+            <Text style={[text.text14, { color: '#4A4A4A' }]}>You can unblock them</Text>
           </View>
           <TouchableOpacity>
-           
+
           </TouchableOpacity>
         </View>
         <ScrollView >
           <View style={[appStyle.bodyBg, appStyle.bodyLayout]}>
             {this.state.dataSource.map((data, index) => {
-              
+
               return (
                 <TouchableOpacity
                   key={index}
                   // onPress={()=>{this.props.navigation.navigate("HomeDetail")}}
-                //  onPress={() => this.movetodetail(index)}
+                  //  onPress={() => this.movetodetail(index)}
                   style={[
                     appStyle.slotCard,
                     appStyle.rowJustify,
@@ -198,7 +198,7 @@ export default class UserManagement extends Component {
                   ]}>
                   <View style={[style.row, style.aiCenter]}>
                     <View style={style.mr10}>
-                      <Image style={image.userImg} source={{uri:data.photo}} />
+                      <Image style={image.userImg} source={{ uri: data.photo }} />
                     </View>
 
                     <View style={[style.rowBtw, style.aiCenter]}>
@@ -208,31 +208,31 @@ export default class UserManagement extends Component {
                           style={[image.image50]}></Image>
                       </View>
                       <View>
-                      
+
                         <View>
                           <Text style={[text.text16, text.bold]}>
-                             {data.firstname}
+                            {data.firstname}
                           </Text>
                         </View>
                         <View style={style.row}>
                           <Image
                             style={[image.xsmall, image.Orange]}
                             source={images.location}></Image>
-                          <Text style={[text.text15, {color: colors.gray}]}>
-                           {data.address} in {data.city}
+                          <Text style={[text.text15, { color: colors.gray }]}>
+                            {data.address} in {data.city}
                           </Text>
                         </View>
                         <View style={style.row}>
                           <Image
                             style={[image.xsmall, image.Orange]}
                             source={images.email}></Image>
-                          <Text style={[text.text15, {color: colors.gray}]}
-                          numberOfLines={0.2}
-                          ellipsizeMode={'tail'}>
+                          <Text style={[text.text15, { color: colors.gray }]}
+                            numberOfLines={0.2}
+                            ellipsizeMode={'tail'}>
                             {data.phone}
                           </Text>
                         </View>
-                       
+
                       </View>
                     </View>
                   </View>

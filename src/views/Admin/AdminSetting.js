@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -15,7 +15,7 @@ import {
   Button,
   Platform,
 } from 'react-native';
-import {colors, screenHeight, screenWidth, images} from '../../config/Constant';
+import { colors, screenHeight, screenWidth, images } from '../../config/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import style from '../../assets/styles/style';
 import image from '../../assets/styles/image';
@@ -26,8 +26,8 @@ import button from '../../assets/styles/button';
 import appStyle from '../../assets/styles/appStyle';
 import Modal from 'react-native-modal';
 import { connect } from "react-redux";
-import {logout} from "../../actions/index"
- class AdminSetting extends Component {
+import { logout } from "../../actions/index"
+class AdminSetting extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,10 +40,10 @@ import {logout} from "../../actions/index"
     };
   }
   onSignout = () => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     navigation.navigate('LoginAsAdmin');
     this.props.logout();
-   };
+  };
 
   render() {
     return (
@@ -82,14 +82,14 @@ import {logout} from "../../actions/index"
           </Modal>
         </View>
         {/*Body */}
-        <View style={{marginTop: 40}} />
+        <View style={{ marginTop: 40 }} />
 
         <View style={[style.row, style.jcSpaceBetween, style.ph20, style.pb10]}>
           <View style={style.mh20}></View>
           <View>
             <Text style={[text.heading1purple, text.bold]}>Settings</Text>
           </View>
-          <View style={{height: 20, width: 40}}></View>
+          <View style={{ height: 20, width: 40 }}></View>
         </View>
 
         <ScrollView style={{}}>
@@ -122,6 +122,28 @@ import {logout} from "../../actions/index"
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
                       Blocked Mechanics
+                    </Text>
+                  </View>
+
+                  <Image
+                    style={image.drawerIconmedium}
+                    source={images.arrowRightPurple}
+                  />
+                </View>
+
+                <View style={style.borderBottomNav} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Blockedusers')}
+                style={[style.mb20]}>
+                <View style={[style.rowBtw]}>
+                  <View style={[style.row, style.aiCenter]}>
+                    <Image
+                      style={image.drawerIconmedium}
+                      source={images.userPurple}
+                    />
+                    <Text style={[text.text18, text.purple, style.pl15]}>
+                      Blocked Users
                     </Text>
                   </View>
 
@@ -192,7 +214,7 @@ import {logout} from "../../actions/index"
                       source={images.terms}
                     />
                     <Text style={[text.text18, text.purple, style.pl15]}>
-                     Terms & Policies
+                      Terms & Policies
                     </Text>
                   </View>
 
@@ -239,4 +261,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, {logout})(AdminSetting);
+export default connect(mapStateToProps, { logout })(AdminSetting);

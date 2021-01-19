@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -37,7 +37,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import StarRating from 'react-native-star-rating';
 import Hamburger from '../../components/headerComponent/Hamburger';
 import AsyncStorage from '@react-native-community/async-storage';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 class MechanicDashboard extends Component {
   constructor(props) {
     super(props);
@@ -74,15 +74,15 @@ class MechanicDashboard extends Component {
           .get(URL.Url + 'getbookedUser/' + this.props.auth.user.mechanicid)
           .then((response) => {
             response.data.map((item) => {
-              this.setState({Amount: item.totalamount});
+              this.setState({ Amount: item.totalamount });
               axios
                 .get(URL.Url + 'user/' + item.userid)
                 .then((response) => {
                   this.setState({
                     bookedUserData: response.data,
                   });
-                  this.setState({refreshing: true});
-                  this.setState({bookedUserid: item._id});
+                  this.setState({ refreshing: true });
+                  this.setState({ bookedUserid: item._id });
                 })
                 .catch((error) => {
                   console.log(error, 'Booked User Not Accesible');
@@ -130,7 +130,7 @@ class MechanicDashboard extends Component {
           (error) => {
             console.log(error.code, error.message);
           },
-          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
         );
       }
     } catch (err) {
@@ -141,7 +141,7 @@ class MechanicDashboard extends Component {
     axios
       .get(URL.Url + 'getMwarning/' + this.props.auth.user.mechanicid)
       .then((response) => {
-        this.setState({warnings: response.data});
+        this.setState({ warnings: response.data });
       })
       .catch((error) => {
         console.log(error);
@@ -153,7 +153,7 @@ class MechanicDashboard extends Component {
     });
   }
   componentDidMount() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
 
     this.requestMechanicLocation();
 
@@ -176,12 +176,12 @@ class MechanicDashboard extends Component {
           return a + b;
         }, 0);
         console.log(sum); // Prints: 15
-        this.setState({earning: sum});
+        this.setState({ earning: sum });
       });
   };
 
   bookedUser = () => {
-    const {bookedUserData, refreshing} = this.state;
+    const { bookedUserData, refreshing } = this.state;
     if (refreshing != false) {
       return (
         <TouchableOpacity
@@ -193,7 +193,7 @@ class MechanicDashboard extends Component {
             <View>
               <Image
                 style={image.userImg}
-                source={{uri: bookedUserData.photo}}
+                source={{ uri: bookedUserData.photo }}
               />
             </View>
 
@@ -208,7 +208,7 @@ class MechanicDashboard extends Component {
                   </Text>
                 </View>
                 <View style={style.row}>
-                  <Text style={[text.text15, {color: colors.gray}]}>
+                  <Text style={[text.text15, { color: colors.gray }]}>
                     Price: {this.state.Amount}
                   </Text>
                   <Image source={images.dollar} style={image.medium}></Image>
@@ -234,7 +234,7 @@ class MechanicDashboard extends Component {
           style={[
             style.mv20,
             style.aiCenter,
-            {backgroundColor: colors.lightgray},
+            { backgroundColor: colors.lightgray },
           ]}>
           <View style={[style.mv20]}>
             <Text style={[text.heading1purple]}>No Data Available</Text>
@@ -245,9 +245,9 @@ class MechanicDashboard extends Component {
   };
 
   render() {
-    const {warnings} = this.state;
+    const { warnings } = this.state;
 
-    const {auth} = this.props;
+    const { auth } = this.props;
 
     return (
       <SafeAreaView style={[appStyle.safeContainer]}>
@@ -260,13 +260,28 @@ class MechanicDashboard extends Component {
         <View style={{}}>
           <LinearGradient
             colors={colors.orablu}
-            start={{x: -0.9, y: 1}}
-            end={{x: 1, y: 0}}
-            style={{height: screenHeight.height30}}>
-            <View style={{postion: 'absolute', top: 30, left: 10, width: 30}}>
+            start={{ x: -0.9, y: 1 }}
+            end={{ x: 1, y: 0 }}
+            style={{ height: screenHeight.height30 }}>
+            <View style={{ postion: 'absolute', top: 30, left: 10, width: 30 }}>
               <Hamburger />
-            </View>
 
+            </View>
+            <View style={{ postion: 'absolute', top: -35, left: 280, width: 240 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('IssueList');
+                }}
+                style={[
+                  button.buttonThemeWhite,
+                  style.w30,
+                  style.mt35,
+                  { display: this.state.cancelButton },
+                ]}>
+                <Text style={[text.heading4, text.goodfishbd]}>Vehicle Issues</Text>
+              </TouchableOpacity>
+
+            </View>
             <View style={[style.aiCenter, style.jcCenter, style.flex1]}>
               <Text style={[text.VanityBold, text.white, text.text30]}>
                 Dashboard
@@ -293,7 +308,7 @@ class MechanicDashboard extends Component {
                   fullStarColor={'#000'}
                   emptyStarColor={'#000'}
                   starSize={20}
-                  containerStyle={{width: 110, marginTop: 3}}
+                  containerStyle={{ width: 110, marginTop: 3 }}
                 />
                 <Text style={[text.center, style.mv5]}>
                   {' '}
@@ -332,7 +347,7 @@ class MechanicDashboard extends Component {
                   <View style={[style.row, style.aiCenter]}>
                     <Image
                       style={[image.Image30, style.mr10]}
-                      source={{uri: auth.user.photo}}
+                      source={{ uri: auth.user.photo }}
                     />
                     <Text style={[text.text16, text.bold]}>
                       {auth.user.firstname} {auth.user.lastname}

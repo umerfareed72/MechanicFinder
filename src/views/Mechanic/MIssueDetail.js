@@ -77,7 +77,7 @@ class HomeDetail extends Component {
       this.setState({ firstname: this.props.auth.user.firstname });
       this.setState({ mphoto: this.props.auth.user.photo });
       this.setState({ mid: this.props.auth.user.mechanicid })
-      console.log('mid', this.state.mid);
+      console.log('mid new', this.state.mid);
       console.log('mphoto', this.state.mphoto);
 
     } catch (error) { }
