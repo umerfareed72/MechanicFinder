@@ -523,39 +523,7 @@ export default class MechanicRegister extends Component {
                   </Text>
                 </View>
                 <View>
-                  {/* <View style={[input.textinputcontainer, style.mv5]}>
-                    <View>
-                      <DatePicker
-                        style={{width: 145}}
-                        mode="date"
-                        placeholder={this.state.date}
-                        format="YYYY-MM-DD"
-                        customStyles={{
-                          dateIcon: {
-                            position: 'absolute',
-                            left: -5,
-                            top: 4,
-                            height: 25,
-                            width: 24,
-                            resizeMode: 'contain',
-                          },
-                          dateInput: {
-                            borderColor: colors.white,
-                          },
-
-                          dateText: {
-                            color: colors.gray,
-                          },
-
-                          // ... You can check the source to find the other keys.
-                        }}
-                        onDateChange={(date) => {
-                          this.setState({date: date});
-                        }}
-                      />
-                    </View>
-                  </View> */}
-
+                
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image source={images.phone} style={image.username}></Image>
                     <TextInput

@@ -114,7 +114,7 @@ class SideMenu extends React.Component {
                       source={{uri: auth.user.photo}}></Image>
                   </View>
                   <View style={[style.jcCenter, {}]}>
-                    <View style={style.mr5}>
+                    <View style={style.w90}>
                       <Text style={[text.text16, text.white, text.semibold]}>
                         {auth.user.firstname} {auth.user.lastname}
                       </Text>

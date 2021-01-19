@@ -72,6 +72,7 @@ export default class MechanicRegister extends Component {
       latitude: '',
       filePath: {},
       editable: false,
+      code: '',
     };
   }
 
@@ -82,6 +83,7 @@ export default class MechanicRegister extends Component {
       alert('Confirm Password Not Matched');
     }
   };
+
   submitData = () => {
     axios
       .post(URL.Url + 'userregister', {
@@ -94,14 +96,15 @@ export default class MechanicRegister extends Component {
         photo: this.state.photo,
         city: this.state.City,
         country: this.state.Country,
-        date: this.state.date,
         longitude: this.state.longitude,
         latitude: this.state.latitude,
+        code: this.state.code,
       })
       .then(async (res) => {
         console.log(res);
         console.log(res.data.token);
         try {
+          this.sendemail();
           this.props.navigation.navigate('Login');
         } catch (e) {
           console.log('error hai', e);
@@ -142,6 +145,40 @@ export default class MechanicRegister extends Component {
       }
     });
   };
+
+  sendemail = () => {
+    try {
+      axios
+        .post(URL.Url + 'sendemail', {
+          email: this.state.Email,
+          code: this.state.code,
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
+    } catch (error) {
+      console.log(error);
+      return (
+        <View style={[style.aiCenter]}>
+          <ActivityIndicator color="#bc2b78" size="large"></ActivityIndicator>
+        </View>
+      );
+    }
+  };
+
+  number = () => {
+    this.setState({code: Math.trunc(Math.random() * 100000).toString()});
+    console.log('code', this.state.code);
+  };
+  componentDidMount() {
+    this.googleUserdata();
+    const {navigation} = this.props;
+    this.number();
+    this.focusListener = navigation.addListener('didFocus', () => {
+      this.number();
+    });
+  }
+
   googleUserdata = () => {
     try {
       AsyncStorage.getItem('googleData').then((res) => {
@@ -166,10 +203,6 @@ export default class MechanicRegister extends Component {
     } catch (error) {
       console.log('error');
     }
-  };
-
-  componentDidMount = () => {
-    this.googleUserdata();
   };
   onStarRatingPress(rating) {
     this.setState({
@@ -432,39 +465,6 @@ export default class MechanicRegister extends Component {
                   </Text>
                 </View>
                 <View>
-                  <View style={[input.textinputcontainer, style.mv5]}>
-                    <View>
-                      <DatePicker
-                        style={{width: 145}}
-                        mode="date"
-                        placeholder={this.state.date}
-                        format="YYYY-MM-DD"
-                        customStyles={{
-                          dateIcon: {
-                            position: 'absolute',
-                            left: -5,
-                            top: 4,
-                            height: 25,
-                            width: 24,
-                            resizeMode: 'contain',
-                          },
-                          dateInput: {
-                            borderColor: colors.white,
-                          },
-
-                          dateText: {
-                            color: colors.gray,
-                          },
-
-                          // ... You can check the source to find the other keys.
-                        }}
-                        onDateChange={(date) => {
-                          this.setState({date: date});
-                        }}
-                      />
-                    </View>
-                  </View>
-
                   <View style={[input.textinputcontainer, style.mv5]}>
                     <Image source={images.phone} style={image.username}></Image>
                     <TextInput
