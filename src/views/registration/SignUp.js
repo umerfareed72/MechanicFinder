@@ -163,7 +163,6 @@ export default class MechanicRegister extends Component {
         .post(URL.Url + 'userregister', {
           firstname: this.state.FirstName,
           lastname: this.state.LastName,
-          // nickname:this.state.nickname,
           email: this.state.Email,
           password: this.state.Password,
           phone: this.state.Phone,
@@ -171,7 +170,6 @@ export default class MechanicRegister extends Component {
           photo: this.state.photo,
           city: this.state.City,
           country: this.state.Country,
-          // date: this.state.date,
           longitude: this.state.longitude,
           latitude: this.state.latitude,
           code: this.state.code,
