@@ -166,6 +166,12 @@ export default class Highratedmechanics extends Component {
                             {data.firstname} {data.lastname}
                           </Text>
                         </View>
+                        <View>
+                          <Text style={[text.heading5, text.bold,style.mv5]}>
+                            (+92){data.phone} 
+                          </Text>
+                        </View>
+                     
                         <View style={style.row}>
                           <StarRating
                             disabled={true}
